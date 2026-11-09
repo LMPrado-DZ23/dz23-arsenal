@@ -260,6 +260,65 @@ def cmd_audit() -> int:
     return 0
 
 
+
+def cmd_verify_quotes(laudo: str | None, como_json: bool) -> int:
+    """Verifica se as citações dos laudos existem nas respostas.
+
+    Sem --laudo: verifica os laudos marcados VALIDO em AUDIT-STATUS.json.
+    Com --laudo: verifica o arquivo informado (serve de controle negativo).
+    """
+    import importlib.util
+
+    caminho_mod = RAIZ / "scripts" / "check-audit-quotes.py"
+    spec = importlib.util.spec_from_file_location("check_audit_quotes", caminho_mod)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    alvos: list[str] = []
+    if laudo:
+        alvos = [laudo]
+    else:
+        arq = RESULTADOS / "_audit-notes" / "AUDIT-STATUS.json"
+        if not arq.is_file():
+            print("sem AUDIT-STATUS.json — nada a verificar")
+            return 0
+        dados = json.loads(arq.read_text(encoding="utf-8"))
+        alvos = [l["arquivo"] for l in dados.get("laudos", []) if l.get("status") == "VALIDO"]
+
+    if not alvos:
+        print("nenhum laudo VALIDO para verificar")
+        return 0
+
+    saida = []
+    falhou = False
+    for alvo in alvos:
+        try:
+            res = mod.verificar_laudo(alvo)
+        except FileNotFoundError:
+            print(f"ERRO: laudo ausente: {alvo}")
+            falhou = True
+            continue
+        saida.append(res)
+        if not res["citacoes"]:
+            print(f"{alvo}: AVISO — nenhuma citação longa encontrada")
+            falhou = True
+        elif not res["ok"]:
+            falhou = True
+
+    if como_json:
+        print(json.dumps(saida, indent=2, ensure_ascii=False))
+    else:
+        for res in saida:
+            r = res["resumo"]
+            marca = "OK" if res["ok"] else "FALHA"
+            print(f"{res['laudo']:<42} {marca:<6} verbatim={r['VERBATIM']:>3} "
+                  f"adaptado={r['ADAPTADO']:>2} resumo={r['RESUMO']:>2} fabricado={r['FABRICADO']:>3}")
+        if falhou:
+            print("\ncitação fabricada encontrada — laudo não sustenta o veredito")
+
+    return 0 if not falhou else 1
+
+
 def main(argv: list[str]) -> int:
     for s in (sys.stdout, sys.stderr):
         try:
@@ -275,9 +334,13 @@ def main(argv: list[str]) -> int:
     g.add_argument("--prompts", action="store_true")
     g.add_argument("--report", action="store_true")
     g.add_argument("--audit", action="store_true", help="estado da auditoria externa")
+    g.add_argument("--verify-quotes", action="store_true",
+                   help="confere se as citações dos laudos VALIDO existem nas respostas")
     g.add_argument("--record", nargs=argparse.REMAINDER, help="repassa para scripts/record-eval.py")
     ap.add_argument("--skill", default=None)
     ap.add_argument("--batch", type=int, default=None)
+    ap.add_argument("--laudo", default=None, help="com --verify-quotes: verifica só este arquivo")
+    ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
 
     if args.record is not None:
@@ -295,6 +358,8 @@ def main(argv: list[str]) -> int:
         return code
     if args.prompts:
         return cmd_prompts(args.skill, args.batch)
+    if args.verify_quotes:
+        return cmd_verify_quotes(args.laudo, args.json)
     if args.audit:
         return cmd_audit()
     if args.report:

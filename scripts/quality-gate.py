@@ -77,6 +77,7 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("evals:coerencia", [py, "scripts/run-evals.py", "--check"]))
     resultados.append(rodar("evals:schema", [py, "scripts/run-evals.py", "--schema"]))
     resultados.append(rodar("evals:registros", [py, "scripts/check-eval-results.py"]))
+    resultados.append(rodar("evals:citacoes", [py, "scripts/run-evals.py", "--verify-quotes"]))
 
     falhas = [r for r in resultados if not r["ok"]]
     if args.json:
