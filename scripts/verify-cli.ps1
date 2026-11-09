@@ -10,17 +10,19 @@ param(
 )
 
 $categorias = [ordered]@{
-    'VCS'        = @('git', 'gh', 'svn')
+    'VCS'        = @('git', 'gh', 'svn', 'scp', 'ssh')
     'Runtimes'   = @('node', 'npm', 'npx', 'pnpm', 'bun', 'deno', 'python', 'python3', 'py', 'pip', 'uv', 'java', 'dotnet', 'go', 'rustc', 'cargo')
     'Containers' = @('docker', 'docker-compose', 'podman', 'kubectl', 'helm', 'k9s', 'terraform', 'tofu', 'act', 'hadolint')
     'Seguranca'  = @('trivy', 'gitleaks', 'semgrep', 'bandit', 'snyk', 'openssl')
     'Dados'      = @('psql', 'mysql', 'mongosh', 'redis-cli', 'sqlite3', 'jq')
-    'Web'        = @('curl', 'wget', 'httpie', 'http', 'grpcurl', 'playwright', 'scrapling')
-    'Build'      = @('make', 'cmake', 'gcc', 'g++', 'clang', 'mvn', 'gradle')
-    'Binario'    = @('objdump', 'readelf', 'strings', 'nm', 'strip', 'ghidra', 'qemu-system-arm')
+    'Web'        = @('curl', 'wget', 'httpie', 'http', 'grpcurl', 'playwright', 'scrapling', 'adb')
+    'Build'      = @('make', 'cmake', 'gcc', 'g++', 'clang', 'ld', 'mvn', 'gradle', 'cl', 'dotnet-ef')
+    'Binario'    = @('objdump', 'readelf', 'strings', 'nm', 'strip', 'ghidra', 'rea', 'qemu-system-arm')
     'Rede'       = @('nmap', 'tcpdump', 'netstat')
-    'Produtividade' = @('rg', 'fd', 'bat', 'fzf', 'lazygit', 'delta', 'eza', 'nvim', 'code', '7z', 'ffmpeg')
-    'Sistema'    = @('pwsh', 'powershell', 'winget', 'wsl', 'ssh', 'scp', 'tar', 'bash')
+    'Produtividade' = @('rg', 'fd', 'bat', 'fzf', 'lazygit', 'delta', 'eza', 'nvim', 'code', '7z', 'ffmpeg', 'zip', 'unzip')
+    'Shell Unix' = @('bash', 'sh', 'sed', 'awk', 'grep', 'which', 'envsubst', 'base64', 'md5sum', 'sha256sum', 'cat', 'ls', 'tar')
+    'Sistema'    = @('pwsh', 'powershell', 'winget', 'wsl', 'robocopy', 'xcopy', 'certutil', 'bitsadmin', 'findstr', 'where', 'tasklist', 'reg', 'schtasks', 'k6', 'ab', 'siege')
+    'Agentes'    = @('claude', 'codex', 'gemini')
 }
 
 $resultado = [ordered]@{}

@@ -1,7 +1,8 @@
 # CLIs ausentes — com prioridade
 
-56 ferramentas que **não estão** no `PATH` desta máquina, classificadas por prioridade real de uso nas
-skills deste arsenal. Levantamento verificado em 2026-11-08.
+**58 ferramentas** que **não estão** no `PATH` desta máquina (fonte: `scripts/verify-cli.ps1` — 117
+procuradas · 59 disponíveis · 58 ausentes). A lista abaixo prioriza as de maior impacto; o total completo
+sai do script.
 
 > Nada aqui foi instalado. A lista existe para decidir com informação, não para empurrar instalação.
 

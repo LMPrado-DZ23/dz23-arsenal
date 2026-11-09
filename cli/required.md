@@ -1,7 +1,10 @@
 # CLIs disponíveis — inventário verificado
 
-58 ferramentas presentes no `PATH` desta máquina, verificadas com `Get-Command` uma por uma.
-Data do levantamento: 2026-11-08.
+**59 ferramentas** presentes no `PATH` desta máquina. Fonte de verdade: `scripts/verify-cli.ps1`
+(117 procuradas · 59 disponíveis · 58 ausentes). Data: 2026-11-08.
+
+> Este arquivo documenta **por categoria** o que o script encontrou. Se a sua máquina divergir, rode o
+> script — o número dele é o que vale.
 
 ## Controle de versão e GitHub
 

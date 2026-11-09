@@ -1,5 +1,34 @@
 # Changelog — dz23-reverse-engineer-anything
 
+## [1.1.2] — 2026-11-08
+
+### Corrigido
+- `references/rea-integration.md`: **duas** afirmações erradas corrigidas em sequência:
+  1. **"REA não instalado"** — falso. `Get-Command rea` + `rea --version` mostram `rea-agents@6.8.0`
+     instalado (281 MB, 9.064 arquivos).
+  2. **"REA disponível"** — falso. `rea analyze` retorna `provider_unavailable` para **PE e ELF**; nenhum
+     dos 4 providers é engine de análise profunda.
+
+  Estado real: **`INSTALLED_NO_ENGINE`** — CLI funciona, análise profunda `BLOCKED`.
+- Tamanho corrigido: 1,2 GB (estimativa) → **281 MB (medido)**.
+- Adicionado: seção de verificação (`rea --version`, `rea capabilities`, `rea analyze`) antes de declarar
+  `AVAILABLE`.
+- Adicionado: tabela de como tornar o REA utilizável (Ghidra/IDA/Kuna por plataforma).
+- Adicionado: limitação conhecida — Windows Ghidra P0 aceita apenas PE e raw 6502; para ELF usar
+  WSL/IDA/Kuna.
+- `SKILL.md`: nota de estado `INSTALLED_NO_ENGINE` + fallback `re_toolkit.py`.
+- Documentado: `rea doctor` avisa "skill identity stale" apontando `reverse-engineer-anything` (skill
+  interna do REA) — **esperado, não é bug desta skill**.
+
+### Lição (dupla)
+"Verificar antes de afirmar" falhou **duas vezes** na mesma skill:
+1. Assumi "não instalado" sem rodar `Get-Command rea`.
+2. Quase assumi "AVAILABLE" sem rodar `rea analyze` — a verificação funcional da Fase 0 evitou o segundo
+   erro.
+
+O padrão DZ23 exige: estado verificado é `INSTALLED_NO_ENGINE`, não "não instalado" nem "AVAILABLE".
+**Instalado ≠ funcional ≠ disponível.**
+
 ## [1.1.1] — 2026-11-08
 
 Doc-only. Nenhum código alterado (`re_toolkit.py` e `file_triage.py` intactos); itens 1 e 3 (desmontador,

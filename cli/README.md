@@ -5,15 +5,23 @@ Guia das ferramentas de linha de comando que as skills usam. O inventário foi l
 
 ## Números reais
 
+Fonte de verdade: **`scripts/verify-cli.ps1`** — o inventário é **gerado por script**, não escrito à mão.
+Rode e compare:
+
+```powershell
+pwsh scripts/verify-cli.ps1 -Json
+```
+
 | | Quantidade |
 |---|---|
-| CLIs procuradas nesta auditoria | **114** |
-| **Disponíveis** (no `PATH`) | **58** |
-| **Ausentes** | **56** |
+| CLIs procuradas pelo script | **117** |
+| **Disponíveis** (no `PATH`) | **59** |
+| **Ausentes** | **58** |
 
-> A promessa original era "48+ instaladas, 23 faltando". O levantamento real deu 58 e 56. Os números
-> acima são os verificados com `Get-Command`, um por um — a diferença não é detalhe: metade das
-> ferramentas que o guia supunha instaladas não está no `PATH` desta máquina.
+> Histórico: o plano original falava em "48+ instaladas, 23 faltando". Levantamentos manuais deram 58/56 e
+> 45/39 em listas diferentes — cada lista produzia um número. A divergência era o sintoma: **contagem
+> manual não é inventário**. Agora existe uma única fonte (`verify-cli.ps1`) e os documentos citam o que
+> ela mediu.
 
 ## Índice
 
@@ -24,6 +32,7 @@ Guia das ferramentas de linha de comando que as skills usam. O inventário foi l
 | [`install-windows.md`](install-windows.md) | `winget` / `choco` / `scoop`, comando por CLI |
 | [`install-linux.md`](install-linux.md) | `apt` / `brew` / `curl \| sh` |
 | [`verify.md`](verify.md) | como rodar a verificação automatizada |
+| [`known-limitations.md`](known-limitations.md) | ferramentas instaladas que **não** entregam a capacidade (REA, kubectl sem contexto) |
 
 ## Como verificar sua própria máquina
 

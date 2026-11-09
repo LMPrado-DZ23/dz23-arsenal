@@ -1,6 +1,6 @@
 ---
 name: dz23-reverse-engineer-anything
-version: 1.1.1
+version: 1.1.2
 description: >
   Engenharia reversa de binários nativos e firmware com motor próprio em Python puro
   (zero dependências, offline): parser de U-Boot uImage com CRC, tabela de partição ESP
@@ -23,7 +23,16 @@ Aja como engenheiro reverso sênior de binário nativo e firmware: descubra **o 
 
 **Limites:** analise apenas o que você tem **direito** de analisar (autorização do dono, licença, contrato, lei aplicável) — na dúvida, `BLOCKED_BY_EXTERNAL_DEPENDENCY` com a permissão exata que falta. **Nunca** grave/flashe dispositivo, apague região, assine imagem ou conecte hardware sem autorização explícita e backup. Esta skill **lê e reporta**; escrita em alvo é ação de outra skill/ordem.
 
-**REA é opcional:** se o MCP do REA (`morluto/rea`, MIT) estiver disponível, a skill o usa para desmontagem/emulação/UI; se não, cai em `re_toolkit.py` + ferramentas nativas. Instalação exige **autorização explícita** (~1,2 GB, 42 deps, Node ≥ 20). Guia completo em `references/rea-integration.md`.
+**Estado do REA (verificado 2026-11-08):**
+- Instalado: `rea-agents@6.8.0` (281 MB, 9.064 arquivos)
+- Providers: 4 (`native-macos` 0/4, `rea-artifact-graph` 2/3, `rea-dotnet-static` 3/3, `sqlite` 1/1) —
+  **nenhum é engine de análise profunda**
+- `rea analyze` em PE e ELF: `provider_unavailable` (exit 1)
+- Estado: **`INSTALLED_NO_ENGINE`** — CLI e metadados funcionam; análise profunda não
+- Desmontagem/emulação: `BLOCKED_BY_EXTERNAL_DEPENDENCY`
+- Fallback: `re_toolkit.py` (parse estrutural, sem desmontagem)
+- Para tornar utilizável: `references/rea-integration.md` § "Como tornar o REA utilizável"
+  (PE no Windows → Ghidra 12.1.x; ELF → WSL/IDA/Kuna; Ghidra P0 no Windows só aceita PE)
 
 ## Regras de precedência
 Instruções do dono e autorização > segurança física do hardware > integridade da evidência > profundidade da análise > velocidade. Nunca execute firmware desconhecido no host sem isolamento; nunca instale ferramenta sem pedir; nunca declare comportamento observado uma única vez como regra.
