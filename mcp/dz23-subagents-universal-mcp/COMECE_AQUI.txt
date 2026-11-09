@@ -1,0 +1,31 @@
+DZ23 SUBAGENTS UNIVERSAL MCP 4.0.0 — PACOTE OPEN-SOURCE
+
+Uma única pasta. Sem ZIP antigo, sem bundle duplicado e sem chaves reais.
+
+PARA INSTALAR
+1. Leia README.md e SECURITY.md. Requer Node.js 22+.
+2. Linux/macOS: bash scripts/install-local.sh
+   Windows: powershell -ExecutionPolicy Bypass -File scripts\install-windows.ps1
+3. O instalador cria .env a partir de .env.example apenas se ele ainda não existe.
+4. Configure o endpoint/modelo que realmente está disponível. Não publique o .env.
+   Alvos mixed (openrouter, gemini, ollama cloud...) podem cobrar e ficam bloqueados sem
+   DZ23_ALLOW_PAID=true, salvo modelos declarados em DZ23_FREE_MODELS.
+5. Rode: node src/index.js config validate e node src/index.js doctor (sem chamadas a providers).
+6. Registre o servidor no harness com os arquivos de config/generated:
+   Claude Code: comando em claude_code_add_command.txt. Codex: substitua a tabela
+   [mcp_servers.dz23-subagents] (nunca crie uma segunda). Detalhes em docs/INSTALL_ANY_HARNESS.md.
+   Alternativa: entregue HERMES_SELF_INSTALL_PROMPT.txt ao agente no computador alvo.
+
+ATUALIZAR UMA INSTALAÇÃO EXISTENTE (2.2.x ou 3.0.0)
+Siga o roteiro "Atualizando de 2.2.x/3.0.0 para 4.0.0" em docs/OPERATIONS.md: feche os harnesses e
+pare os processos do servidor, faça backup do DZ23_STATE_DIR, extraia em uma pasta nova,
+copie o .env, revise as variáveis, rode config validate e doctor e substitua as entradas MCP.
+Não rode versões antigas e novas ao mesmo tempo sobre o mesmo diretório de estado.
+Leia as mudanças incompatíveis em CHANGELOG.md.
+Os scripts PUBLICAR_* servem só para a primeira publicação no GitHub; não os use para atualizar.
+
+PRIMEIRA PUBLICAÇÃO NO GITHUB (uma vez)
+Leia docs/PUBLISH_GITHUB.md. Windows: PUBLICAR_WINDOWS.cmd em uma pasta extraída nova, ou
+entregue PUBLICAR_COM_HARNESS.txt a um agente com terminal e GitHub autenticado.
+Primeiro teste: node scripts/publish-github.mjs --public --dry-run
+O pacote não comprova publicação no GitHub.

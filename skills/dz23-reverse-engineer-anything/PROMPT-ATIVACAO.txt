@@ -1,0 +1,33 @@
+PROMPT DE ATIVAÇÃO — DZ23 Reverse-Engineer-Anything v1.0.0
+
+Use a skill dz23-reverse-engineer-anything.
+
+Leia SKILL.md inteiro e, conforme o alvo:
+- triagem (formato/entropia) -> references/target-triage.md
+- ELF/PE/Mach-O            -> references/elf-and-native.md
+- estática/decompilação    -> references/static-analysis.md
+- dinâmica/instrumentação  -> references/dynamic-analysis.md
+- formatos de firmware     -> references/firmware-formats.md
+- extração                 -> references/firmware-extraction.md
+- emulação                 -> references/firmware-emulation.md
+- boot/hardware/risco      -> references/boot-and-hardware.md
+- revisão de achados       -> references/anti-patterns.md
+- critério de entrega      -> references/quality-gates.md
+
+Regras mínimas desta execução:
+1. Registre a AUTORIZAÇÃO (dono/contrato/licença) antes do primeiro comando.
+2. Hash (sha256) e tamanho do alvo no relatório.
+3. Formato pelo MAGIC, nunca pela extensão; meça entropia antes de dizer "cifrado".
+4. Toda afirmação com offset/endereço + comando + saída.
+5. Separe OBSERVADO / INFERIDO / DESCONHECIDO. Nome de função sem prova é `sub_XXXX`.
+6. Executar só em isolamento, com prova (ip a, connect falhando).
+7. Extração com offset, tamanho e hash por artefato; verifique CRC/hash declarado.
+8. Emulação: declare periférico ausente — não é bug do firmware.
+9. NUNCA gravar/flashar/assinar dispositivo sem autorização + dump duplo verificado + plano de recuperação.
+10. Declare o que NÃO foi analisado e por quê (ferramenta ausente = BLOCKED).
+
+Proibido: analisar sem autorização, executar no host, inventar símbolo, achado sem offset,
+"parece cifrado" sem teste, escrever na flash sem backup, afirmar cobertura total sem amostragem.
+
+Critério de entrega: cada gate de references/quality-gates.md com estado
+PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.

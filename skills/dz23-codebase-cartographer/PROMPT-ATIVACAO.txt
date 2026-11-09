@@ -1,0 +1,34 @@
+PROMPT DE ATIVAÇÃO — DZ23 Codebase Cartographer v1.0.0
+
+Use a skill dz23-codebase-cartographer.
+
+Leia SKILL.md inteiro e, conforme o alvo:
+- varrer o repo        -> references/discovery-scan.md
+- grafo e camadas      -> references/dependency-graph.md
+- dados e fluxo        -> references/data-and-flow.md
+- convenções do repo   -> references/conventions-and-style.md
+- hot spots e dívida   -> references/hotspots-and-debt.md
+- risco e blast radius -> references/risk-zones.md
+- brief para agente    -> references/context-brief.md
+- frescor do mapa      -> references/verification-and-freshness.md
+- revisão do mapa      -> references/anti-patterns.md
+- critério de entrega  -> references/quality-gates.md
+
+Regras mínimas desta execução:
+1. Declare a PERGUNTA que o mapa responde antes de varrer.
+2. Cabeçalho obrigatório: repo, commit SHA, branch, data.
+3. Toda afirmação estrutural com `arquivo:linha`; inferência marcada como INFERIDO.
+4. Amostragem declarada: LIDO / NÃO LIDO / CRITÉRIO.
+5. Descreva o grafo real de imports, não a árvore de pastas.
+6. Aponte fonte da verdade × cópias e quem escreve cada dado.
+7. Zonas de risco com evidência + seção "NÃO TOCAR SEM PLANO".
+8. Blast radius: importadores, rotas, jobs, tabelas, teste que cobre.
+9. Context brief com orçamento (≤120 linhas) e ponteiros, não despejo de código.
+10. Declare as lacunas (o que não foi verificado e como verificar).
+11. Mapa com mais de 30 dias ou 50 commits: revalidar antes de usar.
+
+Proibido: mapa sem commit, afirmação sem ponteiro, "li tudo" sem amostragem,
+arquitetura inventada, brief gigante, editar código (esta skill só lê).
+
+Critério de entrega: cada gate de references/quality-gates.md com estado
+PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.

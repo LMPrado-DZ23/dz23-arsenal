@@ -1,0 +1,511 @@
+# Changelog
+
+## [4.4.1] — 2026-11-08
+
+- Spec 2026-07-28: cache hints (`ttlMs`/`cacheScope`) em list/read
+- `outputSchema` nas tools estruturadas
+- Consistência de versão em README/SECURITY/VALIDATION
+- Contagem de tools corrigida
+
+## 4.4.0 — 2026-11-01 — qualquer API pelo `.env` e pacote instalável
+
+Versão menor: nenhuma ferramenta muda de contrato. O que entra é **distribuição** e
+**provedor genérico**.
+
+### Novo
+
+- **Provedores genéricos (`src/generic-providers.js`)**: declare `DZ23_PROVIDERS=nome1,nome2` e
+  preencha `DZ23_<NOME>_BASE_URL`, `_API_KEY` (ou `_API_KEY_FILE`), `_MODEL`, `_PROTOCOL`
+  (`openai`/`anthropic`), `_TIER` e `_LABEL`. Qualquer endpoint compatível entra sem editar código,
+  quantos o operador quiser.
+- **Falha explícita na inicialização** para nome inválido, `BASE_URL` ausente, protocolo ou tier
+  desconhecido — não existe provedor meio-configurado.
+- **`npm run test:gate`**: cobertura com limite (90% linhas, 75% branches, 80% funções); a CI passa a
+  falhar quando a cobertura cai.
+- **Pacote publicável**: `private` removido, `files`/`publishConfig` definidos — `npm i -g` e
+  `npx` passam a funcionar.
+
+### Documentação
+
+- `docs/PROVIDERS_QUALQUER_API.md` — contrato completo com exemplos (Ollama local, vLLM da equipe,
+  revenda, gateway Anthropic).
+- `.env.example` ganhou o bloco "QUALQUER API", com exemplo comentado pronto para descomentar.
+
+### Infra
+
+- Matriz de CI inclui **Node 26**.
+- Novo workflow de release: tag `v*` publica no npm, constrói a imagem no GHCR e cria a Release.
+
+## 4.3.0 — 2026-09-17 — provedores de conta (CLIs logadas) antes das APIs por token
+
+Versão menor: as ferramentas da 4.2.0 mantêm contrato. Os provedores de conta ficam **desligados por padrão**
+(`DZ23_ACCOUNT_PROVIDERS`), porque ligá-los gasta a assinatura da pessoa.
+
+### Novo
+
+- **Faixa de custo `account`**, entre `local` e `free-tier`: assinatura já paga, custo por token zero
+  (`cost_source: subscription`). Não precisa de `DZ23_ALLOW_PAID` e nunca libera modelo pago.
+- **Provedores de conta (`src/cli-providers.js`)**: o servidor executa a CLI oficial que **você** já logou com
+  a sua conta, sem interface, e usa a resposta como se fosse um provider.
+  - Adaptadores verificados: `claude-code` (Claude Code, login `claude auth login --claudeai`), `codex-cli`
+    (Codex, `codex login`) e `gemini-cli` (Gemini CLI, login pelo Google).
+  - Adaptadores experimentais (flags não verificadas nesta máquina): `qwen-code`, `copilot-cli`, `opencode`
+    (faixa `mixed`, porque também aceita chave) e `cursor-agent`.
+  - Cada chamada roda numa pasta temporária vazia, sem ferramentas, sem servidores MCP e sem persistir sessão;
+    variáveis que parecem credencial (`*API_KEY*`, `*TOKEN*`, `*SECRET*`, `*PASSWORD*`, `ANTHROPIC_*`,
+    `OPENAI_*`, `AWS_*`, `AZURE_*`, `DZ23_*`…) são removidas do processo filho, para que a CLI não possa cair
+    em cobrança por token nem ver as chaves do servidor.
+  - A CLI só é usada quando o status dela diz que o login é de conta; com chave de API ou sem assinatura a
+    chamada falha com `authentication_failed` e o comando de login exato.
+  - Uma CLI por vez (`DZ23_CLI_MAX_CONCURRENCY`), tempo limite próprio (`DZ23_CLI_TIMEOUT_MS`, padrão 300 s)
+    e encerramento da árvore de processos no timeout ou cancelamento.
+  - Mensagens de limite de uso viram `quota_exhausted` com o horário de liberação lido do texto
+    ("try again at …"), então o alvo fica em cooldown até lá (máximo de uma hora).
+- **Gateway de conta OmniRoute**: provider `omniroute` (OpenAI-compatible, `http://127.0.0.1:20128/api/v1`,
+  faixa `account`, `OMNIROUTE_API_KEY`/`OMNIROUTE_API_KEY_FILE`, `DZ23_OMNIROUTE_BASE_URL`).
+- **Ferramenta `account_status`**: quais CLIs estão instaladas, quais estão logadas com conta, qual o comando
+  de login que falta e quais gateways de conta estão configurados. Nenhuma credencial é lida ou exibida.
+- **`doctor`**: nova verificação `accounts` com o mesmo resumo.
+
+### Corrigido
+
+- O teste de execução paralela de grafo usava uma janela fixa de 60 ms e falhava em máquina carregada; agora
+  sincroniza os nós com barreira.
+
+## 4.2.0 — 2026-09-17 — roteamento adaptativo, missões em grafo, painel, sandbox de patch e validação com clientes reais
+
+Versão menor: as ferramentas da 4.1.0 mantêm contrato. Nenhuma capacidade nova com efeito fora da memória
+fica ligada por padrão.
+
+### Novo
+
+- **Roteamento adaptativo:** o servidor aprende, por modelo e tipo de tarefa, a taxa de sucesso e a latência,
+  e lê a cota restante nos cabeçalhos dos provedores. Reordena só dentro da mesma faixa de custo, só com
+  `free-first` (`DZ23_ADAPTIVE_ROUTING`, padrão ligado) e nunca libera modelo pago.
+  - Observações ficam em `providers/routing-stats.json`.
+  - `delegate` aceita `task_type`.
+  - `routing_explain` mostra a ordem e o motivo de cada exclusão; `cost_estimate` mostra o limite de
+    chamadas, tokens e custo antes de rodar.
+- **Missões em grafo:** `mission_start` com `plan.nodes`.
+  - Validação de ids, dependências e ciclos.
+  - Execução paralela dos nós prontos (`DZ23_MISSION_PARALLEL_NODES`), com os resultados das dependências
+    entre marcadores com nonce.
+  - Nova tentativa por nó e nós dependentes pulados após falha.
+  - `dag_state` persistido; `resume_plan` reaproveita nós concluídos, inclusive após reinício.
+- **Ferramentas para qualquer harness:** `mission_list` e `playbook_get` espelham resources e prompts MCP
+  para clientes que não os expõem.
+- **Painel somente leitura:** comando `dashboard` (loopback, token no fragmento da URL, CSP com nonce, só
+  `GET`).
+- **`patch_validate`**, desligado por padrão (`DZ23_SANDBOX_ENABLED`, `DZ23_SANDBOX_COMMANDS`):
+  - diff aplicado num clone temporário em `HEAD`;
+  - só comandos permitidos, com ambiente mínimo, timeout e encerramento da árvore de processos;
+  - caminhos protegidos recusados;
+  - modo `docker` (padrão) com `--network none`; `process` só com `DZ23_SANDBOX_MODE=process` explícito;
+  - diffs com symlinks ou submódulos recusados.
+- **Escopo novo:** `sandbox:execute`.
+- **CI:** job `MCP Inspector (official client)` em Linux e Windows. Valida `tools/list`, `tools/call`,
+  `resources/list`, `resources/templates/list`, `resources/read`, `prompts/list` e `prompts/get` com
+  `@modelcontextprotocol/inspector` fixado (`npm run check:inspector`; ferramenta de desenvolvimento, não
+  dependência).
+
+### Validação com clientes reais (instalação 4.1.0)
+
+- **MCP Inspector 2.7.0:** tools, resources (listagem, modelos, leitura) e prompts (listagem, renderização)
+  funcionaram.
+- **Codex CLI 0.154:** chamou `handoff_export` e `mission_claim` pela MCP, mas não oferece ao modelo
+  ferramentas de resources (`RESOURCE_TOOLS_UNAVAILABLE`). Por isso existem `mission_list` e
+  `playbook_get`.
+- **Claude Code 2.1.201 em modo `-p`:** não pôde ser testado nesta máquina (a autenticação do modo não
+  interativo estava sem crédito de API).
+
+## 4.1.0 — 2026-09-17 — contexto de projeto seguro, missões assíncronas, travas entre harnesses e resources/prompts MCP
+
+Versão menor: as onze ferramentas da 4.0.0 mantêm contrato e respostas. Base entregue por um agente
+externo e auditada antes da publicação (ver `docs/VALIDATION.md`).
+
+### Novo
+
+- **Leitura de projeto** (`workspace_read`, `workspace_search`, `git_readonly`), habilitada só com
+  `DZ23_WORKSPACE_ROOTS`:
+  - caminhos reais, arquivos de credencial bloqueados e segredos mascarados na saída;
+  - regex isolada com limite de tempo;
+  - Git somente leitura, que recusa configuração do repositório capaz de executar programas.
+- **Contexto de projeto** em `delegate`, `consensus` e `swarm_run` (`context: {files, search, git_diff}`
+  + `workspace`):
+  - bloco não confiável com nonce nos dois marcadores e aviso de prompt injection;
+  - `privacy` `auto`, `local_only` (roteia só para alvos locais) ou `allow_cloud`.
+- **Formato de resposta:**
+  - `detail`, `max_response_chars` e `output_schema` (subconjunto de JSON Schema);
+  - `idempotency_key` por identidade e argumentos;
+  - cache opcional em `delegate` (`DZ23_RESPONSE_CACHE_TTL_MS`, `cache_status`).
+- **Missões assíncronas:** `mission_start`, `mission_status_job`, `mission_pause`, `mission_resume` e
+  `mission_cancel`.
+  - O diagnóstico de cada iteração alimenta a próxima.
+  - A estagnação é medida por similaridade.
+  - O job só termina `completed` com testes aprovados registrados pelo harness durante o job.
+  - Limites: `DZ23_MAX_MISSION_JOBS` e `DZ23_MISSION_DEADLINE_MS`.
+  - Após reinício, o job aparece como `orphaned`.
+- **Travas entre harnesses:** `mission_claim` e `mission_release`, com reivindicação atômica e renovação
+  pelo token. A trava é exigida por `memory_checkpoint`, `delegate`, `consensus`, `swarm_run` e
+  `mission_start` (`mission_busy`).
+- **`handoff_export`:** briefing em Markdown.
+- **MCP:**
+  - `resources/list` (paginado), `resources/templates/list` e `resources/read` (erro `-32002`,
+    escopo `memory:read`);
+  - `prompts/list` e `prompts/get` com argumentos validados;
+  - capabilities `resources` e `prompts` no `initialize`.
+- **Log de auditoria** com hash encadeado em `<estado>/audit/events.jsonl`: serializado, travado entre
+  processos e com rotação aos 10 MB.
+- **Tool Gateway:** registro com escopos, classe de custo, evento de auditoria e configuração que
+  habilita cada ferramenta. Novos escopos: `workspace:read`, `git:read`, `mission:control` e
+  `mission:lease`.
+
+### Corrigido na auditoria da entrega (antes de qualquer publicação)
+
+- `git_readonly` executava programas definidos na configuração do repositório (`core.fsmonitor`,
+  filtros).
+- `delegate` passou a cortar respostas em 12 000 caracteres por padrão, quebrando o contrato da 4.0.0.
+- `output_schema` apagava a síntese do `consensus` e a integração do `swarm_run`.
+- **Leitura de projeto:**
+  - `.npmrc`, `.git-credentials`, `.netrc`, `*.pfx` e similares eram legíveis;
+  - segredos dentro de arquivos permitidos saíam sem máscara;
+  - a busca olhava só os primeiros arquivos;
+  - uma regex catastrófica travava o servidor.
+- **Privacidade:**
+  - a máscara de telefone e cartão corrompia números em código;
+  - segredos iam sem máscara com `allow_cloud`;
+  - `local_only` não tinha efeito;
+  - `git_diff` nunca era anexado.
+- **Idempotência e cache:**
+  - a mesma chave devolvia o resultado de outro prompt ou de outra identidade;
+  - o cache ignorava `detail`.
+- **Travas:** a reivindicação não era atômica, a trava não era verificada por nenhuma ferramenta e a
+  identidade sozinha renovava.
+- **Missões:**
+  - o diagnóstico enviado era `[object Object]`;
+  - a estagnação nunca era detectada;
+  - evidência de teste antiga concluía a missão;
+  - `mission_resume` trocava o objetivo pelo diagnóstico;
+  - `mission_cancel` reescrevia jobs terminados como cancelados;
+  - jobs sem limite de concorrência.
+- **MCP:** `resources/list` devolvia um modelo de URI em vez de recursos, erros de resource viravam
+  `-32603`, `resources/*` ignorava escopos e `prompts/get` aceitava qualquer argumento.
+- **Log de auditoria:** gravações concorrentes quebravam a cadeia de hashes.
+- **`handoff_export`:** devolvia uma string sem objeto estruturado.
+
+### Testes
+
+- `test/audit-410-tools.test.js` e `test/audit-410-missions.test.js`: 18 testes, todos falhavam na
+  entrega recebida.
+- `test/workspace.test.js` e `test/coordination.test.js`: testes da entrega mantidos.
+
+## 4.0.0 — 2026-09-15 — cost policy, reliable failover, cancellation, concurrent stdio and smaller results
+
+Versão maior, pela mesma regra da 3.0.0: vários padrões mudaram de forma incompatível. Siga o roteiro
+de atualização em `docs/OPERATIONS.md` (serve para 2.2.x e 3.0.0). Nada foi publicado como 3.1.0.
+
+### Mudanças incompatíveis (revise antes de atualizar)
+
+- Provedores `mixed` (openrouter/auto, mistral, together, fireworks, novita, upstage, ollama cloud,
+  hyperbolic, alibaba, gemini) ficam bloqueados sem `DZ23_ALLOW_PAID=true` (motivo `mixed_not_allowed`),
+  exceto modelos listados exatamente em `DZ23_FREE_MODELS` ou modelos `:free` do OpenRouter (o sufixo
+  não libera nada em outros provedores).
+- Adaptadores locais (`custom`, `lmstudio`, `vllm`) apontados para endpoint não privado, ou servindo
+  modelo `:cloud`/`-cloud` (Ollama cloud via servidor local), passam a ser `mixed`.
+- `GITHUB_TOKEN`, `HF_TOKEN`, `CLOUDFLARE_API_TOKEN` e `CLOUDFLARE_AUTH_TOKEN` só habilitam o provedor
+  quando `DZ23_ROTATION` o cita ou com `DZ23_ALLOW_GENERIC_CREDENTIALS=true`. Nomes específicos novos:
+  `GITHUB_MODELS_TOKEN` e `CLOUDFLARE_WORKERS_AI_TOKEN`.
+- Provedores de nuvem só leem endpoint e modelo com prefixo (`DZ23_<PROVIDER>_BASE_URL`/`_MODEL`);
+  `OPENAI_BASE_URL`, `ANTHROPIC_MODEL`, `OLLAMA_BASE_URL`, `GROQ_MODEL` e afins são ignorados porque
+  outras ferramentas os definem. Só `custom`, `lmstudio` e `vllm` mantêm os nomes sem prefixo.
+- Base URL `http://` só é aceita para endpoint privado: IP de loopback ou privado, `localhost`,
+  `host.docker.internal` ou host listado no novo `DZ23_PRIVATE_HOSTS`. Nomes sem ponto e `.local` deixam
+  de contar como privados (LLMNR/mDNS podem ser respondidos por outra máquina da rede).
+- `DZ23_ROUTING_POLICY=ordered` (2.2.x) é aceito como alias de `rotation-order`, com aviso.
+- `--http` não inicia sem `DZ23_MCP_TOKEN`, `DZ23_MCP_TOKEN_FILE` ou tokens com escopo, mesmo em
+  loopback, salvo `DZ23_ALLOW_UNAUTHENTICATED_LOCAL_HTTP=true` (código 78).
+- `GET /api/discover` só lê o cache, mesmo vazio; `?refresh=true` responde 405; atualize catálogos com
+  `POST /api/discover`.
+- `swarm_run` devolve por padrão `response_mode: "summary"`: trecho de até 600 caracteres por worker e
+  a integração completa. `response_mode: "full"` mantém o formato anterior.
+- `mission_status` devolve prévias (até 400 caracteres) das saídas dos agentes; `include_outputs: true`
+  devolve o conteúdo completo.
+- O texto em `content[0].text` é JSON compacto, sem indentação.
+- HTTP 413 e erros 400/422 de contexto grande agora são `context_length_exceeded` (antes
+  `invalid_request`): fazem failover para o próximo alvo, sem retry e sem cooldown. Quando todos os alvos
+  falham assim, o erro da ferramenta é `context_too_large` (REST 413).
+- Identificadores não podem terminar com ponto nem ser nomes de dispositivo do Windows
+  (`CON`, `NUL`, `COM0`–`COM9`, `LPT0`–`LPT9`…); o erro é `invalid_request`.
+- stdio atende requisições em paralelo; respostas chegam na ordem em que terminam (casadas por `id`).
+  Fila de até 256 requisições (`-32003 Server busy` acima disso) e `id` repetido em andamento recebe
+  `-32600`.
+- `.env.example` refeito a partir do código: todos os provedores cadastrados com chave vazia e só as
+  variáveis que o servidor lê.
+
+### Custo e credenciais
+
+- Relatório por alvo com tier e motivo de exclusão (`targetReport`), usado por `doctor`.
+- `discover_models` só contata provedores habilitados.
+
+### Confiabilidade
+
+- Resposta de provedor nunca é descartada por falha de memória depois da chamada: vem com
+  `memory_warnings` (`usage:…`, `agent_result:…`, `event:…`, `handoff:…`).
+- Cancelamento: `notifications/cancelled` no stdio (sem resposta para a requisição cancelada) e
+  desconexão do cliente no HTTP; fila do limitador, espera de retry e backoff respeitam o sinal; uma
+  requisição stdio cancelada enquanto espera vaga nunca roda; SIGINT/SIGTERM abortam as chamadas stdio
+  em andamento. Chamada cancelada ou com timeout depois de enviada é cobrada no orçamento pela reserva
+  (`token_source: "reserved_estimate"`), para que cancelar não burle limites, e não gera cooldown.
+- Prazo total por chamada de `delegate`, `consensus` e `swarm_run`: `DZ23_DELEGATE_DEADLINE_MS`
+  (padrão 600000). Erros `cancelled` (REST 499) e `deadline_exceeded` (REST 504).
+- `DZ23_SHARED_COOLDOWNS` (padrão `true`) grava em `providers/status.json` só cooldowns transitórios
+  (rate limit, quota, indisponibilidade, timeout), compartilhados entre Claude Code, Codex e Hermes no
+  mesmo diretório de estado. Falhas de autenticação ficam no processo: um harness com chave errada não
+  tira o provider dos outros.
+- `Retry-After` e cooldowns lidos do arquivo compartilhado são limitados a 1 hora.
+- O classificador de contexto grande ficou mais estrito (frases como "context: user profile" não
+  disparam mais failover).
+- Registro de uso após sucesso tenta de novo antes de virar `memory_warnings` e a métrica
+  `usage_record_failures_total`.
+- `DZ23_STDIO_MAX_INFLIGHT` (padrão 8) limita requisições simultâneas no stdio.
+
+### Consenso e swarm
+
+- `possible_divergences` no consenso heurístico ("Postgres" vs "Redis", "30 s" vs "90 s", comparações
+  invertidas, "server" vs "serverless"); com divergências a concordância nunca é `high`;
+  `agreement.method` é `lexical_overlap`.
+- O revisor integrador do swarm e a síntese por modelo recebem as respostas desta rodada no prompt
+  (até 24 mil caracteres, com aviso de corte em `routing.warnings`), entre marcadores com nonce
+  aleatório, para que uma resposta não forje o fim do bloco.
+- Cancelamento ou prazo depois dos workers devolve o resultado parcial já pago com `stopped`, sem
+  iniciar integração ou síntese.
+- Falhas de gravação no fim do swarm viram `memory_warnings` em vez de perder as saídas; `swarm_run` e
+  `consensus` juntam no nível superior os avisos de todos os workers. O resumo de cada worker mantém
+  `usage` e `failed_attempts`.
+
+### Ferramentas, CLI e instalação
+
+- Descrições orientam a reutilizar `project_id`/`mission_id`; `roles`, `max_agents` e `models`
+  documentados no schema.
+- `doctor`: checagens `targets`, `cost_policy`, `generic_credentials` e HTTP sem autenticação, dizendo
+  se a rotação veio de `DZ23_ROTATION`; `providers` com colunas TIER, ELIGIBLE e NOTE (variável
+  genérica ignorada, motivo de bloqueio); `config validate` com os novos campos e um resumo.
+- `discover_models.cache_only` lê catálogos em cache sem contatar provedores.
+- Instalador: Codex com `startup_timeout_sec = 30` e `tool_timeout_sec = 900`; comando pronto
+  `claude mcp add -s user` para Claude Code.
+- `DZ23_STATE_DIR` expande `~\` no Windows.
+
+### Código e testes
+
+- Orquestração de consenso e swarm movida para `src/orchestration.js`; `src/endpoints.js` novo.
+- Testes novos: `hardening-policy`, `hardening-runtime`, `hardening-audit`, `cli-diagnostics`. Asserções de ordem no
+  stdio passaram a casar respostas por `id`; o teste de sobreposição do swarm roda sem fsync (ficava
+  instável com a máquina carregada).
+
+## 3.0.0 — 2026-09-13 — MCP conformance, HTTP security, observability, budgets and memory v2
+
+Versão maior porque há mudanças incompatíveis com 2.2.x. A numeração 2.3.0 foi usada apenas
+numa candidata interna, nunca publicada.
+
+### Mudanças incompatíveis (revise antes de atualizar)
+
+- `consensus` retorna um objeto (`requested`, `planned`, `received`, `failed`,
+  `responses`, `routing`, `synthesis`) em vez de uma lista.
+- Argumentos de ferramentas são validados pelo schema publicado: campos desconhecidos,
+  tipos errados, enums inválidos, prompts vazios ou acima do limite são recusados.
+  `memory_checkpoint.status` agora é um enum.
+- `structuredContent` é sempre um objeto; resultados em lista vêm como `{items: [...]}`.
+  O texto em `content` mantém o JSON original.
+- Tipos de erro de provider mudaram para a taxonomia de 13 categorias
+  (`quota_or_rate_limit`, `auth_or_entitlement` e `model_or_endpoint_missing` não existem mais).
+- `initialize` aceita 2025-11-25 e 2025-06-18; versões datadas não suportadas recebem
+  contraproposta; valores malformados recebem `-32602`.
+- `memory_checkpoint` não força mais `status: active` quando omitido e cria a missão
+  quando ela ainda não existe.
+- Endpoints REST (`/api/*`) usam a mesma validação/escopos/rate limit das ferramentas MCP;
+  o formato de erro mudou.
+- Cooldown depende do tipo de erro (antes: 15 minutos para qualquer falha).
+- `discover_models` devolve `{id, owned_by, catalog_capabilities}` por modelo
+  (campos crus do catálogo foram removidos).
+- Definir `DZ23_MCP_TOKEN` e `DZ23_MCP_TOKEN_FILE` ao mesmo tempo impede a inicialização.
+- `health_check` exige `confirm_billable: true`; na REST é `POST /api/health` (`GET` responde 405).
+- Erros REST e de transporte HTTP usam `{error: {code, message, request_id, details}}`; campos como
+  `error.field` passaram para `error.details`.
+- `memory_checkpoint` responde com um resumo em vez do estado completo; listas são limitadas a 500
+  itens e o estado a 4 MiB (`DZ23_MAX_CHECKPOINT_LIST_ITEMS`, `DZ23_MAX_STATE_BYTES`).
+- `delegate`, `consensus` e `swarm_run` não sobrescrevem mais `status`, `next_action` ou `goal`;
+  gravam `last_tool_handoff`. O swarm não preenche mais listas de tarefas da missão.
+- Provedores locais só ficam ativos com configuração explícita (URL, modelo, chave ou menção em
+  `DZ23_ROTATION`); a exceção à regra de modelo padrão vale só para endereços loopback ou privados.
+- Sem `DZ23_ROTATION`, alvos explícitos com modelo diferente do padrão do provider exigem
+  `DZ23_ALLOW_PAID=true`; `verify_model` segue a mesma regra.
+- Com limites de custo e sem `DZ23_COST_POLICY`, o padrão é `deny_unknown_cost`.
+- Erros de configuração (booleano inválido, política de roteamento desconhecida) impedem o servidor
+  de iniciar, com código 78.
+- Argumentos que não sejam `--stdio`/`--http` são comandos da CLI; comando desconhecido sai com 2.
+- `swarm_run` sem `max_agents` usa no máximo `DZ23_MAX_CONCURRENCY` workers.
+- `token hash` recusa tokens com menos de 32 caracteres. Com `--http`, `DZ23_MCP_TOKEN` com
+  menos de 32 caracteres impede a inicialização (código 78); em stdio gera apenas aviso.
+
+### MCP e JSON-RPC
+- Validador de JSON Schema sem dependências; keywords não suportadas são recusadas no registro.
+- Códigos `-32700`, `-32600`, `-32601`, `-32602`, `-32603`; `-32001` rate limit, `-32002` forbidden,
+  `-32003` servidor ocupado. Falhas esperadas de ferramenta viram `isError: true` com
+  `code`, `message`, `request_id` e detalhes sanitizados.
+- `id: 0` e ids string preservados; `id: null` e batch recusados; notificações sem resposta.
+- Header `MCP-Protocol-Version` validado quando presente.
+
+### HTTP e identidade
+- `DZ23_MCP_TOKEN_FILE`; modo `scoped` com digests SHA-256 e escopos por token.
+- Rate limiting por processo (identidade, ferramenta, concorrência e custo), 429 + `Retry-After`
+  antes de qualquer chamada a provider; falhas de autenticação por endereço limitadas.
+- Limites de corpo, tempo de leitura, requisições em andamento, conexões e shutdown gracioso.
+
+### Observabilidade
+- Logs JSON Lines em stderr com redação; `request_id` em logs, journal, resultados e erros.
+- Métricas de processo e `GET /metrics` (escopo `admin:inventory`).
+
+### Providers, retry e roteamento
+- `ProviderError` com `kind`, `retryable`, `retryAfterMs` e mensagens sem corpo cru.
+- Retry limitado apenas para `rate_limited`, `provider_timeout` e `provider_unavailable`;
+  `invalid_request` não faz failover.
+- Estratégias `first`, `round_robin`, `provider_diversity`, `model_diversity`,
+  `cost_optimized`, `latency_optimized`, diversidade observada, `strict_diversity`
+  e `avoid_reviewer_target`.
+- `verify_model` (exige `confirm_billable: true`), status de catálogo/verificação persistido,
+  `catalog_capabilities` com `unknown` quando o catálogo não declara.
+
+### Orçamento
+- Limites de tokens de entrada, chamadas/tokens por missão e custo por chamada, missão,
+  projeto e dia; política `allow_unknown_cost`/`deny_unknown_cost`; preços apenas de tabela explícita.
+- Registro de uso com origem de tokens e custo; reservas em processo contra estouro concorrente.
+
+### Memória
+- Schema versionado com migrações na leitura; JSON corrompido gera `memory_integrity`.
+- Locks com dono (pid, hostname, heartbeat) e remoção automática só de dono comprovadamente morto.
+- Journal com `seq` monotônico e recuperação de linha incompleta; escrita com fsync.
+- Contexto em camadas com relatório de seções truncadas.
+- Correção de condição de corrida no Windows: rename de `state.json` falhava com EPERM durante
+  leituras concorrentes; leituras/escritas do processo são serializadas por projeto e há retry.
+
+### CLI, CI e empacotamento
+- `doctor`, `config validate`, `providers`, `health --yes`, `missions list|show`,
+  `memory repair [--apply --yes]`, `token hash`, com `--json` e códigos de saída.
+- CI com lint, testes de contrato, cobertura (relatório) e auditoria dos arquivos públicos.
+- Docker com código somente leitura para o usuário não-root, volume de estado, healthcheck
+  com token por arquivo e compose com `read_only`, limites e secret opcional.
+
+### Correções da auditoria independente (arquitetura, segurança e produto)
+- Checkpoints concorrentes perdiam itens: o merge agora acontece dentro do lock da missão.
+- Falhas de autenticação de um endereço bloqueavam também tokens válidos: só tentativas inválidas
+  são limitadas.
+- Chamadas de ferramenta sobrescreviam o handoff do harness (`status`, `next_action`, `goal`).
+- Comando desconhecido iniciava o servidor stdio em silêncio.
+- `GET /api/health` permitia a uma página cross-site disparar chamadas faturáveis num servidor
+  loopback sem token; o Host era lido da URL absoluta em vez do header.
+- Modelos arbitrários em providers de categoria mista contornavam a política de pagos.
+- Remoção de lock sem dono podia apagar um lock recriado; locks anteriores ao boot ficavam presos;
+  `owner.json` é gravado de forma atômica; erros de lock não expõem `pid`/`hostname`.
+- stdio acumulava frames grandes em memória antes de rejeitá-los.
+- `memory repair` propunha restaurar checkpoint antigo sobre registro de schema mais novo.
+- Liquidação de uso marcava como gravada uma escrita que falhou.
+- Revisores do `consensus` viam as respostas uns dos outros no contexto.
+- Fila cheia virava `internal_error`; agora é `queue_full` (503).
+- Rate limiter descartava buckets esgotados sob pressão de chaves; mapas por alvo e séries de
+  métricas agora são limitados.
+- `doctor` passava sem alvos elegíveis ou com registros corrompidos; booleanos, timeouts e política
+  de roteamento inválidos eram aceitos em silêncio.
+- IDs que diferem só por maiúsculas/minúsculas colidiam em Windows/macOS.
+- Guard de publicação passa a recusar `credentials*.json`, `secrets*.json` e `token*.txt`.
+- Segunda rodada: fila cheia não coloca mais um alvo saudável em cooldown; a checagem de
+  maiúsculas/minúsculas vale em todas as leituras e escritas da memória; lock com o PID deste
+  processo e outro horário de início (PID 1 de container reiniciado) é recuperado, e o compose fixa o
+  hostname; o handoff após uma chamada já paga não falha por limite de tamanho; `memory_checkpoint`
+  informa `truncated_lists`; `startMission` não sobrescreve missão criada em paralelo; um processo
+  só remove o próprio lock; erros HTTP inesperados trazem `request_id`.
+- Quarta rodada: falha transitória ao ler `owner.json` na liberação não deixa mais o lock preso até o
+  processo reiniciar (escrita de heartbeat pendente é aguardada e a leitura é repetida); a checagem de
+  maiúsculas/minúsculas só vale em sistemas de arquivos que não as diferenciam, então IDs distintos já
+  existentes em Linux continuam acessíveis; na CLI, ID com maiúsculas/minúsculas trocadas é erro de uso
+  (código 2) em vez de parecer memória corrompida; `memory repair --apply` informa "No repairs applied."
+  quando nada mudou; token HTTP curto impede apenas `--http`; conexões que não completam os headers da
+  primeira requisição são fechadas e respostas não autenticadas encerram a conexão; o endereço privado
+  é analisado como IP de verdade (nomes como `10.0.0.1.evil.com` não contam); a checagem de maiúsculas
+  só lista o diretório para IDs ainda não vistos; o guard de publicação cobre `apikey*`, `.pgpass`,
+  `.htpasswd`, `kubeconfig` e keystores Java; `doctor` falha no check `http` quando `--http` recusaria o
+  token; `memory repair --json` separa `apply_requested` de `applied`.
+- Terceira rodada: missão que já atingiu `DZ23_MAX_STATE_BYTES` é recusada antes de qualquer chamada
+  paga; conexões HTTP silenciosas são fechadas após o timeout de headers; erro de provider, rotação com
+  provider desconhecido e HTTP inseguro fazem o servidor sair com 78 em vez de iniciar ou mostrar stack
+  trace; `config validate` acusa HTTP inseguro; `missions show --json` devolve erro em JSON; o erro de
+  colisão de maiúsculas não revela o identificador existente; o guard de publicação cobre mais nomes
+  de credencial (`tokens.json`, `*-key.json`, `service-account*.json`, `id_rsa`, `.npmrc` e outros).
+
+## 2.2.5 — 2026-09-12 — hardening de orquestração e limites
+
+- Contexto persistido e saídas de modelos são enviados como dados não confiáveis;
+  papéis agora usam enum estrito e QA/DevOps não podem alegar execução de ações.
+- `swarm_run` usa o primeiro alvo como principal e os seguintes apenas como failover,
+  evitando distribuir trabalho ao modelo de fallback quando o principal está saudável.
+- Limites configuráveis para fila, resposta HTTP, frame stdio, outputs persistidos,
+  journal e checkpoints; concorrência e quantidade de agentes possuem tetos.
+- Modo HTTP desativado por padrão e condicionado a opt-in explícito.
+- Locks de memória toleram erros transitórios do Windows sem remover exclusão mútua.
+- Regressões cobrem papéis arbitrários, contexto não confiável, limite de resposta
+  vazia, evento excessivo e preferência do alvo principal. Smoke real no Windows/
+  Node 24 validou os sete papéis e o reviewer integrador usando o modelo cloud
+  `deepseek-v4-flash:cloud` por meio do daemon Ollama local.
+
+## 2.2.4 — 2026-09-12 — paralelismo verificável e distribuição de workers
+
+- Corrigido round-robin em `swarm_run`: papéis usam alvos elegíveis distintos
+  antes de reutilizar um alvo, mantendo a ordem da rotação e os limites existentes.
+- Testes não dependem mais de respostas falsas durarem 30/40 ms. Barreiras de
+  Promises mantêm chamadas abertas até observar simultaneidade e filas. Watchdogs
+  detectam travamentos; o tempo decorrido não é critério de aprovação.
+- Regressão com journal deliberadamente lento; checagem de distribuição com
+  reutilização/cooldown; limites globais/por alvo e liberação em erro preservados.
+- `PUBLICAR_WINDOWS.cmd` executa o publicador na própria pasta, sem digitar caminho.
+  Requer Node/Git/gh instalados e login local; qualquer teste falho ainda bloqueia push.
+- Sem migração de memória, alteração de APIs/chaves ou redução de guardas.
+- Consulte `docs/VALIDATION.md`: validação local Linux, sem alegar Windows/Node 24
+  ou GitHub Actions aprovados antes de serem executados nesses ambientes.
+
+## 2.2.3 — 2026-09-12 — preparação open-source (engineering preview)
+
+### Publicação e documentação
+- Licença MIT original preservada; README PT/EN, contribuição, conduta, segurança,
+  suporte, inventário de componentes e roadmap adicionados.
+- Publicação primeira vez via GitHub CLI com conta verificada, allowlist/hash,
+  scanner de padrões, proteção contra sobrescrita e verificação do commit remoto.
+- Nenhum `.env` privado no código público; instaladores criam a cópia local.
+- CI configurada para Linux/Windows e Node 22/24; ainda não executada no GitHub.
+- Limites reais documentados: workers textuais, sem shell/worktrees automáticas,
+  sem OAuth/RBAC/multitenancy/Vault, sem promessa de custo zero ou host universal.
+
+### Correções de runtime
+- Seleção explícita agora respeita elegibilidade; `paid` e `low-cost` bloqueados
+  com ALLOW_PAID=false (antes era possível contornar via target explícito).
+  Alvos explícitos também respeitam a lista DZ23_ROTATION quando definida.
+- Limites simultâneos globais e por provider:model agora aplicados por processo.
+- IDs de projeto/missão inválidos são rejeitados, não silenciosamente normalizados.
+- Arquivos/dirs de memória novos com permissões restritas quando suportadas.
+- HTTP exige token em bind não local, valida Host/Origin, trata JSON inválido,
+  retorna 202 em notificações e 405 no GET/DELETE MCP sem SSE.
+- Erros de API não devolvem corpo bruto; secret files ilegíveis falham explicitamente.
+- URLs de provider rejeitam credenciais embutidas/query/fragmento.
+- Flags de capabilities agora descrevem a superfície textual realmente exposta.
+- IDs de modelo não comprovados para novas integrações passam a configuração explícita.
+
+### Compatibilidade / atualização
+- Baseline passa para Node 22+. IDs anteriormente normalizados devem ser referidos
+  pelo nome seguro já gravado em disco; faça backup antes de qualquer ajuste manual.
+- Non-loopback HTTP precisa de token 32+ e hosts/origins explicitamente autorizados.
+- Mixed/free-tier continuam dependentes do plano do fornecedor: o guard não é um
+  teto financeiro. Exemplo padrão usa somente o endpoint local.
+- Nenhuma migração, limpeza de estado ou alteração de outros projetos foi executada.
+
+## 2.2.2 — base recebida
+
+Carregamento do .env relativo à instalação e geração de snippets com caminhos reais.
+A suíte de 14 testes da base foi reexecutada antes das mudanças desta preparação.

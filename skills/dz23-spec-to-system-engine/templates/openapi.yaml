@@ -1,0 +1,108 @@
+openapi: 3.1.0
+info:
+  title: <serviço>
+  version: 1.0.0
+  description: Contrato de referência. Adapte paths e schemas ao domínio real.
+servers:
+  - url: https://api.exemplo.com
+paths:
+  /api/v1/orders:
+    get:
+      summary: Lista pedidos do tenant da sessão
+      parameters:
+        - {name: cursor, in: query, schema: {type: string}, description: paginação por keyset}
+        - {name: limit, in: query, schema: {type: integer, minimum: 1, maximum: 100, default: 20}}
+        - {name: status, in: query, schema: {type: string, enum: [pending, confirmed, paid, cancelled]}}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, next_cursor]
+                properties:
+                  items: {type: array, items: {$ref: '#/components/schemas/Order'}}
+                  next_cursor: {type: [string, 'null']}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '429': {$ref: '#/components/responses/TooManyRequests'}
+    post:
+      summary: Cria pedido (idempotente)
+      parameters:
+        - {name: Idempotency-Key, in: header, required: true, schema: {type: string, minLength: 8}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [items, currency]
+              properties:
+                items:
+                  type: array
+                  minItems: 1
+                  maxItems: 100
+                  items:
+                    type: object
+                    required: [product_id, quantity]
+                    properties:
+                      product_id: {type: string, format: uuid}
+                      quantity: {type: integer, minimum: 1, maximum: 999}
+                coupon: {type: string, maxLength: 32}
+                currency: {type: string, enum: [BRL, USD]}
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Order'}
+        '400': {$ref: '#/components/responses/BadRequest'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '422': {$ref: '#/components/responses/UnprocessableEntity'}
+        '429': {$ref: '#/components/responses/TooManyRequests'}
+components:
+  schemas:
+    Order:
+      type: object
+      required: [id, status, total_cents, currency, created_at]
+      properties:
+        id: {type: string, format: uuid}
+        status: {type: string, enum: [pending_payment, confirmed, completed, cancelled]}
+        total_cents: {type: integer, minimum: 0, description: valor em centavos}
+        currency: {type: string, enum: [BRL, USD]}
+        created_at: {type: string, format: date-time}
+    Problem:
+      type: object
+      required: [type, title, status, code]
+      properties:
+        type: {type: string, format: uri}
+        title: {type: string}
+        status: {type: integer}
+        code: {type: string, description: identificador estável para o cliente}
+        detail: {type: string}
+        request_id: {type: string}
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              name: {type: string}
+              reason: {type: string}
+  responses:
+    BadRequest:
+      description: Payload malformado
+      content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}
+    Unauthorized:
+      description: Sem sessão ou sessão expirada
+      content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}
+    Conflict:
+      description: Conflito de estado/unicidade
+      content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}
+    UnprocessableEntity:
+      description: Regra de negócio recusada
+      content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}
+    TooManyRequests:
+      description: Rate limit
+      headers:
+        Retry-After: {schema: {type: integer}}
+      content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}

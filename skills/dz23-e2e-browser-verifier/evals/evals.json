@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "skill": "dz23-e2e-browser-verifier",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso.",
+  "cases": [
+    {
+      "id": "sleep-instead-of-wait",
+      "title": "Sleep como sincronização",
+      "input": "Teste faz `await page.waitForTimeout(3000)` antes de clicar em 'Pagar'.",
+      "expected": "Substitui por espera de estado (`expect(locator).toBeVisible()` ou `waitForResponse`), explica que sleep falha em máquina lenta e desperdiça tempo em rápida.",
+      "fails_if": "Aceita o sleep ou só aumenta para 5000."
+    },
+    {
+      "id": "fragile-selector",
+      "title": "Seletor posicional",
+      "input": "`page.locator('div > div:nth-child(3) > button')` para o botão de checkout.",
+      "expected": "Troca por `getByRole('button', {name})` ou `getByTestId`; explica o que quebra ao mudar layout.",
+      "fails_if": "Mantém o seletor ou troca por outra classe CSS."
+    },
+    {
+      "id": "test-passing-without-assertion",
+      "title": "Teste que não prova nada",
+      "input": "Teste clica em tudo e termina com `expect(true).toBe(true)`.",
+      "expected": "Adiciona asserção de resultado visível + efeito no servidor; aponta que o teste passaria com o produto quebrado.",
+      "fails_if": "Considera o teste válido porque 'não deu erro'."
+    },
+    {
+      "id": "shared-user-state",
+      "title": "Estado compartilhado entre testes",
+      "input": "Dez testes usam o mesmo usuário fixo e decrementam estoque do mesmo produto.",
+      "expected": "Isola por run (usuário/dado único, teardown por runId), elimina dependência de ordem.",
+      "fails_if": "Diz que 'roda em série resolve' ou aumenta timeout."
+    },
+    {
+      "id": "tenant-cross-access",
+      "title": "Acesso cruzado entre tenants",
+      "input": "Usuário do tenant A abre URL de pedido do tenant B e a tela mostra o pedido.",
+      "expected": "Classifica como BLOCKER; exige teste que espere 404/403 e valida que listagem não contém dado de B.",
+      "fails_if": "Trata como cosmético ou só adiciona teste de listagem."
+    },
+    {
+      "id": "auth-bypass-not-tested",
+      "title": "Autorização não testada",
+      "input": "Suíte cobre só o caminho feliz do fluxo admin.",
+      "expected": "Adiciona caso de usuário sem papel (403/redirect) e de sessão expirada.",
+      "fails_if": "Aceita cobertura só do happy path."
+    },
+    {
+      "id": "mock-own-backend",
+      "title": "Mock do próprio alvo",
+      "input": "Teste intercepta `/api/orders` e devolve JSON fixo, chamando isso de E2E.",
+      "expected": "Aponta que E2E deixou de provar integração; mock só no limite externo; mover para teste de componente.",
+      "fails_if": "Considera válido como E2E."
+    },
+    {
+      "id": "flaky-quarantine",
+      "title": "Flake sem tratamento",
+      "input": "Teste falha 3 em 10 execuções; time adicionou `retries: 3` e fechou.",
+      "expected": "Abre triagem (templates/flaky-triage.md), identifica causa provável, corrige ou quarentena com issue e prazo; retry não fecha.",
+      "fails_if": "Aceita retry como solução."
+    },
+    {
+      "id": "missing-trace-evidence",
+      "title": "Falha sem artifact",
+      "input": "CI mostra 'timeout waiting for selector' sem trace, screenshot ou console.",
+      "expected": "Exige trace/screenshot/console no CI, artifact no run; sem isso o diagnóstico é adivinhação.",
+      "fails_if": "Declara a falha investigada sem evidência."
+    },
+    {
+      "id": "production-destructive",
+      "title": "Teste destrutivo em produção",
+      "input": "Pedido de rodar a suíte completa contra produção para 'validar o release'.",
+      "expected": "Recusa por padrão; oferece staging/preview; se for smoke, somente leitura e com autorização explícita registrada.",
+      "fails_if": "Executa ou concorda sem autorização."
+    },
+    {
+      "id": "secret-in-repo",
+      "title": "Credencial no teste",
+      "input": "Teste com `password: 'SenhaReal123'` no código.",
+      "expected": "Move para variável/secret, usuário de teste dedicado, alerta sobre vazamento e artifact com storageState.",
+      "fails_if": "Mantém ou transfere para um fixture commitado."
+    },
+    {
+      "id": "visual-baseline-auto-update",
+      "title": "Baseline visual atualizado sozinho",
+      "input": "Regressão visual falha e o pipeline roda `--update-snapshots` automaticamente.",
+      "expected": "Bloqueia: atualização de baseline exige revisão humana do diff; senão a regressão é aceita em silêncio.",
+      "fails_if": "Aceita atualização automática como correção."
+    },
+    {
+      "id": "click-before-hydration",
+      "title": "Clique antes da hidratação do SSR",
+      "input": "Em app Next.js, o teste clica no botão assim que o HTML chega e o primeiro clique 'se perde'; passa no segundo.",
+      "expected": "Identifica hidratação incompleta; espera estado interativo real (habilitado/pronto) ou exige que a app desabilite o botão até hidratar. Comprova com `--repeat-each=5`.",
+      "fails_if": "Adiciona sleep/waitForTimeout ou clica duas vezes para 'resolver'."
+    },
+    {
+      "id": "sync-assertion-vs-async",
+      "title": "Asserção síncrona em vez de auto-retentável",
+      "input": "`expect(await locator.isVisible()).toBe(true)` num teste que falha de forma intermitente.",
+      "expected": "Troca por `await expect(locator).toBeVisible()`, explica que a forma síncrona avalia o instante sem aguardar o DOM.",
+      "fails_if": "Mantém a forma síncrona ou apenas aumenta o timeout."
+    },
+    {
+      "id": "tenant-cross-read-not-tested",
+      "title": "Acesso cruzado entre tenants não testado",
+      "input": "Suíte entra como tenant A e cobre o fluxo; ninguém testa GET de recurso do tenant B.",
+      "expected": "Adiciona caso por URL/API direta esperando 404/403 e valida que a listagem de B não traz dado de A; classifica como P0.",
+      "fails_if": "Considera coberto porque 'o login funciona'."
+    }
+  ]
+}

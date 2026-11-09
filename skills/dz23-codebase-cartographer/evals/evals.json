@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "skill": "dz23-codebase-cartographer",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado por caso.",
+  "cases": [
+    {
+      "id": "map-without-commit",
+      "title": "Mapa sem commit/data",
+      "input": "Mapa do repositório entregue sem SHA nem data de leitura.",
+      "expected": "Recusa entregar: cabeçalho com repo, commit, branch e data é BLOCKER; sem isso o mapa não é reutilizável.",
+      "fails_if": "Entrega o mapa assim mesmo."
+    },
+    {
+      "id": "claim-without-pointer",
+      "title": "Afirmação sem evidência",
+      "input": "'O serviço de pedidos fala com o billing por evento.'",
+      "expected": "Exige `arquivo:linha` do publicador e do consumidor; sem isso é INFERIDO, não fato.",
+      "fails_if": "Registra como fato consumado."
+    },
+    {
+      "id": "read-everything-claim",
+      "title": "'Li todo o repositório'",
+      "input": "Mapa afirma leitura completa de 900 arquivos em 5 minutos.",
+      "expected": "Exige amostragem declarada (lido / não lido / critério) e rebaixa a afirmação.",
+      "fails_if": "Aceita a alegação de leitura total."
+    },
+    {
+      "id": "folder-as-architecture",
+      "title": "Pasta confundida com arquitetura",
+      "input": "Mapa descreve camadas apenas pelos nomes das pastas.",
+      "expected": "Levanta o grafo real de imports e mostra onde a intenção diverge (ex.: controller importando ORM direto).",
+      "fails_if": "Repete a estrutura de pastas como arquitetura."
+    },
+    {
+      "id": "dead-code-guess",
+      "title": "Código morto sem prova",
+      "input": "'src/legacy/report.ts não é usado, pode apagar.'",
+      "expected": "Exige as 3 checagens (import, referência dinâmica, config/CI); sem todas, é 'candidato a morto, não confirmado'.",
+      "fails_if": "Recomenda apagar direto."
+    },
+    {
+      "id": "no-risk-zones",
+      "title": "Mapa sem zona de risco",
+      "input": "Mapa de sistema com cobrança e auth não menciona áreas de risco.",
+      "expected": "Identifica núcleo de dinheiro, auth/tenant e migração como zonas, com evidência; inclui 'não tocar sem plano'.",
+      "fails_if": "Entrega mapa só estrutural."
+    },
+    {
+      "id": "blast-radius-vague",
+      "title": "Blast radius vago",
+      "input": "'A mudança afeta alguns arquivos.'",
+      "expected": "Exige lista de importadores, rotas, jobs, tabelas e o teste que cobre — ou declara blast radius desconhecido.",
+      "fails_if": "Aceita 'alguns arquivos'."
+    },
+    {
+      "id": "no-test-area-silent",
+      "title": "Área sem teste não mencionada",
+      "input": "Mapa cobre módulo crítico sem dizer que não há teste.",
+      "expected": "Registra ausência de teste como achado P0/P1 e indica validação manual possível.",
+      "fails_if": "Omite a lacuna."
+    },
+    {
+      "id": "brief-over-budget",
+      "title": "Brief estourando o orçamento",
+      "input": "Context brief com 600 linhas e trechos colados de código.",
+      "expected": "Reescreve com ponteiros e orçamento declarado (≤120 linhas), cortando despejo de código.",
+      "fails_if": "Entrega o brief gigante."
+    },
+    {
+      "id": "brief-without-do-not-touch",
+      "title": "Brief sem 'não tocar'",
+      "input": "Brief indica onde mexer, mas não avisa o que é perigoso.",
+      "expected": "Exige seção de 'não tocar' com risco e ponteiro; é o que evita o próximo agente quebrar o núcleo.",
+      "fails_if": "Aceita o brief sem avisos."
+    },
+    {
+      "id": "stale-map",
+      "title": "Mapa velho usado como atual",
+      "input": "Mapa de 4 meses atrás citando arquivo que não existe.",
+      "expected": "Detecta que o arquivo sumiu, marca o mapa como vencido (30 dias/50 commits) e revalida por diff.",
+      "fails_if": "Usa o mapa como verdade atual."
+    },
+    {
+      "id": "readme-as-truth",
+      "title": "README tratado como verdade",
+      "input": "README diz 'Next.js + Postgres', manifest mostra Express + SQLite.",
+      "expected": "Segue o manifest e registra a divergência como achado de documentação mentindo.",
+      "fails_if": "Descreve a stack do README."
+    },
+    {
+      "id": "two-writers-unnoticed",
+      "title": "Dois escritores no mesmo dado",
+      "input": "Duas rotas diferentes atualizam a mesma tabela sem transação comum.",
+      "expected": "Registra como risco P1 (corrida/estado inconsistente) com os dois ponteiros.",
+      "fails_if": "Não nota ou considera normal."
+    },
+    {
+      "id": "inference-as-fact",
+      "title": "Inferência apresentada como leitura",
+      "input": "Mapa afirma 'toda query filtra tenant' sem ter lido o middleware.",
+      "expected": "Marca como INFERIDO e dá o que faltaria para confirmar (ler o middleware / grep de `withTenant`).",
+      "fails_if": "Afirma como confirmado."
+    },
+    {
+      "id": "no-access-honesty",
+      "title": "Sem acesso ao banco",
+      "input": "Skill descreve schema real sem conseguir conectar ao banco.",
+      "expected": "Declara `schema não verificado — inferido de <arquivo>` e/ou BLOCKED_BY_EXTERNAL_DEPENDENCY; nunca inventa coluna.",
+      "fails_if": "Descreve colunas inventadas ou omite a limitação."
+    }
+  ]
+}

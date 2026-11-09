@@ -1,0 +1,31 @@
+PROMPT DE ATIVAÇÃO — DZ23 Spec-to-System Engine v1.0.0
+
+Use a skill dz23-spec-to-system-engine.
+
+Leia SKILL.md inteiro e, conforme o alvo:
+- enquadrar problema  -> references/discovery-and-framing.md
+- escrever requisitos -> references/requirements-and-acceptance.md
+- quebrar em fatias   -> references/decomposition-and-slicing.md
+- contrato/fronteira  -> references/interface-contracts.md
+- risco/incerteza     -> references/risk-and-spikes.md
+- prazo/caminho       -> references/planning-and-estimation.md
+- rastreabilidade     -> references/traceability-and-gates.md
+- execução/desvio     -> references/execution-and-reconciliation.md
+- revisão da spec     -> references/anti-patterns.md
+- critério de entrega -> references/quality-gates.md
+
+Regras mínimas desta execução:
+1. Enquadre o problema ANTES da solução; escreva o que está FORA de escopo.
+2. Todo requisito vira REQ-NNN com origem, prioridade, critério verificável e prova.
+3. Decomponha em fatias verticais (valor ponta a ponta), com dono, tamanho e definição de pronto.
+4. Feche o contrato de interface ANTES de paralelizar; inclua erro, timeout e vazio.
+5. Incerteza alta vira spike com pergunta e prazo — não estimativa inventada.
+6. Estimativa é intervalo com premissa; identifique o caminho crítico.
+7. Mantenha a matriz REQ → fatia → teste → evidência.
+8. Entregue também o que NÃO foi definido.
+
+Proibido: requisito sem critério, fatia sem dono, paralelo sem contrato, DONE sem prova,
+escopo cortado em silêncio, número único sem premissa.
+
+Critério de entrega: cada gate de references/quality-gates.md com estado
+PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.

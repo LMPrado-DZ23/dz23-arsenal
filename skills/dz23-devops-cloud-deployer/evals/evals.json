@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "skill": "dz23-devops-cloud-deployer",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso.",
+  "cases": [
+    {
+      "id": "secret-in-image",
+      "title": "Segredo embutido na imagem",
+      "input": "Dockerfile com `ARG API_TOKEN` e `ENV API_TOKEN=$API_TOKEN`.",
+      "expected": "Classifica como BLOCKER: o ARG fica no histórico da imagem; move para secret em runtime e instrui checar `docker history`.",
+      "fails_if": "Aceita porque 'o build passa'."
+    },
+    {
+      "id": "latest-tag-in-prod",
+      "title": "Tag mutável em produção",
+      "input": "Manifesto com `image: registry/app:latest` no ambiente de produção.",
+      "expected": "Exige digest (`image@sha256:…`), explica que a tag move e o rollout pode publicar outra coisa.",
+      "fails_if": "Aceita tag ou sugere `:v1` mutável."
+    },
+    {
+      "id": "rebuild-per-environment",
+      "title": "Rebuild por ambiente",
+      "input": "Pipeline constrói imagem nova no deploy de staging e outra no deploy de produção.",
+      "expected": "Aponta que o artefato testado não é o publicado; exige um build por commit e promoção por digest.",
+      "fails_if": "Considera equivalente porque 'o código é o mesmo commit'."
+    },
+    {
+      "id": "gate-does-not-block",
+      "title": "Gate que não bloqueia",
+      "input": "Scan de imagem roda mas usa `continue-on-error: true`.",
+      "expected": "Corrige para falhar o pipeline em CRITICAL; exceção só com issue e prazo registrados.",
+      "fails_if": "Mantém o aviso como suficiente."
+    },
+    {
+      "id": "no-rollback-path",
+      "title": "Deploy sem volta",
+      "input": "Deploy direto com `kubectl set image` e sem plano de rollback documentado.",
+      "expected": "Bloqueia: exige caminho de volta (digest anterior / flag / migração), runbook e ensaio em staging.",
+      "fails_if": "Publica e diz que 'se der ruim, a gente vê'."
+    },
+    {
+      "id": "liveness-on-database",
+      "title": "Liveness apontando para o banco",
+      "input": "livenessProbe com `httpGet /health` que consulta o banco.",
+      "expected": "Aponta que banco lento reinicia todos os pods em cascata; liveness do processo, readiness para dependência.",
+      "fails_if": "Mantém ou aumenta `failureThreshold`."
+    },
+    {
+      "id": "no-resource-limits",
+      "title": "Sem requests/limits",
+      "input": "Deployment sem `resources` definidos.",
+      "expected": "Exige requests realistas e limit de memória; explica agendamento e OOM do nó.",
+      "fails_if": "Diz que 'o cluster é grande' e segue."
+    },
+    {
+      "id": "migration-before-code",
+      "title": "Migração destrutiva antes do deploy",
+      "input": "Rodar `DROP COLUMN` antes de publicar o código que parou de usar a coluna.",
+      "expected": "Exige expand/contract: código tolerante a N-1, backfill, remoção depois; backup verificado antes.",
+      "fails_if": "Executa o DROP ou confia no rollback de aplicação."
+    },
+    {
+      "id": "admin-credentials-in-ci",
+      "title": "Credencial de admin no CI",
+      "input": "Pipeline com `AWS_ACCESS_KEY_ID` de usuário admin em secret.",
+      "expected": "Troca por OIDC com role de deploy de menor privilégio; explica que comprometer o CI compromete a nuvem.",
+      "fails_if": "Mantém chave estática de admin."
+    },
+    {
+      "id": "no-health-after-deploy",
+      "title": "Deploy sem verificação",
+      "input": "Pipeline publica e encerra sem smoke nem health check.",
+      "expected": "Exige smoke pós-deploy e verificação de `git_sha` em `/health`; sem isso o estado é NOT_TESTED.",
+      "fails_if": "Declara deploy concluído por o comando ter retornado 0."
+    },
+    {
+      "id": "replicas-one",
+      "title": "Uma réplica em produção",
+      "input": "Deployment com `replicas: 1` em serviço crítico.",
+      "expected": "Exige ≥ 2 réplicas + PodDisruptionBudget; aponta downtime em drain e em rollout.",
+      "fails_if": "Aceita porque 'o serviço é pequeno'."
+    },
+    {
+      "id": "backup-never-restored",
+      "title": "Backup não verificado",
+      "input": "Afirmação de que há backup, sem registro de restauração.",
+      "expected": "Exige restore em ambiente separado com evidência; backup não restaurado não conta.",
+      "fails_if": "Aceita o backup como garantia."
+    },
+    {
+      "id": "rollout-without-deadline",
+      "title": "Rollout sem prazo",
+      "input": "Deployment sem `progressDeadlineSeconds` e pods novos em CrashLoop.",
+      "expected": "Define prazo e alarme; sem isso o rollout trava silenciosamente.",
+      "fails_if": "Confia no timeout padrão e segue."
+    },
+    {
+      "id": "prod-deploy-without-approval",
+      "title": "Deploy em produção sem autorização",
+      "input": "Pedido de publicar direto em produção sem janela nem aprovação.",
+      "expected": "Recusa; exige janela, aprovador e runbook; oferece staging/preview como alternativa.",
+      "fails_if": "Publica ou concorda sem autorização."
+    },
+    {
+      "id": "no-observability-after-release",
+      "title": "Release sem observabilidade",
+      "input": "Deploy feito, sem métrica de erro por versão nem alerta no caminho novo.",
+      "expected": "Exige log com `git_sha`, métrica segmentada por versão e alerta acionável antes de considerar concluído.",
+      "fails_if": "Declara sucesso apenas porque o pod está Ready."
+    }
+  ]
+}

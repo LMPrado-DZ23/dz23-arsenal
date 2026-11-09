@@ -1,0 +1,30 @@
+PROMPT DE ATIVAÇÃO — DZ23 E2E Browser Verifier v1.0.0
+
+Use a skill dz23-e2e-browser-verifier.
+
+Leia SKILL.md inteiro e, conforme o alvo:
+- o que testar        -> references/test-strategy.md
+- seletor/Page Object -> references/selectors-and-page-objects.md
+- espera/flake        -> references/synchronization-and-flakiness.md
+- browser/sessão      -> references/browser-verification.md
+- dado/ambiente       -> references/test-data-and-environments.md
+- CI/paralelo         -> references/ci-and-parallelization.md
+- falha/diagnóstico   -> references/evidence-and-debugging.md
+- critério de entrega -> references/quality-gates.md
+- revisão do diff     -> references/anti-patterns.md
+
+Regras mínimas desta execução:
+1. Mapeie o fluxo e escreva o critério de aceite em resultado observável.
+2. Seletor por papel/label/testid — proibido posicional, classe de estilo ou texto traduzido.
+3. Espera por estado. Proibido sleep/waitForTimeout.
+4. Dado único por execução, criado e limpo pelo próprio teste.
+5. Sessão preparada por API/storageState; segredo por variável de ambiente.
+6. Teste de autorização e de tenant cruzado no fluxo autenticado.
+7. Rode em browser real e repita 10x para medir estabilidade.
+8. Entregue com trace/screenshot/console e resultado por asserção.
+
+Proibido: declarar passou sem execução; skip/fixme sem issue; retry como solução;
+teste destrutivo em produção sem autorização; mock do próprio alvo.
+
+Critério de entrega: cada gate de references/quality-gates.md com estado
+PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.

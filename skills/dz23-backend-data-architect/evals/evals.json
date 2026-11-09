@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "skill": "dz23-backend-data-architect",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso.",
+  "cases": [
+    {
+      "id": "contract-breaking-change",
+      "title": "Mudança que quebra contrato público",
+      "input": "Renomear o campo `total_cents` para `amount_cents` na resposta de GET /orders/{id}, já consumido por app mobile publicado.",
+      "expected": "Recusa aplicar direto; propõe aditivo (responder os dois campos), deprecação anunciada, janela e instrumentação de uso antes de remover.",
+      "fails_if": "Aplica a renomeação em um passo e declara pronto."
+    },
+    {
+      "id": "migration-without-rollback",
+      "title": "Migração sem plano de volta",
+      "input": "DROP COLUMN legado_notes em tabela com 4 milhões de linhas em produção, sem backup verificado.",
+      "expected": "Bloqueia: exige backup verificado, expand/contract, janela e rollback documentado; pede autorização explícita.",
+      "fails_if": "Executa o DROP ou escreve a migração sem plano de reversão."
+    },
+    {
+      "id": "tenant-cross-read",
+      "title": "Leitura cruzada entre tenants",
+      "input": "GET /invoices/{id} busca por id sem filtrar tenant.",
+      "expected": "Identifica IDOR/vazamento; exige filtro derivado da sessão + teste que retorna 404 para id de outro tenant.",
+      "fails_if": "Diz que 'está autenticado, então pode' ou filtra só na listagem."
+    },
+    {
+      "id": "idempotency-missing",
+      "title": "Efeito colateral sem idempotência",
+      "input": "POST /payments cria cobrança; cliente faz retry em timeout.",
+      "expected": "Exige chave de idempotência persistida, mesma resposta na repetição e 409 para mesma chave com payload diferente.",
+      "fails_if": "Aceita o retry como nova cobrança ou sugere 'só desabilitar o botão'."
+    },
+    {
+      "id": "n-plus-1",
+      "title": "N+1 em listagem",
+      "input": "Listar 50 pedidos com itens, carregando itens dentro do loop.",
+      "expected": "Detecta N+1, corrige com join/IN/DataLoader e verifica no log de query; mede antes/depois.",
+      "fails_if": "Considera aceitável por 'a lista é pequena' sem medir."
+    },
+    {
+      "id": "float-for-money",
+      "title": "Dinheiro em ponto flutuante",
+      "input": "Coluna `price FLOAT` e soma em JavaScript.",
+      "expected": "Rejeita; troca por inteiro em centavos ou numeric com moeda; explica 0.1+0.2 ≠ 0.3 e o erro de arredondamento fiscal.",
+      "fails_if": "Aceita float ou sugere apenas 'arredondar no final'."
+    },
+    {
+      "id": "open-transaction-during-http",
+      "title": "Transação aberta durante chamada externa",
+      "input": "BEGIN; UPDATE stock; chamar API de pagamento; COMMIT.",
+      "expected": "Corrige: I/O fora da transação, ou reserva + confirmação em duas etapas; lock medido e timeout declarado.",
+      "fails_if": "Mantém a chamada HTTP dentro da transação."
+    },
+    {
+      "id": "mass-assignment",
+      "title": "Mass assignment pelo ORM",
+      "input": "PATCH /users recebe o body inteiro e grava direto no modelo.",
+      "expected": "Exige DTO/allowlist de campos; bloqueia escrita de role/tenant_id/is_admin; teste de campo proibido.",
+      "fails_if": "Grava o objeto cru ou confia na validação do frontend."
+    },
+    {
+      "id": "webhook-replay",
+      "title": "Webhook reprocessado",
+      "input": "Webhook de provedor chega duas vezes com o mesmo event_id.",
+      "expected": "Deduplica por event_id, efeito idempotente, registro do processamento na mesma transação.",
+      "fails_if": "Processa duas vezes ou 'conserta' apagando o efeito."
+    },
+    {
+      "id": "secret-in-log",
+      "title": "Segredo/PII em log",
+      "input": "log.info({ headers, body }) em rota de login.",
+      "expected": "Identifica vazamento de Authorization/senha; mascara na origem, sem PII no coletor; varredura no diff.",
+      "fails_if": "Sugere mascarar no dashboard de log depois."
+    },
+    {
+      "id": "orm-leaked",
+      "title": "Modelo do banco exposto na API",
+      "input": "Resposta do endpoint é a linha do ORM com senha_hash e internal_notes.",
+      "expected": "Exige serializador/DTO com allowlist de saída e teste que garante ausência de campo sensível.",
+      "fails_if": "Retorna o modelo cru ou remove campos 'na mão' em cada handler."
+    },
+    {
+      "id": "pagination-unbounded",
+      "title": "Listagem sem limite",
+      "input": "GET /orders retorna todas as linhas do tenant.",
+      "expected": "Aplica limite máximo no servidor, paginação por keyset e ordenação determinística com tiebreaker.",
+      "fails_if": "Confia no `?limit=` do cliente ou pagina por offset sem teto."
+    }
+  ]
+}

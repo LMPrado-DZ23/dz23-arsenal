@@ -1,0 +1,13 @@
+.git
+.env
+.env.*
+secrets
+state
+.dz23-state
+.dz23-subagents
+.agent
+audit
+coverage
+node_modules
+*.log
+config/generated

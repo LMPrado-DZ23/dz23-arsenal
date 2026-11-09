@@ -1,0 +1,66 @@
+# Dependências de terceiros
+node_modules/
+bower_components/
+vendor/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Build e distribuição
+dist/
+build/
+out/
+target/
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ambiente e segredos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.*
+credentials.*
+
+# Editores e SO
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/settings.json.example
+*.swp
+*~
+
+# Logs e temporários
+*.log
+tmp/
+temp/
+.cache/
+
+# Artefatos de skill que não devem ir para o repo
+*.zip
+!external/*.zip
+_bak/
+.bak-*/
+_antigos/
+_sources/
+
+# Binários grandes de análise
+*.bin
+*.img
+*.elf
+*.uf2
+*.dtb

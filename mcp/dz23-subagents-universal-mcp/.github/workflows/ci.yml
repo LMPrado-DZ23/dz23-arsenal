@@ -1,0 +1,88 @@
+name: Validate source
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    name: test (${{ matrix.os }}, node ${{ matrix.node }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: ['22', '24', '26']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-09-12
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Syntax and lint
+        run: npm run check
+      - name: Regression tests (fixtures only, no provider credentials)
+        run: npm test
+      - name: Release manifest and secret-pattern check
+        run: npm run check:release
+  contract:
+    name: MCP contract fixtures
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-09-12
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: JSON-RPC, schema, HTTP security and verification contracts
+        run: npm run test:contract
+  inspector:
+    name: MCP Inspector (official client)
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-09-12
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: tools, resources and prompts through @modelcontextprotocol/inspector (pinned, dev only)
+        run: npm run check:inspector
+  coverage:
+    name: coverage report
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-09-12
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Coverage gate (90% lines / 75% branches / 80% functions)
+        run: npm run test:gate
+  public-files:
+    name: public files audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, verified 2026-09-12
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Manifest integrity and secret patterns
+        run: npm run check:release
+      - name: Tracked files match the audited allowlist
+        run: npm run check:public
+

@@ -1,0 +1,95 @@
+# Compose de referência — segmentação, hardening e limites.
+# Adapte imagem, portas e variáveis ao projeto; não use como está em produção.
+
+networks:
+  edge_net:            # proxy e serviços que recebem HTTP externo
+    driver: bridge
+  internal_net:        # DB/cache/brokers — sem rota para a internet
+    driver: bridge
+    internal: true
+
+volumes:
+  pgdata:
+  redisdata:
+
+services:
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    networks: [edge_net]
+    depends_on:
+      api: {condition: service_healthy}
+
+  api:
+    image: ghcr.io/org/app-api:${IMAGE_TAG:?set IMAGE_TAG}   # tag imutável (SHA), nunca latest
+    init: true
+    restart: unless-stopped
+    user: "1001:1001"
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    env_file: [.env.production]        # nunca commitar
+    networks: [edge_net, internal_net]
+    depends_on:
+      postgres: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3000/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits: {cpus: "1.50", memory: 1024M}
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "5"}
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    # NÃO publique porta: fica só em internal_net.
+    # Se precisar de acesso local, use "127.0.0.1:5432:5432" — nunca "5432:5432"
+    # (Docker ignora o UFW ao publicar em 0.0.0.0).
+    networks: [internal_net]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
+    secrets: [pg_password]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d app"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits: {cpus: "1.00", memory: 1024M}
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "5"}
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks: [internal_net]
+    volumes: [redisdata:/data]
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "5"}
+
+secrets:
+  pg_password:
+    file: ./secrets/pg_password.txt   # fora do Git; em prod use secret manager

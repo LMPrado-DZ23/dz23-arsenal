@@ -1,0 +1,33 @@
+PROMPT DE ATIVAÇÃO — DZ23 Performance & Scalability Engine v1.0.0
+
+Use a skill dz23-performance-scalability-engine.
+
+Leia SKILL.md inteiro e, conforme o alvo:
+- medir baseline        -> references/measurement-first.md
+- definir budget        -> references/perf-budget.md
+- camada 1 frontend     -> references/frontend-layer.md
+- camada 2 rede         -> references/network-layer.md
+- camada 3 backend      -> references/backend-layer.md
+- camada 4 infra        -> references/infra-layer.md
+- revisão de achados    -> references/anti-patterns.md
+- critério de entrega   -> references/quality-gates.md
+
+Regras mínimas desta execução:
+1. Baseline com instrumento real ANTES de qualquer mudança (sem número = NOT_TESTED).
+2. Percentil p50/p95/p99 (p75 para LCP/INP/CLS) — nunca média.
+3. Localizar UM gargalo e dizer em qual das 4 camadas ele está, com evidência
+   (trace, EXPLAIN (ANALYZE, BUFFERS), waterfall, flamegraph).
+4. Escrever o budget alvo por rota/endpoint antes de cortar.
+5. Percorrer as 4 camadas e os 20 itens: aplicável / aplicado / não se aplica (com motivo).
+6. Cada item entregue com: problema que evita · como implementar · diretriz técnica.
+7. Mudança mínima na camada do gargalo; ordenar por impacto ÷ esforço.
+8. Provar antes/depois com o MESMO instrumento, ambiente, dado e build.
+9. Declarar custo (memória, CPU, dinheiro, complexidade).
+10. Instalar guarda de regressão (budget no CI ou alerta de SLO).
+
+Proibido: otimizar sem baseline, média no lugar de percentil, várias mudanças de uma vez,
+cache sem invalidação declarada, índice sem EXPLAIN, degradar correção por latência,
+"ficou mais rápido" sem número.
+
+Critério de entrega: cada gate de references/quality-gates.md com estado
+PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.

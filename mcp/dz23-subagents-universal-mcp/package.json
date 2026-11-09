@@ -1,0 +1,65 @@
+{
+  "name": "@dz23/subagents-universal-mcp",
+  "version": "4.4.1",
+  "description": "MCP text delegation router with shared mission memory and bounded parallel model workers",
+  "type": "module",
+  "bin": {
+    "dz23-subagents": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "scripts",
+    "docs",
+    "config",
+    "README.md",
+    "README.en.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "SUPPORT.md",
+    "LICENSE",
+    "NOTICE",
+    "SBOM.spdx.json",
+    ".env.example",
+    "Dockerfile",
+    "compose.yaml"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "start": "node src/index.js --stdio",
+    "start:http": "node src/index.js --http",
+    "doctor": "node src/index.js doctor",
+    "test": "node --test",
+    "test:contract": "node --test test/jsonrpc.test.js test/schema.test.js test/http-security.test.js test/verify.test.js",
+    "test:coverage": "node --test --experimental-test-coverage",
+    "test:gate": "node --test --experimental-test-coverage --test-coverage-lines=90 --test-coverage-branches=75 --test-coverage-functions=80",
+    "check": "node scripts/check.mjs",
+    "check:release": "node scripts/release-check.mjs",
+    "check:public": "node scripts/audit-public-files.mjs",
+    "publish:github": "node scripts/publish-github.mjs",
+    "check:inspector": "node scripts/inspector-check.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "author": "DZ23",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LMPrado-DZ23/dz23-subagents-universal-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LMPrado-DZ23/dz23-subagents-universal-mcp/issues"
+  },
+  "homepage": "https://github.com/LMPrado-DZ23/dz23-subagents-universal-mcp#readme",
+  "keywords": [
+    "mcp",
+    "subagents",
+    "model-router",
+    "shared-memory",
+    "ai",
+    "self-hosted"
+  ]
+}

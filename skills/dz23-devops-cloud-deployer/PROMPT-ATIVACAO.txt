@@ -1,0 +1,34 @@
+PROMPT DE ATIVAÇÃO — DZ23 DevOps Cloud Deployer v1.0.0
+
+Use a skill dz23-devops-cloud-deployer.
+
+Leia SKILL.md inteiro e, conforme o alvo:
+- imagem/Dockerfile   -> references/container-images.md
+- pipeline/artefato   -> references/build-and-artifacts.md
+- config/ambiente     -> references/environments-and-config.md
+- segredo/identidade  -> references/secrets-and-identity.md
+- k8s/probes/recursos -> references/kubernetes-and-orchestration.md
+- estratégia de deploy-> references/deploy-strategies.md
+- rollback/backup     -> references/rollback-and-recovery.md
+- SLO/observabilidade -> references/observability-and-slo.md
+- SBOM/scan/assinatura-> references/supply-chain-security.md
+- critério de entrega -> references/quality-gates.md
+- revisão do diff     -> references/anti-patterns.md
+
+Regras mínimas desta execução:
+1. Audite a stack e registre baseline (build, tempo de pipeline, tamanho de imagem).
+2. Imagem multi-stage, non-root, base e deploy por DIGEST — nunca `latest` em produção.
+3. Nenhum segredo em imagem, repositório, log ou variável pública de CI.
+4. Um build por commit; o mesmo digest é promovido entre ambientes.
+5. Pipeline com gate que BLOQUEIA (teste, scan crítico, política).
+6. Manifesto com readiness/liveness e resource requests/limits.
+7. Deploy progressivo com critério de sucesso e de ABORTAR escritos.
+8. Rollback ensaiado com tempo medido, e runbook pronto.
+9. Observabilidade do release: erro/latência por versão, log com git_sha e alerta.
+10. Produção só com autorização explícita e janela.
+
+Proibido: declarar sucesso sem health check; desabilitar gate para "destravar";
+rebuild por ambiente; deploy sem volta; DROP/delete sem backup verificado.
+
+Critério de entrega: cada gate de references/quality-gates.md com estado
+PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.

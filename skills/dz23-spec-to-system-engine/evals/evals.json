@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "skill": "dz23-spec-to-system-engine",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso.",
+  "cases": [
+    {
+      "id": "requirement-without-criterion",
+      "title": "Requisito sem critério verificável",
+      "input": "Pedido: 'fazer a tela ser mais rápida e intuitiva'.",
+      "expected": "Reescreve em critério observável (p95 ≤ X ms; concluir em ≤ 3 cliques) e declara que sem isso o item fica fora do plano executável.",
+      "fails_if": "Aceita o texto e começa a decompor em tarefas."
+    },
+    {
+      "id": "no-out-of-scope",
+      "title": "Escopo sem fora de escopo",
+      "input": "Spec com prazo de 3 semanas e nenhuma lista do que fica de fora.",
+      "expected": "Classifica como BLOCKER em entrega com prazo; produz lista explícita de fora de escopo com motivo.",
+      "fails_if": "Entrega o plano sem delimitar o que não entra."
+    },
+    {
+      "id": "layer-sliced-plan",
+      "title": "Decomposição por camada",
+      "input": "Plano: 'criar tabela' → 'criar API' → 'criar tela'.",
+      "expected": "Reagrupa em fatias verticais que entregam valor ponta a ponta; camada técnica vira passo interno.",
+      "fails_if": "Mantém a sequência por camada como plano de entrega."
+    },
+    {
+      "id": "parallelize-without-contract",
+      "title": "Paralelizar sem contrato",
+      "input": "Dois agentes começam API e UI no mesmo dia, sem contrato escrito.",
+      "expected": "Bloqueia o paralelo até fechar contrato (payload, erro, timeout, versão) e define dono/consumidor.",
+      "fails_if": "Aceita o paralelo e sugere 'ajustar depois'."
+    },
+    {
+      "id": "contract-happy-path-only",
+      "title": "Contrato só com caminho feliz",
+      "input": "Contrato define apenas sucesso 200 e o payload.",
+      "expected": "Exige erros (400/403/409/422/429), timeout, vazio e regra de compatibilidade.",
+      "fails_if": "Considera o contrato completo."
+    },
+    {
+      "id": "single-number-estimate",
+      "title": "Estimativa de número único",
+      "input": "Cronograma com '3 dias' para cada uma das 8 fatias.",
+      "expected": "Troca por intervalo com premissas, identifica caminho crítico e quarentena de buffer.",
+      "fails_if": "Aceita o cronograma ou só 'multiplica por 2'."
+    },
+    {
+      "id": "spike-without-question",
+      "title": "Spike sem pergunta nem prazo",
+      "input": "'Spike de 5 dias para explorar a integração'.",
+      "expected": "Exige pergunta específica, prazo curto e saída esperada (resposta + evidência + impacto no plano).",
+      "fails_if": "Aceita exploração aberta como spike."
+    },
+    {
+      "id": "circular-dependency",
+      "title": "Dependência circular",
+      "input": "SL-02 depende de SL-03, que depende de SL-02.",
+      "expected": "Detecta o ciclo, quebra a dependência ou funde as fatias; explica por que o plano atual é impossível.",
+      "fails_if": "Não percebe ou 'resolve' com paralelismo."
+    },
+    {
+      "id": "done-without-evidence",
+      "title": "Pronto sem prova",
+      "input": "Fatia marcada DONE sem teste, sem demo e sem saída de comando.",
+      "expected": "Rebaixa para IN_PROGRESS; DONE exige evidência anexada e critério demonstrado.",
+      "fails_if": "Aceita DONE porque 'o código está commitado'."
+    },
+    {
+      "id": "silent-scope-cut",
+      "title": "Requisito cortado em silêncio",
+      "input": "Plano novo sem o requisito de exportação que o cliente pediu; nada registrado.",
+      "expected": "Exige estado CUT com motivo e aprovador, e comunicação ao solicitante; nunca remover em silêncio.",
+      "fails_if": "Aceita a ausência sem registro."
+    },
+    {
+      "id": "risky-integration-last",
+      "title": "Risco provado por último",
+      "input": "Plano deixa a integração externa desconhecida para a última fatia.",
+      "expected": "Reordena: a primeira fatia ataca a integração mais arriscada (descobrir caro cedo), ou exige spike antes.",
+      "fails_if": "Mantém o risco no fim do cronograma."
+    },
+    {
+      "id": "matrix-stale",
+      "title": "Matriz de rastreabilidade morta",
+      "input": "Matriz preenchida só no início; fatias entregues depois não atualizaram estado.",
+      "expected": "Exige atualização na mesma entrega e reconciliação por fatia; matriz divergente é rastreabilidade falsa.",
+      "fails_if": "Diz que a matriz 'será atualizada no fim'."
+    },
+    {
+      "id": "handoff-without-dod",
+      "title": "Handoff sem definição de pronto",
+      "input": "Handoff diz apenas 'implementar exportação'.",
+      "expected": "Exige fatia, REQs, contrato, critério de aceite, DoD e o que está fora — senão é 'vira-se'.",
+      "fails_if": "Aceita o handoff vago."
+    },
+    {
+      "id": "capacity-100-percent",
+      "title": "Plano com 100% da capacidade",
+      "input": "Cronograma que usa todos os dias úteis do time, sem reserva nem buffer.",
+      "expected": "Aplica 70–80% de capacidade, buffer único no fim do caminho crítico e declara o que cai se o imprevisto chegar.",
+      "fails_if": "Aprova o cronograma cheio."
+    },
+    {
+      "id": "conflicting-requirements",
+      "title": "Requisitos contraditórios",
+      "input": "'Registrar tudo para auditoria' e 'não impactar latência em nenhum cenário'.",
+      "expected": "Trata como decisão de produto: registra o conflito, apresenta trade-off e exige escolha com dono; não esconde.",
+      "fails_if": "Promete os dois sem consequência declarada."
+    }
+  ]
+}

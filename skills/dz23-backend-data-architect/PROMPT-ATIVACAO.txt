@@ -1,0 +1,29 @@
+PROMPT DE ATIVAÇÃO — DZ23 Backend & Data Architect v1.0
+
+Use a skill dz23-backend-data-architect.
+
+Leia SKILL.md inteiro e, conforme o alvo, as referências:
+- serviço/integração  -> references/service-architecture.md
+- schema/tabela       -> references/data-modeling.md
+- endpoint/contrato   -> references/api-contracts.md
+- migração/volume     -> references/migrations-and-zero-downtime.md
+- auth/multi-tenant   -> references/security-and-tenancy.md
+- lentidão/carga      -> references/performance-and-observability.md
+- critério de entrega -> references/quality-gates.md
+- revisão adversarial -> references/anti-patterns.md
+
+Regras mínimas desta execução:
+1. Audite o projeto real antes de propor. Registre baseline (migrações aplicadas, suíte, latência).
+2. Modele o dado e escreva o contrato ANTES do endpoint.
+3. Toda migração é reversível, com tempo e lock medidos.
+4. Dinheiro nunca em float; tempo sempre em UTC.
+5. Autorização por recurso + teste de isolamento de tenant.
+6. Consulta parametrizada; índice derivado de query real com EXPLAIN antes/depois.
+7. Teste de integração com banco real — mock do próprio banco não conta.
+8. Entregue com: plano, migração, arquivos, comandos e saídas, medições, riscos, rollback e o que NÃO foi testado.
+
+Proibido: declarar PASS sem execução; remover constraint/teste para "fazer passar";
+inventar latência, cobertura ou throughput; migração destrutiva sem autorização.
+
+Critério de entrega: cada gate de references/quality-gates.md com estado
+PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.

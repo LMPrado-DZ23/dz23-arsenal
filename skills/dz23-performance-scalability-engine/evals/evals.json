@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "skill": "dz23-performance-scalability-engine",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado por caso.",
+  "cases": [
+    {
+      "id": "optimize-without-baseline",
+      "title": "Otimização sem baseline",
+      "input": "Pedido: 'deixa mais rápido' com nenhuma medição.",
+      "expected": "Recusa cortar antes de medir. Define instrumento, ambiente e janela de medição. Declara `BLOCKED_BY_EXTERNAL_DEPENDENCY` se não houver acesso a ambiente real; propõe baseline a ser medido, sem inventar número.",
+      "fails_if": "Começa a aplicar cache, índice e lazy load sem número."
+    },
+    {
+      "id": "average-instead-of-percentile",
+      "title": "Média no lugar de percentil",
+      "input": "Relatório diz 'latência média 120 ms' e conclui que está bom.",
+      "expected": "Exige p50/p95/p99 (p75 em vitals) e mostra a cauda; média esconde o que o usuário sente.",
+      "fails_if": "Aceita a média como prova."
+    },
+    {
+      "id": "layers-swapped",
+      "title": "Otimizar a camada errada",
+      "input": "Gargalo é bundle de 1,2 MB no cliente; plano começa por cache Redis.",
+      "expected": "Localiza o tempo no bundle e ataca camada 1 (code splitting/mídia), não o backend.",
+      "fails_if": "Aplica cache de backend para problema de cliente."
+    },
+    {
+      "id": "cache-without-invalidation",
+      "title": "Cache sem invalidação",
+      "input": "Plano adiciona Redis com `set(chave, dados)` e TTL indefinido.",
+      "expected": "Exige TTL explícito + estratégia de invalidação + o que acontece se o cache estiver errado.",
+      "fails_if": "Aprova o cache sem invalidação."
+    },
+    {
+      "id": "n-plus-one-without-proof",
+      "title": "N+1 'corrigido' sem prova",
+      "input": "'Troquei o loop por include, resolvido.'",
+      "expected": "Exige contador de queries por request (não cresce com linhas) ou EXPLAIN antes/depois.",
+      "fails_if": "Aceita a afirmação sem medição."
+    },
+    {
+      "id": "index-without-explain",
+      "title": "Índice criado sem EXPLAIN",
+      "input": "Plano cria 6 índices 'por precaução' sem consulta alvo.",
+      "expected": "Exige consulta real + EXPLAIN (ANALYZE, BUFFERS) antes/depois e alerta custo de escrita.",
+      "fails_if": "Aprova índices sem plano de execução."
+    },
+    {
+      "id": "one-big-change",
+      "title": "Várias mudanças de uma vez",
+      "input": "Mesmo PR com split de bundle, virtualização, índice e cache.",
+      "expected": "Exige uma mudança, uma medição; sem isolamento não há atribuição causal.",
+      "fails_if": "Aceita o pacote e atribui o ganho a tudo."
+    },
+    {
+      "id": "timeout-missing",
+      "title": "Sem timeout em dependência externa",
+      "input": "Handler chama gateway de pagamento sem timeout e com retry infinito.",
+      "expected": "Exige timeout menor que o do chamador, backoff com jitter, teto de tentativas e circuit breaker.",
+      "fails_if": "Só sugere 'aumentar o timeout'."
+    },
+    {
+      "id": "offset-pagination",
+      "title": "Paginação por offset em lista grande",
+      "input": "API com `OFFSET 50000 LIMIT 20` em tabela de milhões.",
+      "expected": "Troca por keyset/cursor com índice coerente e cap de limite no servidor.",
+      "fails_if": "Mantém offset ou só adiciona índice em `id`."
+    },
+    {
+      "id": "mobile-untested",
+      "title": "Só testou no desktop",
+      "input": "'Performance ok' medido em desktop com rede de escritório.",
+      "expected": "Exige teste com throttle 3G e CPU 4× (ou device real) e declara o que não foi medido.",
+      "fails_if": "Generaliza o resultado de desktop."
+    },
+    {
+      "id": "budget-missing",
+      "title": "Mudança sem budget",
+      "input": "Plano de otimização sem alvo declarado ('vai melhorar bastante').",
+      "expected": "Exige budget por rota/endpoint antes de cortar; sem alvo, 'melhorou' é indefinido.",
+      "fails_if": "Executa sem alvo."
+    },
+    {
+      "id": "before-after-different-env",
+      "title": "Antes e depois em ambientes diferentes",
+      "input": "Antes medido em produção, depois em laptop com dado de 10 registros.",
+      "expected": "Recusa a comparação; exige mesmo build, dado, ambiente, carga e cache declarado.",
+      "fails_if": "Declara ganho com bases incomparáveis."
+    },
+    {
+      "id": "glass-and-cache",
+      "title": "Asset com immutable e HTML igual",
+      "input": "Tudo com `Cache-Control: immutable, max-age=31536000`, inclusive HTML.",
+      "expected": "Separa: asset com hash → `immutable`; HTML → `no-cache`/`s-maxage` curto.",
+      "fails_if": "Aplica immutable ao HTML."
+    },
+    {
+      "id": "compression-on-media",
+      "title": "Comprimir o que já é comprimido",
+      "input": "Config habilita Brotli/GZIP para `image/*`, `video/*` e `.zip`.",
+      "expected": "Restringe a texto/JS/CSS/JSON/SVG; comprimir mídia queima CPU sem ganho.",
+      "fails_if": "Aceita a config global."
+    },
+    {
+      "id": "no-regression-guard",
+      "title": "Sem guarda de regressão",
+      "input": "Otimização entregue, nenhum budget no CI e nenhum alerta de SLO.",
+      "expected": "Exige gate (Lighthouse CI / budget check / alerta de SLO) — performance sem guarda volta a degradar.",
+      "fails_if": "Considera concluído sem guarda."
+    },
+    {
+      "id": "claims-faster-without-command",
+      "title": "Alegação de ganho sem comando",
+      "input": "Otimizamos o checkout, ficou 40% mais rápido. Fecha aí.",
+      "expected": "Exige comando + workload + percentil + volume. Sem isso, declara NOT_TESTED — 'ficou 40% mais rápido' não é evidência.",
+      "fails_if": "Aceita a afirmação sem exigir benchmark, ou declara PASS com base só no texto."
+    }
+  ]
+}

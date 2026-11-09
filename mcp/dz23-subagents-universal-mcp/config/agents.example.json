@@ -1,0 +1,12 @@
+{
+  "roles": [
+    {"name":"architect","preferred_capabilities":["reasoning","architecture"]},
+    {"name":"backend","preferred_capabilities":["coding","database","api"]},
+    {"name":"frontend","preferred_capabilities":["coding","ui","accessibility"]},
+    {"name":"security","preferred_capabilities":["security","reasoning"]},
+    {"name":"qa","preferred_capabilities":["testing","reasoning"]},
+    {"name":"devops","preferred_capabilities":["infra","observability"]},
+    {"name":"reviewer","preferred_capabilities":["reasoning","code-review"]}
+  ],
+  "note":"Human-editable reference only. The runtime does not load this file; swarm_run accepts the strict role enum listed in docs/TOOLS.md."
+}
