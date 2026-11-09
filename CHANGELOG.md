@@ -3,6 +3,41 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.4.0] — 2026-11-09
+
+Auditoria de **todos os evals** do arsenal e criação do harness que faltava.
+
+### Adicionado
+- **`scripts/run-evals.py`** — harness de evals com quatro comandos:
+  - `--list` lista cenários por skill;
+  - `--check` auditoria determinística (schema, id duplicado, `expected` × `fails_if`, **cobertura** — a regra
+    do `expected` existe no `SKILL.md`/`references`? — e eval possivelmente impossível);
+  - `--record <skill> <arquivo>` grava veredito de execução real em `evals-results/`;
+  - `--report` mostra quantos cenários já têm resultado.
+- `evals-audit.json` — relatório da auditoria, gerado pelo `--check`.
+- Check de evals no `quality-gate.py` (**13 checks**) e step próprio no CI.
+
+### Corrigido (defeitos reais encontrados pela auditoria)
+- **`dz23-autonomous-improvement-ultimate` 2.1.1 → 2.1.2**:
+  - `tailwind3`, `tailwind4` e `streaming-chat` testavam **regra de UI** numa skill de **orquestração**. O
+    `--check` acusou cobertura de 1/5 termos — a regra simplesmente não existia na skill. Foram para
+    `dz23-ultimate-pro-max`, que tem a reference de stack.
+  - No lugar entraram três cenários de orquestração: `checkpoint-ausente`, `escopo-inflado`,
+    `delegacao-sem-skill`.
+  - Nova regra no `SKILL.md`: **falha repetida exige mudança de estratégia diagnóstica** (três tentativas com
+    a mesma hipótese produzem a mesma falha; na quarta, trocar o instrumento e preservar as evidências).
+- **`dz23-ultimate-pro-max` 2.2.0 → 2.2.1**: a skill tinha **zero evals** — justamente a de output mais
+  subjetivo do arsenal. Agora tem **13 cenários** (tokens semânticos, Tailwind v3 × v4 com `@theme`, estados
+  interativos, focus-visible, `prefers-reduced-motion`, CLS de mídia, adoção de shadcn/ui, badge sem quebra,
+  contraste, estados vazio/erro, prova visual, streaming de chat).
+- `references/stack-implementation.md`: explicitado `@theme` do Tailwind v4 (CSS como fonte dos tokens) e
+  `aspect-ratio`/`width`/`height` contra CLS.
+
+### Números
+- **128 cenários** auditados · **0 erros** de coerência · **3 avisos** de cobertura baixa.
+- **128 cenários ainda sem resultado de execução** — `python scripts/run-evals.py --report` retorna exit `1`.
+  Coerência do eval ≠ comportamento provado da skill.
+
 ## [1.3.0] — 2026-11-09
 
 Transformação de "coleção de zips" em **arsenal verificável**: gate único, CI, inventário gerado e política

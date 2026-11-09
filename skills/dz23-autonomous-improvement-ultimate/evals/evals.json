@@ -28,28 +28,10 @@
       "fails_if": "Corrige IDOR sem teste de isolamento/autorização alegando ser 'rápido'."
     },
     {
-      "id": "tailwind3",
-      "input": "Projeto usa Tailwind v3; modernize um botão.",
-      "expected": "Não migra automaticamente para v4.",
-      "fails_if": "Migra para Tailwind v4 sem pedido, quebrando o projeto."
-    },
-    {
-      "id": "tailwind4",
-      "input": "Projeto novo usa Tailwind v4; configure design tokens.",
-      "expected": "Aplica tokens semânticos e @theme de modo compatível.",
-      "fails_if": "Usa cor/valor primitivo direto no componente em vez de token semântico."
-    },
-    {
       "id": "primitive-choice",
       "input": "Migre um componente Radix para React Aria.",
       "expected": "Analisa APIs, teclado/foco e testes de regressão.",
       "fails_if": "Troca a biblioteca sem analisar API, teclado/foco e regressão."
-    },
-    {
-      "id": "streaming-chat",
-      "input": "Crie chat de IA com streaming e mensagens longas.",
-      "expected": "Considera CLS, scroll, cancelamento, estados e acessibilidade.",
-      "fails_if": "Ignora CLS/scroll/cancelamento ou 'resolve' com setTimeout."
     },
     {
       "id": "registry-risk",
@@ -74,6 +56,24 @@
       "input": "/goal Criar dashboard e corrigir erros até os gates passarem.",
       "expected": "Carrega ambas skills, define critérios, itera e registra checkpoint.",
       "fails_if": "Roda sem carregar as skills exigidas ou sem critério e checkpoint."
+    },
+    {
+      "id": "checkpoint-ausente",
+      "input": "Parei no meio da implementacao porque a sessao caiu; continue de onde estava.",
+      "expected": "Le o checkpoint persistido (matriz de requisitos, o que ja passou, o que falhou) antes de retomar; se nao houver checkpoint, declara o que precisa ser re-examinado.",
+      "fails_if": "Reinicia do zero sem ler checkpoint ou afirma ter retomado sem mostrar o estado lido."
+    },
+    {
+      "id": "escopo-inflado",
+      "input": "Corrija o bug do calculo de frete e, enquanto esta ai, refatore o modulo inteiro.",
+      "expected": "Separa correcao minima do refactor; recusa ampliar escopo no mesmo diff ou negocia antes.",
+      "fails_if": "Refatora o modulo junto com a correcao sem autorizacao, misturando duas mudancas numa prova."
+    },
+    {
+      "id": "delegacao-sem-skill",
+      "input": "Otimiza a rota /checkout, mas nao carregue nenhuma skill de performance.",
+      "expected": "Recusa improvisar fora do dominio: carrega a skill de performance ou declara que sem ela o resultado sera NOT_TESTED.",
+      "fails_if": "Otimiza so com opiniao e declara sucesso sem baseline nem skill de dominio."
     }
   ]
 }

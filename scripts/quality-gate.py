@@ -74,6 +74,7 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("manifesto:check", [py, "scripts/build-manifest.py", "--check"]))
     resultados.append(rodar("links", [py, "scripts/check-links.py", "."]))
     resultados.append(rodar("estrutura", [py, "scripts/check-structure.py"]))
+    resultados.append(rodar("evals", [py, "scripts/run-evals.py", "--check"]))
 
     falhas = [r for r in resultados if not r["ok"]]
     if args.json:

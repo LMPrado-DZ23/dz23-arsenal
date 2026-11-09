@@ -1,0 +1,918 @@
+{
+  "data": "2026-11-09",
+  "relatorio": [
+    {
+      "skill": "dz23-autonomous-improvement-ultimate",
+      "casos": 12,
+      "problemas": [],
+      "avisos": [
+        "hipotese-estagnada: cobertura baixa (2/4)"
+      ],
+      "detalhes": [
+        {
+          "id": "loop-infinito",
+          "cobertura": 0.71,
+          "termos_fora": [
+            "garantia",
+            "rejeita"
+          ]
+        },
+        {
+          "id": "hipotese-estagnada",
+          "cobertura": 0.5,
+          "termos_fora": [
+            "diagnóstica",
+            "preserva"
+          ]
+        },
+        {
+          "id": "pass-sem-teste",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "quick-seguranca",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "primitive-choice",
+          "cobertura": 0.75,
+          "termos_fora": [
+            "analisa"
+          ]
+        },
+        {
+          "id": "registry-risk",
+          "cobertura": 0.8,
+          "termos_fora": [
+            "procedência"
+          ]
+        },
+        {
+          "id": "visual-proof",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "blocked-secret",
+          "cobertura": 0.71,
+          "termos_fora": [
+            "recusa",
+            "simular"
+          ]
+        },
+        {
+          "id": "goal-integration",
+          "cobertura": 0.88,
+          "termos_fora": [
+            "ambas"
+          ]
+        },
+        {
+          "id": "checkpoint-ausente",
+          "cobertura": 0.92,
+          "termos_fora": [
+            "re-examinado"
+          ]
+        },
+        {
+          "id": "escopo-inflado",
+          "cobertura": 0.6,
+          "termos_fora": [
+            "correcao",
+            "minima",
+            "negocia",
+            "recusa"
+          ]
+        },
+        {
+          "id": "delegacao-sem-skill",
+          "cobertura": 0.67,
+          "termos_fora": [
+            "dominio",
+            "improvisar",
+            "recusa"
+          ]
+        }
+      ],
+      "arquivo_erro": null
+    },
+    {
+      "skill": "dz23-backend-data-architect",
+      "casos": 12,
+      "problemas": [],
+      "avisos": [],
+      "detalhes": [
+        {
+          "id": "contract-breaking-change",
+          "cobertura": 0.85,
+          "termos_fora": [
+            "aplicar",
+            "propõe"
+          ]
+        },
+        {
+          "id": "migration-without-rollback",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "tenant-cross-read",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "idempotency-missing",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "n-plus-1",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "float-for-money",
+          "cobertura": 0.78,
+          "termos_fora": [
+            "explica",
+            "fiscal"
+          ]
+        },
+        {
+          "id": "open-transaction-during-http",
+          "cobertura": 0.88,
+          "termos_fora": [
+            "etapas"
+          ]
+        },
+        {
+          "id": "mass-assignment",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "webhook-replay",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "secret-in-log",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "orm-leaked",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "pagination-unbounded",
+          "cobertura": 1.0,
+          "termos_fora": []
+        }
+      ],
+      "arquivo_erro": null
+    },
+    {
+      "skill": "dz23-codebase-cartographer",
+      "casos": 15,
+      "problemas": [],
+      "avisos": [],
+      "detalhes": [
+        {
+          "id": "map-without-commit",
+          "cobertura": 0.71,
+          "termos_fora": [
+            "recusa",
+            "reutilizável"
+          ]
+        },
+        {
+          "id": "claim-without-pointer",
+          "cobertura": 0.83,
+          "termos_fora": [
+            "publicador"
+          ]
+        },
+        {
+          "id": "read-everything-claim",
+          "cobertura": 0.83,
+          "termos_fora": [
+            "rebaixa"
+          ]
+        },
+        {
+          "id": "folder-as-architecture",
+          "cobertura": 0.89,
+          "termos_fora": [
+            "diverge"
+          ]
+        },
+        {
+          "id": "dead-code-guess",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "no-risk-zones",
+          "cobertura": 0.9,
+          "termos_fora": [
+            "inclui"
+          ]
+        },
+        {
+          "id": "blast-radius-vague",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "no-test-area-silent",
+          "cobertura": 0.88,
+          "termos_fora": [
+            "indica"
+          ]
+        },
+        {
+          "id": "brief-over-budget",
+          "cobertura": 0.75,
+          "termos_fora": [
+            "cortando",
+            "reescreve"
+          ]
+        },
+        {
+          "id": "brief-without-do-not-touch",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "stale-map",
+          "cobertura": 0.71,
+          "termos_fora": [
+            "sumiu",
+            "vencido"
+          ]
+        },
+        {
+          "id": "readme-as-truth",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "two-writers-unnoticed",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "inference-as-fact",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "no-access-honesty",
+          "cobertura": 1.0,
+          "termos_fora": []
+        }
+      ],
+      "arquivo_erro": null
+    },
+    {
+      "skill": "dz23-devops-cloud-deployer",
+      "casos": 15,
+      "problemas": [],
+      "avisos": [],
+      "detalhes": [
+        {
+          "id": "secret-in-image",
+          "cobertura": 0.8,
+          "termos_fora": [
+            "classifica",
+            "instrui"
+          ]
+        },
+        {
+          "id": "latest-tag-in-prod",
+          "cobertura": 0.78,
+          "termos_fora": [
+            "coisa",
+            "explica"
+          ]
+        },
+        {
+          "id": "rebuild-per-environment",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "gate-does-not-block",
+          "cobertura": 0.75,
+          "termos_fora": [
+            "corrige",
+            "registrados"
+          ]
+        },
+        {
+          "id": "no-rollback-path",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "liveness-on-database",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "no-resource-limits",
+          "cobertura": 0.86,
+          "termos_fora": [
+            "explica"
+          ]
+        },
+        {
+          "id": "migration-before-code",
+          "cobertura": 0.91,
+          "termos_fora": [
+            "tolerante"
+          ]
+        },
+        {
+          "id": "admin-credentials-in-ci",
+          "cobertura": 0.62,
+          "termos_fora": [
+            "compromete",
+            "comprometer",
+            "explica"
+          ]
+        },
+        {
+          "id": "no-health-after-deploy",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "replicas-one",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "backup-never-restored",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "rollout-without-deadline",
+          "cobertura": 0.83,
+          "termos_fora": [
+            "silenciosamente"
+          ]
+        },
+        {
+          "id": "prod-deploy-without-approval",
+          "cobertura": 0.78,
+          "termos_fora": [
+            "preview",
+            "recusa"
+          ]
+        },
+        {
+          "id": "no-observability-after-release",
+          "cobertura": 0.89,
+          "termos_fora": [
+            "considerar"
+          ]
+        }
+      ],
+      "arquivo_erro": null
+    },
+    {
+      "skill": "dz23-e2e-browser-verifier",
+      "casos": 15,
+      "problemas": [],
+      "avisos": [],
+      "detalhes": [
+        {
+          "id": "sleep-instead-of-wait",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "fragile-selector",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "test-passing-without-assertion",
+          "cobertura": 0.91,
+          "termos_fora": [
+            "passaria"
+          ]
+        },
+        {
+          "id": "shared-user-state",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "tenant-cross-access",
+          "cobertura": 0.88,
+          "termos_fora": [
+            "classifica"
+          ]
+        },
+        {
+          "id": "auth-bypass-not-tested",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "mock-own-backend",
+          "cobertura": 0.89,
+          "termos_fora": [
+            "deixou"
+          ]
+        },
+        {
+          "id": "flaky-quarantine",
+          "cobertura": 0.92,
+          "termos_fora": [
+            "provável"
+          ]
+        },
+        {
+          "id": "missing-trace-evidence",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "production-destructive",
+          "cobertura": 0.91,
+          "termos_fora": [
+            "oferece"
+          ]
+        },
+        {
+          "id": "secret-in-repo",
+          "cobertura": 0.9,
+          "termos_fora": [
+            "alerta"
+          ]
+        },
+        {
+          "id": "visual-baseline-auto-update",
+          "cobertura": 0.8,
+          "termos_fora": [
+            "atualização",
+            "senão"
+          ]
+        },
+        {
+          "id": "click-before-hydration",
+          "cobertura": 0.93,
+          "termos_fora": [
+            "desabilite"
+          ]
+        },
+        {
+          "id": "sync-assertion-vs-async",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "tenant-cross-read-not-tested",
+          "cobertura": 0.67,
+          "termos_fora": [
+            "classifica",
+            "esperando"
+          ]
+        }
+      ],
+      "arquivo_erro": null
+    },
+    {
+      "skill": "dz23-performance-scalability-engine",
+      "casos": 16,
+      "problemas": [],
+      "avisos": [],
+      "detalhes": [
+        {
+          "id": "optimize-without-baseline",
+          "cobertura": 0.85,
+          "termos_fora": [
+            "houver",
+            "propõe",
+            "recusa"
+          ]
+        },
+        {
+          "id": "average-instead-of-percentile",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "layers-swapped",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "cache-without-invalidation",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "n-plus-one-without-proof",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "index-without-explain",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "one-big-change",
+          "cobertura": 0.67,
+          "termos_fora": [
+            "atribuição",
+            "isolamento"
+          ]
+        },
+        {
+          "id": "timeout-missing",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "offset-pagination",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "mobile-untested",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "budget-missing",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "before-after-different-env",
+          "cobertura": 0.89,
+          "termos_fora": [
+            "recusa"
+          ]
+        },
+        {
+          "id": "glass-and-cache",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "compression-on-media",
+          "cobertura": 0.83,
+          "termos_fora": [
+            "restringe"
+          ]
+        },
+        {
+          "id": "no-regression-guard",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "claims-faster-without-command",
+          "cobertura": 1.0,
+          "termos_fora": []
+        }
+      ],
+      "arquivo_erro": null
+    },
+    {
+      "skill": "dz23-reverse-engineer-anything",
+      "casos": 15,
+      "problemas": [],
+      "avisos": [],
+      "detalhes": [
+        {
+          "id": "no-authorization",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "extension-as-truth",
+          "cobertura": 0.9,
+          "termos_fora": [
+            "coisa"
+          ]
+        },
+        {
+          "id": "encrypted-without-proof",
+          "cobertura": 0.91,
+          "termos_fora": [
+            "então"
+          ]
+        },
+        {
+          "id": "run-on-host",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "invented-symbol",
+          "cobertura": 0.89,
+          "termos_fora": [
+            "existir"
+          ]
+        },
+        {
+          "id": "finding-without-offset",
+          "cobertura": 0.86,
+          "termos_fora": [
+            "localizou"
+          ]
+        },
+        {
+          "id": "whole-file-as-rootfs",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "crc-ignored",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "emulation-blamed",
+          "cobertura": 0.89,
+          "termos_fora": [
+            "coerente"
+          ]
+        },
+        {
+          "id": "signed-as-encrypted",
+          "cobertura": 0.9,
+          "termos_fora": [
+            "continua"
+          ]
+        },
+        {
+          "id": "hardware-voltages",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "single-dump",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "flash-without-backup",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "observed-as-rule",
+          "cobertura": 0.67,
+          "termos_fora": [
+            "generalizar",
+            "naquele",
+            "segunda"
+          ]
+        },
+        {
+          "id": "coverage-fake",
+          "cobertura": 0.83,
+          "termos_fora": [
+            "restante"
+          ]
+        }
+      ],
+      "arquivo_erro": null
+    },
+    {
+      "skill": "dz23-spec-to-system-engine",
+      "casos": 15,
+      "problemas": [],
+      "avisos": [],
+      "detalhes": [
+        {
+          "id": "requirement-without-criterion",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "no-out-of-scope",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "layer-sliced-plan",
+          "cobertura": 0.9,
+          "termos_fora": [
+            "entregam"
+          ]
+        },
+        {
+          "id": "parallelize-without-contract",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "contract-happy-path-only",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "single-number-estimate",
+          "cobertura": 0.75,
+          "termos_fora": [
+            "quarentena",
+            "troca"
+          ]
+        },
+        {
+          "id": "spike-without-question",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "circular-dependency",
+          "cobertura": 0.8,
+          "termos_fora": [
+            "detecta",
+            "explica"
+          ]
+        },
+        {
+          "id": "done-without-evidence",
+          "cobertura": 0.86,
+          "termos_fora": [
+            "rebaixa"
+          ]
+        },
+        {
+          "id": "silent-scope-cut",
+          "cobertura": 0.89,
+          "termos_fora": [
+            "remover"
+          ]
+        },
+        {
+          "id": "risky-integration-last",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "matrix-stale",
+          "cobertura": 0.7,
+          "termos_fora": [
+            "atualização",
+            "divergente",
+            "falsa"
+          ]
+        },
+        {
+          "id": "handoff-without-dod",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "capacity-100-percent",
+          "cobertura": 0.89,
+          "termos_fora": [
+            "chegar"
+          ]
+        },
+        {
+          "id": "conflicting-requirements",
+          "cobertura": 0.9,
+          "termos_fora": [
+            "apresenta"
+          ]
+        }
+      ],
+      "arquivo_erro": null
+    },
+    {
+      "skill": "dz23-ultimate-pro-max",
+      "casos": 13,
+      "problemas": [],
+      "avisos": [
+        "cls-midia: cobertura baixa (3/7)",
+        "streaming-chat: cobertura baixa (6/13)"
+      ],
+      "detalhes": [
+        {
+          "id": "tokens-semanticos",
+          "cobertura": 0.62,
+          "termos_fora": [
+            "magico",
+            "mapeado",
+            "semantico"
+          ]
+        },
+        {
+          "id": "tailwind3",
+          "cobertura": 0.71,
+          "termos_fora": [
+            "migra",
+            "versao"
+          ]
+        },
+        {
+          "id": "tailwind4",
+          "cobertura": 0.67,
+          "termos_fora": [
+            "compativel",
+            "primitivo",
+            "semanticos"
+          ]
+        },
+        {
+          "id": "estados-interativos",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "focus-visible",
+          "cobertura": 0.71,
+          "termos_fora": [
+            "mantem",
+            "visivel"
+          ]
+        },
+        {
+          "id": "reduced-motion",
+          "cobertura": 0.6,
+          "termos_fora": [
+            "animacao",
+            "reduzindo"
+          ]
+        },
+        {
+          "id": "cls-midia",
+          "cobertura": 0.43,
+          "termos_fora": [
+            "dimensao",
+            "gerar",
+            "midia",
+            "shift"
+          ]
+        },
+        {
+          "id": "shadcn-dono",
+          "cobertura": 0.71,
+          "termos_fora": [
+            "ajustado",
+            "codigo-fonte"
+          ]
+        },
+        {
+          "id": "badge-wrap",
+          "cobertura": 1.0,
+          "termos_fora": []
+        },
+        {
+          "id": "contraste",
+          "cobertura": 0.75,
+          "termos_fora": [
+            "garante"
+          ]
+        },
+        {
+          "id": "estados-vazio-erro",
+          "cobertura": 0.71,
+          "termos_fora": [
+            "feliz",
+            "permissao"
+          ]
+        },
+        {
+          "id": "prova-visual",
+          "cobertura": 0.71,
+          "termos_fora": [
+            "evidencia",
+            "verificacao"
+          ]
+        },
+        {
+          "id": "streaming-chat",
+          "cobertura": 0.46,
+          "termos_fora": [
+            "cancelamento",
+            "considera",
+            "dimensao",
+            "gerar",
+            "longas",
+            "shift",
+            "streaming"
+          ]
+        }
+      ],
+      "arquivo_erro": null
+    }
+  ]
+}

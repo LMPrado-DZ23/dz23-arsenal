@@ -12,7 +12,7 @@
   "skills": [
     {
       "name": "dz23-autonomous-improvement-ultimate",
-      "version": "2.1.1",
+      "version": "2.1.2",
       "description": "Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.",
       "user_invocable": true,
       "files": 14,
@@ -20,7 +20,7 @@
       "templates": 2,
       "scripts": 0,
       "evals": 12,
-      "sha256_skill_md": "52d8ea54f55a5669f89a223760737139bc189d124015d21484e1c4aa67750e84"
+      "sha256_skill_md": "123b4bcf94f04b33864137b7a34340b1335b76ab2e71be18e469a788d922f8ed"
     },
     {
       "name": "dz23-backend-data-architect",
@@ -108,15 +108,15 @@
     },
     {
       "name": "dz23-ultimate-pro-max",
-      "version": "2.2.0",
+      "version": "2.2.1",
       "description": "Skill de direção de arte premium, UX, frontend, arquitetura de interface, segurança, acessibilidade, performance, QA visual e entrega verificável para sites, SaaS, CRM, ERP, B-3PO, desktop e mobile. Ative ao criar, revisar, redesenhar ou implementar interfaces, fluxos e design systems.",
       "user_invocable": true,
-      "files": 15,
+      "files": 16,
       "references": 9,
       "templates": 0,
       "scripts": 1,
-      "evals": 0,
-      "sha256_skill_md": "8f06187825fae7a1d978fc48d6d073da3c0f5efdfa5ca0364eb4282ca3aaf1ef"
+      "evals": 13,
+      "sha256_skill_md": "c54625e136a70094c30698db04029c40e8bede644ec55e28b252b46287d941af"
     }
   ],
   "external": [

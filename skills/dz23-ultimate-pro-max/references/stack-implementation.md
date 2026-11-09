@@ -34,6 +34,10 @@ theme: {
 
 Proibido no JSX: `text-[#7c3aed]`, `p-[13px]`, `mt-[7px]`. Valor mágico é dívida de design.
 
+**Tailwind v4:** os tokens semânticos vivem no CSS via `@theme` (bloco de design tokens que gera as
+utilidades). Declare `--color-action-primary` e companhia dentro de `@theme` em vez de manter um
+`tailwind.config.js` paralelo — em v4 o CSS é a fonte da verdade.
+
 ## 2. shadcn/ui — adotar, não copiar cego
 
 - shadcn/ui é **código-fonte adaptável**, não dependência de runtime: você incorpora o componente e passa a

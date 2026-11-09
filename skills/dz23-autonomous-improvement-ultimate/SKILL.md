@@ -1,6 +1,6 @@
 ---
 name: dz23-autonomous-improvement-ultimate
-version: 2.1.1
+version: 2.1.2
 description: Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.
 user-invocable: true
 argument-hint: "<objetivo, ou 'audit <path>', ou cole o /goal>"

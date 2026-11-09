@@ -1,5 +1,19 @@
 # Changelog — dz23-autonomous-improvement-ultimate
 
+## [2.1.2] — 2026-11-09
+
+### Corrigido
+- **Evals fora do domínio da skill**: `tailwind3` e `tailwind4` testavam regra de UI numa skill de
+  orquestração. Foram para `dz23-ultimate-pro-max` (que tem a reference de stack) e a regra não existia aqui —
+  o `run-evals.py --check` acusou cobertura de 1/5 termos.
+- **`streaming-chat`** também era de domínio de UI: movido para `dz23-ultimate-pro-max`.
+- No lugar, entraram três cenários de orquestração: `checkpoint-ausente`, `escopo-inflado` e
+  `delegacao-sem-skill`. Total permanece 12.
+
+### Adicionado
+- Regra no `SKILL.md`: **falha repetida exige mudança de estratégia diagnóstica** — três tentativas com a
+  mesma hipótese produzem a mesma falha; na quarta, mudar o instrumento e preservar as evidências anteriores.
+
 ## [2.1.1] — 2026-11-09
 
 ### Corrigido

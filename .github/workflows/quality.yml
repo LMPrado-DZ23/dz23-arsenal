@@ -38,6 +38,9 @@ jobs:
           done
           exit $falhou
 
+      - name: Coerência dos evals
+        run: python scripts/run-evals.py --check
+
       - name: Links relativos
         run: python scripts/check-links.py .
 

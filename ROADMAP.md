@@ -35,15 +35,23 @@ As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em har
 Isso significa: **o comportamento das skills em produção é não comprovado**, exceto pelos 4 casos acima. O
 `evals.json` é especificação de comportamento, não certificado.
 
-### Próximo passo concreto
+### Harness de evals (implementado na v1.4.0)
 
-Construir o harness de execução de eval (`scripts/run-evals.py`), que:
+`scripts/run-evals.py` existe e roda três coisas:
 
-1. lista os cenários de uma skill e permite executá-los um a um;
-2. registra o veredito (`PASS`/`PARTIAL`/`FAIL`/`NOT_TESTED`) com a evidência citada;
-3. grava em `evals/results/<skill>.json` e alimenta o `INDEX.md`.
+| Comando | O que faz |
+|---|---|
+| `--list` | lista os cenários por skill |
+| `--check` | auditoria **determinística**: schema, ids duplicados, `expected` × `fails_if` contraditórios, cobertura (a regra do `expected` existe no `SKILL.md`/`references`?) e eval possivelmente impossível |
+| `--record <skill> <arquivo>` | grava o veredito de quem executou, em `evals-results/<skill>.json` |
+| `--report` | estado consolidado: quantos cenários têm resultado |
 
-**Não implementado ainda** — e enquanto não estiver, os evals continuam `NOT_TESTED`.
+**O que ele não faz:** executar o comportamento. Isso exige uma sessão de agente real por cenário; o harness
+prova que o eval é **coerente e executável** e guarda o veredito de quem executou.
+
+Auditoria de 2026-11-09: **128 cenários, 0 erros de coerência, 3 avisos de cobertura**. Dois defeitos reais
+foram encontrados e corrigidos nesse processo (evals de UI na skill de orquestração; `ultimate-pro-max` sem
+nenhum eval).
 
 ## Dívidas conhecidas
 

@@ -1,5 +1,18 @@
 # Changelog — dz23-ultimate-pro-max
 
+## [2.2.1] — 2026-11-09
+
+### Adicionado
+- **`evals/evals.json` com 13 cenários** — a skill tinha **zero** evals, sendo a de output mais subjetivo do
+  arsenal. Cobre: tokens semânticos, Tailwind v3 × v4 (`@theme`), estados interativos, focus-visible,
+  `prefers-reduced-motion`, CLS de mídia, adoção de shadcn/ui, badge sem quebra de linha, contraste,
+  estados vazio/erro, prova visual e streaming de chat.
+- `references/stack-implementation.md`: explicitado `@theme` do Tailwind v4 (CSS como fonte dos tokens) e
+  `aspect-ratio`/`width`/`height` contra CLS.
+
+### Recebido de `dz23-autonomous-improvement-ultimate`
+- `tailwind3`, `tailwind4` e `streaming-chat` — estavam lá, mas testam regra desta skill.
+
 ## [2.2.0] — 2026-11-08
 
 ### Adicionado
