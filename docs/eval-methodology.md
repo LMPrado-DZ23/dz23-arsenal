@@ -30,7 +30,7 @@ Cada camada é evidência mais forte que a anterior. **Nenhuma substitui a próx
 |---|---|
 | 1 — autoavaliação | **45/128 (35,2%)** |
 | 2 — re-leitura adversarial | **20/45** (aplicada só na Rodada 3) |
-| 3 — auditoria externa | **11/16 com veredito aproveitável** · 5 `NOT_AUDITED` (laudo julgou cenário parafraseado) |
+| 3 — auditoria externa | **16/16 PASS com input literal** (2 re-auditorias) — laudo original descartado como evidência |
 | 4 — projeto real | **0** |
 
 ## Camada 5 — conferência do método
@@ -49,6 +49,24 @@ olhou os dois casos mais evidentes. Virou 16 de 16 quando deixou de ser olho e v
 | 3 auditoria externa | terceiro | veredito do autor errado |
 | 4 uso em projeto real | usuário | tudo acima, na prática |
 | 5 conferência do método | script | **a auditoria não julgou o que disse julgar** |
+
+### O que a conferência encontrou no laudo original
+
+| Problema | Medida |
+|---|---|
+| input parafraseado | **13 de 16** (3 literais: 20, 21, 22) |
+| paráfrase que remove a armadilha | **5** (05, 12, 13, 16, 19) |
+| citação que não existe na resposta | **55 de 68 citações**, em **16 de 16** evals (`check-audit-quotes.py`) |
+
+Duas ferramentas medem isso sem depender de quem afirma:
+
+```bash
+python scripts/check-audit-inputs.py audit-results/audit-2026-11-09.md   # fidelidade do input
+python scripts/check-audit-quotes.py audit-results/audit-2026-11-09.md   # citação existe na resposta?
+```
+
+O veredito 16/16 PASS **sobreviveu** à re-auditoria — mas por mérito das respostas, não do laudo: as
+respostas citam o input literal dentro delas mesmas. Os PASS anteriores estavam certos **por acaso**.
 
 ## Por que não perseguir 128/128
 

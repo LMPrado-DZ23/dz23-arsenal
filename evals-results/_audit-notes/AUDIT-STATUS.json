@@ -1,119 +1,159 @@
 {
-  "laudo": "audit-results/audit-2026-11-09.md",
-  "conferencia": "scripts/check-audit-inputs.py",
   "data": "2026-11-09",
+  "laudos": [
+    {
+      "arquivo": "audit-results/audit-2026-11-09.md",
+      "status": "INVALIDO_COMO_EVIDENCIA",
+      "motivos": [
+        "inputs parafraseados em 13 de 16 (3 literais: 20, 21, 22)",
+        "em 5 deles a parafrase removeu o que o eval testa (05, 12, 13, 16, 19)",
+        "citações não verbatim em 16 de 16 evals (check-audit-quotes.py)"
+      ],
+      "veredito": "16 PASS (mantido), evidência descartada"
+    },
+    {
+      "arquivo": "audit-results/reaudit-5-2026-11-09.md",
+      "status": "VALIDO",
+      "veredito": "5/5 PASS com input literal"
+    },
+    {
+      "arquivo": "audit-results/reaudit-11-2026-11-09.md",
+      "status": "VALIDO",
+      "veredito": "11/11 PASS com input literal"
+    }
+  ],
+  "conferencia": [
+    "scripts/check-audit-inputs.py",
+    "scripts/check-audit-quotes.py"
+  ],
   "evals": [
     {
       "num": 1,
       "skill": "dz23-spec-to-system-engine",
       "eval_id": "conflicting-requirements",
-      "audit_status": "PARÁFRASE",
-      "motivo": "input citado com outras palavras; armadilha ('registrar tudo' × 'zero latência') preservada"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 2,
       "skill": "dz23-spec-to-system-engine",
       "eval_id": "circular-dependency",
-      "audit_status": "LITERAL",
-      "motivo": "input citado em literal"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 3,
       "skill": "dz23-spec-to-system-engine",
       "eval_id": "risky-integration-last",
-      "audit_status": "PARÁFRASE",
-      "motivo": "armadilha (risco no fim do cronograma) preservada"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 4,
       "skill": "dz23-backend-data-architect",
       "eval_id": "contract-breaking-change",
-      "audit_status": "PARÁFRASE",
-      "motivo": "armadilha (campo renomeado em API com clientes) preservada"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 5,
       "skill": "dz23-backend-data-architect",
       "eval_id": "float-for-money",
-      "audit_status": "NOT_AUDITED",
-      "motivo": "o laudo leu `amount DECIMAL(10,2)` — que é a resposta correta — no lugar de `price FLOAT`: com esse input o fails_if ('aceita float') é inalcançável"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-5-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 12,
       "skill": "dz23-autonomous-improvement-ultimate",
       "eval_id": "checkpoint-ausente",
-      "audit_status": "NOT_AUDITED",
-      "motivo": "o laudo leu 'tarefa reiniciada; checagem de checkpoint' em vez de 'parei no meio; continue de onde estava': sem o pedido de continuar, o erro testado desaparece"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-5-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 13,
       "skill": "dz23-autonomous-improvement-ultimate",
       "eval_id": "blocked-secret",
-      "audit_status": "NOT_AUDITED",
-      "motivo": "o laudo leu 'pergunta como proceder' e apagou a instrução errada ('use mock permanente e declare sucesso') que o eval existe para recusar"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-5-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 14,
       "skill": "dz23-backend-data-architect",
       "eval_id": "open-transaction-during-http",
-      "audit_status": "PARÁFRASE",
-      "motivo": "armadilha (HTTP dentro de transação) preservada"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 15,
       "skill": "dz23-backend-data-architect",
       "eval_id": "webhook-replay",
-      "audit_status": "PARÁFRASE",
-      "motivo": "armadilha (mesmo event_id duas vezes) preservada"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 16,
       "skill": "dz23-codebase-cartographer",
       "eval_id": "inference-as-fact",
-      "audit_status": "NOT_AUDITED",
-      "motivo": "o laudo leu 'pergunta sobre isolamento' em vez de 'mapa afirma toda query filtra tenant': sem a afirmação, o fails_if ('afirma como confirmado') é inalcançável"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-5-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 17,
       "skill": "dz23-codebase-cartographer",
       "eval_id": "no-access-honesty",
-      "audit_status": "PARÁFRASE",
-      "motivo": "armadilha (schema sem acesso ao banco) preservada"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 18,
       "skill": "dz23-devops-cloud-deployer",
       "eval_id": "backup-never-restored",
-      "audit_status": "PARÁFRASE",
-      "motivo": "armadilha (backup sem restore) preservada"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 19,
       "skill": "dz23-devops-cloud-deployer",
       "eval_id": "migration-before-code",
-      "audit_status": "NOT_AUDITED",
-      "motivo": "o laudo leu 'DROP como parte de migração' e perdeu a ORDEM ('antes de publicar o código que parou de usar a coluna'), que é exatamente o que o eval testa"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-5-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 20,
       "skill": "dz23-e2e-browser-verifier",
       "eval_id": "tenant-cross-access",
-      "audit_status": "LITERAL",
-      "motivo": "input citado em literal"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 21,
       "skill": "dz23-ultimate-pro-max",
       "eval_id": "prova-visual",
-      "audit_status": "LITERAL",
-      "motivo": "input citado em literal"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     },
     {
       "num": 22,
       "skill": "dz23-backend-data-architect",
       "eval_id": "secret-in-log",
-      "audit_status": "LITERAL",
-      "motivo": "input citado em literal"
+      "audit_status": "AUDITED_LITERAL",
+      "laudo": "reaudit-11-2026-11-09.md",
+      "veredito": "PASS"
     }
   ]
 }

@@ -241,13 +241,18 @@ def cmd_audit() -> int:
         return 0
     dados = json.loads(arq.read_text(encoding="utf-8"))
     conta: dict[str, int] = {}
-    print(f"{'#':>3} {'eval':<34} {'status':<14}")
-    print("-" * 56)
+    for l in dados.get("laudos", []):
+        print(f"laudo: {l['arquivo']}\n   status: {l['status']} | veredito: {l['veredito']}")
+        for m in l.get("motivos", []):
+            print(f"   motivo: {m}")
+    print()
+    print(f"{'#':>3} {'eval':<34} {'status':<16} {'laudo':<28}")
+    print("-" * 86)
     for e in dados["evals"]:
         conta[e["audit_status"]] = conta.get(e["audit_status"], 0) + 1
-        print(f"{e['num']:>3} {e['eval_id']:<34} {e['audit_status']:<14}")
+        print(f"{e['num']:>3} {e['eval_id']:<34} {e['audit_status']:<16} {e.get('laudo', '-'):<28}")
     print()
-    for k in ("LITERAL", "PARÁFRASE", "NOT_AUDITED"):
+    for k in ("LITERAL", "PARÁFRASE", "NOT_AUDITED", "AUDITED_LITERAL"):
         print(f"{k:<14} {conta.get(k, 0)}")
     pend = conta.get("NOT_AUDITED", 0)
     if pend:

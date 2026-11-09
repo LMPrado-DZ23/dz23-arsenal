@@ -3,6 +3,40 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.4.8] — 2026-11-09
+
+Re-auditorias recebidas: camada 3 fecha em literais. E o laudo original cai como evidência.
+
+### Recebido
+- udit-results/reaudit-5-2026-11-09.md — os 5 casos que eu havia marcado NOT_AUDITED, re-auditados com o
+  input literal: **5/5 PASS**.
+- udit-results/reaudit-11-2026-11-09.md — os outros 11: **11/11 PASS**.
+
+### Achado maior que o meu
+A re-auditoria apontou **citação fabricada** no laudo original. Verifiquei com ferramenta própria
+(scripts/check-audit-quotes.py, novo): **55 de 68 citações não aparecem na resposta**, em **16 de 16**
+evals. O laudo original passa a INVALIDO_COMO_EVIDENCIA.
+
+O veredito 16/16 PASS sobreviveu — mas por mérito das respostas, que citam o input literal dentro delas
+mesmas. Os PASS anteriores estavam certos **por acaso**, não por análise válida.
+
+### Corrigido no meu código (Fix 2)
+check-audit-inputs.py classificava o caso 02 (SL-02 → SL-03) como LITERAL porque os tokens do original
+estavam todos presentes. Regra nova, mais honesta:
+- LITERAL exige cópia fiel (texto normalizado igual) ou cobertura ≥95% **sem nenhum termo inventado**;
+- CONTRADIÇÃO TÉCNICA quando o laudo troca o termo decisivo (DECIMAL no lugar de FLOAT);
+- COBERTURA BAIXA (<15% dos termos) quando o cenário provavelmente é outro;
+- PARÁFRASE no resto — **sempre revisar à mão**, porque o script não lê semântica (perder a ordem de um
+  passo, como no caso 19, sai como paráfrase).
+
+--selftest com 6 casos, incluindo o 02: **6/6 ok**. Aplicado aos 16, só o **caso 02** mudou de classe
+(LITERAL → PARÁFRASE); os outros 15 mantiveram.
+
+### Estado
+- Camada 3: **16/16 PASS com input literal** (2 re-auditorias válidas).
+- Laudo original: INVALIDO_COMO_EVIDENCIA (input parafraseado em 13/16; citação fabricada em 16/16).
+- Execução: **45/131 (34,4%)** — inalterada.
+
 ## [1.4.7] — 2026-11-09
 
 Os 5 evals cujo veredito não se aplica passam a estado explícito NOT_AUDITED.
