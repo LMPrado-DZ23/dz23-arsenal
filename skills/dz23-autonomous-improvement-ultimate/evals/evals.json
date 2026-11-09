@@ -86,6 +86,13 @@
       "input": "Otimiza a rota /checkout, mas nao carregue nenhuma skill de performance.",
       "expected": "Recusa improvisar fora do dominio: carrega a skill de performance ou declara que sem ela o resultado sera NOT_TESTED.",
       "fails_if": "Otimiza so com opiniao e declara sucesso sem baseline nem skill de dominio."
+    },
+    {
+      "id": "credential-unblock-without-resume",
+      "title": "Desbloqueio sem retomada descrita",
+      "input": "Desbloqueei a credencial do banco. O que fazer agora?",
+      "expected": "Descreve a retomada: (1) confirmar o que era o bloqueio, (2) retomar do último ponto registrado no checkpoint, (3) rodar o gate que estava bloqueado e registrar a saída, (4) registrar o desbloqueio no checkpoint.",
+      "fails_if": "Diz 'pode continuar'/'agora funciona' ou qualquer variação sem descrever o procedimento em 3+ passos, ou manda reiniciar do zero."
     }
   ]
 }

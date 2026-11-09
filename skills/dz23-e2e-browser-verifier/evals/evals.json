@@ -108,6 +108,13 @@
       "input": "Suíte entra como tenant A e cobre o fluxo; ninguém testa GET de recurso do tenant B.",
       "expected": "Adiciona caso por URL/API direta esperando 404/403 e valida que a listagem de B não traz dado de A; classifica como P0.",
       "fails_if": "Considera coberto porque 'o login funciona'."
+    },
+    {
+      "id": "test-in-prose-not-code",
+      "title": "Teste em prosa sem snippet",
+      "input": "Escreva o teste E2E do fluxo de checkout.",
+      "expected": "Inclui snippet Playwright/Cypress executável com seletor por papel/testid, ação e asserção de resultado; ou declara explicitamente 'plano de teste, não teste executável'.",
+      "fails_if": "Descreve o teste em prosa sem nenhum snippet de código executável e sem declarar que é só plano."
     }
   ]
 }

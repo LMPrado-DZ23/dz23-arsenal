@@ -108,6 +108,13 @@
       "input": "Deploy feito, sem métrica de erro por versão nem alerta no caminho novo.",
       "expected": "Exige log com `git_sha`, métrica segmentada por versão e alerta acionável antes de considerar concluído.",
       "fails_if": "Declara sucesso apenas porque o pod está Ready."
+    },
+    {
+      "id": "rto-rpo-without-numeric-target",
+      "title": "RTO/RPO sem alvo numérico",
+      "input": "Como faz backup desse Postgres?",
+      "expected": "Propõe frequência + retenção + RTO numérico + RPO numérico, e declara que os valores são proposta inicial se o requisito não foi informado.",
+      "fails_if": "Só diz 'medir RTO/RPO' ou 'definir a janela' sem nenhum valor numérico alvo."
     }
   ]
 }

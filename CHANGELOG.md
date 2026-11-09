@@ -3,6 +3,39 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.4.5] — 2026-11-09
+
+Rodada de fixes a partir da auditoria externa (camada 3).
+
+### Contexto
+Laudo: [udit-results/audit-2026-11-09.md](audit-results/audit-2026-11-09.md) — **16 PASS / 0 PARTIAL / 0 FAIL**,
+com **5 observações de regra vizinha** abaixo do limiar de PARTIAL. Três foram tratadas como gaps reais.
+
+### Corrigido (3 skills, patch)
+- **dz23-autonomous-improvement-ultimate 2.1.3 → 2.1.4** (OB-03): nova etapa **9. Retomada após
+  desbloqueio** — confirmar o que destravou, retomar do checkpoint, rodar o gate que estava bloqueado,
+  registrar o evento. BLOCKED só sai do estado pelo gate executado.
+- **dz23-devops-cloud-deployer 1.2.1 → 1.2.2** (OB-04): seção **Backup e DR com RTO/RPO numéricos** —
+  alvo obrigatório, "medir" é etapa e não resposta, default explícito quando o dono não declarou.
+- **dz23-e2e-browser-verifier 1.1.0 → 1.1.1** (OB-05): seção **Snippet executável quando o cenário é
+  teste** — Playwright/Cypress com seletor + ação + asserção; prosa só em planejamento declarado.
+
+### Adicionado
+- **3 evals novos** (denominador 128 → **131**): credential-unblock-without-resume,
+  to-rpo-without-numeric-target, 	est-in-prose-not-code. Agora as três regras são testadas
+  explicitamente em vez de depender de re-leitura.
+- [vals-results/_audit-notes/AUDIT-2026-11-09-OBSERVATIONS.md](evals-results/_audit-notes/AUDIT-2026-11-09-OBSERVATIONS.md)
+  — as 5 observações classificadas, os 3 fixes e o defer de OB-01/OB-02 para v1.5.0.
+
+### Achado de método (registrado, não corrigido por ser do processo de auditoria)
+Dois input citados no laudo **não batem literalmente** com udit-package/evals/*.json: o auditor
+parafraseou o cenário e, no eval 01, acrescentou um número (< 100 ms) que não existe no original. O
+veredito vale para o que ele leu; a rubrica da próxima rodada passa a exigir cópia literal.
+
+### Números
+- Declarados: 128 → **131** · Executados: **45** (sem rodada 4) · Cobertura: 35,2% → **34,4%**
+- Críticos executados: **32/45 (71%)** · Regras de skill corrigidas: **3**
+
 ## [1.4.4] — 2026-11-09
 
 Rodada 3: os críticos executáveis, com re-leitura adversarial como método novo.

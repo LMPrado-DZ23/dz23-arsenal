@@ -8,11 +8,11 @@
 
 | Skill | Versão | Arquivos | Refs | Templates | Scripts | Evals |
 |---|---|---|---|---|---|---|
-| [dz23-autonomous-improvement-ultimate](skills/dz23-autonomous-improvement-ultimate/) | 2.1.3 | 14 | 5 | 2 | 0 | 12 |
+| [dz23-autonomous-improvement-ultimate](skills/dz23-autonomous-improvement-ultimate/) | 2.1.4 | 14 | 5 | 2 | 0 | 13 |
 | [dz23-backend-data-architect](skills/dz23-backend-data-architect/) | 1.1.0 | 19 | 10 | 2 | 1 | 12 |
 | [dz23-codebase-cartographer](skills/dz23-codebase-cartographer/) | 1.1.0 | 31 | 15 | 7 | 3 | 15 |
-| [dz23-devops-cloud-deployer](skills/dz23-devops-cloud-deployer/) | 1.2.1 | 33 | 17 | 7 | 3 | 15 |
-| [dz23-e2e-browser-verifier](skills/dz23-e2e-browser-verifier/) | 1.1.0 | 23 | 10 | 6 | 1 | 15 |
+| [dz23-devops-cloud-deployer](skills/dz23-devops-cloud-deployer/) | 1.2.2 | 33 | 17 | 7 | 3 | 16 |
+| [dz23-e2e-browser-verifier](skills/dz23-e2e-browser-verifier/) | 1.1.1 | 23 | 10 | 6 | 1 | 16 |
 | [dz23-performance-scalability-engine](skills/dz23-performance-scalability-engine/) | 1.3.0 | 26 | 10 | 6 | 4 | 16 |
 | [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.1.2 | 25 | 12 | 4 | 3 | 15 |
 | [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.2.0 | 44 | 17 | 11 | 3 | 15 |

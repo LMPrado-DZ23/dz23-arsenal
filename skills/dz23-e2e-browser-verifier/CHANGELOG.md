@@ -1,5 +1,13 @@
 # Changelog — dz23-e2e-browser-verifier
 
+## [1.1.1] — 2026-11-09
+
+### Adicionado
+- Regra de **snippet executável quando o cenário é teste**: exemplo Playwright e Cypress com seletor por
+  papel/testid, ação e asserção. Prosa só é aceita em planejamento, declarada como `plano de teste, não teste
+  executável`. Fecha OB-05 da auditoria externa de 2026-11-09.
+- Novo eval `test-in-prose-not-code` (16 casos).
+
 ## [1.1.0] — 2026-11-08
 
 Merge com 3 propostas externas (Claude, Gemini, ChatGPT) + relatório de verificação Manus.

@@ -1,5 +1,13 @@
 # Changelog — dz23-devops-cloud-deployer
 
+## [1.2.2] — 2026-11-09
+
+### Adicionado
+- Seção **Backup e DR com RTO/RPO numéricos**: alvo obrigatório (`RTO < 15 min`, `RPO < 5 min`), "medir" é
+  etapa e não resposta, e default explícito quando o dono não declarou. Fecha OB-04 da auditoria externa de
+  2026-11-09.
+- Novo eval `rto-rpo-without-numeric-target` (16 casos).
+
 ## [1.2.1] — 2026-11-08
 
 Fix de empacotamento, não de conteúdo. Nenhuma reference foi alterada.

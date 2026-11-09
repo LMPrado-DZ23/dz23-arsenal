@@ -1,5 +1,10 @@
 # Changelog — dz23-autonomous-improvement-ultimate
 
+## [2.1.4] — 2026-11-09
+
+### Adicionado
+- Adiciona a etapa 9 do fluxo (retomada após desbloqueio) — fecha OB-03 da auditoria externa de 2026-11-09. Novo eval `credential-unblock-without-resume`.
+
 ## [2.1.3] — 2026-11-09
 
 ### Corrigido

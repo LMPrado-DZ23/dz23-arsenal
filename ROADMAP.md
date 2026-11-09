@@ -35,61 +35,57 @@ As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em har
 Isso significa: **o comportamento das skills em produção é não comprovado**, exceto pelos 4 casos acima. O
 `evals.json` é especificação de comportamento, não certificado.
 
-## Status de evals (atualizado 2026-11-09 · Rodada 3)
+## Status de evals (atualizado 2026-11-09 · pós-auditoria externa)
 
 Fonte: `python scripts/run-evals.py --report`. Classificação:
-[`evals-results/_audit-notes/CLASSIFICATION.md`](evals-results/_audit-notes/CLASSIFICATION.md). Bloqueados por infra:
-[`evals-results/_audit-notes/BLOCKED-TRACK-B.md`](evals-results/_audit-notes/BLOCKED-TRACK-B.md). Método:
-[`docs/eval-methodology.md`](docs/eval-methodology.md).
+[`evals-results/_audit-notes/CLASSIFICATION.md`](evals-results/_audit-notes/CLASSIFICATION.md). Bloqueados:
+[`BLOCKED-TRACK-B.md`](evals-results/_audit-notes/BLOCKED-TRACK-B.md). Método:
+[`docs/eval-methodology.md`](docs/eval-methodology.md). Laudo da camada 3:
+[`audit-results/audit-2026-11-09.md`](audit-results/audit-2026-11-09.md). Observações e fixes:
+[`AUDIT-2026-11-09-OBSERVATIONS.md`](evals-results/_audit-notes/AUDIT-2026-11-09-OBSERVATIONS.md).
 
-### Por track
+### Cobertura
 
-| Track | Total | Executados | % |
-|---|---|---|---|
-| **A — reasoning-only** | 78 | **45** | **58%** |
-| **B — precisa de infra** | 40 | **0** (declarados BLOCKED) | 0% |
-| **C — produto real** | 0 | 0 | — |
-| **Total** | **128** | **45** | **35,2%** |
+| Métrica | Valor |
+|---|---|
+| Evals declarados | **131** (+3 na v1.4.5) |
+| Evals executados | **45** |
+| Cobertura | **45/131 (34,4%)** |
+| Track A (reasoning) executados | 45 de 78 |
+| Track B (infra) | 40, declarados `BLOCKED` |
+| Críticos executados | **32/45 (71%)** — 13 exigem infra |
 
-### Criticidade (o número que importa)
-
-| Categoria | Total | Executados | % |
-|---|---|---|---|
-| **A — crítico** | 45 | **32** | **71%** |
-| B — importante | 62 | 13 | 21% |
-| C — borda | 11 | 0 | 0% |
-
-**Os 13 críticos restantes exigem infraestrutura** (Postgres, Playwright com app, Ghidra, hardware) — ver
-`BLOCKED-TRACK-B.md`. **100% dos críticos não é atingível neste ambiente**; o teto real é 32/45.
+O denominador subiu de 128 para 131 porque três regras que antes dependiam de sorte agora têm eval próprio
+(OB-03, OB-04, OB-05). Cobertura menor com mais precisão é melhor que cobertura maior com padrão conhecido.
 
 ### Por skill
 
-| Skill | Total | Executados | PASS | PARTIAL | FAIL | BLOCKED |
-|---|---|---|---|---|---|---|
-| `dz23-spec-to-system-engine` | 15 | 10 | 10 | 0 | 0 | 0 |
-| `dz23-backend-data-architect` | 12 | 10 | 9 | 1 | 0 | 0 |
-| `dz23-devops-cloud-deployer` | 15 | 7 | 7 | 0 | 0 | 0 |
-| `dz23-autonomous-improvement-ultimate` | 12 | 5 | 5 | 0 | 0 | 0 |
-| `dz23-codebase-cartographer` | 15 | 5 | 5 | 0 | 0 | 0 |
-| `dz23-performance-scalability-engine` | 16 | 3 | 2 | 1 | 0 | 0 |
-| `dz23-reverse-engineer-anything` | 15 | 3 | 3 | 0 | 0 | 0 |
-| `dz23-e2e-browser-verifier` | 15 | 1 | 1 | 0 | 0 | 0 |
-| `dz23-ultimate-pro-max` | 13 | 1 | 1 | 0 | 0 | 0 |
-| **TOTAL** | **128** | **45** | **43** | **2** | **0** | **0** |
+| Skill | Total | Executados | PASS | PARTIAL | FAIL |
+|---|---|---|---|---|---|
+| `dz23-spec-to-system-engine` | 15 | 10 | 10 | 0 | 0 |
+| `dz23-backend-data-architect` | 12 | 10 | 9 | 1 | 0 |
+| `dz23-devops-cloud-deployer` | 16 | 7 | 7 | 0 | 0 |
+| `dz23-autonomous-improvement-ultimate` | 13 | 5 | 5 | 0 | 0 |
+| `dz23-codebase-cartographer` | 15 | 5 | 5 | 0 | 0 |
+| `dz23-performance-scalability-engine` | 16 | 3 | 2 | 1 | 0 |
+| `dz23-reverse-engineer-anything` | 15 | 3 | 3 | 0 | 0 |
+| `dz23-e2e-browser-verifier` | 16 | 1 | 1 | 0 | 0 |
+| `dz23-ultimate-pro-max` | 13 | 1 | 1 | 0 | 0 |
+| **TOTAL** | **131** | **45** | **43** | **2** | **0** |
 
-### Camadas (ver `docs/eval-methodology.md`)
+### Camadas
 
 | Camada | Cobertura |
 |---|---|
-| 1 — autoavaliação | 45/128 |
-| 2 — re-leitura adversarial | 20/45 (só Rodada 3) |
-| 3 — auditoria externa | 0 de 16 selecionados |
-| 4 — projeto real | 0 |
+| 1 — autoavaliação | 45/131 |
+| 2 — re-leitura adversarial | 20/45 |
+| 3 — auditoria externa | **16 de 16 selecionados → 16 PASS, 5 observações** (laudo em `audit-results/`) |
+| 4 — projeto real | **0** |
 
 ### Próximo passo
 
-Rodada 4: auditoria externa dos 16 registros em `AUDIT-SAMPLE.md` (camada 3). Depois, 1 projeto real usando
-3 skills (camada 4). Track B só quando houver Postgres/Playwright instalados.
+Rodada 4: os 33 evals restantes do Track A (com os 3 novos já incluídos). Track B quando houver
+Postgres/Playwright/Ghidra. Camada 4 (projeto real) segue como a única prova de uso.
 
 ### Harness de evals (implementado na v1.4.0)
 

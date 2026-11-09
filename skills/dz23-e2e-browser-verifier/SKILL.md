@@ -1,6 +1,6 @@
 ---
 name: dz23-e2e-browser-verifier
-version: 1.1.0
+version: 1.1.1
 description: >
   Automação de testes E2E com browser real (Playwright + cross-browser).
   Verifica fluxos críticos de UI, captura evidências (screenshot, vídeo,
@@ -95,6 +95,28 @@ VEREDITO GERAL: PASS | PARTIAL | FAIL | BLOCKED
 Referência: `templates/playwright.config.ts` (adaptar ao repositório; não criar config paralelo).
 Cross-browser: Chromium, Firefox e WebKit quando disponíveis. **Emulação de dispositivo não equivale a
 hardware físico**, e WebKit do Playwright não é Safari/iOS real — declare o limite da cobertura.
+
+## Snippet executável quando o cenário é teste
+Quando o pedido é **escrever/verificar um teste**, entregue um snippet mínimo executável — prosa não é teste:
+
+```ts
+// Playwright
+await page.getByRole('button', { name: 'Finalizar compra' }).click();
+await expect(page.getByRole('heading', { name: 'Pedido confirmado' })).toBeVisible();
+await expect(page).toHaveURL(/\/orders\/[a-z0-9-]+$/);
+```
+```js
+// Cypress
+cy.get('[data-testid="checkout"]').click();
+cy.contains('Pedido confirmado').should('be.visible');
+```
+
+Regra: **descrição de teste ≠ teste**. Se o contexto é apenas *planejamento* (não implementação), a prosa é
+aceitável — mas o plano deve declarar `plano de teste, não teste executável` e nomear o seletor/asserção que
+será usado.
+
+O snippet precisa conter: seletor por papel/testid, ação, e **asserção** de resultado visível ou efeito no
+servidor. Sem asserção, o teste passa com o produto quebrado.
 
 ## Integração com outras skills
 - UI/visual → `dz23-ultimate-pro-max` (fidelidade visual e de interação).

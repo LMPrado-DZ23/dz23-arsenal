@@ -1,6 +1,6 @@
 ---
 name: dz23-autonomous-improvement-ultimate
-version: 2.1.3
+version: 2.1.4
 description: Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.
 user-invocable: true
 argument-hint: "<objetivo, ou 'audit <path>', ou cole o /goal>"
@@ -82,6 +82,20 @@ Ao retomar, leia checkpoint, **revalide** branch/HEAD, working tree, serviços, 
 
 ### 8. Relatório obrigatório
 Apresente: `STATUS`; objetivo/escopo; baseline; `REQ-ID → estado → evidência`; correções por causa raiz; arquivos alterados; comandos/testes executados e resultados; inspeções reais; riscos/defeitos restantes; gates `NOT_RUN/BLOCKED`; checkpoint e próxima ação. Nunca invente logs, capturas, scores ou execução de ferramentas.
+
+### 9. Retomada após desbloqueio
+Quando uma credencial, permissão ou dependência externa é desbloqueada, descreva a retomada em passos —
+nunca responda só "pode continuar":
+
+1. **Confirme o que foi desbloqueado** — qual era o bloqueio, qual a dependência, o que exatamente destrava.
+2. **Retome do ponto registrado** — leia o checkpoint; identifique a última ação e o que falta. Não reinicie
+   do zero por conveniência.
+3. **Rode o gate que estava bloqueado** — o teste/verificação que falhava por falta da dependência agora
+   deve ser executado e registrado com saída.
+4. **Registre no checkpoint** — o desbloqueio é evento auditável: data, dependência, gate executado,
+   resultado, próximo passo.
+
+`BLOCKED_BY_EXTERNAL_DEPENDENCY` só sai do estado por (3), não por disponibilidade declarada.
 
 ## Referências
 - `references/goal-integration.md`: integração com `/goal` e coordenação de skills.

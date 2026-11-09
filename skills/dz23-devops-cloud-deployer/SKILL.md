@@ -1,6 +1,6 @@
 ---
 name: dz23-devops-cloud-deployer
-version: 1.2.1
+version: 1.2.2
 description: >
   DevSecOps, containers e deploy autônomo com evidência: imagem mínima e
   reproduzível, pipeline com gates, configuração e segredos por ambiente,
@@ -122,6 +122,21 @@ kubectl create secret generic app-secrets --from-env-file=.env.prod \
 
 Matriz de evidência por etapa em `templates/deployment-report.md`. Sem arquivo de evidência, o estado é
 `NOT_TESTED` — não `PASS`.
+
+## Backup e DR com RTO/RPO numéricos
+Ao tratar de backup, restore ou disaster recovery, **declare valores numéricos** — nunca "medir RTO":
+
+| Métrica | O que é | Exemplo de declaração |
+|---|---|---|
+| **RTO** | tempo máximo de indisponibilidade tolerado após falha | `RTO < 15 min` |
+| **RPO** | perda máxima de dados tolerada | `RPO < 5 min` ou `RPO = último backup diário` |
+
+"Medir o RTO" é **etapa**, não resposta — a resposta é o valor-alvo. Se o requisito não foi declarado pelo
+dono, proponha default explícito como *proposta inicial* (ex.: `RTO < 30 min, RPO < 1 h`) e diga que precisa
+de confirmação; nunca silencie o número.
+
+Consequência prática: o alvo define a frequência (RPO), a topologia (RTO) e o ensaio de restore que precisa
+ser medido. Backup sem alvo não tem critério de aprovação.
 
 ## Quality gates
 Leia `references/quality-gates.md`. Resumo — BLOCKER: segredo no artefato, imagem sem digest em prod, deploy sem health check, gate desabilitado para passar, rollback inexistente, `DROP`/delete sem backup, permissão de admin no CI, imagem com CVE crítica publicada. MAJOR: ausência de probe, sem resource limits, rebuild por ambiente, rollback não ensaiado, sem alerta no caminho novo, `latest` em staging.

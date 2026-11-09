@@ -58,7 +58,7 @@ for f in root.rglob('*.md'):
 evals = json.loads((root / 'evals' / 'evals.json').read_text(encoding='utf-8'))
 assert evals.get('schema_version') == 1, 'evals.json com schema_version != 1'
 cases = evals.get('cases', [])
-assert len(cases) == 15, f'evals devem ter 15 casos, tem {len(cases)}'
+assert len(cases) == 16, f'evals devem ter 16 casos, tem {len(cases)}'
 assert len({c['id'] for c in cases}) == len(cases), 'ids de eval duplicados'
 for c in cases:
     for k in ('id', 'title', 'input', 'expected', 'fails_if'):
