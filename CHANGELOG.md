@@ -3,6 +3,32 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.4.6] — 2026-11-09
+
+Conferência pós-auditoria: o laudo da camada 3 julgou cenários parafraseados.
+
+### Achado
+python scripts/check-audit-inputs.py audit-results/audit-2026-11-09.md compara o input citado no laudo
+com o do pacote. Resultado: **4 literais, 7 paráfrases com armadilha preservada, 5 com cenário alterado**.
+
+Nos 5 alterados, a paráfrase removeu justamente o que o eval testa:
+loat-for-money (leu DECIMAL, que é a resposta certa, no lugar de FLOAT), checkpoint-ausente
+(sem o "continue de onde estava"), locked-secret (sem a instrução "use mock permanente"),
+inference-as-fact (sem a afirmação falsa) e migration-before-code (perdeu a **ordem** do DROP).
+
+**Correção de uma afirmação anterior:** eu havia dito "2 de 16 divergem". Errado — o texto difere em 16 de
+16, e em 5 a diferença invalida o veredito. A primeira contagem olhou só os dois casos mais gritantes.
+
+### Adicionado
+- scripts/check-audit-inputs.py — triagem automática de fidelidade de input em laudo de auditoria.
+- udit-package/rubrica-em-branco.md — regra obrigatória: copiar o input literalmente; auditor que
+  parafraseia invalida a auditoria.
+- udit-package/REAUDIT-PROMPT.md — prompt pronto para re-auditar os 5, com o que cada paráfrase mudou.
+
+### Estado da camada 3
+- **4/16** auditados em literais · **7/16** em paráfrase com armadilha preservada · **5/16** a re-auditar.
+- O "16/16 PASS" do laudo **não** pode ser declarado como auditoria em literais.
+
 ## [1.4.5] — 2026-11-09
 
 Rodada de fixes a partir da auditoria externa (camada 3).

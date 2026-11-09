@@ -143,7 +143,7 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 | **Assets em release** | **18 zips** na [`v1.4.0`](https://github.com/LMPrado-DZ23/dz23-arsenal/releases/tag/v1.4.0) |
 | Gates automáticos | **15/15** |
 | CI | ✅ verde (2 runs em 2026-11-09) |
-| Auditoria externa (camada 3) | **16/16 PASS** — laudo em [`audit-results/`](audit-results/audit-2026-11-09.md) |
+| Auditoria externa (camada 3) | **4/16 em literais · 7 paráfrase com armadilha preservada · 5 a re-auditar** — laudo em [`audit-results/`](audit-results/audit-2026-11-09.md), conferência em [`OBSERVATIONS`](evals-results/_audit-notes/AUDIT-2026-11-09-OBSERVATIONS.md) |
 
 Verificar agora:
 

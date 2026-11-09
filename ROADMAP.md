@@ -79,7 +79,7 @@ O denominador subiu de 128 para 131 porque três regras que antes dependiam de s
 |---|---|
 | 1 — autoavaliação | 45/131 |
 | 2 — re-leitura adversarial | 20/45 |
-| 3 — auditoria externa | **16 de 16 selecionados → 16 PASS, 5 observações** (laudo em `audit-results/`) |
+| 3 — auditoria externa | **16 auditados: 4 em literais, 7 em paráfrase com armadilha preservada, 5 em cenário alterado → estes 5 precisam de re-auditoria** (laudo em `audit-results/`, conferência em `evals-results/_audit-notes/AUDIT-2026-11-09-OBSERVATIONS.md`) |
 | 4 — projeto real | **0** |
 
 ### Próximo passo

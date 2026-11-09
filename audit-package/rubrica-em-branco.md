@@ -1,5 +1,21 @@
 # Rubrica de auditoria — 16 evals
 
+## Regra obrigatória: copie o `input` LITERALMENTE
+
+Copie o `input` do JSON **caractere por caractere**. Não parafraseie, não resuma, não acrescente números,
+não "traduza para um exemplo melhor".
+
+Se o input diz *"não impactar latência em nenhum cenário"*, a rubrica cita exatamente isso — **não**
+*"latência < 100 ms"*. Esse número não existe no original e inventa um requisito.
+
+**Auditor que parafraseia o input invalida a própria auditoria**, por dois motivos:
+1. O veredito passa a ser sobre outro cenário.
+2. Se a paráfrase remover a armadilha do cenário (o motivo pelo qual o eval existe), o `fails_if` deixa de
+   poder ser ativado — e o PASS não significa nada.
+
+Ferramenta de apoio: `python scripts/check-audit-inputs.py <laudo>`, que compara o input citado com o do
+pacote. Ela faz **triagem**, não julgamento: paráfrase legítima também é sinalizada.
+
 ## Setup
 
 - Ler `README.md` e `LEAK-CHECK.md`

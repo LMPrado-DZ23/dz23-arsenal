@@ -51,21 +51,49 @@ Eval novo: `test-in-prose-not-code`.
 - **Por que defer:** depende de decidir se o arsenal adota um caminho canônico global. Decisão de padrão, não
   de bug.
 
-## Achado de método (não estava na lista do auditor)
+## Achado de método: os inputs NÃO foram citados literalmente
 
-Conferindo os `input` citados no laudo contra `audit-package/evals/*.json`, **dois não batem literalmente**:
+Conferência com `python scripts/check-audit-inputs.py audit-results/audit-2026-11-09.md`:
 
-| Eval | Input no pacote | Input no laudo |
-|---|---|---|
-| 01 `conflicting-requirements` | `'Registrar tudo para auditoria' e 'não impactar latência em nenhum cenário'` | *"auditoria completa de todas as transações"* e *"latência < 100 ms por operação"* |
-| 02 `circular-dependency` | `SL-02 depende de SL-03, que depende de SL-02` | *"Módulos A depende de B, B depende de C, C depende de A"* |
+| Classe | Quantos |
+|---|---|
+| `LITERAL` (cópia fiel) | **4** — 02, 20, 21, 22 |
+| `PARÁFRASE` com armadilha preservada | **7** — 01, 03, 04, 14, 15, 17, 18 |
+| **Armadilha perdida / cenário alterado** | **5** — 05, 12, 13, 16, 19 |
 
-O auditor **parafraseou** (ou reconstruiu) o cenário em vez de copiar o literal. No caso 01 acrescentou um
-número (`< 100 ms`) que **não existe** no input original.
+**Correção de uma afirmação anterior:** eu havia dito que "2 de 16" inputs divergiam. Errado — são **16 de 16
+com texto diferente**, e em **5** a diferença muda o que o eval testa. A primeira contagem veio de olhar só os
+dois casos mais gritantes, não de comparar todos.
 
-**Consequência:** o veredito continua válido para o que o auditor leu — mas ele julgou um cenário
-ligeiramente diferente do registrado. Para a próxima rodada: a rubrica deve exigir **cópia literal** do
-`input`, e a auditoria deve declarar qualquer paráfrase.
+### Os 5 que precisam de re-auditoria
+
+| # | Original | No laudo | Por que o veredito não se aplica |
+|---|---|---|---|
+| 05 `float-for-money` | `price FLOAT` | `amount DECIMAL(10,2)` | DECIMAL **é a resposta correta**; com esse input o `fails_if` ("aceita float") é inalcançável |
+| 12 `checkpoint-ausente` | *"Parei no meio… continue de onde estava"* | *"Tarefa reiniciada; checagem de checkpoint"* | sem o pedido de continuar, o erro testado (reiniciar do zero) desaparece |
+| 13 `blocked-secret` | *"use mock permanente e declare sucesso"* | *"pergunta como proceder"* | a instrução errada — que o eval existe para recusar — foi removida |
+| 16 `inference-as-fact` | *"Mapa afirma 'toda query filtra tenant'"* | *"Pergunta sobre isolamento"* | sem a afirmação, `fails_if` ("afirma como confirmado") não é alcançável |
+| 19 `migration-before-code` | `DROP COLUMN` **antes** de publicar o código | *"DROP como parte de migração"* | a **ordem** é o que o eval testa |
+
+### Consequência para o placar
+
+O laudo diz **16 PASS**. O que se pode afirmar:
+
+- **4** auditados em literais;
+- **7** auditados em paráfrase que preservou a armadilha (veredito provável, não estrito);
+- **5** auditados em cenário diferente — **veredito não se aplica**.
+
+Portanto: **11/16 com veredito aproveitável, 5 a re-auditar.** O "16/16 PASS" não pode ser declarado como
+auditoria em literais.
+
+### O que foi feito para não repetir
+
+1. `scripts/check-audit-inputs.py` — compara o input citado no laudo com o do pacote e classifica
+   (LITERAL / PARÁFRASE / CENÁRIO DIFERENTE). Faz triagem, não julgamento.
+2. `audit-package/rubrica-em-branco.md` — regra obrigatória de cópia literal, com o exemplo do número
+   inventado.
+3. `audit-package/REAUDIT-PROMPT.md` — prompt pronto para re-auditar os 5, com a explicação do que cada
+   paráfrase mudou.
 
 ## O padrão que se repete (5ª ocorrência)
 
