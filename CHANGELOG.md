@@ -3,6 +3,30 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.4.9] — 2026-11-09
+
+**Camada 4** — 3 skills do arsenal usadas no próprio repo, com o CI como juiz.
+
+### Adicionado
+- **--verify-quotes** no un-evals.py: verifica se as citações dos laudos marcados VALIDO existem nas
+  respostas. xit 1 quando há citação fabricada.
+- **quality-gate.py: 16 checks** (era 15) — vals:citacoes roda no CI.
+- **docs/camada-4-2026-11-09.md** — spec (REQ-001..008), contrato de exit code, 5 iterações com o defeito
+  de cada uma, o que quebrou, o que funcionou, lições e o que **não** foi testado.
+
+### O que a Camada 4 produziu de diferente
+A ferramenta acusou o laudo **válido** cinco vezes durante a construção: cabeçalho ## vs ###, citação do
+input antigo confundida com citação da resposta, anotação do auditor (...) contada como citação, linha
+quebrada em duas, e guarda de tamanho que matava citação curta. Cada uma virou regra no extrator
+(RESUMO, isolar seção de resposta, juntar linha quebrada) e caso no --selftest.
+
+O controle negativo (--laudo audit-2026-11-09.md → exit 1, 54 de 68 fabricadas) é o que prova que a
+ferramenta discrimina; sem ele, "passou nos válidos" não significaria nada.
+
+### Estado
+- Gate **16/16** · CI verde · execução de evals inalterada (45/131)
+- Camada 4: **PASS** — tarefa com consequência entregue e provada pelo CI, não por declaração
+
 ## [1.4.8] — 2026-11-09
 
 Re-auditorias recebidas: camada 3 fecha em literais. E o laudo original cai como evidência.
