@@ -138,7 +138,8 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 |---|---|
 | Skills empacotadas | **9** + 1 MCP + 1 bundle + **7** externas + 1 prompt |
 | Evals declarados | **128** |
-| **Evals executados** | **25 (19,5%)** — 23 PASS · 2 PARTIAL · 0 FAIL |
+| **Evals executados** | **45 (35,2%)** — 43 PASS · 2 PARTIAL · 0 FAIL |
+| **Críticos executados** | **32 de 45 (71%)** — 13 exigem infra, declarados BLOCKED |
 | **Assets em release** | **18 zips** na [`v1.4.0`](https://github.com/LMPrado-DZ23/dz23-arsenal/releases/tag/v1.4.0) |
 | Gates automáticos | **15/15** |
 | CI | ✅ verde (2 runs em 2026-11-09) |

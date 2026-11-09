@@ -3,6 +3,48 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.4.4] — 2026-11-09
+
+Rodada 3: os críticos executáveis, com re-leitura adversarial como método novo.
+
+### Adicionado
+- **20 evals críticos executados** (categoria A, reasoning-only): autonomous 4, backend 5, cartographer 5,
+  devops 4, e2e 1, ultimate-pro-max 1.
+- **`docs/eval-methodology.md`** — o que um eval prova, o que não prova, as 4 camadas de verificação e o
+  estado de cada uma.
+- **`evals-results/BLOCKED-TRACK-B.md`** — os 40 evals que exigem infra, cada um com a dependência nomeada.
+- **11 registros** adicionados à amostra de auditoria externa (total **16**), `method: auto-then-reaudit`.
+
+### Método novo: re-leitura adversarial
+A resposta é relida como se fosse outro leitor, procurando violação de regra **vizinha** — não só do
+`expected`. Produziu 5 defeitos menores que a autoavaliação simples deixaria passar (números ilustrativos
+apresentados como dados, teto de paginação fixado sem justificativa, checkpoint assumido sem varrer o disco).
+
+### Números reais (e correção do plano)
+- Cobertura: **25/128 (19,5%) → 45/128 (35,2%)**
+- Track A: **45/78 (58%)**
+- **Críticos: 32/45 (71%)** — não 45/45
+
+**Por que não 100% dos críticos:** dos 33 restantes, **13 exigem infraestrutura** (Postgres, Playwright com
+app rodando, Ghidra, hardware). Executá-los sem a dependência daria `PASS` falso. O teto real neste ambiente
+é 32/45.
+
+### Vereditos
+43 PASS · 2 PARTIAL · **0 FAIL**. Nenhuma skill teve 3+ FAIL, então nenhuma regra foi corrigida.
+
+## [1.4.3] — 2026-11-09
+
+Auditoria da amostra da Rodada 2 (5 registros).
+
+### Resultado (mesmo autor — não independente)
+- [`evals-results/AUDIT-RESULT.md`](evals-results/AUDIT-RESULT.md): releitura adversarial dos 5 selecionados.
+  **4 PASS · 1 PARTIAL**. `float-for-money` rebaixado de PASS para PARTIAL: o `expected` exige explicar o
+  **erro de arredondamento fiscal** e a resposta apenas definiu a regra de arredondamento.
+- **Achado de infra corrigido:** o template do `record-eval.py` não gravava `fails_if`, então o auditor não
+  conseguia julgar a segunda dimensão só pelo registro. Template corrigido e **backfill nos 25 registros**.
+- 3 defeitos menores documentados (decisão padrão sem prazo, inferência não marcada, afirmação sem prova) e
+  1 lapso de aplicação de regra que **já existe** na skill (estimativa por intervalo).
+
 ## [1.4.2] — 2026-11-09
 
 Rodada 2: classificação dos 118 evals restantes e lote de 15 reasoning-only.
@@ -22,15 +64,6 @@ Rodada 2: classificação dos 118 evals restantes e lote de 15 reasoning-only.
 - Cobertura: **10/128 (7,8%) → 25/128 (19,5%)**.
 - Vereditos acumulados: **24 PASS · 1 PARTIAL · 0 FAIL · 0 BLOCKED**.
 - Track A (reasoning): 25 de 78 executados (**32%**).
-
-### Auditoria da amostra (mesmo autor — não independente)
-- [`evals-results/AUDIT-RESULT.md`](evals-results/AUDIT-RESULT.md): releitura adversarial dos 5 selecionados.
-  **4 PASS · 1 PARTIAL**. `float-for-money` rebaixado de PASS para PARTIAL: o `expected` exige explicar o
-  **erro de arredondamento fiscal** e a resposta apenas definiu a regra de arredondamento.
-- **Achado de infra corrigido:** o template do `record-eval.py` não gravava `fails_if`, então o auditor não
-  conseguia julgar a segunda dimensão só pelo registro. Template corrigido e **backfill nos 25 registros**.
-- 3 defeitos menores documentados (decisão padrão sem prazo, inferência não marcada, afirmação sem prova) e
-  1 lapso de aplicação de regra que **já existe** na skill (estimativa por intervalo).
 
 ### Sem correção estrutural nesta rodada
 Nenhum `expected` autocontraditório, `input` ambíguo ou `fails_if` brando apareceu nos 15 executados — e

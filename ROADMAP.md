@@ -35,52 +35,61 @@ As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em har
 Isso significa: **o comportamento das skills em produção é não comprovado**, exceto pelos 4 casos acima. O
 `evals.json` é especificação de comportamento, não certificado.
 
-## Status de evals (atualizado 2026-11-09 · Rodada 2)
+## Status de evals (atualizado 2026-11-09 · Rodada 3)
 
-Fonte: `python scripts/run-evals.py --report`. Classificação completa em
-[`evals-results/CLASSIFICATION.md`](evals-results/CLASSIFICATION.md); registros em [`evals-results/`](evals-results/).
+Fonte: `python scripts/run-evals.py --report`. Classificação:
+[`evals-results/CLASSIFICATION.md`](evals-results/CLASSIFICATION.md). Bloqueados por infra:
+[`evals-results/BLOCKED-TRACK-B.md`](evals-results/BLOCKED-TRACK-B.md). Método:
+[`docs/eval-methodology.md`](docs/eval-methodology.md).
 
 ### Por track
 
 | Track | Total | Executados | % |
 |---|---|---|---|
-| **A — reasoning-only** | 78 | 25 | **32%** |
-| **B — precisa de infra** (Docker/Postgres/Ghidra/browser/hardware) | 40 | 0 | 0% |
-| **C — precisa de produto real** | 0 | 0 | — |
-| **Total** | **128** | **25** | **19,5%** |
+| **A — reasoning-only** | 78 | **45** | **58%** |
+| **B — precisa de infra** | 40 | **0** (declarados BLOCKED) | 0% |
+| **C — produto real** | 0 | 0 | — |
+| **Total** | **128** | **45** | **35,2%** |
+
+### Criticidade (o número que importa)
+
+| Categoria | Total | Executados | % |
+|---|---|---|---|
+| **A — crítico** | 45 | **32** | **71%** |
+| B — importante | 62 | 13 | 21% |
+| C — borda | 11 | 0 | 0% |
+
+**Os 13 críticos restantes exigem infraestrutura** (Postgres, Playwright com app, Ghidra, hardware) — ver
+`BLOCKED-TRACK-B.md`. **100% dos críticos não é atingível neste ambiente**; o teto real é 32/45.
 
 ### Por skill
 
 | Skill | Total | Executados | PASS | PARTIAL | FAIL | BLOCKED |
 |---|---|---|---|---|---|---|
-| `dz23-spec-to-system-engine` | 15 | **10** | 10 | 0 | 0 | 0 |
-| `dz23-backend-data-architect` | 12 | **5** | 5 | 0 | 0 | 0 |
-| `dz23-reverse-engineer-anything` | 15 | 3 | 3 | 0 | 0 | 0 |
-| `dz23-devops-cloud-deployer` | 15 | 3 | 3 | 0 | 0 | 0 |
+| `dz23-spec-to-system-engine` | 15 | 10 | 10 | 0 | 0 | 0 |
+| `dz23-backend-data-architect` | 12 | 10 | 9 | 1 | 0 | 0 |
+| `dz23-devops-cloud-deployer` | 15 | 7 | 7 | 0 | 0 | 0 |
+| `dz23-autonomous-improvement-ultimate` | 12 | 5 | 5 | 0 | 0 | 0 |
+| `dz23-codebase-cartographer` | 15 | 5 | 5 | 0 | 0 | 0 |
 | `dz23-performance-scalability-engine` | 16 | 3 | 2 | 1 | 0 | 0 |
-| `dz23-autonomous-improvement-ultimate` | 12 | 1 | 1 | 0 | 0 | 0 |
-| `dz23-codebase-cartographer` | 15 | 0 | 0 | 0 | 0 | 0 |
-| `dz23-e2e-browser-verifier` | 15 | 0 | 0 | 0 | 0 | 0 |
-| `dz23-ultimate-pro-max` | 13 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **128** | **25** | **23** | **2** | **0** | **0** |
+| `dz23-reverse-engineer-anything` | 15 | 3 | 3 | 0 | 0 | 0 |
+| `dz23-e2e-browser-verifier` | 15 | 1 | 1 | 0 | 0 | 0 |
+| `dz23-ultimate-pro-max` | 13 | 1 | 1 | 0 | 0 | 0 |
+| **TOTAL** | **128** | **45** | **43** | **2** | **0** | **0** |
 
-Não houve `FAIL`, então nenhuma regra precisou de correção nesta rodada. **Mas 15 desses 25 registros são
-`method: auto`** — o mesmo agente respondeu e julgou. Auto-avaliação não homologa (a performance provou:
-3/3 PASS na autoavaliação, 5 defeitos na reauditoria).
+### Camadas (ver `docs/eval-methodology.md`)
 
-### Auditoria externa pendente
-
-**5 dos 15 registros desta rodada** foram separados para revisão independente:
-[`evals-results/AUDIT-SAMPLE.md`](evals-results/AUDIT-SAMPLE.md).
-
-Releitura adversarial feita (mesmo autor — **não** é auditoria independente): [`evals-results/AUDIT-RESULT.md`](evals-results/AUDIT-RESULT.md). Resultado: **4 PASS · 1 PARTIAL**, com `float-for-money` rebaixado (o `expected` exige explicar o **erro de arredondamento fiscal** e a resposta só definiu a regra de arredondamento). Achado de infra corrigido: os registros não gravavam `fails_if` — template e backfill dos 25 ajustados.
-
-Os 4 PASS seguem **não homologados** até um agente que nunca viu esta sessão revisar.
+| Camada | Cobertura |
+|---|---|
+| 1 — autoavaliação | 45/128 |
+| 2 — re-leitura adversarial | 20/45 (só Rodada 3) |
+| 3 — auditoria externa | 0 de 16 selecionados |
+| 4 — projeto real | 0 |
 
 ### Próximo passo
 
-Rodada 3: os 53 evals reasoning-only restantes (Track A), priorizando categoria **A** — há 45 críticos no
-total e apenas 12 executados. Depois, Track B (40 evals) quando houver infra.
+Rodada 4: auditoria externa dos 16 registros em `AUDIT-SAMPLE.md` (camada 3). Depois, 1 projeto real usando
+3 skills (camada 4). Track B só quando houver Postgres/Playwright instalados.
 
 ### Harness de evals (implementado na v1.4.0)
 
