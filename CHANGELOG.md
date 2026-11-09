@@ -3,6 +3,15 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.1.0] — 2026-11-08
+
+### Adicionado
+- **`prompts/`** — pasta para os prompts de origem das skills:
+  - `prompts/performance-4-camadas.md` — prompt original em 4 camadas / 20 itens que deu origem à
+    `dz23-performance-scalability-engine`, copiado **verbatim** (inclusive o typo "Processamento
+    Assalariado", que a skill interpreta como assíncrono)
+  - `prompts/README.md` — índice, comparação prompt × skill e regra de contribuição
+
 ## [1.0.0] — 2026-11-08
 
 Primeira release pública.

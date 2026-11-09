@@ -77,6 +77,17 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 
 Cada linha linka para `external/<nome>.md` com instruções completas de instalação e uso.
 
+## Prompts de origem
+
+Os prompts que deram origem a algumas skills. Servem para **uso direto** (copiar e colar, sem instalar
+nada) e para **rastreabilidade** (de onde veio cada skill).
+
+| Prompt | O que pede | Virou a skill |
+|---|---|---|
+| [`prompts/performance-4-camadas.md`](prompts/performance-4-camadas.md) | plano de otimização em 4 camadas, 20 itens | [`dz23-performance-scalability-engine`](skills/dz23-performance-scalability-engine/) |
+
+Índice e comparação prompt × skill: [`prompts/README.md`](prompts/README.md).
+
 ## Pré-requisitos de CLI
 
 - **Base para todas as skills**: `git`, `python` (3.10+), `node` (20+), `rg`, `jq`, `curl`
