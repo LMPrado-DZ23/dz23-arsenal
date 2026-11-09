@@ -1,0 +1,182 @@
+{
+  "schema": 1,
+  "generated_by": "scripts/build-manifest.py",
+  "generated_at": "2026-11-09",
+  "counts": {
+    "skills": 9,
+    "external": 9,
+    "prompts": 1,
+    "mcp": 1,
+    "bundle": 1
+  },
+  "skills": [
+    {
+      "name": "dz23-autonomous-improvement-ultimate",
+      "version": "2.1.1",
+      "description": "Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.",
+      "user_invocable": true,
+      "files": 14,
+      "references": 5,
+      "templates": 2,
+      "scripts": 0,
+      "evals": 12,
+      "sha256_skill_md": "52d8ea54f55a5669f89a223760737139bc189d124015d21484e1c4aa67750e84"
+    },
+    {
+      "name": "dz23-backend-data-architect",
+      "version": "1.1.0",
+      "description": "Skill de engenharia de backend, banco de dados, contratos de API, migrações seguras, multi-tenancy, segurança de aplicação e observabilidade. Ative ao criar, revisar, refatorar ou depurar serviços, endpoints, schemas, migrações, integrações e pipelines de dados.",
+      "user_invocable": true,
+      "files": 19,
+      "references": 10,
+      "templates": 2,
+      "scripts": 1,
+      "evals": 12,
+      "sha256_skill_md": "51dcffd175fc9d31dae07db819f4c6c872147fd3e463ebd0b81cf64bddca11fc"
+    },
+    {
+      "name": "dz23-codebase-cartographer",
+      "version": "1.1.0",
+      "description": ">",
+      "user_invocable": true,
+      "files": 31,
+      "references": 15,
+      "templates": 7,
+      "scripts": 3,
+      "evals": 15,
+      "sha256_skill_md": "942d6a8cf557717b1d0dc04935cf2b8f726b601a19b47140dbfd1442e06550ed"
+    },
+    {
+      "name": "dz23-devops-cloud-deployer",
+      "version": "1.2.1",
+      "description": ">",
+      "user_invocable": true,
+      "files": 33,
+      "references": 17,
+      "templates": 7,
+      "scripts": 3,
+      "evals": 15,
+      "sha256_skill_md": "7b18da1220a18581235df560788c957306b3d4e9410142d740fc90a5cc652ec1"
+    },
+    {
+      "name": "dz23-e2e-browser-verifier",
+      "version": "1.1.0",
+      "description": ">",
+      "user_invocable": true,
+      "files": 23,
+      "references": 10,
+      "templates": 6,
+      "scripts": 1,
+      "evals": 15,
+      "sha256_skill_md": "8739773275603bdc9bf53a7a9b26001ef058a47facb847918eea2f268d944845"
+    },
+    {
+      "name": "dz23-performance-scalability-engine",
+      "version": "1.3.0",
+      "description": ">",
+      "user_invocable": true,
+      "files": 26,
+      "references": 10,
+      "templates": 6,
+      "scripts": 4,
+      "evals": 16,
+      "sha256_skill_md": "7971061d65c4372de0138c3d075cbd6833d08d464a8d7bbb44ddaabe0436f8ef"
+    },
+    {
+      "name": "dz23-reverse-engineer-anything",
+      "version": "1.1.2",
+      "description": ">",
+      "user_invocable": true,
+      "files": 25,
+      "references": 12,
+      "templates": 4,
+      "scripts": 3,
+      "evals": 15,
+      "sha256_skill_md": "6b9a897a6c176172681f55ee887d138ae02cf33c6cbf4375cb9ad91cfea1a410"
+    },
+    {
+      "name": "dz23-spec-to-system-engine",
+      "version": "1.2.0",
+      "description": ">",
+      "user_invocable": true,
+      "files": 44,
+      "references": 17,
+      "templates": 11,
+      "scripts": 3,
+      "evals": 15,
+      "sha256_skill_md": "0d3d41530ed66ea1e6a01a785ffee296e1017f97ce0d121470b304ca6a2ccc4b"
+    },
+    {
+      "name": "dz23-ultimate-pro-max",
+      "version": "2.2.0",
+      "description": "Skill de direção de arte premium, UX, frontend, arquitetura de interface, segurança, acessibilidade, performance, QA visual e entrega verificável para sites, SaaS, CRM, ERP, B-3PO, desktop e mobile. Ative ao criar, revisar, redesenhar ou implementar interfaces, fluxos e design systems.",
+      "user_invocable": true,
+      "files": 15,
+      "references": 9,
+      "templates": 0,
+      "scripts": 1,
+      "evals": 0,
+      "sha256_skill_md": "8f06187825fae7a1d978fc48d6d073da3c0f5efdfa5ca0364eb4282ca3aaf1ef"
+    }
+  ],
+  "external": [
+    {
+      "file": "external/anthropic-skills.md",
+      "autor": "Anthropic",
+      "repo": "https://github.com/anthropics/skills"
+    },
+    {
+      "file": "external/cloudflare-security-audit.md",
+      "autor": "Cloudflare",
+      "repo": "https://github.com/cloudflare/security-audit-skill"
+    },
+    {
+      "file": "external/playwright-mcp.md",
+      "autor": "Microsoft",
+      "repo": "https://github.com/microsoft/playwright-mcp"
+    },
+    {
+      "file": "external/rea.md",
+      "autor": "morluto",
+      "repo": "https://github.com/morluto/rea"
+    },
+    {
+      "file": "external/supabase-postgres-best-practices.md",
+      "autor": "Supabase",
+      "repo": "https://github.com/supabase/agent-skills"
+    },
+    {
+      "file": "external/superpowers.md",
+      "autor": "obra",
+      "repo": "https://github.com/obra/superpowers"
+    },
+    {
+      "file": "external/terraform-aws-vpc.md",
+      "autor": "terraform-aws-modules",
+      "repo": "https://github.com/terraform-aws-modules/terraform-aws-vpc"
+    },
+    {
+      "file": "external/ui-ux-pro-max.md",
+      "autor": "nextlevelbuilder",
+      "repo": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill"
+    },
+    {
+      "file": "external/vercel-react-best-practices.md",
+      "autor": "vercel-labs",
+      "repo": "https://github.com/vercel-labs/agent-skills"
+    }
+  ],
+  "prompts": [
+    "prompts/performance-4-camadas.md"
+  ],
+  "bundles": [
+    {
+      "path": "mcp/dz23-subagents-universal-mcp",
+      "version": "4.4.1"
+    },
+    {
+      "path": "bundle/dz23-dsh-agency",
+      "version": "1.0.0"
+    }
+  ]
+}

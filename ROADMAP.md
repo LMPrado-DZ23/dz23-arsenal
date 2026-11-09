@@ -1,0 +1,76 @@
+# Roadmap e estado honesto
+
+Este documento existe para que ninguém precise acreditar em badge. O que está aqui é o que foi **verificado**;
+o que não foi testado está marcado como `NOT_TESTED`, não como "funciona".
+
+## Onde estamos (v1.3.0)
+
+| Componente | Versão | Estado verificado |
+|---|---|---|
+| 9 skills DZ23 | ver [`INDEX.md`](INDEX.md) | estrutura ✅ · validadores ✅ · **evals `NOT_TESTED`** |
+| `mcp/dz23-subagents-universal-mcp` | 4.4.1 | instalado e configurado no ambiente de origem; **não iniciado em CI** |
+| `bundle/dz23-dsh-agency` | 1.0.0 | estrutura ✅; `build.py` não executado em CI |
+| 9 skills externas | — | apenas documentadas (não redistribuídas) |
+| 1 prompt de origem | — | copiado verbatim |
+
+### O que roda em CI (a cada push/PR)
+
+1. `validate_skill.py` de cada skill que tiver um
+2. `check-structure.py` — arquivos obrigatórios, frontmatter, `VERSION` × frontmatter, schema dos evals
+3. `check-links.py` — todo link relativo `.md` do repositório
+4. `build-manifest.py --check` — `arsenal.json` e `INDEX.md` não podem estar desatualizados
+
+Constantes do CI: [`.github/workflows/quality.yml`](.github/workflows/quality.yml).
+
+## O buraco maior: evals não executados
+
+As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em harness real e julgados: **3**.
+
+| Skill | Cenários | Executados |
+|---|---|---|
+| `dz23-performance-scalability-engine` | 16 | 3 (autoavaliados) |
+| `dz23-autonomous-improvement-ultimate` | 12 | 1 (`pass-sem-teste`, PASS 6/6) |
+| demais 7 | ~109 | 0 |
+
+Isso significa: **o comportamento das skills em produção é não comprovado**, exceto pelos 4 casos acima. O
+`evals.json` é especificação de comportamento, não certificado.
+
+### Próximo passo concreto
+
+Construir o harness de execução de eval (`scripts/run-evals.py`), que:
+
+1. lista os cenários de uma skill e permite executá-los um a um;
+2. registra o veredito (`PASS`/`PARTIAL`/`FAIL`/`NOT_TESTED`) com a evidência citada;
+3. grava em `evals/results/<skill>.json` e alimenta o `INDEX.md`.
+
+**Não implementado ainda** — e enquanto não estiver, os evals continuam `NOT_TESTED`.
+
+## Dívidas conhecidas
+
+| # | Dívida | Impacto | Esforço |
+|---|---|---|---|
+| 1 | Evals não executados (~133 cenários) | alto — comportamento não comprovado | alto |
+| 2 | `install-all.sh` nunca rodou em Linux/macOS | médio — caminho Linux não exercitado | baixo |
+| 3 | CI nunca executou no GitHub (criado localmente) | médio — pode falhar no primeiro run | baixo |
+| 4 | `mcp/` e `bundle/` não são testados em CI | médio | médio |
+| 5 | Skills em português; sem tradução para inglês | baixo — alcance | alto |
+| 6 | `external/` é só documentação; nenhuma skill externa é testada junto | baixo | — |
+| 7 | Sem `evals/results/` versionado (histórico de execução) | médio — falta série temporal | médio |
+
+## Não objetivos (para não prometer o que não vamos fazer)
+
+- Substituir testes reais de produto: as skills organizam trabalho, não substituem QA.
+- Instalar ferramenta sem autorização: toda dependência externa é declarada e `BLOCKED` quando falta.
+- Ser framework universal: cobre engenharia de software; não é CRM, não é plataforma de agentes.
+- Publicar popularidade (estrelas/downloads): número sem verificação é desinformação.
+
+## Como acompanhar
+
+- `INDEX.md` — inventário gerado dos arquivos (sempre atualizado por CI).
+- `CHANGELOG.md` — histórico do arsenal; cada skill tem o seu.
+- Issues abertas — o que está em andamento.
+
+## Regra de honestidade deste documento
+
+Quando algo passar de `NOT_TESTED` para `PASS`, este arquivo muda **com o comando e a saída** que provaram.
+Enquanto isso, `NOT_TESTED` fica escrito — inclusive aqui.

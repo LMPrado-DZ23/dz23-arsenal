@@ -132,6 +132,36 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 | [`docs/faq.md`](docs/faq.md) | Perguntas frequentes |
 | [`cli/README.md`](cli/README.md) | Guia de CLIs |
 
+## Qualidade — um comando, um veredito
+
+```bash
+python scripts/quality-gate.py
+```
+
+Roda: validador de cada skill · estrutura (arquivos obrigatórios, frontmatter, `VERSION` × frontmatter,
+schema dos evals) · links relativos · manifesto atualizado. Exit `0` só se **tudo** passar. O mesmo gate
+roda em CI a cada push ([`.github/workflows/quality.yml`](.github/workflows/quality.yml)).
+
+| Ferramenta | Para quê |
+|---|---|
+| [`scripts/quality-gate.py`](scripts/quality-gate.py) | roda todos os checks e dá o veredito |
+| [`scripts/check-structure.py`](scripts/check-structure.py) | arquivos obrigatórios, frontmatter, `VERSION`, schema de evals |
+| [`scripts/check-links.py`](scripts/check-links.py) | todo link relativo `.md` |
+| [`scripts/build-manifest.py`](scripts/build-manifest.py) | gera [`arsenal.json`](arsenal.json) e [`INDEX.md`](INDEX.md) |
+| [`scripts/audit-zips.py`](scripts/audit-zips.py) | compara o repo com as skills instaladas |
+| [`scripts/verify-cli.ps1`](scripts/verify-cli.ps1) | inventário real de CLIs da máquina |
+
+## Documentos do repositório
+
+| Documento | Conteúdo |
+|---|---|
+| [`INDEX.md`](INDEX.md) | inventário gerado (versão, arquivos, refs, evals por skill) |
+| [`ROADMAP.md`](ROADMAP.md) | estado honesto: o que foi verificado e o que é `NOT_TESTED` |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | como propor mudança |
+| [`SECURITY.md`](SECURITY.md) | como reportar vulnerabilidade |
+| [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) | regra de convivência |
+| [`CHANGELOG.md`](CHANGELOG.md) | histórico do arsenal |
+
 ## Como contribuir
 
 Leia [`CONTRIBUTING.md`](CONTRIBUTING.md). Contribuição é bem-vinda em: correção de fato técnico,
@@ -149,7 +179,13 @@ referências externas pertencem aos seus respectivos autores e mantêm suas lice
 
 ## Aviso honesto sobre evals
 
-Cada skill traz `evals/evals.json` com 12–16 cenários. **A maioria nunca foi executada em harness real**
-— o estado é `NOT_TESTED`, e está declarado no `CHANGELOG` de cada skill. Skill com eval não executado é
-skill com comportamento não comprovado; trate os arquivos como especificação de comportamento, não como
-certificado.
+As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em harness real e julgados:
+**3** — mais 1 (`pass-sem-teste`) na skill de orquestração. O resto é `NOT_TESTED`, declarado no
+`CHANGELOG.md` de cada skill e no [`ROADMAP.md`](ROADMAP.md).
+
+Skill com eval não executado é skill com comportamento **não comprovado**. Trate `evals/evals.json` como
+especificação de comportamento, não como certificado.
+
+O próximo passo para fechar esse buraco está descrito no `ROADMAP.md` (dívida #1): um harness
+`scripts/run-evals.py` que executa, registra veredito e guarda evidência. Enquanto ele não existir, o
+número honesto continua sendo **3 de 137**.

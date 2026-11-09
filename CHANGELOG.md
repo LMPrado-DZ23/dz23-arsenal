@@ -3,6 +3,42 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.3.0] — 2026-11-09
+
+Transformação de "coleção de zips" em **arsenal verificável**: gate único, CI, inventário gerado e política
+de contribuição/segurança.
+
+### Adicionado
+- **`scripts/quality-gate.py`** — roda tudo (validador de cada skill, estrutura, links, manifesto) e dá um
+  veredito com exit code. Um comando, um veredito.
+- **`scripts/check-structure.py`** — arquivos obrigatórios por skill, frontmatter (`name`/`version`/
+  `description`/`user-invocable`), `name` == pasta, `VERSION` == frontmatter, `CHANGELOG` com a versão atual,
+  README com seção Arsenal, schema dos evals, detecção de skill-esqueleto.
+- **`scripts/check-links.py`** — valida todo link relativo `.md` do repositório (133 links).
+- **`scripts/build-manifest.py`** + **`arsenal.json`** + **`INDEX.md`** — inventário legível por máquina e
+  índice gerado dos próprios arquivos; `--check` falha se estiver desatualizado.
+- **CI** em [`.github/workflows/quality.yml`](.github/workflows/quality.yml) — roda o gate em push/PR e
+  publica `gate.json` como artefato.
+- **`SECURITY.md`** — canal privado, o que conta como vulnerabilidade neste projeto, prazo de melhor esforço.
+- **`CODE_OF_CONDUCT.md`** — regra de convivência curta, centrada em evidência.
+- **`ROADMAP.md`** — estado honesto: o que foi verificado, as 7 dívidas conhecidas e os não-objetivos.
+- **`.github/ISSUE_TEMPLATE/{bug,feature}.md`** e **`pull_request_template.md`** — formulários que exigem
+  evidência literal.
+- **`.gitattributes`** — normaliza LF no repositório (CRLF só em `.ps1`/`.cmd`), evitando churn de fim de linha.
+
+### Corrigido
+- `dz23-autonomous-improvement-ultimate` **2.1.0 → 2.1.1**: `evals/evals.json` estava no schema antigo
+  (`prompt` + `expectations`), enquanto as outras 8 skills usam `input`/`expected`/`fails_if`. Isso gerava
+  **36 problemas** no `check-structure` e quebrava qualquer harness que lesse só aquela skill. Os 12 casos
+  foram migrados preservando conteúdo, e cada um ganhou `fails_if` (antes inexistente).
+- README: seção de qualidade, tabela de ferramentas, documentos do repositório e aviso de evals reescrito
+  com o número real (3 de ~137).
+
+### Estado de verificação
+- `python scripts/quality-gate.py` → **12/12 checks passaram** (local, Windows).
+- `CI no GitHub`: workflow **nunca executou** — primeiro run acontece no próximo push. Declarado como
+  dívida #3 no `ROADMAP.md`.
+
 ## [1.2.0] — 2026-11-09
 
 ### Adicionado

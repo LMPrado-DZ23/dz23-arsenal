@@ -1,0 +1,73 @@
+name: quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: quality gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Estrutura das skills
+        run: python scripts/check-structure.py
+
+      - name: Validador de cada skill
+        run: |
+          falhou=0
+          for v in skills/*/scripts/validate_skill.py; do
+            [ -f "$v" ] || continue
+            echo "== $v"
+            python "$v" || falhou=1
+          done
+          exit $falhou
+
+      - name: Links relativos
+        run: python scripts/check-links.py .
+
+      - name: Manifesto atualizado
+        run: python scripts/build-manifest.py --check
+
+      - name: Quality gate completo
+        run: python scripts/quality-gate.py --json > gate.json || (cat gate.json; exit 1)
+
+      - name: Resumo
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          p = pathlib.Path("gate.json")
+          if not p.is_file():
+              print("gate.json ausente — o gate não chegou a rodar")
+              raise SystemExit(0)
+          d = json.loads(p.read_text())
+          print(f"checks: {d['total']} | falhas: {d['falhas']}")
+          for c in d["checks"]:
+              if not c["ok"]:
+                  print(f"  FALHA {c['check']}: {c['resumo']}")
+          PY
+
+      - name: Publicar relatório do gate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-gate
+          path: gate.json
+          if-no-files-found: ignore
+          retention-days: 14
