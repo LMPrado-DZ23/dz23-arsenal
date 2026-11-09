@@ -1,5 +1,26 @@
 # Changelog — dz23-ultimate-pro-max
 
+## [2.2.0] — 2026-11-08
+
+### Adicionado
+- `references/stack-implementation.md` — cobre o que a direção de arte não cobre: como o design system vira
+  código na stack real.
+  - tokens em **3 camadas** (primitiva → semântica → componente) e mapeamento para Tailwind (proibido valor
+    mágico no JSX)
+  - **shadcn/ui**: adoção como código-fonte (você vira dono), não dependência copiada cega
+  - tabela de **estados obrigatórios** por componente interativo (hover, active, focus-visible, disabled,
+    loading, error) com como verificar cada um
+  - especificidades de **React, Next.js (App Router), Vue/Nuxt, React Native/Expo, Flutter**
+  - **8 bugs visuais recorrentes** com causa e correção (badge quebrando linha, falta de `cursor-pointer`,
+    CLS por mídia sem dimensão, fonte tardia, `prefers-reduced-motion` ignorado, contraste variável, focus
+    trap, toaster sobre ação no mobile)
+  - checklist de pré-entrega para o `dz23-e2e-browser-verifier`
+- `VERSION` — arquivo criado; a skill só declarava versão no frontmatter, o que quebrava o empacotamento.
+
+### Corrigido
+- A skill tinha direção de arte, contratos de componente e gates, mas **não dizia como implementar na stack
+  do projeto** — Tailwind, shadcn e framework ficavam a cargo da improvisação do agente.
+
 ## v2.1.0 — 2026-11-08
 
 feat(skill): v2.1 — módulo de interatividade enterprise, mídia rica e motion

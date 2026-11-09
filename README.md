@@ -44,14 +44,14 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 | Skill | Versão | Para quê | Quando usar |
 |---|---|---|---|
 | [`dz23-autonomous-improvement-ultimate`](skills/dz23-autonomous-improvement-ultimate/) | 2.1 | Loop de correção com evidência | Qualquer `/goal` de melhoria |
-| [`dz23-backend-data-architect`](skills/dz23-backend-data-architect/) | 1.0.1 | Backend, DB, contratos | API, schema, migration |
+| [`dz23-backend-data-architect`](skills/dz23-backend-data-architect/) | 1.1.0 | Backend, DB, contratos | API, schema, migration |
 | [`dz23-codebase-cartographer`](skills/dz23-codebase-cartographer/) | 1.1.0 | Mapeamento de codebase | Onboarding, antes de refactor |
 | [`dz23-devops-cloud-deployer`](skills/dz23-devops-cloud-deployer/) | 1.2.1 | Deploy, CI/CD, IaC | Container, K8s, cloud |
 | [`dz23-e2e-browser-verifier`](skills/dz23-e2e-browser-verifier/) | 1.1.0 | E2E com Playwright | Verificação de UI |
 | [`dz23-performance-scalability-engine`](skills/dz23-performance-scalability-engine/) | 1.3.0 | Otimização 4 camadas | Performance, latência, budget |
 | [`dz23-reverse-engineer-anything`](skills/dz23-reverse-engineer-anything/) | 1.1.1 | RE de binários/firmware | Análise de binário, CTF, audit |
 | [`dz23-spec-to-system-engine`](skills/dz23-spec-to-system-engine/) | 1.2.0 | Spec executável | PRD, decomposição, Gherkin |
-| [`dz23-ultimate-pro-max`](skills/dz23-ultimate-pro-max/) | 2.1 | Frontend/UI/UX | Componente, landing, a11y |
+| [`dz23-ultimate-pro-max`](skills/dz23-ultimate-pro-max/) | 2.2.0 | Frontend/UI/UX | Componente, landing, a11y |
 
 Índice detalhado com tabela comparativa: [`skills/README.md`](skills/README.md).
 
@@ -62,11 +62,12 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 | [`dz23-subagents-universal-mcp`](mcp/dz23-subagents-universal-mcp/) | MCP (Node) | 4.4.1 | Sub-agentes com 28 tools |
 | [`dz23-dsh-agency`](bundle/dz23-dsh-agency/) | Bundle | 1.0.0 | 88 agentes especializados + Diretor |
 
-## Skills externas recomendadas (8)
+## Skills externas recomendadas (9)
 
 | Skill | Autor | Para quê | Repo |
 |---|---|---|---|
 | [Superpowers](external/superpowers.md) | obra | Planejamento + disciplina (SDLC) | [link](https://github.com/obra/superpowers) |
+| [UI UX Pro Max](external/ui-ux-pro-max.md) | nextlevelbuilder | Design intelligence por segmento e stack | [link](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) |
 | [REA](external/rea.md) | morluto | Engenharia reversa + binários | [link](https://github.com/morluto/rea) |
 | [Cloudflare Security Audit](external/cloudflare-security-audit.md) | cloudflare | Auditoria de segurança de source | [link](https://github.com/cloudflare/security-audit-skill) |
 | [Anthropic Skills](external/anthropic-skills.md) | anthropic | skill-creator, mcp-builder, pdf, docx, xlsx, pptx | [link](https://github.com/anthropics/skills) |

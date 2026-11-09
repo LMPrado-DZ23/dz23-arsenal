@@ -1,6 +1,6 @@
 ---
 name: dz23-backend-data-architect
-version: 1.0.1
+version: 1.1.0
 description: Skill de engenharia de backend, banco de dados, contratos de API, migrações seguras, multi-tenancy, segurança de aplicação e observabilidade. Ative ao criar, revisar, refatorar ou depurar serviços, endpoints, schemas, migrações, integrações e pipelines de dados.
 user-invocable: true
 argument-hint: "<serviço/rota/entidade, 'audit <path>' ou 'design <feature>'>"
@@ -57,6 +57,7 @@ AUDITAR → ENTENDER O DOMÍNIO → MODELAR DADOS → DESENHAR O CONTRATO → PL
 - REST/GraphQL/RPC, paginação, erro, versionamento e eventos: `references/api-contracts.md`
 - Expand/contract, backfill, locks e rollback: `references/migrations-and-zero-downtime.md`
 - Autorização, IDOR, injeção, segredos, RLS e LGPD: `references/security-and-tenancy.md`
+- Threat modeling (STRIDE), OWASP Top 10/ASVS, hardening e gates de AppSec: `references/threat-modeling-and-appsec.md`
 - Query plan, N+1, cache, pool, SLO e telemetria: `references/performance-and-observability.md`
 - Gates, severidade e matriz de teste: `references/quality-gates.md`
 - Catálogo de erros recorrentes com sintoma e correção: `references/anti-patterns.md`

@@ -1,5 +1,22 @@
 # Changelog — dz23-backend-data-architect
 
+## [1.1.0] — 2026-11-08
+
+### Adicionado
+- `references/threat-modeling-and-appsec.md` — fecha o gap de **AppSec ofensivo** que estava disperso:
+  - threat model em 6 passos (fluxo → fronteiras de confiança → STRIDE por elemento → rank → controle → teste)
+  - tabela **STRIDE** com pergunta objetiva, controle e teste de verificação por ameaça
+  - **OWASP Top 10 → controle verificável**, com evidência exigida por linha
+  - **ASVS**: L2 como alvo para SaaS que trata dado de cliente
+  - segredos (gitleaks/trivy secret), dependências (scan bloqueando CRITICAL/HIGH), upload (magic bytes)
+  - hardening mínimo: CORS, headers, rate limit, payload, timeout, debug, sessão
+  - **gates de AppSec que bloqueiam merge**, cada um com a evidência que o sustenta
+
+### Corrigido
+- Segurança estava coberta só em `security-and-tenancy.md` (autorização, IDOR, injeção, RLS, LGPD) — faltava
+  a camada de **modelagem de ameaças** e o mapeamento OWASP/ASVS. Agora as duas convivem: uma diz *o que
+  proteger*, a outra *como provar que está protegido*.
+
 ## [1.0.1] — 2026-11-08
 
 ### Adicionado

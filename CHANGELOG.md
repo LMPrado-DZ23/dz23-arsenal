@@ -3,6 +3,35 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.2.0] — 2026-11-09
+
+### Adicionado
+- **`external/ui-ux-pro-max.md`** — skill de design intelligence da nextlevelbuilder (MIT, 192 regras de
+  raciocínio, 80 estilos de UI). Preenche o gap de **direção visual por segmento** antes do código.
+- **`skills/dz23-ultimate-pro-max/references/stack-implementation.md`** (v2.1.0 → **2.2.0**) — tokens em 3
+  camadas → Tailwind, adoção de shadcn/ui, estados obrigatórios por componente, especificidades
+  React/Next/Vue/Nuxt/RN/Flutter, 8 bugs visuais recorrentes e checklist pré-e2e.
+- **`skills/dz23-backend-data-architect/references/threat-modeling-and-appsec.md`** (v1.0.1 → **1.1.0**) —
+  threat model em 6 passos, STRIDE com controle e teste por ameaça, OWASP Top 10 → controle verificável,
+  ASVS L2, segredos/dependências/upload, hardening e gates de AppSec que bloqueiam merge.
+- `VERSION` da `dz23-ultimate-pro-max` — existia só no frontmatter, o que quebrava empacotamento.
+
+### Corrigido (diagnóstico do usuário, com ressalvas)
+- O diagnóstico dizia que **faltava skill de frontend/UI**. Não faltava: `dz23-ultimate-pro-max` já
+  existia (8 references, gates de acessibilidade e QA visual). Faltava **instanciação por stack** —
+  resolvida com `stack-implementation.md`.
+- O diagnóstico dizia que **filas/webhooks não estavam cobertos**. Estavam, em
+  `references/service-architecture.md` (idempotency key, outbox, DLQ, retry com backoff+jitter, dedup de
+  webhook, `SKIP LOCKED`). Nada a criar; só registro aqui para não duplicar.
+- Gap **real** identificado: **AppSec ofensivo** (threat modeling/OWASP/ASVS) — fechado nesta versão.
+- `external/superpowers.md` atualizado: licença MIT verificada, suporte multi-harness documentado
+  (plugins `.codex-plugin`, `.cursor-plugin`, `.opencode`, `.pi`…), diagrama de pipeline.
+
+### Estado de verificação
+- `validate_skill.py` PASS nas duas skills alteradas · `skills-check.py` 0 erros · 9/9 skills `EM_DIA`
+  contra o pacote publicado (`audit-zips.py`).
+- Evals: continuam `NOT_TESTED` — nenhum dos ~125 cenários foi executado.
+
 ## [1.1.0] — 2026-11-08
 
 ### Adicionado

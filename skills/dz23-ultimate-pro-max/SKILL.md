@@ -1,6 +1,6 @@
 ---
 name: dz23-ultimate-pro-max
-version: 2.1.0
+version: 2.2.0
 description: Skill de direção de arte premium, UX, frontend, arquitetura de interface, segurança, acessibilidade, performance, QA visual e entrega verificável para sites, SaaS, CRM, ERP, B-3PO, desktop e mobile. Ative ao criar, revisar, redesenhar ou implementar interfaces, fluxos e design systems.
 user-invocable: true
 argument-hint: "<página/rota, 'audit <path>' ou 'redesign <path>'>"
@@ -56,6 +56,7 @@ Leia `references/b3po-workspaces.md`. Os seis modos (Engenharia, Empresa, Automa
 ## Seleção de referências (carregamento progressivo)
 - Direção de arte: `references/art-direction-playbook.md` e `references/visual-direction.md`
 - Componentes e shadcn: `references/component-system.md`
+- Implementação por stack (Tailwind, shadcn/ui, React, Next, Vue, RN, Flutter): `references/stack-implementation.md`
 - B-3PO e seis modos: `references/b3po-workspaces.md`
 - QA, segurança, acessibilidade, performance: `references/qa-and-evidence.md` e `references/quality-gates.md`
 - Instalação no DeepSeek: `references/installation.md`
