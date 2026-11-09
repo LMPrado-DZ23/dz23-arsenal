@@ -116,5 +116,5 @@ Este checklist **não** substitui o browser real: `dz23-e2e-browser-verifier` é
 ## 7. Relação com o catálogo externo
 
 Para **decidir** paleta, tipografia e estilo por segmento, use
-[`external/ui-ux-pro-max.md`](../../external/ui-ux-pro-max.md) (design intelligence por segmento e stack).
+`external/ui-ux-pro-max.md` (no repositório dz23-arsenal: https://github.com/LMPrado-DZ23/dz23-arsenal/blob/main/external/ui-ux-pro-max.md) (design intelligence por segmento e stack).
 Este documento assume que a decisão visual já foi tomada e trata da **execução fiel** dela.

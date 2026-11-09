@@ -92,5 +92,5 @@ Sessão: cookie HttpOnly + Secure + SameSite; rotação no login; invalidação 
 - Não cobre segurança de infraestrutura (rede, IAM, cluster) — isso é
   `dz23-devops-cloud-deployer` (`references/supply-chain-security.md`).
 - Não cobre auditoria profunda de source de terceiro — para isso existe
-  [`external/cloudflare-security-audit.md`](../../external/cloudflare-security-audit.md), que usa a postura
+  `external/cloudflare-security-audit.md` (no repositório dz23-arsenal: https://github.com/LMPrado-DZ23/dz23-arsenal/blob/main/external/cloudflare-security-audit.md), que usa a postura
   "hunt, then disprove".

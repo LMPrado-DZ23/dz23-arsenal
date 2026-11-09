@@ -1,6 +1,6 @@
 # Skills externas recomendadas
 
-Dez skills mantidas por outras organizações que **complementam** as 9 skills DZ23. Nenhuma delas está
+Nove skills mantidas por outras organizações que **complementam** as 9 skills DZ23. Nenhuma delas está
 redistribuída aqui — cada arquivo documenta o repositório oficial, o gap que preenche e os cuidados.
 
 ## Índice
