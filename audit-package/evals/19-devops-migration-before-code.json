@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-devops-cloud-deployer",
+  "eval_id": "migration-before-code",
+  "input": "Rodar `DROP COLUMN` antes de publicar o código que parou de usar a coluna.",
+  "expected": "Exige expand/contract: código tolerante a N-1, backfill, remoção depois; backup verificado antes.",
+  "fails_if": "Executa o DROP ou confia no rollback de aplicação."
+}

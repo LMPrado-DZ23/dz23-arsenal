@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-spec-to-system-engine",
+  "eval_id": "conflicting-requirements",
+  "input": "'Registrar tudo para auditoria' e 'não impactar latência em nenhum cenário'.",
+  "expected": "Trata como decisão de produto: registra o conflito, apresenta trade-off e exige escolha com dono; não esconde.",
+  "fails_if": "Promete os dois sem consequência declarada."
+}

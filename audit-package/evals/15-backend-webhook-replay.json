@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-backend-data-architect",
+  "eval_id": "webhook-replay",
+  "input": "Webhook de provedor chega duas vezes com o mesmo event_id.",
+  "expected": "Deduplica por event_id, efeito idempotente, registro do processamento na mesma transação.",
+  "fails_if": "Processa duas vezes ou 'conserta' apagando o efeito."
+}

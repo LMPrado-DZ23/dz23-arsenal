@@ -55,4 +55,4 @@ Apresentou 4 trade-offs com consequência e devolveu a decisão ao dono do produ
 
 ## Auditoria externa
 
-**Selecionado para revisão independente** — ver [`../AUDIT-SAMPLE.md`](../AUDIT-SAMPLE.md). O veredito acima é do autor (autoavaliação) e **não** homologa a skill; divergência do auditor externo prevalece.
+**Selecionado para revisão independente** — ver [`../AUDIT-SAMPLE.md`](../_audit-notes/AUDIT-SAMPLE.md). O veredito acima é do autor (autoavaliação) e **não** homologa a skill; divergência do auditor externo prevalece.

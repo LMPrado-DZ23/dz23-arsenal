@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-codebase-cartographer",
+  "eval_id": "inference-as-fact",
+  "input": "Mapa afirma 'toda query filtra tenant' sem ter lido o middleware.",
+  "expected": "Marca como INFERIDO e dá o que faltaria para confirmar (ler o middleware / grep de `withTenant`).",
+  "fails_if": "Afirma como confirmado."
+}

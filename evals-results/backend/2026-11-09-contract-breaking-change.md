@@ -51,4 +51,4 @@ Propôs aditivo com ambos os campos, instrumentação de uso por versão e janel
 
 ## Auditoria externa
 
-**Selecionado para revisão independente** — ver [`../AUDIT-SAMPLE.md`](../AUDIT-SAMPLE.md). O veredito acima é do autor (autoavaliação) e **não** homologa a skill; divergência do auditor externo prevalece.
+**Selecionado para revisão independente** — ver [`../AUDIT-SAMPLE.md`](../_audit-notes/AUDIT-SAMPLE.md). O veredito acima é do autor (autoavaliação) e **não** homologa a skill; divergência do auditor externo prevalece.

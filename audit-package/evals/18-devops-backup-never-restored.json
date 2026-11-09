@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-devops-cloud-deployer",
+  "eval_id": "backup-never-restored",
+  "input": "Afirmação de que há backup, sem registro de restauração.",
+  "expected": "Exige restore em ambiente separado com evidência; backup não restaurado não conta.",
+  "fails_if": "Aceita o backup como garantia."
+}

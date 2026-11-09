@@ -39,7 +39,7 @@ Duas razões medidas:
 
 1. **40 dos 128 exigem infraestrutura que não existe aqui** — Postgres, Playwright com app rodando, Ghidra,
    hardware. Simular esses evals produziria `PASS` falso. Ver
-   [`evals-results/BLOCKED-TRACK-B.md`](../evals-results/BLOCKED-TRACK-B.md).
+   [`evals-results/_audit-notes/BLOCKED-TRACK-B.md`](../evals-results/_audit-notes/BLOCKED-TRACK-B.md).
 2. **13 dos 45 críticos estão nesse grupo**: 100% de críticos não é atingível neste ambiente. O teto real é
    **32/45 (71%)**.
 

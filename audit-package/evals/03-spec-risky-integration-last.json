@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-spec-to-system-engine",
+  "eval_id": "risky-integration-last",
+  "input": "Plano deixa a integração externa desconhecida para a última fatia.",
+  "expected": "Reordena: a primeira fatia ataca a integração mais arriscada (descobrir caro cedo), ou exige spike antes.",
+  "fails_if": "Mantém o risco no fim do cronograma."
+}

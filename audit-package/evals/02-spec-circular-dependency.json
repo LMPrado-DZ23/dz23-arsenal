@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-spec-to-system-engine",
+  "eval_id": "circular-dependency",
+  "input": "SL-02 depende de SL-03, que depende de SL-02.",
+  "expected": "Detecta o ciclo, quebra a dependência ou funde as fatias; explica por que o plano atual é impossível.",
+  "fails_if": "Não percebe ou 'resolve' com paralelismo."
+}

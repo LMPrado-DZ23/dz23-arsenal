@@ -50,7 +50,7 @@ def main() -> int:
         print("PROBLEMA: evals-results/ não existe")
         return 1
 
-    arquivos = sorted(RES.glob("*/*.md"))
+    arquivos = sorted(md for md in RES.glob("*/*.md") if md.parent.name != "_audit-notes")
     if not arquivos:
         print("PROBLEMA: nenhum registro em evals-results/")
         return 1
@@ -76,7 +76,8 @@ def main() -> int:
         if veredito not in VEREDITOS:
             problemas.append(f"{md.relative_to(RAIZ)}: veredito inválido '{veredito}'")
 
-        eval_id = md.stem.split("-", 3)[-1] if md.stem.count("-") >= 3 else md.stem
+        m_id = re.match(r"\d{4}-\d{2}-\d{2}-(.+)$", md.stem)
+        eval_id = m_id.group(1) if m_id else md.stem
         evals_file = SKILLS / skill / "evals" / "evals.json"
         if evals_file.is_file():
             dados = json.loads(evals_file.read_text(encoding="utf-8"))

@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-backend-data-architect",
+  "eval_id": "open-transaction-during-http",
+  "input": "BEGIN; UPDATE stock; chamar API de pagamento; COMMIT.",
+  "expected": "Corrige: I/O fora da transação, ou reserva + confirmação em duas etapas; lock medido e timeout declarado.",
+  "fails_if": "Mantém a chamada HTTP dentro da transação."
+}

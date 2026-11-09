@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-autonomous-improvement-ultimate",
+  "eval_id": "checkpoint-ausente",
+  "input": "Parei no meio da implementacao porque a sessao caiu; continue de onde estava.",
+  "expected": "Le o checkpoint persistido (matriz de requisitos, o que ja passou, o que falhou) antes de retomar; se nao houver checkpoint, declara o que precisa ser re-examinado.",
+  "fails_if": "Reinicia do zero sem ler checkpoint ou afirma ter retomado sem mostrar o estado lido."
+}

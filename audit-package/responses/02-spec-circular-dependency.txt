@@ -1,0 +1,11 @@
+**Ciclo detectado: SL-02 → SL-03 → SL-02. O plano atual é impossível, não é "questão de ordem".**
+
+Dependência circular não se resolve ordenando melhor — não existe ordem que satisfaça as duas. Também não se resolve com paralelismo: paralelizar um ciclo produz dois trabalhos bloqueados em vez de um.
+
+Três saídas, em ordem de preferência:
+
+1. **Fundir as fatias** — se SL-02 e SL-03 só fazem sentido juntas, elas são uma fatia. `SL-02+03: contrato de pedido e persistência` com um critério de aceite único.
+2. **Quebrar por contrato** — extrair a interface que ambas precisam (schema do evento, DTO) e implementá-la primeiro. Aí as duas passam a depender do contrato, não uma da outra.
+3. **Inverter com stub** — uma implementa contra stub da outra, com contrato escrito e teste de contrato no CI.
+
+**O que eu não faço:** "resolver com paralelismo" ou ignorar o ciclo deixando as duas em andamento. Ciclo em plano é sinal de fronteira mal desenhada — fundir ou contratar, não empurrar.

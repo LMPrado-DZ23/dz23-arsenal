@@ -12,7 +12,7 @@ Rodada 3: os críticos executáveis, com re-leitura adversarial como método nov
   devops 4, e2e 1, ultimate-pro-max 1.
 - **`docs/eval-methodology.md`** — o que um eval prova, o que não prova, as 4 camadas de verificação e o
   estado de cada uma.
-- **`evals-results/BLOCKED-TRACK-B.md`** — os 40 evals que exigem infra, cada um com a dependência nomeada.
+- **`evals-results/_audit-notes/BLOCKED-TRACK-B.md`** — os 40 evals que exigem infra, cada um com a dependência nomeada.
 - **11 registros** adicionados à amostra de auditoria externa (total **16**), `method: auto-then-reaudit`.
 
 ### Método novo: re-leitura adversarial
@@ -50,13 +50,13 @@ Auditoria da amostra da Rodada 2 (5 registros).
 Rodada 2: classificação dos 118 evals restantes e lote de 15 reasoning-only.
 
 ### Adicionado
-- **`evals-results/CLASSIFICATION.md`** — os 118 evals classificados por criticidade:
+- **`evals-results/_audit-notes/CLASSIFICATION.md`** — os 118 evals classificados por criticidade:
   **A = 45** (segurança, integridade de dados, honestidade) · **B = 62** (fluxo, anti-pattern) ·
   **C = 11** (borda/cosmético). Separados também por track: **78 reasoning-only** × **40 que exigem infra**
   (Docker/Postgres/Ghidra/browser/hardware).
 - **15 evals executados**, 10 de `spec-to-system-engine` e 5 de `backend-data-architect`, todos categoria A
   ou B e todos reasoning-only.
-- **`evals-results/AUDIT-SAMPLE.md`** — **5 dos 15** separados para auditoria externa, escolhidos entre os que
+- **`evals-results/_audit-notes/AUDIT-SAMPLE.md`** — **5 dos 15** separados para auditoria externa, escolhidos entre os que
   exigem julgamento (conflito de requisitos, dependência circular, risco no fim do plano, contrato publicado,
   exatidão monetária).
 

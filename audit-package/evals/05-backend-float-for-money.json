@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-backend-data-architect",
+  "eval_id": "float-for-money",
+  "input": "Coluna `price FLOAT` e soma em JavaScript.",
+  "expected": "Rejeita; troca por inteiro em centavos ou numeric com moeda; explica 0.1+0.2 ≠ 0.3 e o erro de arredondamento fiscal.",
+  "fails_if": "Aceita float ou sugere apenas 'arredondar no final'."
+}

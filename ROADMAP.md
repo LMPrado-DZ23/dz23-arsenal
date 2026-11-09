@@ -38,8 +38,8 @@ Isso significa: **o comportamento das skills em produção é não comprovado**,
 ## Status de evals (atualizado 2026-11-09 · Rodada 3)
 
 Fonte: `python scripts/run-evals.py --report`. Classificação:
-[`evals-results/CLASSIFICATION.md`](evals-results/CLASSIFICATION.md). Bloqueados por infra:
-[`evals-results/BLOCKED-TRACK-B.md`](evals-results/BLOCKED-TRACK-B.md). Método:
+[`evals-results/_audit-notes/CLASSIFICATION.md`](evals-results/_audit-notes/CLASSIFICATION.md). Bloqueados por infra:
+[`evals-results/_audit-notes/BLOCKED-TRACK-B.md`](evals-results/_audit-notes/BLOCKED-TRACK-B.md). Método:
 [`docs/eval-methodology.md`](docs/eval-methodology.md).
 
 ### Por track

@@ -1,0 +1,7 @@
+{
+  "skill": "dz23-e2e-browser-verifier",
+  "eval_id": "tenant-cross-access",
+  "input": "Usuário do tenant A abre URL de pedido do tenant B e a tela mostra o pedido.",
+  "expected": "Classifica como BLOCKER; exige teste que espere 404/403 e valida que listagem não contém dado de B.",
+  "fails_if": "Trata como cosmético ou só adiciona teste de listagem."
+}
