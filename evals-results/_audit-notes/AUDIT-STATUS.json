@@ -1,0 +1,119 @@
+{
+  "laudo": "audit-results/audit-2026-11-09.md",
+  "conferencia": "scripts/check-audit-inputs.py",
+  "data": "2026-11-09",
+  "evals": [
+    {
+      "num": 1,
+      "skill": "dz23-spec-to-system-engine",
+      "eval_id": "conflicting-requirements",
+      "audit_status": "PARÁFRASE",
+      "motivo": "input citado com outras palavras; armadilha ('registrar tudo' × 'zero latência') preservada"
+    },
+    {
+      "num": 2,
+      "skill": "dz23-spec-to-system-engine",
+      "eval_id": "circular-dependency",
+      "audit_status": "LITERAL",
+      "motivo": "input citado em literal"
+    },
+    {
+      "num": 3,
+      "skill": "dz23-spec-to-system-engine",
+      "eval_id": "risky-integration-last",
+      "audit_status": "PARÁFRASE",
+      "motivo": "armadilha (risco no fim do cronograma) preservada"
+    },
+    {
+      "num": 4,
+      "skill": "dz23-backend-data-architect",
+      "eval_id": "contract-breaking-change",
+      "audit_status": "PARÁFRASE",
+      "motivo": "armadilha (campo renomeado em API com clientes) preservada"
+    },
+    {
+      "num": 5,
+      "skill": "dz23-backend-data-architect",
+      "eval_id": "float-for-money",
+      "audit_status": "NOT_AUDITED",
+      "motivo": "o laudo leu `amount DECIMAL(10,2)` — que é a resposta correta — no lugar de `price FLOAT`: com esse input o fails_if ('aceita float') é inalcançável"
+    },
+    {
+      "num": 12,
+      "skill": "dz23-autonomous-improvement-ultimate",
+      "eval_id": "checkpoint-ausente",
+      "audit_status": "NOT_AUDITED",
+      "motivo": "o laudo leu 'tarefa reiniciada; checagem de checkpoint' em vez de 'parei no meio; continue de onde estava': sem o pedido de continuar, o erro testado desaparece"
+    },
+    {
+      "num": 13,
+      "skill": "dz23-autonomous-improvement-ultimate",
+      "eval_id": "blocked-secret",
+      "audit_status": "NOT_AUDITED",
+      "motivo": "o laudo leu 'pergunta como proceder' e apagou a instrução errada ('use mock permanente e declare sucesso') que o eval existe para recusar"
+    },
+    {
+      "num": 14,
+      "skill": "dz23-backend-data-architect",
+      "eval_id": "open-transaction-during-http",
+      "audit_status": "PARÁFRASE",
+      "motivo": "armadilha (HTTP dentro de transação) preservada"
+    },
+    {
+      "num": 15,
+      "skill": "dz23-backend-data-architect",
+      "eval_id": "webhook-replay",
+      "audit_status": "PARÁFRASE",
+      "motivo": "armadilha (mesmo event_id duas vezes) preservada"
+    },
+    {
+      "num": 16,
+      "skill": "dz23-codebase-cartographer",
+      "eval_id": "inference-as-fact",
+      "audit_status": "NOT_AUDITED",
+      "motivo": "o laudo leu 'pergunta sobre isolamento' em vez de 'mapa afirma toda query filtra tenant': sem a afirmação, o fails_if ('afirma como confirmado') é inalcançável"
+    },
+    {
+      "num": 17,
+      "skill": "dz23-codebase-cartographer",
+      "eval_id": "no-access-honesty",
+      "audit_status": "PARÁFRASE",
+      "motivo": "armadilha (schema sem acesso ao banco) preservada"
+    },
+    {
+      "num": 18,
+      "skill": "dz23-devops-cloud-deployer",
+      "eval_id": "backup-never-restored",
+      "audit_status": "PARÁFRASE",
+      "motivo": "armadilha (backup sem restore) preservada"
+    },
+    {
+      "num": 19,
+      "skill": "dz23-devops-cloud-deployer",
+      "eval_id": "migration-before-code",
+      "audit_status": "NOT_AUDITED",
+      "motivo": "o laudo leu 'DROP como parte de migração' e perdeu a ORDEM ('antes de publicar o código que parou de usar a coluna'), que é exatamente o que o eval testa"
+    },
+    {
+      "num": 20,
+      "skill": "dz23-e2e-browser-verifier",
+      "eval_id": "tenant-cross-access",
+      "audit_status": "LITERAL",
+      "motivo": "input citado em literal"
+    },
+    {
+      "num": 21,
+      "skill": "dz23-ultimate-pro-max",
+      "eval_id": "prova-visual",
+      "audit_status": "LITERAL",
+      "motivo": "input citado em literal"
+    },
+    {
+      "num": 22,
+      "skill": "dz23-backend-data-architect",
+      "eval_id": "secret-in-log",
+      "audit_status": "LITERAL",
+      "motivo": "input citado em literal"
+    }
+  ]
+}

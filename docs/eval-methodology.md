@@ -30,8 +30,25 @@ Cada camada é evidência mais forte que a anterior. **Nenhuma substitui a próx
 |---|---|
 | 1 — autoavaliação | **45/128 (35,2%)** |
 | 2 — re-leitura adversarial | **20/45** (aplicada só na Rodada 3) |
-| 3 — auditoria externa | **0 de 16 selecionados** (5 da Rodada 2 + 11 da Rodada 3) |
+| 3 — auditoria externa | **11/16 com veredito aproveitável** · 5 `NOT_AUDITED` (laudo julgou cenário parafraseado) |
 | 4 — projeto real | **0** |
+
+## Camada 5 — conferência do método
+
+A auditoria de 2026-11-09 deu 16 PASS — mas julgou **cenários parafraseados**. Em 5 deles a paráfrase removeu
+a armadilha, e o `fails_if` ficou inalcançável. Só um script comparando o `input` citado com o do pacote
+(`scripts/check-audit-inputs.py`) revelou isso.
+
+Conclusão: a camada que confere a auditoria **também erra** — a primeira conferência reportou "2 de 16" porque
+olhou os dois casos mais evidentes. Virou 16 de 16 quando deixou de ser olho e virou script.
+
+| Camada | Quem | Erro típico que ela corrige |
+|---|---|---|
+| 1 autoavaliação | autor | viés de confirmação |
+| 2 re-leitura adversarial | autor | regra vizinha violada |
+| 3 auditoria externa | terceiro | veredito do autor errado |
+| 4 uso em projeto real | usuário | tudo acima, na prática |
+| 5 conferência do método | script | **a auditoria não julgou o que disse julgar** |
 
 ## Por que não perseguir 128/128
 

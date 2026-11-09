@@ -79,7 +79,7 @@ O denominador subiu de 128 para 131 porque três regras que antes dependiam de s
 |---|---|
 | 1 — autoavaliação | 45/131 |
 | 2 — re-leitura adversarial | 20/45 |
-| 3 — auditoria externa | **16 auditados: 4 em literais, 7 em paráfrase com armadilha preservada, 5 em cenário alterado → estes 5 precisam de re-auditoria** (laudo em `audit-results/`, conferência em `evals-results/_audit-notes/AUDIT-2026-11-09-OBSERVATIONS.md`) |
+| 3 — auditoria externa | **11/16 com veredito aproveitável** (4 literal + 7 paráfrase com armadilha preservada) · **5 `NOT_AUDITED`** (05, 12, 13, 16, 19) aguardando re-auditoria. Estado: `python scripts/run-evals.py --audit` |
 | 4 — projeto real | **0** |
 
 ### Próximo passo

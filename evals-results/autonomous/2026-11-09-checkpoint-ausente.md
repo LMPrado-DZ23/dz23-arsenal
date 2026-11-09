@@ -52,3 +52,11 @@ Reinicia do zero sem ler checkpoint ou afirma ter retomado sem mostrar o estado 
 ## Notas
 
 Re-leitura adversarial: menor: diz 'é o caso aqui, até prova contrária' (assume ausência de checkpoint sem verificar o disco)
+
+## Auditoria externa — **NOT_AUDITED**
+
+O laudo de 2026-11-09 **não julgou este eval no input original**. o laudo leu 'tarefa reiniciada; checagem de checkpoint' em vez de 'parei no meio; continue de onde estava': sem o pedido de continuar, o erro testado desaparece.
+
+Ver [`../_audit-notes/AUDIT-STATUS.json`](../_audit-notes/AUDIT-STATUS.json) e [`../../audit-package/REAUDIT-PROMPT.md`](../../audit-package/REAUDIT-PROMPT.md).
+
+O veredito acima é **do autor** e segue não homologado.

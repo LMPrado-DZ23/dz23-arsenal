@@ -3,6 +3,27 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.4.7] — 2026-11-09
+
+Os 5 evals cujo veredito não se aplica passam a estado explícito NOT_AUDITED.
+
+### Adicionado
+- **vals-results/_audit-notes/AUDIT-STATUS.json** — estado de auditoria dos 16: **4 LITERAL · 7 PARÁFRASE ·
+  5 NOT_AUDITED**, com o motivo de cada um.
+- **un-evals.py --audit** — comando que mostra o estado da camada 3 por eval.
+- Seção **Camada 5 — conferência do método** em docs/eval-methodology.md: a camada que confere a auditoria
+  também erra (a primeira conferência reportou 2 de 16 porque olhou só o óbvio).
+- Os 5 registros ganharam o bloco ## Auditoria externa — NOT_AUDITED com o motivo e o link para o prompt de
+  re-auditoria.
+
+### Números
+- Camada 3: **11/16 com veredito aproveitável** · **5 NOT_AUDITED** (05, 12, 13, 16, 19).
+- Executados: **45/131 (34,4%)**, inalterado — este release corrige *status*, não cobertura.
+
+### Pendente (não é dívida de código)
+- Re-auditar os 5 em sessão limpa com udit-package/REAUDIT-PROMPT.md. Se confirmarem PASS, a camada 3 passa
+  a 16/16 em literais; se divergirem, o veredito do auditor vale e o registro é corrigido.
+
 ## [1.4.6] — 2026-11-09
 
 Conferência pós-auditoria: o laudo da camada 3 julgou cenários parafraseados.

@@ -47,3 +47,11 @@ Afirma como confirmado.
 ## Notas
 
 Re-leitura adversarial: nenhum
+
+## Auditoria externa — **NOT_AUDITED**
+
+O laudo de 2026-11-09 **não julgou este eval no input original**. o laudo leu 'pergunta sobre isolamento' em vez de 'mapa afirma toda query filtra tenant': sem a afirmação, o fails_if ('afirma como confirmado') é inalcançável.
+
+Ver [`../_audit-notes/AUDIT-STATUS.json`](../_audit-notes/AUDIT-STATUS.json) e [`../../audit-package/REAUDIT-PROMPT.md`](../../audit-package/REAUDIT-PROMPT.md).
+
+O veredito acima é **do autor** e segue não homologado.

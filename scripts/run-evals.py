@@ -232,6 +232,29 @@ def cmd_report() -> int:
     return 0 if faltando == 0 else 1
 
 
+
+def cmd_audit() -> int:
+    """Estado da auditoria externa dos registros selecionados."""
+    arq = RESULTADOS / "_audit-notes" / "AUDIT-STATUS.json"
+    if not arq.is_file():
+        print("sem AUDIT-STATUS.json — nenhum laudo conferido")
+        return 0
+    dados = json.loads(arq.read_text(encoding="utf-8"))
+    conta: dict[str, int] = {}
+    print(f"{'#':>3} {'eval':<34} {'status':<14}")
+    print("-" * 56)
+    for e in dados["evals"]:
+        conta[e["audit_status"]] = conta.get(e["audit_status"], 0) + 1
+        print(f"{e['num']:>3} {e['eval_id']:<34} {e['audit_status']:<14}")
+    print()
+    for k in ("LITERAL", "PARÁFRASE", "NOT_AUDITED"):
+        print(f"{k:<14} {conta.get(k, 0)}")
+    pend = conta.get("NOT_AUDITED", 0)
+    if pend:
+        print(f"\n{pend} eval(s) aguardam re-auditoria: audit-package/REAUDIT-PROMPT.md")
+    return 0
+
+
 def main(argv: list[str]) -> int:
     for s in (sys.stdout, sys.stderr):
         try:
@@ -246,6 +269,7 @@ def main(argv: list[str]) -> int:
     g.add_argument("--schema", action="store_true")
     g.add_argument("--prompts", action="store_true")
     g.add_argument("--report", action="store_true")
+    g.add_argument("--audit", action="store_true", help="estado da auditoria externa")
     g.add_argument("--record", nargs=argparse.REMAINDER, help="repassa para scripts/record-eval.py")
     ap.add_argument("--skill", default=None)
     ap.add_argument("--batch", type=int, default=None)
@@ -266,6 +290,8 @@ def main(argv: list[str]) -> int:
         return code
     if args.prompts:
         return cmd_prompts(args.skill, args.batch)
+    if args.audit:
+        return cmd_audit()
     if args.report:
         return cmd_report()
     return 2

@@ -58,6 +58,10 @@ Aceita float ou sugere apenas 'arredondar no final'.
 
 Trocou por BIGINT em centavos, soma no servidor e regra de arredondamento declarada.
 
-## Auditoria externa
+## Auditoria externa — **NOT_AUDITED**
 
-**Selecionado para revisão independente** — ver [`../AUDIT-SAMPLE.md`](../_audit-notes/AUDIT-SAMPLE.md). O veredito acima é do autor (autoavaliação) e **não** homologa a skill; divergência do auditor externo prevalece.
+O laudo de 2026-11-09 **não julgou este eval no input original**. o laudo leu `amount DECIMAL(10,2)` — que é a resposta correta — no lugar de `price FLOAT`: com esse input o fails_if ('aceita float') é inalcançável.
+
+Ver [`../_audit-notes/AUDIT-STATUS.json`](../_audit-notes/AUDIT-STATUS.json) e [`../../audit-package/REAUDIT-PROMPT.md`](../../audit-package/REAUDIT-PROMPT.md).
+
+O veredito acima é **do autor** e segue não homologado.

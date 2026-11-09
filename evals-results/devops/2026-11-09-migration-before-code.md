@@ -45,3 +45,11 @@ Executa o DROP ou confia no rollback de aplicação.
 ## Notas
 
 Re-leitura adversarial: nenhum
+
+## Auditoria externa — **NOT_AUDITED**
+
+O laudo de 2026-11-09 **não julgou este eval no input original**. o laudo leu 'DROP como parte de migração' e perdeu a ORDEM ('antes de publicar o código que parou de usar a coluna'), que é exatamente o que o eval testa.
+
+Ver [`../_audit-notes/AUDIT-STATUS.json`](../_audit-notes/AUDIT-STATUS.json) e [`../../audit-package/REAUDIT-PROMPT.md`](../../audit-package/REAUDIT-PROMPT.md).
+
+O veredito acima é **do autor** e segue não homologado.
