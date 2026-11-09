@@ -134,23 +134,57 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 
 ## Estado verificado (não é marketing)
 
-| Eixo | Estado |
+Este repo publica **9 skills DZ23 + 1 MCP + 1 bundle + 7 skills externas empacotadas** e **9 referências
+externas** documentadas. **O que está publicado é diferente do que está verificado.**
+
+| Métrica | Valor |
 |---|---|
-| Skills empacotadas | **9** + 1 MCP + 1 bundle + **7** externas + 1 prompt |
+| Skills publicadas | 9 DZ23 + 1 MCP + 1 bundle + 7 externas (+9 referências externas) |
 | Evals declarados | **131** |
-| **Evals executados** | **45 (34,4% de 131)** — 43 PASS · 2 PARTIAL · 0 FAIL |
-| **Críticos executados** | **32 de 45 (71%)** — 13 exigem infra, declarados BLOCKED |
-| **Assets em release** | **18 zips** na [`v1.4.0`](https://github.com/LMPrado-DZ23/dz23-arsenal/releases/tag/v1.4.0) |
-| Gates automáticos | **15/15** |
-| CI | ✅ verde (2 runs em 2026-11-09) |
-| Auditoria externa (camada 3) | **16/16 PASS com input literal** (re-auditorias de 2026-11-09) — o laudo original **não serve como evidência** (parafraseou inputs e citou fora do texto) |
+| **Evals executados** | **45/131 (34,4%)** — 43 PASS · 2 PARTIAL · 0 FAIL |
+| **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |
+| **Laudo original da auditoria** | **`INVALIDO_COMO_EVIDENCIA`** — 54 de 68 citações não existem nas respostas |
+| Críticos executados | **32 de 45 identificados (71%)** — 13 exigem infra |
+| Camada 4 (projeto real) | **1 tarefa** no próprio repo — CI verde após **5 iterações** de correção |
+| CI | ✅ verde · **16/16** no gate |
+| Release | **v1.4.9** com 18 assets |
+
+### 5 camadas de verificação
+
+Cada camada conserta a anterior e cria um erro próprio, de natureza nova. O repo mede as cinco porque
+nenhuma enxerga o que a outra enxerga:
+
+| Camada | Cobertura | Erro que só ela mostra |
+|---|---|---|
+| 1 — autoavaliação | 45/131 | viés de confirmação |
+| 2 — re-leitura adversarial | 20/45 | violação de regra **vizinha** ao eval |
+| 3 — auditoria externa | 16/16 da amostra, em literais | paráfrase do input + citação fabricada |
+| 4 — projeto real | 1 tarefa (CI verde) | ferramenta acusando evidência **legítima** |
+| 5 — conferência mecânica | 2 scripts dentro do gate | amostragem preguiçosa da própria conferência |
+
+**Nenhuma camada substitui a próxima.** A 4 é a única que ainda não errou — porque uso em projeto de outra
+pessoa transforma erro em retrabalho, não em parágrafo.
+
+### O que NÃO está provado
+
+- **86 de 131 evals nunca executados** (65,6%)
+- **40 evals bloqueados** por ausência de infra (Docker/Postgres/Ghidra/browser/hardware), 13 deles críticos
+- **3 evals criados na v1.4.5** (OB-03/04/05) nunca executados nem auditados
+- **Camada 4 fora do próprio repo:** 0 tarefas
+- **Uso em produto de outra pessoa:** 0
+
+O repo é honesto sobre o que afirma. Não é cobertura completa, e não tem 100% de nada.
+
+Detalhes da Camada 4: [`docs/camada-4-2026-11-09.md`](docs/camada-4-2026-11-09.md) · método:
+[`docs/eval-methodology.md`](docs/eval-methodology.md) · estado por eval:
+`python scripts/run-evals.py --audit`
 
 Verificar agora:
 
 ```bash
-python scripts/quality-gate.py
-python scripts/run-evals.py --report
-gh run list --limit 1
+python scripts/quality-gate.py              # 16 checks
+python scripts/run-evals.py --report        # 45/131
+python scripts/run-evals.py --verify-quotes # citações dos laudos válidos
 ```
 
 Detalhe por skill: [`ROADMAP.md`](ROADMAP.md#status-de-evals-atualizado-2026-11-09) · registros:

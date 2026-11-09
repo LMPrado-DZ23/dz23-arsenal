@@ -35,28 +35,31 @@ As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em har
 Isso significa: **o comportamento das skills em produção é não comprovado**, exceto pelos 4 casos acima. O
 `evals.json` é especificação de comportamento, não certificado.
 
-## Status de evals (atualizado 2026-11-09 · pós-auditoria externa)
+## Status de evals (atualizado 2026-11-09 · pós-Camada 4)
 
-Fonte: `python scripts/run-evals.py --report`. Classificação:
-[`evals-results/_audit-notes/CLASSIFICATION.md`](evals-results/_audit-notes/CLASSIFICATION.md). Bloqueados:
-[`BLOCKED-TRACK-B.md`](evals-results/_audit-notes/BLOCKED-TRACK-B.md). Método:
-[`docs/eval-methodology.md`](docs/eval-methodology.md). Laudo da camada 3:
-[`audit-results/audit-2026-11-09.md`](audit-results/audit-2026-11-09.md). Observações e fixes:
-[`AUDIT-2026-11-09-OBSERVATIONS.md`](evals-results/_audit-notes/AUDIT-2026-11-09-OBSERVATIONS.md).
+Fonte: `python scripts/run-evals.py --report` · estado de auditoria: `--audit` · método:
+[`docs/eval-methodology.md`](docs/eval-methodology.md) · Camada 4:
+[`docs/camada-4-2026-11-09.md`](docs/camada-4-2026-11-09.md).
+
+### Por track
+
+| Track | Pendentes | Executados | Observação |
+|---|---|---|---|
+| **A — reasoning-only** | 43 | 45 | executável sem infra |
+| **B — exige infra** | 40 | 0 | `BLOCKED` por Docker/Postgres/Ghidra/browser/hardware |
+| **Novos (v1.4.5)** | 3 | 0 | OB-03/04/05 — nasceram depois da classificação |
+| **Total pendente** | **86** | — | de 131 declarados |
 
 ### Cobertura
 
 | Métrica | Valor |
 |---|---|
-| Evals declarados | **131** (+3 na v1.4.5) |
-| Evals executados | **45** |
-| Cobertura | **45/131 (34,4%)** |
-| Track A (reasoning) executados | 45 de 78 |
-| Track B (infra) | 40, declarados `BLOCKED` |
-| Críticos executados | **32/45 (71%)** — 13 exigem infra |
-
-O denominador subiu de 128 para 131 porque três regras que antes dependiam de sorte agora têm eval próprio
-(OB-03, OB-04, OB-05). Cobertura menor com mais precisão é melhor que cobertura maior com padrão conhecido.
+| Declarados | **131** |
+| Executados | **45 (34,4%)** |
+| Criticidade A (crítico) identificada | 45 |
+| Críticos executados | **32 (71%)** — os 13 restantes exigem infra |
+| Auditados em literais | **16/16 da amostra** |
+| Camada 4 | 1 tarefa (CI verde) — **não é eval**, não entra em cobertura |
 
 ### Por skill
 
@@ -73,19 +76,18 @@ O denominador subiu de 128 para 131 porque três regras que antes dependiam de s
 | `dz23-ultimate-pro-max` | 13 | 1 | 1 | 0 | 0 |
 | **TOTAL** | **131** | **45** | **43** | **2** | **0** |
 
-### Camadas
+### Auditoria (camada 3)
 
-| Camada | Cobertura |
-|---|---|
-| 1 — autoavaliação | 45/131 |
-| 2 — re-leitura adversarial | 20/45 |
-| 3 — auditoria externa | **16/16 PASS com input literal** (re-auditorias). O laudo original é `INVALIDO_COMO_EVIDENCIA`: parafraseou 13 de 16 inputs e citou fora do texto em 16 de 16. Estado: `python scripts/run-evals.py --audit` |
-| 4 — projeto real | **0** |
+- **Válido:** `reaudit-5-2026-11-09.md` (5/5 PASS) e `reaudit-11-2026-11-09.md` (11/11 PASS), ambos com
+  `input` literal.
+- **Inválido como evidência:** `audit-2026-11-09.md` — parafraseou 13 de 16 inputs (em 5 removeu a
+  armadilha) e citou fora do texto em 16 de 16 (54 de 68 citações não existem na resposta).
+- Verificação automatizada no gate: `evals:citacoes` (`run-evals.py --verify-quotes`).
 
 ### Próximo passo
 
-Rodada 4: os 33 evals restantes do Track A (com os 3 novos já incluídos). Track B quando houver
-Postgres/Playwright/Ghidra. Camada 4 (projeto real) segue como a única prova de uso.
+Rodada 4 dos 43 do Track A + os 3 novos. E, acima disso: **Camada 4 fora do próprio repo** — uso em projeto
+de outra pessoa, onde o erro custa retrabalho e não parágrafo.
 
 ### Harness de evals (implementado na v1.4.0)
 
