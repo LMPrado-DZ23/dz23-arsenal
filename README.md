@@ -132,6 +132,28 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 | [`docs/faq.md`](docs/faq.md) | Perguntas frequentes |
 | [`cli/README.md`](cli/README.md) | Guia de CLIs |
 
+## Estado verificado (não é marketing)
+
+| Eixo | Estado |
+|---|---|
+| Skills empacotadas | **9** + 1 MCP + 1 bundle + **7** externas + 1 prompt |
+| Evals declarados | **128** |
+| **Evals executados** | **10 (7,8%)** — 9 PASS · 1 PARTIAL · 0 FAIL |
+| **Assets em release** | **18 zips** na [`v1.4.0`](https://github.com/LMPrado-DZ23/dz23-arsenal/releases/tag/v1.4.0) |
+| Gates automáticos | **15/15** |
+| CI | ✅ verde (2 runs em 2026-11-09) |
+
+Verificar agora:
+
+```bash
+python scripts/quality-gate.py
+python scripts/run-evals.py --report
+gh run list --limit 1
+```
+
+Detalhe por skill: [`ROADMAP.md`](ROADMAP.md#status-de-evals-atualizado-2026-11-09) · registros:
+[`evals-results/`](evals-results/).
+
 ## Qualidade — um comando, um veredito
 
 ```bash

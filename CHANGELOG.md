@@ -3,6 +3,38 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.4.1] — 2026-11-09
+
+Rodada 1: fechar honestidade, distribuição e infraestrutura de evals.
+
+### Corrigido
+- **Drift do "CI nunca rodou"** (2 lugares): o workflow executou em **2026-11-09, verde** (2 runs). Corrigido
+  em `ROADMAP.md` (dívida #3, agora resolvida) e no `CHANGELOG` da v1.3.0. A dívida #2
+  (`install-all.sh` em Linux) **permanece** — é outro assunto e continua verdadeira.
+- **0 assets nas releases**: **18 zips** anexados à `v1.4.0` (9 skills + 1 MCP + 1 bundle + 7 externos).
+  Download testado: 18 baixados, SHA-256 igual ao original.
+
+### Adicionado
+- **`evals-results/`** — histórico versionado de execução, um arquivo por execução, com método, veredito,
+  cenário, resposta, esperado, trecho literal e notas.
+- **`evals.schema.json`** — JSON Schema 2020-12. Aceita `skill`/`version`/`note` como metadados opcionais de
+  topo (os 9 arquivos já os tinham; o schema original os rejeitaria).
+- **`scripts/run-evals.py`** reescrito: `--list`, `--check`, `--schema`, `--prompts`, `--record`, `--report`,
+  `--skill`, `--batch`. Gera prompts prontos em `evals-prompts/` para execução manual.
+- **`scripts/record-eval.py`** — registro com regras de honestidade embutidas: `PASS` exige resposta **e**
+  trecho literal; `BLOCKED` exige a dependência; `NOT_RECOVERED` é aceito sem artefato (e não reconstruído).
+- **`scripts/check-eval-results.py`** — valida os registros: seções obrigatórias, veredito reconhecido, eval-id
+  existente na skill, PASS com trecho, ROADMAP com seção "Status de evals".
+- **Títulos nos evals** de `autonomous` (12) e `ultimate-pro-max` (13) — 25 casos passaram a cumprir o schema.
+- **10 evals registrados** formalmente: 7 execuções anteriores (devops ×3 com Docker real, autonomous ×1,
+  performance ×3) + **3 pilotos novos** na `reverse-engineer-anything`.
+- `quality-gate.py`: **15 checks** (era 13) — agora inclui schema e registros de evals.
+
+### Cobertura de evals
+- Antes: **0/128** registrados no repositório (4 executados fora do repo).
+- Depois: **10/128 (7,8%)** — 9 PASS, 1 PARTIAL, 0 FAIL, 0 BLOCKED.
+- Próximo passo: Rodada 2 (lote de 15–20, começando por `spec-to-system-engine` e `backend-data-architect`).
+
 ## [1.4.0] — 2026-11-09
 
 Auditoria de **todos os evals** do arsenal e criação do harness que faltava.
@@ -71,8 +103,8 @@ de contribuição/segurança.
 
 ### Estado de verificação
 - `python scripts/quality-gate.py` → **12/12 checks passaram** (local, Windows).
-- `CI no GitHub`: workflow **nunca executou** — primeiro run acontece no próximo push. Declarado como
-  dívida #3 no `ROADMAP.md`.
+- `CI no GitHub`: workflow executou em **2026-11-09, verde** (2 runs — `gh run list --limit 5`).
+  *(Esta linha dizia "nunca executou"; corrigida na v1.4.1 — o run aconteceu no push da própria v1.3.0.)*
 
 ## [1.2.0] — 2026-11-09
 

@@ -5,78 +5,91 @@
   "cases": [
     {
       "id": "tokens-semanticos",
+      "title": "Tokens semanticos",
       "input": "Implemente um botao primario no projeto com Tailwind.",
       "expected": "Usa token semantico (action-primary) mapeado no tema; nenhum valor hex ou px magico no componente.",
       "fails_if": "Escreve classe com cor literal (ex.: text-[#7c3aed]) ou espacamento ad hoc."
     },
     {
       "id": "tailwind3",
+      "title": "Tailwind3",
       "input": "Projeto usa Tailwind v3; modernize um botao.",
       "expected": "Nao migra automaticamente para v4; aplica tokens e estados na versao existente.",
       "fails_if": "Migra para Tailwind v4 sem pedido, quebrando o projeto."
     },
     {
       "id": "tailwind4",
+      "title": "Tailwind4",
       "input": "Projeto novo usa Tailwind v4; configure design tokens.",
       "expected": "Aplica tokens semanticos e @theme de modo compativel, sem valor primitivo direto no componente.",
       "fails_if": "Usa cor/valor primitivo direto no componente em vez de token semantico."
     },
     {
       "id": "estados-interativos",
+      "title": "Estados interativos",
       "input": "Faz o componente de botao.",
       "expected": "Entrega default, hover, active, focus-visible, disabled e loading, com como verificar cada um.",
       "fails_if": "Entrega so default e hover, ou remove outline sem substituto de foco."
     },
     {
       "id": "focus-visible",
+      "title": "Focus visible",
       "input": "Limpa o estilo do navegador no formulario.",
       "expected": "Mantem foco visivel por teclado com anel de contraste >= 3:1; nunca outline none sem alternativa.",
       "fails_if": "Aplica outline: none global e deixa o teclado sem indicacao de foco."
     },
     {
       "id": "reduced-motion",
+      "title": "Reduced motion",
       "input": "Adiciona animacao de entrada no card.",
       "expected": "Respeita prefers-reduced-motion, desligando ou reduzindo a animacao.",
       "fails_if": "Anima sem guarda de prefers-reduced-motion."
     },
     {
       "id": "cls-midia",
+      "title": "Cls midia",
       "input": "Coloca imagem de capa na pagina.",
       "expected": "Declara dimensao ou aspect-ratio da midia para nao gerar layout shift.",
       "fails_if": "Insere img sem width/height nem aspect-ratio."
     },
     {
       "id": "shadcn-dono",
+      "title": "Shadcn dono",
       "input": "Instala shadcn/ui e usa o Button padrao.",
       "expected": "Trata shadcn como codigo-fonte incorporado, ajustado aos tokens do projeto.",
       "fails_if": "Usa a paleta default do shadcn sem adaptar ao design system do projeto."
     },
     {
       "id": "badge-wrap",
+      "title": "Badge wrap",
       "input": "Cria um badge de status com texto longo.",
       "expected": "Impede quebra de linha no badge (whitespace-nowrap) e testa com texto longo.",
       "fails_if": "Badge quebra em duas linhas porque nao ha nowrap."
     },
     {
       "id": "contraste",
+      "title": "Contraste",
       "input": "Define texto cinza sobre fundo claro.",
       "expected": "Garante contraste >= 4.5:1 para texto e >= 3:1 para UI, verificado.",
       "fails_if": "Declara contraste AA sem medir ou usa cinza claro que reprova."
     },
     {
       "id": "estados-vazio-erro",
+      "title": "Estados vazio erro",
       "input": "Faz a tabela de pedidos.",
       "expected": "Desenha estado vazio, erro, loading e permissao negada, alem do caso feliz.",
       "fails_if": "Entrega so a tabela preenchida, sem vazio/erro/loading."
     },
     {
       "id": "prova-visual",
+      "title": "Prova visual",
       "input": "Diga que o layout mobile esta perfeito.",
       "expected": "Declara NOT_TESTED ate abrir navegador; pede ou executa verificacao com evidencia.",
       "fails_if": "Afirma que esta perfeito sem abrir navegador ou inventa screenshot."
     },
     {
       "id": "streaming-chat",
+      "title": "Streaming chat",
       "input": "Crie chat de IA com streaming e mensagens longas.",
       "expected": "Considera CLS, scroll, cancelamento, estado de erro e acessibilidade do streaming de mensagens longas, com dimensao declarada para nao gerar layout shift.",
       "fails_if": "Ignora CLS/scroll/cancelamento ou 'resolve' com setTimeout, sem estado de erro nem acessibilidade."

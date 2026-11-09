@@ -41,6 +41,12 @@ jobs:
       - name: Coerência dos evals
         run: python scripts/run-evals.py --check
 
+      - name: Evals contra o schema
+        run: python scripts/run-evals.py --schema
+
+      - name: Registros de evals
+        run: python scripts/check-eval-results.py
+
       - name: Links relativos
         run: python scripts/check-links.py .
 

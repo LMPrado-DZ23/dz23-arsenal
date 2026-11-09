@@ -1,52 +1,66 @@
 #!/usr/bin/env python3
-"""run-evals.py — harness de evals do arsenal.
+"""run-evals.py — runner e auditor de evals do arsenal.
 
-O que ele FAZ (determinístico, sem LLM):
-  --list     lista os cenários
-  --check    lint + auditoria de coerência de cada eval contra o próprio SKILL.md/references
-  --record   grava um veredito vindo de sessão real (LLM/humano) em evals/results/
-  --report   mostra o estado de execução consolidado
+Comandos:
+  --list                     lista cenários (todas as skills ou --skill)
+  --check                    auditoria determinística de coerência dos evals
+  --schema                   valida cada evals.json contra evals.schema.json
+  --prompts                  gera prompts prontos em evals-prompts/ para execução manual
+  --record                    equivalente a: python scripts/record-eval.py (repassa os argumentos)
+  --report                   estado consolidado (declarados × executados por skill)
 
-O que ele NÃO FAZ: executar o comportamento da skill. Isso exige uma sessão de agente real; o
-harness apenas (a) prova que o eval é coerente e executável, e (b) guarda o veredito de quem executou.
+O que ele NÃO faz: executar o comportamento da skill. Isso exige sessão de agente real; o harness
+valida, prepara o prompt, e guarda o veredito de quem executou.
 
 Exit:
-  --check  : 0 = nenhum erro (avisos podem existir) · 1 = erro de coerência
-  --report : 0 = todos os cenários têm resultado · 1 = há cenário sem resultado
+  --check/--schema : 0 = ok · 1 = problema
+  --report         : 0 = todos executados · 1 = há cenário sem resultado
 """
 from __future__ import annotations
 
 import argparse
 import json
 import re
+import subprocess
 import sys
-from datetime import date
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 SKILLS = RAIZ / "skills"
 RESULTADOS = RAIZ / "evals-results"
+PROMPTS = RAIZ / "evals-prompts"
+SCHEMA = RAIZ / "evals.schema.json"
 
-# palavras que não ajudam a localizar a regra no texto da skill
+CURTO = {
+    "dz23-autonomous-improvement-ultimate": "autonomous",
+    "dz23-backend-data-architect": "backend",
+    "dz23-codebase-cartographer": "cartographer",
+    "dz23-devops-cloud-deployer": "devops",
+    "dz23-e2e-browser-verifier": "e2e",
+    "dz23-performance-scalability-engine": "performance",
+    "dz23-reverse-engineer-anything": "reverse-engineer",
+    "dz23-spec-to-system-engine": "spec",
+    "dz23-ultimate-pro-max": "ultimate-pro-max",
+}
+
 STOP = set("""a o as os um uma de da do das dos e ou que em no na nos nas para por com sem ao aos
 se ser é são estar está como quando onde qual quais seu sua seus suas este esta isso isto
 não mais menos muito pouco todo toda todos todas ele ela eles elas você vocês nós
-the a an of to in on and or is are be for with without not no do does this that it its
+the a an of to in on and or is are be with without not no do does this that it its
 must should shall can could will would may might""".split())
 
 
 def carregar(skill: Path) -> dict:
     f = skill / "evals" / "evals.json"
     if not f.is_file():
-        return {"casos": [], "erro": "evals/evals.json ausente"}
+        return {"cases": [], "erro": "evals/evals.json ausente"}
     try:
         return json.loads(f.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
-        return {"casos": [], "erro": f"JSON inválido: {exc}"}
+        return {"cases": [], "erro": f"JSON inválido: {exc}"}
 
 
 def corpus(skill: Path) -> str:
-    """Todo o texto da skill (SKILL.md + references + templates)."""
     partes = []
     for nome in ("SKILL.md", "README.md"):
         p = skill / nome
@@ -60,153 +74,161 @@ def corpus(skill: Path) -> str:
     return "\n".join(partes).lower()
 
 
-def termos(texto: str, minimo: int = 5) -> set[str]:
+def termos(texto: str) -> set[str]:
     achados = re.findall(r"[a-záàâãéêíóôõúç0-9][a-záàâãéêíóôõúç0-9\-]{3,}", texto.lower())
-    return {t for t in achados if t not in STOP and len(t) >= minimo}
+    return {t for t in achados if t not in STOP and len(t) >= 5}
 
 
-def auditar(skill: Path) -> dict:
-    dados = carregar(skill)
-    casos = dados.get("casos") or dados.get("cases") or []
-    texto = corpus(skill)
-    problemas: list[str] = []
-    avisos: list[str] = []
-    detalhes: list[dict] = []
-
-    if not casos:
-        problemas.append("nenhum caso encontrado")
-
-    ids = [c.get("id") for c in casos]
-    if len(ids) != len(set(ids)):
-        problemas.append("id duplicado entre casos")
-
-    for c in casos:
-        cid = c.get("id", "?")
-        for campo in ("id", "input", "expected", "fails_if"):
-            if not c.get(campo):
-                problemas.append(f"{cid}: campo '{campo}' vazio")
-        entrada = str(c.get("input", ""))
-        esperado = str(c.get("expected", ""))
-        falha = str(c.get("fails_if", ""))
-
-        # contradição: expected e fails_if idênticos ou quase
-        if esperado and falha and esperado.strip().lower() == falha.strip().lower():
-            problemas.append(f"{cid}: expected == fails_if (eval impossível de distinguir)")
-        elif esperado and falha and (esperado.lower() in falha.lower() or falha.lower() in esperado.lower()):
-            avisos.append(f"{cid}: expected e fails_if se sobrepõem textualmente")
-
-        # cobertura: a regra citada no expected aparece na skill?
-        termos_exp = termos(esperado)
-        achados = {t for t in termos_exp if t in texto}
-        cobertura = len(achados) / len(termos_exp) if termos_exp else 1.0
-        if termos_exp and cobertura < 0.34:
-            problemas.append(
-                f"{cid}: só {len(achados)}/{len(termos_exp)} termos do expected aparecem na skill "
-                f"(regra possivelmente não existe): {sorted(termos_exp - achados)[:6]}"
-            )
-        elif termos_exp and cobertura < 0.6:
-            avisos.append(f"{cid}: cobertura baixa ({len(achados)}/{len(termos_exp)})")
-
-        # eval possivelmente impossível: input nega medição e expected exige entrega de número
-        neg = re.search(r"\b(sem|nenhum|nenhuma|não há|nao ha)\b.{0,30}(medi|medição|medicao|número|numero)", entrada.lower())
-        exig = re.search(r"\b(entrega|entrega|informa|declare|declara)\b.{0,40}(baseline|p50|p95|p99|número|numero)", esperado.lower())
-        if neg and exig:
-            avisos.append(f"{cid}: input nega medição e expected pede número — verificar se é resolvível")
-
-        detalhes.append({
-            "id": cid,
-            "cobertura": round(cobertura, 2),
-            "termos_fora": sorted(termos_exp - achados)[:8],
-        })
-
-    return {
-        "skill": skill.name,
-        "casos": len(casos),
-        "problemas": problemas,
-        "avisos": avisos,
-        "detalhes": detalhes,
-        "arquivo_erro": dados.get("erro"),
-    }
-
-
-def resultado_execucao(skill: Path) -> dict | None:
-    f = RESULTADOS / f"{skill.name}.json"
-    if not f.is_file():
-        return None
+def validar_schema() -> tuple[int, list[str]]:
+    if not SCHEMA.is_file():
+        return 1, ["evals.schema.json ausente na raiz"]
     try:
-        return json.loads(f.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return None
+        schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return 1, [f"evals.schema.json inválido: {exc}"]
 
+    try:
+        import jsonschema  # type: ignore
+    except ImportError:
+        jsonschema = None
 
-def cmd_check() -> int:
-    total_casos = total_problemas = total_avisos = 0
-    relatorio = []
+    obrig = schema.get("properties", {}).get("cases", {}).get("items", {}).get("required", [])
+    padrao = re.compile(r"^[a-z][a-z0-9-]+$")
+    erros: list[str] = []
     for skill in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
-        r = auditar(skill)
-        total_casos += r["casos"]
-        total_problemas += len(r["problemas"])
-        total_avisos += len(r["avisos"])
-        relatorio.append(r)
-        marca = "OK" if not r["problemas"] else "PROBLEMA"
-        print(f"{skill.name:<40} {r['casos']:>3} casos  {marca}")
-        for p in r["problemas"]:
-            print(f"    ERRO  {p}")
-        for a in r["avisos"]:
-            print(f"    aviso {a}")
+        dados = carregar(skill)
+        if dados.get("erro"):
+            erros.append(f"{skill.name}: {dados['erro']}")
+            continue
+        if jsonschema is not None:
+            try:
+                jsonschema.validate(dados, schema)
+                continue
+            except jsonschema.ValidationError as exc:  # type: ignore[attr-defined]
+                erros.append(f"{skill.name}: {exc.message} (em {list(exc.absolute_path)})")
+                continue
+        # fallback sem a lib: checagem manual do essencial
+        for c in dados.get("cases", []):
+            for ch in obrig:
+                if not c.get(ch):
+                    erros.append(f"{skill.name}/{c.get('id', '?')}: falta '{ch}'")
+            if not padrao.match(str(c.get("id", ""))):
+                erros.append(f"{skill.name}/{c.get('id', '?')}: id fora do padrão")
+    return (1 if erros else 0), erros
 
-    print()
-    print(f"casos analisados: {total_casos} | erros: {total_problemas} | avisos: {total_avisos}")
-    (RAIZ / "evals-audit.json").write_text(
-        json.dumps({"data": date.today().isoformat(), "relatorio": relatorio}, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8", newline="\n",
-    )
-    print("relatório: evals-audit.json")
-    return 0 if total_problemas == 0 else 1
 
-
-def cmd_list(filtro: str | None) -> int:
+def cmd_check(skill_filtro: str | None) -> int:
+    total_casos = total_erros = total_avisos = 0
     for skill in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
-        if filtro and filtro not in skill.name:
+        if skill_filtro and skill_filtro not in skill.name:
             continue
         dados = carregar(skill)
-        casos = dados.get("casos") or dados.get("cases") or []
-        print(f"\n## {skill.name} ({len(casos)} casos)")
+        casos = dados.get("cases", [])
+        texto = corpus(skill)
+        problemas, avisos = [], []
+        if not casos:
+            problemas.append("nenhum caso")
+        ids = [c.get("id") for c in casos]
+        if len(ids) != len(set(ids)):
+            problemas.append("id duplicado")
         for c in casos:
-            print(f"  - {c.get('id')}: {str(c.get('input', ''))[:80]}")
+            cid = c.get("id", "?")
+            for campo in ("id", "title", "input", "expected", "fails_if"):
+                if not c.get(campo):
+                    problemas.append(f"{cid}: campo '{campo}' vazio")
+            exp, fal = str(c.get("expected", "")), str(c.get("fails_if", ""))
+            if exp and fal and exp.strip().lower() == fal.strip().lower():
+                problemas.append(f"{cid}: expected == fails_if")
+            termos_exp = termos(exp)
+            achados = {t for t in termos_exp if t in texto}
+            cobertura = len(achados) / len(termos_exp) if termos_exp else 1.0
+            if termos_exp and cobertura < 0.34:
+                problemas.append(f"{cid}: cobertura {len(achados)}/{len(termos_exp)} — regra pode não existir")
+            elif termos_exp and cobertura < 0.6:
+                avisos.append(f"{cid}: cobertura baixa ({len(achados)}/{len(termos_exp)})")
+        total_casos += len(casos)
+        total_erros += len(problemas)
+        total_avisos += len(avisos)
+        marca = "OK" if not problemas else "PROBLEMA"
+        print(f"{skill.name:<40} {len(casos):>3} casos  {marca}")
+        for p in problemas:
+            print(f"    ERRO  {p}")
+        for a in avisos:
+            print(f"    aviso {a}")
+    print()
+    print(f"casos analisados: {total_casos} | erros: {total_erros} | avisos: {total_avisos}")
+    return 0 if total_erros == 0 else 1
+
+
+def cmd_list(skill_filtro: str | None, batch: int | None) -> int:
+    for skill in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
+        if skill_filtro and skill_filtro not in skill.name:
+            continue
+        casos = carregar(skill).get("cases", [])
+        print(f"\n## {skill.name} ({len(casos)} casos)")
+        for c in (casos[:batch] if batch else casos):
+            print(f"  - {c.get('id')}: {str(c.get('input', ''))[:78]}")
     return 0
 
 
-def cmd_record(skill_nome: str, arquivo: str) -> int:
-    skill = SKILLS / skill_nome
-    if not skill.is_dir():
-        print(f"INVALID skill inexistente: {skill_nome}", file=sys.stderr)
-        return 2
-    dados = json.loads(Path(arquivo).read_text(encoding="utf-8"))
-    RESULTADOS.mkdir(exist_ok=True)
-    alvo = RESULTADOS / f"{skill_nome}.json"
-    alvo.write_text(json.dumps(dados, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
-    print(f"gravado: {alvo.relative_to(RAIZ)}")
+def cmd_prompts(skill_filtro: str | None, batch: int | None) -> int:
+    PROMPTS.mkdir(exist_ok=True)
+    gerados = 0
+    for skill in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
+        if skill_filtro and skill_filtro not in skill.name:
+            continue
+        casos = carregar(skill).get("cases", [])
+        if not casos:
+            continue
+        destino = PROMPTS / skill.name
+        destino.mkdir(parents=True, exist_ok=True)
+        for c in (casos[:batch] if batch else casos):
+            texto = (
+                f"# Eval `{c['id']}` — {skill.name}\n\n"
+                f"## Instrução\n\nCarregue a skill `{skill.name}` e responda ao cenário abaixo **como a skill "
+                f"responderia**. Não consulte `expected` nem `fails_if` antes de responder.\n\n"
+                f"## Cenário (input)\n\n{c['input']}\n\n"
+                f"## Como julgar depois\n\n"
+                f"- esperado: {c['expected']}\n"
+                f"- reprova se: {c['fails_if']}\n\n"
+                f"## Registro\n\n```bash\npython scripts/record-eval.py --skill {skill.name} "
+                f"--eval-id {c['id']} --verdict <PASS|PARTIAL|FAIL|BLOCKED> "
+                f"--response-file <arquivo> --evidence \"<trecho literal>\"\n```\n"
+            )
+            (destino / f"{c['id']}.md").write_text(texto, encoding="utf-8", newline="\n")
+            gerados += 1
+    print(f"prompts gerados: {gerados} em {PROMPTS.relative_to(RAIZ)}/")
     return 0
 
 
 def cmd_report() -> int:
-    print(f"{'skill':<40}{'casos':>6}{'executados':>11}{'PASS':>6}{'FAIL':>6}{'NOT_TESTED':>12}")
-    print("-" * 82)
+    print(f"{'skill':<42}{'declarados':>11}{'executados':>12}{'PASS':>6}{'PARTIAL':>9}{'FAIL':>6}{'BLOCKED':>9}")
+    print("-" * 95)
     faltando = 0
+    total = total_exec = 0
     for skill in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
-        dados = carregar(skill)
-        casos = dados.get("casos") or dados.get("cases") or []
-        res = resultado_execucao(skill) or {}
-        resultados = res.get("results", {})
-        executados = [v for v in resultados.values() if v in ("PASS", "PARTIAL", "FAIL")]
-        passa = sum(1 for v in resultados.values() if v == "PASS")
-        falha = sum(1 for v in resultados.values() if v == "FAIL")
-        sem = len(casos) - len(executados)
-        faltando += sem
-        print(f"{skill.name:<40}{len(casos):>6}{len(executados):>11}{passa:>6}{falha:>6}{sem:>12}")
+        casos = carregar(skill).get("cases", [])
+        total += len(casos)
+        curto = CURTO.get(skill.name, skill.name.replace("dz23-", ""))
+        pasta = RESULTADOS / curto
+        vereditos: list[str] = []
+        if pasta.is_dir():
+            for md in pasta.glob("*.md"):
+                texto = md.read_text(encoding="utf-8", errors="replace")
+                m = re.search(r"\*\*Veredito:\*\*\s*\*{0,2}(PASS|PARTIAL|FAIL|NOT_TESTED|BLOCKED|NOT_RECOVERED)",
+                              texto)
+                if m:
+                    vereditos.append(m.group(1))
+        exec_ = len(vereditos)
+        total_exec += exec_
+        sem = len(casos) - exec_
+        faltando += max(0, sem)
+        conta = lambda v: sum(1 for x in vereditos if x == v)  # noqa: E731
+        print(f"{skill.name:<42}{len(casos):>11}{exec_:>12}{conta('PASS'):>6}{conta('PARTIAL'):>9}"
+              f"{conta('FAIL'):>6}{conta('BLOCKED'):>9}")
     print()
-    print(f"cenários sem resultado: {faltando}")
+    pct = (total_exec / total * 100) if total else 0
+    print(f"TOTAL: {total} declarados · {total_exec} registrados ({pct:.1f}%) · {faltando} sem resultado")
     return 0 if faltando == 0 else 1
 
 
@@ -221,19 +243,31 @@ def main(argv: list[str]) -> int:
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--list", action="store_true")
     g.add_argument("--check", action="store_true")
+    g.add_argument("--schema", action="store_true")
+    g.add_argument("--prompts", action="store_true")
     g.add_argument("--report", action="store_true")
-    g.add_argument("--record", nargs=2, metavar=("SKILL", "ARQUIVO"))
-    ap.add_argument("--filtro", default=None)
+    g.add_argument("--record", nargs=argparse.REMAINDER, help="repassa para scripts/record-eval.py")
+    ap.add_argument("--skill", default=None)
+    ap.add_argument("--batch", type=int, default=None)
     args = ap.parse_args(argv)
 
+    if args.record is not None:
+        cmd = [sys.executable, str(RAIZ / "scripts" / "record-eval.py")] + args.record
+        return subprocess.call(cmd)
     if args.list:
-        return cmd_list(args.filtro)
+        return cmd_list(args.skill, args.batch)
     if args.check:
-        return cmd_check()
+        return cmd_check(args.skill)
+    if args.schema:
+        code, erros = validar_schema()
+        print(f"skills validadas contra evals.schema.json: {'OK' if code == 0 else 'PROBLEMAS'}")
+        for e in erros:
+            print(f"  - {e}")
+        return code
+    if args.prompts:
+        return cmd_prompts(args.skill, args.batch)
     if args.report:
         return cmd_report()
-    if args.record:
-        return cmd_record(*args.record)
     return 2
 
 

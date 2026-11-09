@@ -1,5 +1,10 @@
 # Changelog — dz23-autonomous-improvement-ultimate
 
+## [2.1.3] — 2026-11-09
+
+### Corrigido
+- `evals/evals.json`: os casos não tinham `title`, exigido pelo `evals.schema.json` do arsenal (25 casos em 2 skills). Título derivado do id — mecânico, sem inventar conteúdo.
+
 ## [2.1.2] — 2026-11-09
 
 ### Corrigido

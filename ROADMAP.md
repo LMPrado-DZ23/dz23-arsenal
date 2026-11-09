@@ -35,6 +35,32 @@ As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em har
 Isso significa: **o comportamento das skills em produção é não comprovado**, exceto pelos 4 casos acima. O
 `evals.json` é especificação de comportamento, não certificado.
 
+## Status de evals (atualizado 2026-11-09)
+
+Fonte: `python scripts/run-evals.py --report` e os registros em [`evals-results/`](evals-results/).
+
+| Skill | Total | Executados | PASS | PARTIAL | FAIL | BLOCKED |
+|---|---|---|---|---|---|---|
+| `dz23-devops-cloud-deployer` | 15 | 3 | 3 | 0 | 0 | 0 |
+| `dz23-autonomous-improvement-ultimate` | 12 | 1 | 1 | 0 | 0 | 0 |
+| `dz23-performance-scalability-engine` | 16 | 3 | 2 | 1 | 0 | 0 |
+| `dz23-reverse-engineer-anything` | 15 | **3 (piloto)** | 3 | 0 | 0 | 0 |
+| `dz23-backend-data-architect` | 12 | 0 | 0 | 0 | 0 | 0 |
+| `dz23-codebase-cartographer` | 15 | 0 | 0 | 0 | 0 | 0 |
+| `dz23-e2e-browser-verifier` | 15 | 0 | 0 | 0 | 0 | 0 |
+| `dz23-spec-to-system-engine` | 15 | 0 | 0 | 0 | 0 | 0 |
+| `dz23-ultimate-pro-max` | 13 | 0 | 0 | 0 | 0 | 0 |
+| **TOTAL** | **128** | **10** | **9** | **1** | **0** | **0** |
+
+**Cobertura: 10/128 = 7,8%.**
+
+Um registro é `PARTIAL`: `optimize-without-baseline` da performance — o instrumento proposto usava
+`curl -o NUL` (Windows-only) e a janela de medição foi apresentada como regra sem fonte.
+
+**Próximo passo:** Rodada 2 — executar 15–20 evals em lote, priorizando `spec-to-system-engine` e
+`backend-data-architect` (decisões de arquitetura custam mais caro que erro de formatação). Cada execução
+passa por `scripts/record-eval.py`, que exige trecho literal para `PASS`.
+
 ### Harness de evals (implementado na v1.4.0)
 
 `scripts/run-evals.py` existe e roda três coisas:
@@ -57,9 +83,9 @@ nenhum eval).
 
 | # | Dívida | Impacto | Esforço |
 |---|---|---|---|
-| 1 | Evals não executados (~133 cenários) | alto — comportamento não comprovado | alto |
+| 1 | Evals não executados (128 cenários) | alto — comportamento não comprovado | alto |
 | 2 | `install-all.sh` nunca rodou em Linux/macOS | médio — caminho Linux não exercitado | baixo |
-| 3 | CI nunca executou no GitHub (criado localmente) | médio — pode falhar no primeiro run | baixo |
+| 3 | **CI** — resolvido: rodando desde 2026-11-09 (2 runs verdes). Verificar: `gh run list --limit 5` | — | — |
 | 4 | `mcp/` e `bundle/` não são testados em CI | médio | médio |
 | 5 | Skills em português; sem tradução para inglês | baixo — alcance | alto |
 | 6 | `external/` é só documentação; nenhuma skill externa é testada junto | baixo | — |

@@ -1,6 +1,6 @@
 ---
 name: dz23-ultimate-pro-max
-version: 2.2.1
+version: 2.2.2
 description: Skill de direção de arte premium, UX, frontend, arquitetura de interface, segurança, acessibilidade, performance, QA visual e entrega verificável para sites, SaaS, CRM, ERP, B-3PO, desktop e mobile. Ative ao criar, revisar, redesenhar ou implementar interfaces, fluxos e design systems.
 user-invocable: true
 argument-hint: "<página/rota, 'audit <path>' ou 'redesign <path>'>"

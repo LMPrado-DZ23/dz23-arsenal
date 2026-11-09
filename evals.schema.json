@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DZ23 Evals",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "input",
+          "expected",
+          "fails_if"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]+$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 3
+          },
+          "input": {
+            "type": "string",
+            "minLength": 5
+          },
+          "expected": {
+            "type": "string",
+            "minLength": 5
+          },
+          "fails_if": {
+            "type": "string",
+            "minLength": 5
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "skill": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "$comment": "skill/version/note são metadados opcionais de topo. Ficam no arquivo para rastreabilidade (qual skill, qual versão, por que o caso existe) e não alteram a semântica do eval."
+}
