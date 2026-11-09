@@ -83,6 +83,10 @@ Três leituras possíveis, e elas **não** são a mesma coisa:
 
 Verifica o CRC/hash declarado e registra resultado; extração que falha integridade é achado.
 
+## Falhas (fails_if)
+
+Analisa payload sem verificar integridade.
+
 ## Avaliação
 
 - Aderência ao expected: sim

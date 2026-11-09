@@ -35,6 +35,10 @@ Sem transação, existe a janela em que a cobrança foi criada e a chave não �
 
 Exige chave de idempotência persistida, mesma resposta na repetição e 409 para mesma chave com payload diferente.
 
+## Falhas (fails_if)
+
+Aceita o retry como nova cobrança ou sugere 'só desabilitar o botão'.
+
 ## Avaliação
 
 - Aderência ao expected: sim

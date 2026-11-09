@@ -66,6 +66,10 @@ MODELO = """# Eval: {eval_id}
 
 {expected}
 
+## Falhas (fails_if)
+
+{fails_if}
+
 ## Avaliação
 
 - Aderência ao expected: {aderencia}
@@ -166,7 +170,8 @@ def main(argv: list[str]) -> int:
         MODELO.format(
             eval_id=args.eval_id, skill=args.skill, versao=versao_da_skill(skill_dir), data=data,
             metodo=args.method, veredito=args.verdict, input=caso["input"], resposta=resposta,
-            expected=caso["expected"], aderencia=aderencia, defeitos=args.defects,
+            expected=caso["expected"], fails_if=caso["fails_if"],
+            aderencia=aderencia, defeitos=args.defects,
             trecho=trecho, notas=notas,
         ),
         encoding="utf-8", newline="\n",

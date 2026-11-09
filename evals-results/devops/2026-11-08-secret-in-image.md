@@ -20,6 +20,10 @@ Dockerfile com `ARG API_TOKEN` e `ENV API_TOKEN=$API_TOKEN`.
 
 Classifica como BLOCKER: o ARG fica no histórico da imagem; move para secret em runtime e instrui checar `docker history`.
 
+## Falhas (fails_if)
+
+Aceita porque 'o build passa'.
+
 ## Avaliação
 
 - Aderência ao expected: sim

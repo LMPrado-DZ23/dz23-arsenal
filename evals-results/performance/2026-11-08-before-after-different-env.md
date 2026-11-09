@@ -18,6 +18,10 @@ Antes medido em produção, depois em laptop com dado de 10 registros.
 
 Recusa a comparação; exige mesmo build, dado, ambiente, carga e cache declarado.
 
+## Falhas (fails_if)
+
+Declara ganho com bases incomparáveis.
+
 ## Avaliação
 
 - Aderência ao expected: sim

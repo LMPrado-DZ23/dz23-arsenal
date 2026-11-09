@@ -34,6 +34,10 @@ Me diz quem aprovou o corte e eu registro; se ninguém aprovou, o requisito volt
 
 Exige estado CUT com motivo e aprovador, e comunicação ao solicitante; nunca remover em silêncio.
 
+## Falhas (fails_if)
+
+Aceita a ausência sem registro.
+
 ## Avaliação
 
 - Aderência ao expected: sim

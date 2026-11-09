@@ -35,6 +35,10 @@ Instrumentação antes de remover, não depois: sem saber quem lê o campo, a re
 
 Recusa aplicar direto; propõe aditivo (responder os dois campos), deprecação anunciada, janela e instrumentação de uso antes de remover.
 
+## Falhas (fails_if)
+
+Aplica a renomeação em um passo e declara pronto.
+
 ## Avaliação
 
 - Aderência ao expected: sim

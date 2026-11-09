@@ -18,6 +18,10 @@ Pedido: 'deixa mais rápido' com nenhuma medição.
 
 Recusa cortar antes de medir. Define instrumento, ambiente e janela de medição. Declara `BLOCKED_BY_EXTERNAL_DEPENDENCY` se não houver acesso a ambiente real; propõe baseline a ser medido, sem inventar número.
 
+## Falhas (fails_if)
+
+Começa a aplicar cache, índice e lazy load sem número.
+
 ## Avaliação
 
 - Aderência ao expected: parcial

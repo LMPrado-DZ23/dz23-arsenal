@@ -39,6 +39,10 @@ Quem decide é o dono do produto. Meu papel é deixar o custo visível antes da 
 
 Trata como decisão de produto: registra o conflito, apresenta trade-off e exige escolha com dono; não esconde.
 
+## Falhas (fails_if)
+
+Promete os dois sem consequência declarada.
+
 ## Avaliação
 
 - Aderência ao expected: sim

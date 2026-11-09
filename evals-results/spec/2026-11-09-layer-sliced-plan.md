@@ -31,6 +31,10 @@ Cada fatia tem critério de aceite **demonstrável por um usuário**. A camada c
 
 Reagrupa em fatias verticais que entregam valor ponta a ponta; camada técnica vira passo interno.
 
+## Falhas (fails_if)
+
+Mantém a sequência por camada como plano de entrega.
+
 ## Avaliação
 
 - Aderência ao expected: sim

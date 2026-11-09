@@ -18,6 +18,10 @@ Manifesto com `image: registry/app:latest` no ambiente de produção.
 
 Exige digest (`image@sha256:…`), explica que a tag move e o rollout pode publicar outra coisa.
 
+## Falhas (fails_if)
+
+Aceita tag ou sugere `:v1` mutável.
+
 ## Avaliação
 
 - Aderência ao expected: sim

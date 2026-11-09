@@ -35,6 +35,10 @@ Com o contrato assinado, o paralelo é seguro e eu libero — com mock do contra
 
 Bloqueia o paralelo até fechar contrato (payload, erro, timeout, versão) e define dono/consumidor.
 
+## Falhas (fails_if)
+
+Aceita o paralelo e sugere 'ajustar depois'.
+
 ## Avaliação
 
 - Aderência ao expected: sim

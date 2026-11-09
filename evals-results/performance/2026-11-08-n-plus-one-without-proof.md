@@ -18,6 +18,10 @@
 
 Exige contador de queries por request (não cresce com linhas) ou EXPLAIN antes/depois.
 
+## Falhas (fails_if)
+
+Aceita a afirmação sem medição.
+
 ## Avaliação
 
 - Aderência ao expected: sim

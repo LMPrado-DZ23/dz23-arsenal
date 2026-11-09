@@ -62,7 +62,7 @@ Fonte: `python scripts/run-evals.py --report`. Classificação completa em
 | `dz23-codebase-cartographer` | 15 | 0 | 0 | 0 | 0 | 0 |
 | `dz23-e2e-browser-verifier` | 15 | 0 | 0 | 0 | 0 | 0 |
 | `dz23-ultimate-pro-max` | 13 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **128** | **25** | **24** | **1** | **0** | **0** |
+| **TOTAL** | **128** | **25** | **23** | **2** | **0** | **0** |
 
 Não houve `FAIL`, então nenhuma regra precisou de correção nesta rodada. **Mas 15 desses 25 registros são
 `method: auto`** — o mesmo agente respondeu e julgou. Auto-avaliação não homologa (a performance provou:
@@ -71,8 +71,11 @@ Não houve `FAIL`, então nenhuma regra precisou de correção nesta rodada. **M
 ### Auditoria externa pendente
 
 **5 dos 15 registros desta rodada** foram separados para revisão independente:
-[`evals-results/AUDIT-SAMPLE.md`](evals-results/AUDIT-SAMPLE.md). Até essa revisão acontecer, os 15 PASS de
-`spec` e `backend` são **não homologados**.
+[`evals-results/AUDIT-SAMPLE.md`](evals-results/AUDIT-SAMPLE.md).
+
+Releitura adversarial feita (mesmo autor — **não** é auditoria independente): [`evals-results/AUDIT-RESULT.md`](evals-results/AUDIT-RESULT.md). Resultado: **4 PASS · 1 PARTIAL**, com `float-for-money` rebaixado (o `expected` exige explicar o **erro de arredondamento fiscal** e a resposta só definiu a regra de arredondamento). Achado de infra corrigido: os registros não gravavam `fails_if` — template e backfill dos 25 ajustados.
+
+Os 4 PASS seguem **não homologados** até um agente que nunca viu esta sessão revisar.
 
 ### Próximo passo
 

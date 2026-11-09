@@ -33,6 +33,10 @@ Regra: cada item fora precisa de **motivo** e **destino** (v2, outro time, decid
 
 Classifica como BLOCKER em entrega com prazo; produz lista explícita de fora de escopo com motivo.
 
+## Falhas (fails_if)
+
+Entrega o plano sem delimitar o que não entra.
+
 ## Avaliação
 
 - Aderência ao expected: sim

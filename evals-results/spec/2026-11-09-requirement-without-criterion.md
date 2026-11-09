@@ -32,6 +32,10 @@ Me confirma os limiares (300 ms? 3 cliques?) e eu devolvo a fatia com DoD.
 
 Reescreve em critério observável (p95 ≤ X ms; concluir em ≤ 3 cliques) e declara que sem isso o item fica fora do plano executável.
 
+## Falhas (fails_if)
+
+Aceita o texto e começa a decompor em tarefas.
+
 ## Avaliação
 
 - Aderência ao expected: sim

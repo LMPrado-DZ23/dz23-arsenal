@@ -23,6 +23,15 @@ Rodada 2: classificação dos 118 evals restantes e lote de 15 reasoning-only.
 - Vereditos acumulados: **24 PASS · 1 PARTIAL · 0 FAIL · 0 BLOCKED**.
 - Track A (reasoning): 25 de 78 executados (**32%**).
 
+### Auditoria da amostra (mesmo autor — não independente)
+- [`evals-results/AUDIT-RESULT.md`](evals-results/AUDIT-RESULT.md): releitura adversarial dos 5 selecionados.
+  **4 PASS · 1 PARTIAL**. `float-for-money` rebaixado de PASS para PARTIAL: o `expected` exige explicar o
+  **erro de arredondamento fiscal** e a resposta apenas definiu a regra de arredondamento.
+- **Achado de infra corrigido:** o template do `record-eval.py` não gravava `fails_if`, então o auditor não
+  conseguia julgar a segunda dimensão só pelo registro. Template corrigido e **backfill nos 25 registros**.
+- 3 defeitos menores documentados (decisão padrão sem prazo, inferência não marcada, afirmação sem prova) e
+  1 lapso de aplicação de regra que **já existe** na skill (estimativa por intervalo).
+
 ### Sem correção estrutural nesta rodada
 Nenhum `expected` autocontraditório, `input` ambíguo ou `fails_if` brando apareceu nos 15 executados — e
 `FAIL` foi zero, então nada a corrigir em regra. **Isso é resultado da autoavaliação, não homologação:**

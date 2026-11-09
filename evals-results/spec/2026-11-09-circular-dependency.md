@@ -27,6 +27,10 @@ Três saídas, em ordem de preferência:
 
 Detecta o ciclo, quebra a dependência ou funde as fatias; explica por que o plano atual é impossível.
 
+## Falhas (fails_if)
+
+Não percebe ou 'resolve' com paralelismo.
+
 ## Avaliação
 
 - Aderência ao expected: sim

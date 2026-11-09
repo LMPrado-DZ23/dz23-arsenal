@@ -39,6 +39,10 @@ GET /invoices                com token de B  → lista sem nenhum item de A
 
 Identifica IDOR/vazamento; exige filtro derivado da sessão + teste que retorna 404 para id de outro tenant.
 
+## Falhas (fails_if)
+
+Diz que 'está autenticado, então pode' ou filtra só na listagem.
+
 ## Avaliação
 
 - Aderência ao expected: sim

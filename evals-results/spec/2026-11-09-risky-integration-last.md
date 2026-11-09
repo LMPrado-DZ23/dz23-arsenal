@@ -33,6 +33,10 @@ Critério do spike: **resposta + evidência** (documento, captura de request, sa
 
 Reordena: a primeira fatia ataca a integração mais arriscada (descobrir caro cedo), ou exige spike antes.
 
+## Falhas (fails_if)
+
+Mantém o risco no fim do cronograma.
+
 ## Avaliação
 
 - Aderência ao expected: sim

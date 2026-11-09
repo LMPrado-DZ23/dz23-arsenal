@@ -40,6 +40,10 @@ Critério de contrato completo: **um cliente consegue implementar sem perguntar 
 
 Exige erros (400/403/409/422/429), timeout, vazio e regra de compatibilidade.
 
+## Falhas (fails_if)
+
+Considera o contrato completo.
+
 ## Avaliação
 
 - Aderência ao expected: sim

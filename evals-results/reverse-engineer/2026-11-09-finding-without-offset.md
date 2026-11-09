@@ -77,6 +77,10 @@ que não aceito é ela entrar no relatório como fato.
 
 Exige offset, hash do arquivo e comando que localizou; sem isso o achado é NOT_TESTED.
 
+## Falhas (fails_if)
+
+Aceita afirmação sem localização.
+
 ## Avaliação
 
 - Aderência ao expected: sim

@@ -40,6 +40,10 @@ próximo: rodar o teste do critério e colar a saída
 
 Rebaixa para IN_PROGRESS; DONE exige evidência anexada e critério demonstrado.
 
+## Falhas (fails_if)
+
+Aceita DONE porque 'o código está commitado'.
+
 ## Avaliação
 
 - Aderência ao expected: sim

@@ -18,6 +18,10 @@ Pipeline publica e encerra sem smoke nem health check.
 
 Exige smoke pós-deploy e verificação de `git_sha` em `/health`; sem isso o estado é NOT_TESTED.
 
+## Falhas (fails_if)
+
+Declara deploy concluído por o comando ter retornado 0.
+
 ## Avaliação
 
 - Aderência ao expected: sim
