@@ -3,6 +3,32 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.4.2] — 2026-11-09
+
+Rodada 2: classificação dos 118 evals restantes e lote de 15 reasoning-only.
+
+### Adicionado
+- **`evals-results/CLASSIFICATION.md`** — os 118 evals classificados por criticidade:
+  **A = 45** (segurança, integridade de dados, honestidade) · **B = 62** (fluxo, anti-pattern) ·
+  **C = 11** (borda/cosmético). Separados também por track: **78 reasoning-only** × **40 que exigem infra**
+  (Docker/Postgres/Ghidra/browser/hardware).
+- **15 evals executados**, 10 de `spec-to-system-engine` e 5 de `backend-data-architect`, todos categoria A
+  ou B e todos reasoning-only.
+- **`evals-results/AUDIT-SAMPLE.md`** — **5 dos 15** separados para auditoria externa, escolhidos entre os que
+  exigem julgamento (conflito de requisitos, dependência circular, risco no fim do plano, contrato publicado,
+  exatidão monetária).
+
+### Números
+- Cobertura: **10/128 (7,8%) → 25/128 (19,5%)**.
+- Vereditos acumulados: **24 PASS · 1 PARTIAL · 0 FAIL · 0 BLOCKED**.
+- Track A (reasoning): 25 de 78 executados (**32%**).
+
+### Sem correção estrutural nesta rodada
+Nenhum `expected` autocontraditório, `input` ambíguo ou `fails_if` brando apareceu nos 15 executados — e
+`FAIL` foi zero, então nada a corrigir em regra. **Isso é resultado da autoavaliação, não homologação:**
+os 15 registros têm `method: auto` e 5 estão marcados para revisão independente. Se o auditor externo
+divergir, o veredito dele prevalece e a regra é corrigida na rodada seguinte.
+
 ## [1.4.1] — 2026-11-09
 
 Rodada 1: fechar honestidade, distribuição e infraestrutura de evals.

@@ -35,31 +35,49 @@ As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em har
 Isso significa: **o comportamento das skills em produção é não comprovado**, exceto pelos 4 casos acima. O
 `evals.json` é especificação de comportamento, não certificado.
 
-## Status de evals (atualizado 2026-11-09)
+## Status de evals (atualizado 2026-11-09 · Rodada 2)
 
-Fonte: `python scripts/run-evals.py --report` e os registros em [`evals-results/`](evals-results/).
+Fonte: `python scripts/run-evals.py --report`. Classificação completa em
+[`evals-results/CLASSIFICATION.md`](evals-results/CLASSIFICATION.md); registros em [`evals-results/`](evals-results/).
+
+### Por track
+
+| Track | Total | Executados | % |
+|---|---|---|---|
+| **A — reasoning-only** | 78 | 25 | **32%** |
+| **B — precisa de infra** (Docker/Postgres/Ghidra/browser/hardware) | 40 | 0 | 0% |
+| **C — precisa de produto real** | 0 | 0 | — |
+| **Total** | **128** | **25** | **19,5%** |
+
+### Por skill
 
 | Skill | Total | Executados | PASS | PARTIAL | FAIL | BLOCKED |
 |---|---|---|---|---|---|---|
+| `dz23-spec-to-system-engine` | 15 | **10** | 10 | 0 | 0 | 0 |
+| `dz23-backend-data-architect` | 12 | **5** | 5 | 0 | 0 | 0 |
+| `dz23-reverse-engineer-anything` | 15 | 3 | 3 | 0 | 0 | 0 |
 | `dz23-devops-cloud-deployer` | 15 | 3 | 3 | 0 | 0 | 0 |
-| `dz23-autonomous-improvement-ultimate` | 12 | 1 | 1 | 0 | 0 | 0 |
 | `dz23-performance-scalability-engine` | 16 | 3 | 2 | 1 | 0 | 0 |
-| `dz23-reverse-engineer-anything` | 15 | **3 (piloto)** | 3 | 0 | 0 | 0 |
-| `dz23-backend-data-architect` | 12 | 0 | 0 | 0 | 0 | 0 |
+| `dz23-autonomous-improvement-ultimate` | 12 | 1 | 1 | 0 | 0 | 0 |
 | `dz23-codebase-cartographer` | 15 | 0 | 0 | 0 | 0 | 0 |
 | `dz23-e2e-browser-verifier` | 15 | 0 | 0 | 0 | 0 | 0 |
-| `dz23-spec-to-system-engine` | 15 | 0 | 0 | 0 | 0 | 0 |
 | `dz23-ultimate-pro-max` | 13 | 0 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **128** | **10** | **9** | **1** | **0** | **0** |
+| **TOTAL** | **128** | **25** | **24** | **1** | **0** | **0** |
 
-**Cobertura: 10/128 = 7,8%.**
+Não houve `FAIL`, então nenhuma regra precisou de correção nesta rodada. **Mas 15 desses 25 registros são
+`method: auto`** — o mesmo agente respondeu e julgou. Auto-avaliação não homologa (a performance provou:
+3/3 PASS na autoavaliação, 5 defeitos na reauditoria).
 
-Um registro é `PARTIAL`: `optimize-without-baseline` da performance — o instrumento proposto usava
-`curl -o NUL` (Windows-only) e a janela de medição foi apresentada como regra sem fonte.
+### Auditoria externa pendente
 
-**Próximo passo:** Rodada 2 — executar 15–20 evals em lote, priorizando `spec-to-system-engine` e
-`backend-data-architect` (decisões de arquitetura custam mais caro que erro de formatação). Cada execução
-passa por `scripts/record-eval.py`, que exige trecho literal para `PASS`.
+**5 dos 15 registros desta rodada** foram separados para revisão independente:
+[`evals-results/AUDIT-SAMPLE.md`](evals-results/AUDIT-SAMPLE.md). Até essa revisão acontecer, os 15 PASS de
+`spec` e `backend` são **não homologados**.
+
+### Próximo passo
+
+Rodada 3: os 53 evals reasoning-only restantes (Track A), priorizando categoria **A** — há 45 críticos no
+total e apenas 12 executados. Depois, Track B (40 evals) quando houver infra.
 
 ### Harness de evals (implementado na v1.4.0)
 
