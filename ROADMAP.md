@@ -45,17 +45,17 @@ Fonte: `python scripts/run-evals.py --report` · estado de auditoria: `--audit` 
 
 | Track | Pendentes | Executados | Observação |
 |---|---|---|---|
-| **A — reasoning-only** | 43 | 45 | executável sem infra |
+| **A — reasoning-only** | 56 | 45 | executável sem infra (inclui 13 do pré-flight de banco) |
 | **B — exige infra** | 40 | 0 | `BLOCKED` por Docker/Postgres/Ghidra/browser/hardware |
 | **Novos (v1.4.5)** | 3 | 0 | OB-03/04/05 — nasceram depois da classificação |
-| **Total pendente** | **86** | — | de 131 declarados |
+| **Total pendente** | **99** | — | de 144 declarados |
 
 ### Cobertura
 
 | Métrica | Valor |
 |---|---|
-| Declarados | **131** |
-| Executados | **45 (34,4%)** |
+| Declarados | **144** |
+| Executados | **45 (31,2%)** |
 | Criticidade A (crítico) identificada | 45 |
 | Críticos executados | **32 (71%)** — os 13 restantes exigem infra |
 | Auditados em literais | **16/16 da amostra** |
@@ -74,7 +74,8 @@ Fonte: `python scripts/run-evals.py --report` · estado de auditoria: `--audit` 
 | `dz23-reverse-engineer-anything` | 15 | 3 | 3 | 0 | 0 |
 | `dz23-e2e-browser-verifier` | 16 | 1 | 1 | 0 | 0 |
 | `dz23-ultimate-pro-max` | 13 | 1 | 1 | 0 | 0 |
-| **TOTAL** | **131** | **45** | **43** | **2** | **0** |
+| `dz23-postgres-prod-preflight` | 13 | 0 | 0 | 0 | 0 |
+| **TOTAL** | **144** | **45** | **43** | **2** | **0** |
 
 ### Auditoria (camada 3)
 

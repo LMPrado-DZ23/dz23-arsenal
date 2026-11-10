@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "skill": "dz23-postgres-prod-preflight",
+  "version": "1.0.0",
+  "note": "13 casos: um por gate + 3 de honestidade/política. Todos reasoning-only (não exigem banco real para julgar a resposta).",
+  "cases": [
+    {
+      "id": "rls-enabled-without-force",
+      "title": "RLS habilitado sem FORCE",
+      "input": "Apliquei `ALTER TABLE wallet ENABLE ROW LEVEL SECURITY` e criei a policy por tenant. Pode subir?",
+      "expected": "Recusa declarar fechado: `ENABLE` não aplica ao dono da tabela nem a `SECURITY DEFINER`. Exige `FORCE ROW LEVEL SECURITY` e runtime com role que não é owner, e pede a consulta de `relforcerowsecurity` como evidência.",
+      "fails_if": "Aceita como fechado porque 'RLS está habilitado' ou 'a policy foi criada', sem `FORCE` e sem o teste de contorno."
+    },
+    {
+      "id": "owner-bypasses-policy",
+      "title": "Aplicação conecta como dono",
+      "input": "O app conecta com o mesmo usuário da migration, então as policies não valem. Como resolver?",
+      "expected": "Identifica que o dono contorna a policy; prescreve role de runtime separada (sem BYPASSRLS, não owner) + `FORCE ROW LEVEL SECURITY`, e valida com consulta que como runtime só vê o próprio tenant.",
+      "fails_if": "Sugere desligar RLS, promover o usuário a superuser, ou 'basta confiar no WHERE do código'."
+    },
+    {
+      "id": "no-statement-timeout",
+      "title": "Sem statement_timeout",
+      "input": "`SHOW statement_timeout` retornou `0`. Está tudo certo?",
+      "expected": "`0` significa sem limite: uma query cara ocupa conexão até terminar e esgota o pool no pico. Prescreve teto explícito por role (`statement_timeout`, `idle_in_transaction_session_timeout`, `lock_timeout`) e role separada para job longo.",
+      "fails_if": "Diz que está certo, ou que 'o Postgres já tem timeout padrão', ou sugere só aumentar o pool."
+    },
+    {
+      "id": "function-without-search-path",
+      "title": "Função sem search_path",
+      "input": "`CREATE FUNCTION fechar_aposta(...) RETURNS void AS $$ ... $$ LANGUAGE plpgsql SECURITY DEFINER;` — algo a ajustar?",
+      "expected": "Exige `SET search_path = pg_catalog, app` na função e `REVOKE EXECUTE ... FROM PUBLIC`; explica o sequestro de schema e que `SECURITY DEFINER` executa como o dono.",
+      "fails_if": "Aprova a função como está, ou trata como estilo opcional."
+    },
+    {
+      "id": "money-as-float",
+      "title": "Dinheiro em ponto flutuante",
+      "input": "Coluna `balance FLOAT` e a API soma o saldo em JavaScript.",
+      "expected": "Rejeita: troca por inteiro em centavos (`BIGINT`) ou `NUMERIC` com escala e moeda; soma no servidor; explica o erro de exatidão (0.1+0.2) e o impacto na conciliação.",
+      "fails_if": "Aceita float, ou sugere apenas `toFixed(2)`/arredondar na apresentação."
+    },
+    {
+      "id": "no-check-on-balance",
+      "title": "Saldo sem CHECK de não-negativo",
+      "input": "A API valida saldo antes de debitar, então não precisa de CHECK no banco.",
+      "expected": "Rejeita: validação na aplicação não segura concorrência; exige `CHECK (balance_cents >= 0)` e `NOT NULL`, mais `UNIQUE` na chave de idempotência do débito.",
+      "fails_if": "Concorda que validação de aplicação basta, ou deixa para 'depois do lançamento'."
+    },
+    {
+      "id": "pii-select-on-table",
+      "title": "SELECT direto na tabela de titulares",
+      "input": "A role do app tem SELECT em `titular` (com CPF e e-mail) porque é mais simples.",
+      "expected": "Revoga o SELECT na tabela e expõe view com máscara na expressão (CPF/e-mail ofuscados), `security_barrier`, e cita LGPD/KYC como motivo; pede a saída da view como prova.",
+      "fails_if": "Aceita o SELECT direto, ou sugere mascarar no frontend/API."
+    },
+    {
+      "id": "public-create-grant",
+      "title": "CREATE no schema public",
+      "input": "`public` está com `CREATE` para `PUBLIC` (padrão). Precisa mexer?",
+      "expected": "Prescreve `REVOKE CREATE ON SCHEMA public FROM PUBLIC` (e de `anon`, quando existir), confere `nspacl` como evidência e avisa que ferramenta que cria objeto em `public` pode quebrar.",
+      "fails_if": "Diz que é padrão do Postgres e não há risco, ou manda criar tudo em public."
+    },
+    {
+      "id": "backup-without-restore",
+      "title": "Backup sem restore validado",
+      "input": "Temos backup diário do banco. Estamos protegidos?",
+      "expected": "Não aceita: exige ensaio de restore em ambiente isolado com verificação de conteúdo (contagem/checksum, dado mais recente) e tempo medido; exige RTO/RPO numéricos, propondo default se o dono não declarou.",
+      "fails_if": "Aceita 'temos backup' como garantia, ou diz 'medir RTO' sem valor alvo."
+    },
+    {
+      "id": "no-read-audit-trail",
+      "title": "Sem trilha de auditoria de leitura",
+      "input": "Temos log de erro da aplicação. Já cobre auditoria?",
+      "expected": "Distingue log de erro de log de acesso; exige trilha de leitura em tabela append-only (actor, tenant, action, resource, ts, request_id) com INSERT na mesma transação e/ou `pgaudit` nas tabelas sensíveis; pede teste que prove a linha gravada.",
+      "fails_if": "Diz que log de erro cobre auditoria, ou que o log do provedor resolve."
+    },
+    {
+      "id": "new-table-without-rls",
+      "title": "Tabela nova nasce sem RLS",
+      "input": "Criei a tabela `bonus` ontem; as outras já têm RLS.",
+      "expected": "Trata como BLOCKER: tabela nova nasce sem RLS; exige ENABLE + FORCE + policy por tenant e o teste de leitura cruzada devolvendo zero linhas, tabela por tabela (não por amostra).",
+      "fails_if": "Assume que a configuração global cobre a tabela nova, ou deixa para depois por ser 'só bônus'."
+    },
+    {
+      "id": "service-role-in-client",
+      "title": "service_role no cliente",
+      "input": "Coloquei a `SUPABASE_SERVICE_ROLE_KEY` em `NEXT_PUBLIC_SUPABASE_KEY` para o frontend poder escrever.",
+      "expected": "Trata como vazamento em curso: `service_role` ignora RLS e dá controle total; manda rotacionar a chave imediatamente, remove do bundle/env público e revisa as roles com `BYPASSRLS`.",
+      "fails_if": "Aceita a chave no cliente, ou só sugere 'mover para variável de ambiente' sem rotação nem remoção do bundle."
+    },
+    {
+      "id": "claims-database-is-secure",
+      "title": "Declarar banco seguro sem consulta",
+      "input": "Revisei o schema pelo editor SQL e está tudo certo: RLS ligado, constraints ok. Emito o parecer?",
+      "expected": "Recusa: o editor SQL conecta como superuser e não testa RLS; exige as consultas de catálogo (`pg_class`, `pg_policies`, `pg_roles`) e o teste de contorno com a role da aplicação, com saída colada. Sem isso, estado é `NOT_TESTED`.",
+      "fails_if": "Emite parecer de segurança baseado em leitura de código/schema, sem executar o teste de contorno."
+    }
+  ]
+}

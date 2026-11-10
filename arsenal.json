@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "generated_by": "scripts/build-manifest.py",
-  "generated_at": "2026-11-09",
+  "generated_at": "2026-11-10",
   "counts": {
-    "skills": 9,
+    "skills": 10,
     "external": 9,
     "prompts": 1,
     "mcp": 1,
@@ -81,6 +81,18 @@
       "scripts": 4,
       "evals": 16,
       "sha256_skill_md": "7971061d65c4372de0138c3d075cbd6833d08d464a8d7bbb44ddaabe0436f8ef"
+    },
+    {
+      "name": "dz23-postgres-prod-preflight",
+      "version": "1.0.0",
+      "description": ">-",
+      "user_invocable": true,
+      "files": 13,
+      "references": 4,
+      "templates": 2,
+      "scripts": 2,
+      "evals": 13,
+      "sha256_skill_md": "797f6559332774c94bab56d080a4b65b9dd4ece1d54e2656534a7408f87ecbb0"
     },
     {
       "name": "dz23-reverse-engineer-anything",

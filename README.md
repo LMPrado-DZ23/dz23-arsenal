@@ -39,7 +39,7 @@ pwsh scripts/verify-cli.ps1
 As skills ficam em `~/.agents/skills/<nome>/` e são descobertas automaticamente por Claude Code, DeepSeek
 Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/skills`).
 
-## Índice — Skills DZ23 (9)
+## Índice — Skills DZ23 (10)
 
 | Skill | Versão | Para quê | Quando usar |
 |---|---|---|---|
@@ -49,6 +49,7 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 | [`dz23-devops-cloud-deployer`](skills/dz23-devops-cloud-deployer/) | 1.2.1 | Deploy, CI/CD, IaC | Container, K8s, cloud |
 | [`dz23-e2e-browser-verifier`](skills/dz23-e2e-browser-verifier/) | 1.1.0 | E2E com Playwright | Verificação de UI |
 | [`dz23-performance-scalability-engine`](skills/dz23-performance-scalability-engine/) | 1.3.0 | Otimização 4 camadas | Performance, latência, budget |
+| [`dz23-postgres-prod-preflight`](skills/dz23-postgres-prod-preflight/) | 1.0.0 | Pré-deploy de banco: 10 gates | Antes de subir schema, RLS ou credencial |
 | [`dz23-reverse-engineer-anything`](skills/dz23-reverse-engineer-anything/) | 1.1.1 | RE de binários/firmware | Análise de binário, CTF, audit |
 | [`dz23-spec-to-system-engine`](skills/dz23-spec-to-system-engine/) | 1.2.0 | Spec executável | PRD, decomposição, Gherkin |
 | [`dz23-ultimate-pro-max`](skills/dz23-ultimate-pro-max/) | 2.2.0 | Frontend/UI/UX | Componente, landing, a11y |
@@ -134,14 +135,14 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 
 ## Estado verificado (não é marketing)
 
-Este repo publica **9 skills DZ23 + 1 MCP + 1 bundle + 7 skills externas empacotadas** e **9 referências
+Este repo publica **10 skills DZ23 + 1 MCP + 1 bundle + 7 skills externas empacotadas** e **9 referências
 externas** documentadas. **O que está publicado é diferente do que está verificado.**
 
 | Métrica | Valor |
 |---|---|
-| Skills publicadas | 9 DZ23 + 1 MCP + 1 bundle + 7 externas (+9 referências externas) |
-| Evals declarados | **131** |
-| **Evals executados** | **45/131 (34,4%)** — 43 PASS · 2 PARTIAL · 0 FAIL |
+| Skills publicadas | **10** DZ23 + 1 MCP + 1 bundle + 7 externas (+9 referências externas) |
+| Evals declarados | **144** |
+| **Evals executados** | **45/144 (31,2%)** — 43 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |
 | **Laudo original da auditoria** | **`INVALIDO_COMO_EVIDENCIA`** — 54 de 68 citações não existem nas respostas |
 | Críticos executados | **32 de 45 identificados (71%)** — 13 exigem infra |
@@ -156,7 +157,7 @@ nenhuma enxerga o que a outra enxerga:
 
 | Camada | Cobertura | Erro que só ela mostra |
 |---|---|---|
-| 1 — autoavaliação | 45/131 | viés de confirmação |
+| 1 — autoavaliação | 45/144 | viés de confirmação |
 | 2 — re-leitura adversarial | 20/45 | violação de regra **vizinha** ao eval |
 | 3 — auditoria externa | 16/16 da amostra, em literais | paráfrase do input + citação fabricada |
 | 4 — projeto real | 1 tarefa (CI verde) | ferramenta acusando evidência **legítima** |
@@ -167,7 +168,7 @@ pessoa transforma erro em retrabalho, não em parágrafo.
 
 ### O que NÃO está provado
 
-- **86 de 131 evals nunca executados** (65,6%)
+- **99 de 144 evals nunca executados** (68,8%)
 - **40 evals bloqueados** por ausência de infra (Docker/Postgres/Ghidra/browser/hardware), 13 deles críticos
 - **3 evals criados na v1.4.5** (OB-03/04/05) nunca executados nem auditados
 - **Camada 4 fora do próprio repo:** 0 tarefas
