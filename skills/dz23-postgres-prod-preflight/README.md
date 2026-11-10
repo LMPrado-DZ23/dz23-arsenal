@@ -36,6 +36,17 @@ python scripts/pg_preflight.py --dsn "$URL" --json
 
 Sem `psql` no PATH o script sai com `2` e instrução — e `--dry-run` continua funcionando.
 
+## Verificado contra banco real
+
+Executado em `postgres:16-alpine` (2026-11-10), com **dois controles**:
+
+| Cenário | Resultado |
+|---|---|
+| Banco bem feito | **9 PASS + P7 MANUAL · exit 0** |
+| Banco com os defeitos clássicos | **9 FAIL · exit 1** |
+
+Detalhe e o que continua `NOT_TESTED`: [`references/verificacao.md`](references/verificacao.md).
+
 ## Regra central
 
 **Gate sem consulta anexada é `NOT_TESTED`, não `PASS`.** Por isso o script marca `MANUAL` os gates de processo

@@ -1,6 +1,6 @@
 ---
 name: dz23-postgres-prod-preflight
-version: 1.0.0
+version: 1.1.0
 description: >-
   Auditoria de pré-produção para Postgres e Supabase: 10 gates de segurança e integridade que a IA costuma
   deixar passar (RLS sem FORCE, statement_timeout ausente, search_path mutável, constraints fora do banco,

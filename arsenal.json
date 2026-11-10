@@ -84,15 +84,15 @@
     },
     {
       "name": "dz23-postgres-prod-preflight",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": ">-",
       "user_invocable": true,
-      "files": 13,
-      "references": 4,
+      "files": 14,
+      "references": 5,
       "templates": 2,
       "scripts": 2,
       "evals": 13,
-      "sha256_skill_md": "797f6559332774c94bab56d080a4b65b9dd4ece1d54e2656534a7408f87ecbb0"
+      "sha256_skill_md": "529c23516dc899d3dba8cca9ad5284af446e1f483f1d31d282a85359528f6bcc"
     },
     {
       "name": "dz23-reverse-engineer-anything",
