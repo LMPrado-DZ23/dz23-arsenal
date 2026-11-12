@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "generated_by": "scripts/build-manifest.py",
-  "generated_at": "2026-11-10",
+  "generated_at": "2026-11-12",
   "counts": {
     "skills": 10,
-    "external": 9,
+    "external": 13,
     "prompts": 1,
     "mcp": 1,
     "bundle": 1
@@ -138,9 +138,29 @@
       "repo": "https://github.com/anthropics/skills"
     },
     {
+      "file": "external/astryx.md",
+      "autor": null,
+      "repo": null
+    },
+    {
       "file": "external/cloudflare-security-audit.md",
       "autor": "Cloudflare",
       "repo": "https://github.com/cloudflare/security-audit-skill"
+    },
+    {
+      "file": "external/modern-web-guidance.md",
+      "autor": null,
+      "repo": null
+    },
+    {
+      "file": "external/pentagi.md",
+      "autor": null,
+      "repo": null
+    },
+    {
+      "file": "external/phone-agent-harness.md",
+      "autor": null,
+      "repo": null
     },
     {
       "file": "external/playwright-mcp.md",

@@ -1,0 +1,13 @@
+Gemini CLI   (~/.gemini/settings.json):
+  {"mcpServers":{"pentagi":{"command":"node","args":["<SERVER_JS>"],
+   "env":{"PENTAGI_URL":"<URL>","PENTAGI_TOKEN_FILE":"<TOKEN_FILE>"}}}}
+
+Qwen Code    (~/.qwen/settings.json): mesmo formato do Gemini CLI.
+
+OpenCode     (~/.config/opencode/opencode.json):
+  {"mcp":{"pentagi":{"type":"local","command":["node","<SERVER_JS>"],
+   "environment":{"PENTAGI_URL":"<URL>","PENTAGI_TOKEN_FILE":"<TOKEN_FILE>"},"enabled":true}}}
+
+Cursor       (~/.cursor/mcp.json): mesmo formato do Claude Code (mcpServers).
+
+Copilot CLI  (~/.copilot/mcp-config.json): mesmo formato do Claude Code (mcpServers).

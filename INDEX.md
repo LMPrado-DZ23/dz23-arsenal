@@ -1,8 +1,8 @@
 # Índice do arsenal
 
-> Gerado por `scripts/build-manifest.py` em 2026-11-10. **Não editar à mão** — rode o script.
+> Gerado por `scripts/build-manifest.py` em 2026-11-12. **Não editar à mão** — rode o script.
 
-**10 skills · 9 externas · 1 prompt(s) · 1 MCP · 1 bundle**
+**10 skills · 13 externas · 1 prompt(s) · 1 MCP · 1 bundle**
 
 ## Skills
 
@@ -31,7 +31,11 @@
 | Skill | Autor | Repositório |
 |---|---|---|
 | [anthropic-skills](external/anthropic-skills.md) | Anthropic | https://github.com/anthropics/skills |
+| [astryx](external/astryx.md) | — | — |
 | [cloudflare-security-audit](external/cloudflare-security-audit.md) | Cloudflare | https://github.com/cloudflare/security-audit-skill |
+| [modern-web-guidance](external/modern-web-guidance.md) | — | — |
+| [pentagi](external/pentagi.md) | — | — |
+| [phone-agent-harness](external/phone-agent-harness.md) | — | — |
 | [playwright-mcp](external/playwright-mcp.md) | Microsoft | https://github.com/microsoft/playwright-mcp |
 | [rea](external/rea.md) | morluto | https://github.com/morluto/rea |
 | [supabase-postgres-best-practices](external/supabase-postgres-best-practices.md) | Supabase | https://github.com/supabase/agent-skills |

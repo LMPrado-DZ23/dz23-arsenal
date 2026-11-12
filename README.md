@@ -62,8 +62,10 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 |---|---|---|---|
 | [`dz23-subagents-universal-mcp`](mcp/dz23-subagents-universal-mcp/) | MCP (Node) | 4.4.1 | Sub-agentes com 28 tools |
 | [`dz23-dsh-agency`](bundle/dz23-dsh-agency/) | Bundle | 1.0.0 | 88 agentes especializados + Diretor |
+| [`pentagi-mcp`](mcp/pentagi-mcp/) | 1.0.0 | 8 ferramentas MCP sobre a API do PentAGI (pentest autônomo) |
 
-## Skills externas recomendadas (9)
+
+## Skills e plataformas externas (13)
 
 | Skill | Autor | Para quê | Repo |
 |---|---|---|---|
@@ -135,12 +137,12 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 
 ## Estado verificado (não é marketing)
 
-Este repo publica **10 skills DZ23 + 1 MCP + 1 bundle + 7 skills externas empacotadas** e **9 referências
+Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **13 referências
 externas** documentadas. **O que está publicado é diferente do que está verificado.**
 
 | Métrica | Valor |
 |---|---|
-| Skills publicadas | **10** DZ23 + 1 MCP + 1 bundle + 7 externas (+9 referências externas) |
+| Skills publicadas | **10** DZ23 + **2 MCP** + 1 bundle + 7 externas (+13 referências externas) |
 | Evals declarados | **144** |
 | **Evals executados** | **45/144 (31,2%)** — 43 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |

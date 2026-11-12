@@ -1,0 +1,24 @@
+{
+  "name": "pentagi-mcp",
+  "version": "1.0.0",
+  "description": "MCP server that exposes PentAGI (self-hosted autonomous pentest platform) to any MCP-capable harness: DSH, Claude Code, Codex, Gemini CLI, Qwen Code, OpenCode, Cursor.",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "pentagi-mcp": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "selftest": "node scripts/selftest.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.20.0",
+    "undici": "^8.12.4",
+    "zod": "^3.25.0"
+  },
+  "license": "MIT",
+  "private": true
+}
