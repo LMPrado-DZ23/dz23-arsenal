@@ -1,6 +1,6 @@
 # Índice do arsenal
 
-> Gerado por `scripts/build-manifest.py` em 2026-11-12. **Não editar à mão** — rode o script.
+> Gerado por `scripts/build-manifest.py` em 2026-11-14. **Não editar à mão** — rode o script.
 
 **10 skills · 13 externas · 1 prompt(s) · 1 MCP · 1 bundle**
 
@@ -15,7 +15,7 @@
 | [dz23-e2e-browser-verifier](skills/dz23-e2e-browser-verifier/) | 1.1.1 | 23 | 10 | 6 | 1 | 16 |
 | [dz23-performance-scalability-engine](skills/dz23-performance-scalability-engine/) | 1.3.0 | 26 | 10 | 6 | 4 | 16 |
 | [dz23-postgres-prod-preflight](skills/dz23-postgres-prod-preflight/) | 1.1.0 | 14 | 5 | 2 | 2 | 13 |
-| [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.1.2 | 25 | 12 | 4 | 3 | 15 |
+| [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.1.3 | 25 | 12 | 4 | 3 | 15 |
 | [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.2.0 | 44 | 17 | 11 | 3 | 15 |
 | [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.2 | 16 | 9 | 0 | 1 | 13 |
 

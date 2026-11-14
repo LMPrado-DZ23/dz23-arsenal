@@ -5,30 +5,38 @@ promete. Registro aqui para não repetir a suposição.
 
 ## REA (Reverse Engineering Agent)
 
-| Campo | Valor verificado (2026-11-08) |
+| Campo | Valor verificado (2026-11-14 — substitui o registro de 2026-11-08) |
 |---|---|
-| Versão | `rea-agents@6.8.0` |
-| Tamanho | 281 MB (9.064 arquivos) |
-| Comando | `rea --version` → 6.8.0 ✅ |
-| Estado | **`INSTALLED_NO_ENGINE`** |
-| `rea analyze` PE | ❌ `provider_unavailable`, exit 1 |
-| `rea analyze` ELF | ❌ `provider_unavailable`, exit 1 |
-| `rea doctor` | 21 checks, 19 falhas |
+| Versões | `rea-agents@6.8.0` (Windows) · **6.9.0** (WSL) |
+| Estado | **`AVAILABLE`** — engines instalados **e** configurados |
+| Ghidra | 12.1.4 PUBLIC, `GHIDRA_INSTALL_DIR` setado nos dois hosts |
+| jadx | 0.7.1, `REA_JADX_MCP_JAR` setado |
+| Desmontagem | ✅ provada — `procedure_pseudo_code` devolveu `entry` de PE x86-64 |
+| APK | ✅ provado — 20.990 classes, 1.842 recursos |
+| Apoio | apktool 3.0.3 · adb 37.0.1 · WABT 1.0.42 · unblob 26.6.4 · tshark |
+| `rea doctor` | `ghidra` ok (+8 subchecagens) e `jadx` ok; restam `ida`/`kuna` ausentes |
 
-**Engines ausentes:** `ghidra` (`GHIDRA_INSTALL_DIR` não setado), `ida` (`REA_IDA_MCP_CONFIG`),
-`jadx` (`REA_JADX_MCP_JAR`), `kuna` (`REA_KUNA_COMMAND`), `hopper` (não suportado em Windows).
+**Engines ainda ausentes:** `ida` (`REA_IDA_MCP_CONFIG`), `kuna` (`REA_KUNA_COMMAND`), `jeb`
+(cliente em `127.0.0.1:8425`), `hopper` (só macOS).
 
-**Providers presentes (não são engines de análise):** `rea-dotnet-static` (3/3), `sqlite` (1/1),
-`rea-artifact-graph` (2/3, e não aceito como `--provider analyze`), `native-macos` (0/4, host errado).
+**Armadilha que gerou dois diagnósticos errados seguidos (2026-11-08):** o REA estava instalado mas os
+servers MCP subiam **sem** a env de provider, então a CLI respondia `provider_unavailable` em PE e ELF
+mesmo com tudo no disco. **Instalado ≠ configurado no processo.** O estado só vale se medido com a env
+do processo que vai executar.
 
-**Para desbloquear:**
+**Como iniciar:**
 
-- **PE no Windows:** Ghidra 12.1.x + `GHIDRA_INSTALL_DIR`
-- **ELF:** Ghidra no **WSL**, ou IDA, ou Kuna
-- **Limitação:** Ghidra P0 no Windows aceita apenas PE e raw 6502
+- Windows/WSL: `. D:\IA-Workspace\Deepseek\tools\rea-env.ps1` · `source /mnt/d/.../tools/rea-env.sh`
+- Confira: `rea doctor` (Ghidra e jadx `ok: true`) antes de declarar `AVAILABLE`
+- No DSH, os servers MCP `rea` e `rea-linux` já recebem a env pela config
+  (`.dsh\cordis.patch.yml` e `.dsh\profiles\desktop\cordis.patch.yml`)
 
-**Consequência para as skills:** `dz23-reverse-engineer-anything` declara desmontagem/emulação como
-`BLOCKED_BY_EXTERNAL_DEPENDENCY` e usa `re_toolkit.py` (parse estrutural) como fallback.
+**Limitação:** Ghidra P0 no Windows aceita apenas PE e raw 6502; para ELF use o WSL. Ghidra no Windows
+também não renomeia nem comenta (limite do P0).
+
+**Consequência para as skills:** `dz23-reverse-engineer-anything` passa a usar o REA para desmontagem,
+pseudocódigo, APK e wasm, mantendo `re_toolkit.py` como fallback offline para firmware e parse
+estrutural.
 
 ## Ferramentas ausentes que bloqueiam fluxo
 
@@ -49,7 +57,7 @@ Registradas em detalhe em [`recommended.md`](recommended.md). As que mais bloque
 |---|---|---|---|
 | `kubectl` | ✅ | ❌ | sem contexto (`kubectl config current-context` falha) |
 | `docker` | ✅ | ✅ | daemon ativo, poucas imagens |
-| `rea` | ✅ | ⚠️ parcial | sem engine de análise |
+| `rea` | ✅ | ✅ | engines configurados; a env é lida no startup do processo |
 | `objdump`/`readelf` | ✅ | ⚠️ parcial | toolchain GNU do Windows; sobre ELF Linux o comportamento é limitado |
 
 ## Regra

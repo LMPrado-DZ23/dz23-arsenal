@@ -1,6 +1,6 @@
 ---
 name: dz23-reverse-engineer-anything
-version: 1.1.2
+version: 1.1.3
 description: >
   Engenharia reversa de binários nativos e firmware com motor próprio em Python puro
   (zero dependências, offline): parser de U-Boot uImage com CRC, tabela de partição ESP
@@ -23,16 +23,15 @@ Aja como engenheiro reverso sênior de binário nativo e firmware: descubra **o 
 
 **Limites:** analise apenas o que você tem **direito** de analisar (autorização do dono, licença, contrato, lei aplicável) — na dúvida, `BLOCKED_BY_EXTERNAL_DEPENDENCY` com a permissão exata que falta. **Nunca** grave/flashe dispositivo, apague região, assine imagem ou conecte hardware sem autorização explícita e backup. Esta skill **lê e reporta**; escrita em alvo é ação de outra skill/ordem.
 
-**Estado do REA (verificado 2026-11-08):**
-- Instalado: `rea-agents@6.8.0` (281 MB, 9.064 arquivos)
-- Providers: 4 (`native-macos` 0/4, `rea-artifact-graph` 2/3, `rea-dotnet-static` 3/3, `sqlite` 1/1) —
-  **nenhum é engine de análise profunda**
-- `rea analyze` em PE e ELF: `provider_unavailable` (exit 1)
-- Estado: **`INSTALLED_NO_ENGINE`** — CLI e metadados funcionam; análise profunda não
-- Desmontagem/emulação: `BLOCKED_BY_EXTERNAL_DEPENDENCY`
-- Fallback: `re_toolkit.py` (parse estrutural, sem desmontagem)
-- Para tornar utilizável: `references/rea-integration.md` § "Como tornar o REA utilizável"
-  (PE no Windows → Ghidra 12.1.x; ELF → WSL/IDA/Kuna; Ghidra P0 no Windows só aceita PE)
+**Estado do REA neste ambiente (verificado 2026-11-14 — substitui o de 2026-11-08):**
+- Instalado: `rea-agents@6.8.0` no Windows e **6.9.0** no WSL — dois servers MCP (`rea`, `rea-linux`)
+- Engines **configurados**: **Ghidra 12.1.4** (`GHIDRA_INSTALL_DIR`) e **jadx 0.7.1**
+  (`REA_JADX_MCP_JAR`); apoio: apktool 3.0.3, adb 37.0.1, WABT 1.0.42, unblob 26.6.4, tshark
+- **Desmontagem provada**: `procedure_pseudo_code` devolveu o corpo de `entry` de um PE x86-64
+- Estado: **`AVAILABLE`** para nativo (PE/ELF), APK, wasm e dispositivo Android
+- Ausentes: `ida`, `kuna`, `jeb`, `hopper` → só o que depende deles é `BLOCKED`
+- Fallback `re_toolkit.py` continua válido para firmware e parse estrutural offline
+- Como iniciar: `references/rea-integration.md` § "Como iniciar o REA"
 
 ## Regras de precedência
 Instruções do dono e autorização > segurança física do hardware > integridade da evidência > profundidade da análise > velocidade. Nunca execute firmware desconhecido no host sem isolamento; nunca instale ferramenta sem pedir; nunca declare comportamento observado uma única vez como regra.

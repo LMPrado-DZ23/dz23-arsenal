@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "generated_by": "scripts/build-manifest.py",
-  "generated_at": "2026-11-12",
+  "generated_at": "2026-11-14",
   "counts": {
     "skills": 10,
     "external": 13,
@@ -96,7 +96,7 @@
     },
     {
       "name": "dz23-reverse-engineer-anything",
-      "version": "1.1.2",
+      "version": "1.1.3",
       "description": ">",
       "user_invocable": true,
       "files": 25,
@@ -104,7 +104,7 @@
       "templates": 4,
       "scripts": 3,
       "evals": 15,
-      "sha256_skill_md": "6b9a897a6c176172681f55ee887d138ae02cf33c6cbf4375cb9ad91cfea1a410"
+      "sha256_skill_md": "91d4c4c1c15c0b392146d014e1e3e35bd2698100f824abaae6143a474851690a"
     },
     {
       "name": "dz23-spec-to-system-engine",

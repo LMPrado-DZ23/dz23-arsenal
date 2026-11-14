@@ -1,5 +1,30 @@
 # Changelog — dz23-reverse-engineer-anything
 
+## [1.1.3] — 2026-11-14
+
+### Corrigido
+- `references/rea-integration.md` e `SKILL.md`: o estado **`INSTALLED_NO_ENGINE`** ficou obsoleto.
+  Nesta máquina, Ghidra **12.1.4** e jadx **0.7.1** estão instalados **e configurados**
+  (`GHIDRA_INSTALL_DIR`, `REA_JADX_MCP_JAR`), mais apktool 3.0.3, adb 37.0.1, WABT 1.0.42 e
+  unblob 26.6.4. Estado passa a **`AVAILABLE`** para nativo, APK, wasm e Android.
+  O que continua ausente: `ida`, `kuna`, `jeb`, `hopper`.
+- Distinção que faltava nas versões anteriores: **instalado ≠ configurado**. Em 2026-11-08 o REA
+  estava instalado e *sem* env de provider; a CLI sobe sem engine mesmo com o binário no disco.
+  Registrar o estado pelo binário, e não pela config do processo, produziu dois diagnósticos errados
+  em sequência (1.1.1 e 1.1.2). A verificação agora exige `rea doctor` **com a env do processo**.
+- `references/rea-integration.md`: seção "Como tornar o REA utilizável" vira "Como iniciar o REA",
+  com o bootstrap único (`tools/rea-env.ps1` / `tools/rea-env.sh`) e o gate de autorização mantido.
+
+### Prova registrada
+- `procedure_pseudo_code` devolveu `void entry(void)` real de um PE x86-64.
+- `inspect_android_package`: 20.990 classes, 1.842 recursos, 45 componentes de um APK.
+- `inspect_wasm_artifact`: WABT 1.0.42, `validation: valid`, export `add (i32,i32)->i32`.
+- `adb`: `emulator-5554` listado.
+
+### Lição (terceira da mesma família)
+"Instalado ≠ disponível ≠ funcional" agora tem um quarto membro: **configurado no processo**.
+Binário no disco com servidor MCP sem env é exatamente o caso que engana os dois lados.
+
 ## [1.1.2] — 2026-11-08
 
 ### Corrigido
