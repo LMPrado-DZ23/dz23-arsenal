@@ -108,6 +108,14 @@ jobs:
       - name: Links relativos
         run: python scripts/check-links.py .
 
+      - name: Conteudo instalado bate com o repositorio
+        # Sem --strict: divergencia de conteudo e defeito real, mas 'nada instalado' e a condicao
+        # normal de um runner efemero e ali a presenca nao e alegacao do repo. Instalar e exigir
+        # presenca sao atos locais: use python scripts/audit-zips.py --strict depois de
+        # install-all. Verificado nesta sessao nos dois estados (com instalacao exit 0; HOME vazio
+        # exit 0; instalacao adulterada exit 1).
+        run: python scripts/audit-zips.py
+
       - name: Cada verificador sabe ficar vermelho
         # Verde que nao saberia virar vermelho e uma afirmativa decorada. Ja aconteceu: um
         # --check que media bytes e dizia OK, e verificadores aprovando arvore vazia.

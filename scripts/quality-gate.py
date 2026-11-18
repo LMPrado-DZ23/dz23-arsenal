@@ -127,6 +127,12 @@ def main(argv: list[str]) -> int:
     # um verificador que parou de comparar nada continua devolvendo 0 -- foi o build.py --check
     # da rodada 28, e aqui se descobriu que duas das minhas proprias violacoes eram imaginarias.
     resultados.append(rodar("verificadores-sensiveis", [py, "scripts/audita-sensibilidade.py"]))
+    # Estado da instalação do usuário. Entra sem --strict de propósito: divergência de conteúdo
+    # entre repo e ~/.agents/skills é defeito real e deve quebrar o gate, mas "nada instalado" é
+    # a condição normal de um runner efêmero -- com --strict este check seria vermelho em todo CI
+    # e alguém acabaria removendo o check inteiro. A distinção existe no próprio script: use
+    # `python scripts/audit-zips.py --strict` ao instalar, para exigir presença.
+    resultados.append(rodar("instalacao:conteudo", [py, "scripts/audit-zips.py"]))
     resultados.append(rodar("estrutura", [py, "scripts/check-structure.py"]))
     # As skills embutem cópias de scripts/skill_validator.py e scripts/_achar_arsenal.py
     # para se auto-validarem fora do checkout. Duplicação intencional — mas só é segura

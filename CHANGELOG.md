@@ -3,6 +3,19 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.5.20] -- 2026-11-18
+
+### Adicionado
+- **`instalacao:conteudo` no `quality-gate`** (43 checks) e passo proprio no CI. O verificador
+  da instalacao existia desde a rodada 9 e nunca rodou em lugar nenhum automatizado -- nem no gate,
+  nem no workflow -- porque em runner efemero nada esta instalado. Roda agora sem `--strict`,
+  escolha deliberada e registrada no comentario: divergencia de conteudo entre repo e
+  `~/.agents/skills` e defeito real e deve quebrar o build; ausencia de instalacao e condicao
+  normal do ambiente, nao violacao do repositorio. Com `--strict` o check seria vermelho em todo
+  CI e alguem acabaria removendo-o. Os tres estados foram medidos: maquina com instalacao exit 0;
+  `HOME` vazio exit 0; instalacao adulterada (linha injetada num SKILL.md instalado) -> gate
+  42/43 denunciando `1 divergentes`, restaurado volta a 43/43.
+
 ## [1.5.19] -- 2026-11-18
 
 ### Adicionado
