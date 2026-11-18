@@ -92,6 +92,26 @@ def roda(base: pathlib.Path, *args, cwd=None):
     return p.returncode, out
 
 
+def _viola_pendente(base: pathlib.Path) -> None:
+    """Troca o valor REAL de 'Total pendente' por outro, sem assumir qual ele é.
+
+    A versão anterior gravava o dígito 99 no regex, e na rodada seguinte à execução do primeiro
+    eval de postgres o número passou a ser 98 -- a substituição não casou, nenhum arquivo mudou,
+    e a guarda anti-violação-imaginária reportou 'medição vazia'. O bug era da lente, não do
+    verificador: violação com valor fixo vence o tempo uma vez e apodrece depois. Ler o valor
+    atual e escrever um diferente é o que torna a prova durável.
+    """
+    alvo = base / "ROADMAP.md"
+    texto = alvo.read_text(encoding="utf-8")
+    m = re.search(r"(\*\*Total pendente\*\*\s*\|\s*\*\*)(\d+)(\*\*)", texto)
+    if not m:
+        raise AssertionError("ROADMAP sem célula 'Total pendente' para violar")
+    atual = int(m.group(2))
+    novo = atual - 1 if atual > 1 else atual + 7
+    alvo.write_text(texto[:m.start()] + m.group(1) + str(novo) + m.group(3)
+                    + texto[m.end():], encoding="utf-8")
+
+
 CASOS = {
     "check-structure": ("scripts/check-structure.py", lambda b: (
         (b / "skills/dz23-postgres-prod-preflight/VERSION").write_text("9.9.9\n", encoding="utf-8"))),
@@ -116,15 +136,12 @@ CASOS = {
     "check-docs-runnable": ("scripts/check-docs-runnable.py", lambda b: (
         b / "CONTRIBUTING.md").write_bytes(b"\n```bash\npython scripts/zz-inexistente.py\n```\n"
                                            + (b / "CONTRIBUTING.md").read_bytes())),
-    "check-eval-results": ("scripts/check-eval-results.py", lambda b: (
-        b / "ROADMAP.md").write_text(re.sub(r"(\*\*Total pendente\*\* \| \*\*)99(\*\*)",
-                                             r"\g<1>3\g<2>",
-                                             (b / "ROADMAP.md").read_text(encoding="utf-8"),
-                                             count=1), encoding="utf-8")),
+    "check-eval-results": ("scripts/check-eval-results.py", lambda b: _viola_pendente(b)),
     "checa-ancoras": ("scripts/checa-ancoras.py", lambda b: (
-        b / "CHANGELOG.md").write_text(re.sub(r"(?m)^## \[1\.5\.", "## [0.5.",
-                                             (b / "CHANGELOG.md").read_text(encoding="utf-8"),
-                                             count=1), encoding="utf-8")),
+        b / "CHANGELOG.md").write_text(re.sub(r"(?m)^(## \[)(\d+\.\d+\.\d+)(\])",
+                                              r"\g<1>0.0.1\g<3>",
+                                              (b / "CHANGELOG.md").read_text(encoding="utf-8"),
+                                              count=1), encoding="utf-8")),
     "gera-indice-skills": ("scripts/gera-indice-skills.py --check", lambda b: (
         b / "skills/README.md").write_text(re.sub(r"\| 1\.1\.1 \| Explora", "| 0.0.1 | Explora",
                                                   (b / "skills/README.md").read_text(encoding="utf-8"),
