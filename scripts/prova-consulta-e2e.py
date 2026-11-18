@@ -12,8 +12,7 @@ ARQS = ["flaky-causas-e-correcao.csv", "seletores-e-esperas.csv", "verificar-flu
 
 
 def _run(args):
-    r = subprocess.run([sys.executable, str(CONS), *args], capture_output=True, text=True,
-                       encoding="utf-8")
+    r = subprocess.run([sys.executable, str(CONS), *args], capture_output=True, text=True, encoding="utf-8", errors="replace")
     return (r.stdout or "") + (r.stderr or "")
 
 

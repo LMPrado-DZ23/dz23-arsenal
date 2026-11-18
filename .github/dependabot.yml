@@ -1,0 +1,29 @@
+# Atualização de dependências (acelerador GitHub, opcional). Abre PRs quando uma Action do CI
+# ou uma dependência npm dos MCP ganha versão -- mantém a cadeia de suprimentos atualizada sem
+# vigilância manual. Não há ecossistema pip aqui: os scripts do arsenal são stdlib puro (só o CI
+# instala jsonschema ad-hoc), então não existe manifesto Python para o Dependabot acompanhar.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: npm
+    directory: "/mcp/pentagi-mcp"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(pentagi)"
+
+  - package-ecosystem: npm
+    directory: "/mcp/dz23-subagents-universal-mcp"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(subagents)"

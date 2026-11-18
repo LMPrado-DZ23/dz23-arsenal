@@ -12,8 +12,7 @@ ARQS = ["gates-de-seguranca-e-lock.csv", "anti-padroes-de-migracao.csv", "checkl
 
 
 def _run(args):
-    r = subprocess.run([sys.executable, str(CONS), *args], capture_output=True, text=True,
-                       encoding="utf-8")
+    r = subprocess.run([sys.executable, str(CONS), *args], capture_output=True, text=True, encoding="utf-8", errors="replace")
     return (r.stdout or "") + (r.stderr or "")
 
 

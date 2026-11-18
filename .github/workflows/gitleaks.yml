@@ -1,0 +1,32 @@
+# Camada OPCIONAL de segurança (acelerador GitHub). A verificação OBRIGATÓRIA e local é
+# scripts/check-secrets.py, rodada pelo quality gate e sem rede -- o repo nunca depende
+# desta Action para saber se vazou credencial. Gitleaks aqui varre o HISTÓRICO inteiro do
+# git (coisa que o gate local, que olha a árvore atual, não cobre) e é defesa em profundidade
+# para um repositório público. Sem licença para repositório público.
+name: gitleaks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: segredos no histórico
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout (histórico completo)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

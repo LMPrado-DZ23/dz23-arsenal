@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -21,7 +22,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 
 def rodar(nome: str, cmd: list[str], cwd: Path | None = None) -> dict:
     try:
-        p = subprocess.run(cmd, cwd=str(cwd or RAIZ), capture_output=True, text=True,
+        p = subprocess.run(cmd, cwd=str(cwd or RAIZ), capture_output=True, text=True, encoding="utf-8", errors="replace",
                            timeout=300)
         saida = (p.stdout or "").strip().splitlines()
         erro = (p.stderr or "").strip().splitlines()
@@ -299,6 +300,14 @@ def main(argv: list[str]) -> int:
                                     [py, "scripts/verifica_claims.py",
                                      "--texto", str(sm), "--raiz", str(RAIZ),
                                      "--min", "1.0"]))
+
+    # Regressao de encoding: o gate tem de sobreviver a um locale cp1252 (o bug real
+    # desta sessao -- captura de subprocesso sem encoding explicito quebrava tudo). A
+    # prova roda o proprio gate sob PYTHONIOENCODING=cp1252; a flag ARSENAL_GATE_
+    # ENCODING_SELFTEST quebra a recursao, entao a rodada interna pula esta linha.
+    if os.environ.get("ARSENAL_GATE_ENCODING_SELFTEST") != "1":
+        resultados.append(rodar("gate:autoteste-encoding-cp1252",
+                                [py, "scripts/prova-encoding-gate.py"]))
 
     falhas = [r for r in resultados if not r["ok"]]
     publicar_contagem(len(resultados))

@@ -1,0 +1,42 @@
+# Camada OPCIONAL de análise estática (acelerador GitHub). Não substitui nenhum verificador
+# do quality gate: é SAST de segurança (fluxo de dados, injeção, uso perigoso de API) sobre o
+# Python dos scripts e o JavaScript dos MCP, que o gate local não faz. Defesa em profundidade
+# para repositório público; os resultados vão para a aba Security do GitHub.
+name: codeql
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "27 4 * * 1"   # segunda-feira, varredura semanal do default
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript-typescript]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inicializar CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-and-quality
+
+      - name: Analisar
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"

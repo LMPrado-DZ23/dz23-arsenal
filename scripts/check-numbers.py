@@ -33,7 +33,7 @@ def _num(texto: str, padrao: str) -> int | None:
 def _run(cmd: list[str]) -> str:
     """Roda um subprocesso lendo bytes e decodificando como UTF-8.
 
-    `text=True` usaria a codepage do Windows (cp1252) e arrebentaria na saída com
+    `text=True, encoding="utf-8", errors="replace"` usaria a codepage do Windows (cp1252) e arrebentaria na saída com
     acentos dos próprios scripts. Os scripts-alvo já se reconfiguram para UTF-8;
     aqui é o lado do leitor que precisa saber disso.
     """

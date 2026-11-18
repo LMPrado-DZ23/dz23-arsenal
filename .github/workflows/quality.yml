@@ -14,7 +14,7 @@ jobs:
   gate:
     name: quality gate
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
@@ -231,6 +231,65 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: quality-gate
+          path: gate.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # Validação cruzada de SO. O bug de encoding desta linha de trabalho (gate capturando
+  # subprocesso sem encoding explícito, estourando UnicodeDecodeError sob cp1252) só se
+  # manifestava no Windows -- o próprio prompt pedia validação Windows/Linux. Este job roda
+  # o gate inteiro no runner Windows real, onde o locale é de fato cp1252: é a prova viva de
+  # que a correção segura. O gate é Python puro e cross-platform; aqui vai compacto (um
+  # comando, um veredito) com shell bash para a redação de gate.json não virar UTF-16 do pwsh.
+  gate-windows:
+    name: quality gate (windows)
+    runs-on: windows-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Dependências dos verificadores
+        run: python -m pip install --quiet jsonschema
+
+      - name: Quality gate completo (Windows, locale cp1252 real)
+        run: |
+          set -euo pipefail
+          python scripts/quality-gate.py --json > gate.json
+
+      - name: Resumo
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          p = pathlib.Path("gate.json")
+          if not p.is_file():
+              print("gate.json ausente — o gate não chegou a completar no Windows")
+              raise SystemExit(1)
+          d = json.loads(p.read_text(encoding="utf-8"))
+          resumo = f"checks: {d['total']} | falhas: {d['falhas']}"
+          print(resumo)
+          for c in d["checks"]:
+              if not c["ok"]:
+                  print(f"  FALHA {c['check']}: {c['resumo']}")
+          with pathlib.Path(os.environ.get("GITHUB_STEP_SUMMARY", "/dev/null")).open("a", encoding="utf-8") as fh:
+              fh.write(f"## Quality gate (Windows)\n\n{resumo}\n")
+          raise SystemExit(0 if d["ok"] else 1)
+          PY
+
+      - name: Publicar relatório do gate (Windows)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-gate-windows
           path: gate.json
           if-no-files-found: ignore
           retention-days: 14
