@@ -16,10 +16,18 @@ passRate = verificados / (verificados + falhos). Colocar as duas últimas no den
 derrubaria o número por limite da ferramenta, não por erro de conteúdo — é assim que um
 métrico morre: param de acreditar nele.
 
-Escopo honesto: este verificador cobre caminho de arquivo. Números, citações longas e
-afirmações de comportamento ficam em `sem-suporte`. Um extrator de claims cobre ~30 tipos
-no pacote original; reimplementar tudo de uma vez produziria um verificador em que ninguém
-confia. Crescer por tipo, com selftest positivo E negativo a cada adição.
+Escopo honesto, em três níveis — a distinção importa porque "sem suporte" e "não visto"
+têm consequências diferentes para quem lê o número:
+  * caminho de arquivo ........ conferido de fato (verificado / falho);
+  * grandeza com unidade ...... "850ms", "42%", "60s" são detectadas e contadas como
+    `sem-suporte`: há claim, não há fonte acoplada para checá-lo;
+  * citação longa, afirmação de comportamento, fato externo .... NEM DETECTADAS. Não
+    aparecem em lugar nenhum, nem como sem-suporte.
+
+Por isso "sem_suporte = 0" não quer dizer "nada ficou de fora": quer dizer que não havia
+grandeza com unidade no texto. O extrator original cataloga ~30 tipos; reimplementar tudo de
+uma vez produziria um verificador em que ninguém confia. Crescer por tipo, com selftest
+positivo E negativo a cada adição.
 
 Uso:
     python scripts/verifica_claims.py --texto relatorio.md [--raiz .] [--min 0.8]
@@ -35,7 +43,7 @@ import sys
 from dataclasses import dataclass, asdict
 from pathlib import Path, PurePosixPath as _PurePosixPath
 
-VERSAO = "1.2.0"
+VERSAO = "1.3.0"
 
 RE_CAMINHO = re.compile(
     r"(?<![\w./-])((?:[\w.\-]+[/\\])+[\w.\-]+\.(?:py|md|json|ya?ml|toml|sh|ps1|js|ts|tsx|jsx|"
@@ -51,6 +59,12 @@ RE_IMPERATIVO = re.compile(
     r"(?i)\b(crie|criar|gere|gerar|adicione|adicionar|escreva|implemente|add |create|"
     r"generate|should exist|deve existir|deve ser criado)\b")
 
+# Comparação numérica com unidade ou percentual: é alegação mensurável, mas este script não
+# tem como conferi-la sem o dado de origem. Vira claim explícito em `sem-suporte`, não
+# silêncio. O padrão exige unidade/percentual para não pescar "10 skills" solto no texto.
+RE_NUMERICO = re.compile(
+    r"(?<![\w.])(?:~)?\d+(?:[.,]\d+)?\s*(?:%|ms|s\b|MB|GB|KB|x\b|vezes|pp\b)", re.I)
+
 
 @dataclass
 class Claim:
@@ -62,7 +76,13 @@ class Claim:
 
 
 def extrair(texto: str) -> list[tuple[str, str, int]]:
-    """(tipo, valor, linha) dos claims conferíveis mecanicamente."""
+    """(tipo, valor, linha) dos claims conferíveis mecanicamente.
+
+    Além de caminho de arquivo, extraio claims numéricos comparativos ("p95 850ms → ~250ms",
+    "42% dos casos") para que existam como `sem-suporte` declarado, não como ausência
+    invisível. A diferença importa: um relatório que diz "0 claims sem suporte" sugere que
+    tudo foi conferido, quando na verdade o extrator só não olhou para aquilo.
+    """
     achados: list[tuple[str, str, int]] = []
     dentro_de_bloco = False
     for n, linha in enumerate(texto.splitlines(), 1):
@@ -73,6 +93,8 @@ def extrair(texto: str) -> list[tuple[str, str, int]]:
             continue          # exemplo de código não é alegação sobre este repo
         for m in RE_CAMINHO.finditer(linha):
             achados.append(("caminho-arquivo", m.group(1), n))
+        for m in RE_NUMERICO.finditer(linha):
+            achados.append(("numerico", m.group(0).strip(), n))
     return achados
 
 
@@ -177,6 +199,11 @@ def avaliar(texto: str, raiz: Path, texto_path: Path | None = None) -> dict:
     for tipo, valor, n in extrair(texto):
         if tipo == "caminho-arquivo":
             claims.append(checar_caminho(valor, raiz, texto, n, base_skill))
+        elif tipo == "numerico":
+            linhas = texto.splitlines()
+            ctx = linhas[n - 1].strip()[:120] if n <= len(linhas) else ""
+            claims.append(Claim("numerico", valor, "sem-suporte",
+                                "comparação numérica sem fonte de dados acoplada", ctx))
 
     verificados = [c for c in claims if c.disposicao == "verificado"]
     falhos = [c for c in claims if c.disposicao == "falho"]
@@ -262,6 +289,23 @@ def selftest() -> int:
     espera(r9["falhos"] == 0 and r9["nao_verificaveis"] == 1,
            f"path traversal vazou como alegação verificável: {r9['claims']}")
 
+    # Claim numérico comparativo precisa aparecer como sem-suporte declarado, não sumir.
+    # Motivo: um relatório lendo "0 sem suporte" concluiria que tudo foi conferido.
+    r10 = avaliar("O p95 caiu de 850ms para ~250ms em 42% dos casos.", raiz)
+    espera(r10["sem_suporte"] >= 3,
+           f"claims numéricos não foram declarados como sem-suporte: {r10['sem_suporte']}")
+    espera(r10["denominador"] == 0,
+           "claim sem-suporte entrou no denominador do passRate (deveria estar fora)")
+    espera(r10["passRate"] is None,
+           f"com só sem-suporte, passRate deveria ser None: {r10['passRate']}")
+
+    # Mistura: caminho verificado + numérico sem-suporte -> denominador conta só o primeiro.
+    r11 = avaliar(f"Cada `scripts/{aqui}` e 90ms de margem.", raiz)
+    espera(r11["verificados"] == 1 and r11["sem_suporte"] == 1,
+           f"contagem mista errada: {r11}")
+    espera(r11["passRate"] == 1.0,
+           f"passRate deveria ignorar o numérico e dar 1.00: {r11['passRate']}")
+
     if falhas:
         print("SELFTEST FALHOU:")
         for f in falhas:
@@ -269,7 +313,7 @@ def selftest() -> int:
         return 1
     print(f"selftest OK · verifica_claims {VERSAO} · "
           "positivo/âncora/negativo/imperativo/placeholder/code-block/vazio/"
-          "determinismo/traversal")
+          "determinismo/traversal/numerico/misto")
     return 0
 
 
