@@ -171,6 +171,10 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("permissoes:verifica", [py, "scripts/check-permissoes.py"]))
     resultados.append(rodar("permissoes:indice", [py, "scripts/gera-permissoes.py", "--check"]))
     resultados.append(rodar("permissoes:autoteste", [py, "scripts/check-permissoes.py", "--selftest"]))
+    # Instalador multiplataforma (mandato, layer install/). O autoteste exercita o ciclo inteiro
+    # num diretório temporário: dry-run inócuo, install das 18 skills, manifesto coerente, log sem
+    # segredo, idempotência, rollback preciso e no-op seguro. Offline por construção (só cópia).
+    resultados.append(rodar("install:autoteste", [py, "scripts/dz23-install.py", "--selftest"]))
     # Documento era a única superfície sem verificador de conteúdo: existência e link eram
     # conferidos, mas texto corrompido passava. Nesta sessão eu mesmo injetei duas vezes resíduo
     # de ferramenta num .md (caractere CJK no meio do português e uma expressão Python inteira no
