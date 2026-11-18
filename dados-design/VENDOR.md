@@ -106,6 +106,25 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
   acervo (`prioridade peso` → CRITICAL 2; `metrica lcp` → Waterfalls/Bundle Size/Resource Hints) e
   medindo builds reais nesta máquina (mídia 53% do artefato, JS 30%) -- não por opinião.
 
+### `skills/dz23-codebase-cartographer/dados/` — 3 CSVs (18 linhas)
+- **Origem:** ECC (`affaan-m/everything-claude-code` v2.2.3), skill `code-tour`, seções *When NOT to Use*,
+  *2. Infer the reader* e *Anti-Patterns*. Licença **MIT lida no arquivo `LICENSE` da raiz** (texto
+  completo, 1.071 chars).
+- **O que entrou:** 8 personas com formato de pedido e profundidade sugerida, 6 antipadrões com a
+  correção de cada um, 4 casos em que o tour não é o entregável certo. Cada linha carrega
+  `origem_arquivo`/`origem_secao`. Consultor `scripts/consulta-codebase.py` com mapa fechado de 44
+  sinônimos PT→EN; prova no gate exercitando todas as chaves contra os valores reais das tabelas +
+  integridade por sha256 (autocontida: não depende da fonte ECC estar na máquina). Template
+  `templates/code-tour.md` liga cada regra inegociável a um antipadrão do acervo.
+- **Rejeitado dentro da mesma família:** as tabelas "Tech Stack" e "Where to Look" de
+  `codebase-onboarding` têm forma de dado mas estão dentro de
+  `<!-- Example ... replace with detected paths -->` — placeholder de template com valores inventados
+  (`npm run dev`, `prisma migrate dev`). Copiá-las encheria o acervo de exemplo alheio disfarçado de
+  conhecimento consultável.
+- **Verificação:** 44 células conferidas contra a fonte na geração, zero divergências. A prova detecta
+  adulteração: mudar uma célula quebra o hash e o check sai exit 1 apontando o arquivo.
+- **Proveniência completa:** `skills/dz23-codebase-cartographer/dados/PROVENIENCIA.md`.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

@@ -1,0 +1,5 @@
+No,instead_of_code_tour,use,origem_arquivo,origem_secao
+1,A one-off explanation in chat is enough,answer directly,ECC/skills/code-tour/SKILL.md,When NOT to Use
+2,"The user wants prose docs, not a .tour artifact",documentation-lookup or repo docs editing,ECC/skills/code-tour/SKILL.md,When NOT to Use
+3,The task is implementation or refactoring,do the implementation work,ECC/skills/code-tour/SKILL.md,When NOT to Use
+4,The task is broad codebase onboarding without a tour artifact,codebase-onboarding,ECC/skills/code-tour/SKILL.md,When NOT to Use

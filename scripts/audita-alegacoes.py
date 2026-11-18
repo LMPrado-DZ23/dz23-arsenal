@@ -338,7 +338,15 @@ def confere_indice() -> None:
             shutil.copytree(RAIZ / n, base / n, symlinks=False)
         alvo = base / "skills/README.md"
         texto = alvo.read_text(encoding="utf-8")
-        violado = re.sub(r"\| 1\.1\.1 \| Exploração", "| 0.0.1 | Exploração", texto, count=1)
+        # Injecao por padrao literal fixo ("| 1.1.1 | Exploracao") apontava para a versao que a
+        # cartographer tinha quando este teste foi escrito; bump real (1.1.1 -> 1.2.0) fez o re.sub
+        # virar no-op e o verificador acusar "medicao vazia". A violacao agora localiza a linha pelo
+        # nome da skill e troca a versao que ela de fato carrega -- senao o teste quebra no dia em que
+        # qualquer skill sobe de versao, e verde obtido por injecao que nao aconteceu nao mede nada.
+        m = re.search(r"(?m)^\| \[codebase-cartographer\]\([^\)]*\) \| (\d+\.\d+\.\d+) \|", texto)
+        if not m:
+            raise AssertionError("nao achei a linha da cartographer no indice para violar")
+        violado = texto.replace(m.group(0), m.group(0).replace(m.group(1), "0.0.1"), 1)
         if violado == texto:
             raise AssertionError("não consegui violar o índice; prova cega")
         alvo.write_text(violado, encoding="utf-8")

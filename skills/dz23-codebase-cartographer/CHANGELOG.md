@@ -1,5 +1,36 @@
 # Changelog — dz23-codebase-cartographer
 
+## [1.2.0] — 2026-11-18
+
+### Adicionado — acervo de code tour consultável dentro da skill
+`dados/` com 18 decisões tabuladas extraídas das tabelas de decisão reais da ECC `code-tour` (MIT lido no
+arquivo LICENSE): 8 personas com formato de pedido e profundidade sugerida, 6 antipadrões com correção e
+4 casos em que o tour não é o entregável certo. Cada linha carrega `origem_arquivo` e `origem_secao`.
+
+Consultor em português: `scripts/consulta-codebase.py` com mapa fechado de 44 sinônimos (`chute`→Guessed
+anchors, `quebrou`→rca-investigator, `refatorar`→When NOT to Use), casamento por palavra inteira e recusa
+honesta listando os valores existentes quando não há correspondência.
+
+Template do artefato: `templates/code-tour.md`, com as regras inegociáveis ligadas a cada antipadrão do
+acervo e o comando de verificação de âncoras antes de entregar. Passo 6 do workflow agora manda consultar
+o acervo antes de escrever um tour, não depois de reclamar que ficou longo.
+
+Prova no gate (`gate:autoteste-consulta-codebase`): exaustão dos 44 sinônimos contra os valores reais das
+tabelas, validação de esquema, e integridade do acervo por sha256 — autocontida, sem depender da fonte ECC
+estar nesta máquina.
+
+### Rejeitado — duas tabelas da mesma família de fontes
+As tabelas "Tech Stack" e "Where to Look" de `codebase-onboarding` têm forma de dado mas estão dentro de
+`<!-- Example ... replace with detected paths -->`: placeholder de template com valores inventados
+(`npm run dev`, `prisma migrate dev`). Copiá-las encheria o acervo de exemplo alheio disfarçado de
+conhecimento consultável. Detalhe em `dados/PROVENIENCIA.md`.
+
+### Corrigido — caminho do acervo resolvido pelo lugar onde o script está
+A primeira versão calculava `RAIZ` subindo dois níveis fixos, o que só valia para uma das cópias: rodando
+pela pasta da skill, o consultor procurava `dados/` fora dela e declarava o acervo ausente. Agora resolve
+subindo até encontrar `skills/`, funcionando igual em `scripts/` do repo, dentro da skill e na instalação
+em `~/.agents/skills/`. Verificado executando das três origens.
+
 ## [1.1.1] — 2026-11-17
 
 ### Corrigido

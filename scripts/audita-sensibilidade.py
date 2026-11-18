@@ -142,11 +142,24 @@ CASOS = {
                                               r"\g<1>0.0.1\g<3>",
                                               (b / "CHANGELOG.md").read_text(encoding="utf-8"),
                                               count=1), encoding="utf-8")),
+    # Injecao literal fixa ("| 1.1.1 | Explora") apontava para a versao que a cartographer carregava
+    # quando este caso foi escrito; o bump 1.1.1 -> 1.2.0 tornou o re.sub um no-op e o auditador
+    # reportou SETUP!/medicao vazia -- corretamente, porque nada mudou conteudo. Agora a violacao
+    # localiza a linha pelo nome da skill e troca a versao que ela de fato tem, entao sobrevive a
+    # qualquer bump futuro em vez de quebrar no proximo.
     "gera-indice-skills": ("scripts/gera-indice-skills.py --check", lambda b: (
-        b / "skills/README.md").write_text(re.sub(r"\| 1\.1\.1 \| Explora", "| 0.0.1 | Explora",
-                                                  (b / "skills/README.md").read_text(encoding="utf-8"),
-                                                  count=1), encoding="utf-8")),
+        _violar_indice_cartografo(b))),
 }
+
+
+def _violar_indice_cartografo(base):
+    p = base / "skills/README.md"
+    texto = p.read_text(encoding="utf-8")
+    m = re.search(r"(?m)^\| \[codebase-cartographer\]\([^\)]*\) \| (\d+\.\d+\.\d+) \|", texto)
+    if not m:
+        raise AssertionError("linha da cartographer nao encontrada no indice")
+    p.write_text(texto.replace(m.group(0), m.group(0).replace(m.group(1), "0.0.1"), 1),
+                 encoding="utf-8")
 
 print("=== cada verificador sabe ficar vermelho? ===")
 ocos, falhas_setup = [], []

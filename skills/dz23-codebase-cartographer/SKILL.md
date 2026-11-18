@@ -1,6 +1,6 @@
 ---
 name: dz23-codebase-cartographer
-version: 1.1.1
+version: 1.2.0
 description: >
   Engenharia de contexto e mapeamento de codebase: transforma um repositório
   desconhecido em mapa verificável antes de qualquer mudança — topologia,
@@ -40,6 +40,32 @@ SAÍDA:    [CODEBASE_MAP | CHANGE_IMPACT | AGENT_HANDOFF | resposta pontual]
 | `CHANGE_IMPACT.md` | `projects/<p>/CHANGE_IMPACT.md` | mudança pontual |
 | `AGENT_HANDOFF.md` | `projects/<p>/AGENT_HANDOFF.md` | antes de delegar |
 | `inventory.json` | `projects/<p>/inventory.json` | após `repo_inventory.py` |
+| `<nome>.tour` | raiz do projeto alvo | quando o pedido é explicar/trilhar código para alguém — **não** para refatorar nem para pergunta que se responde em chat (consulte `python scripts/consulta-codebase.py quando-nao <caso>`) |
+
+## Acervo de code tour (dados/)
+
+Dezoito decisões tabuladas da ECC `code-tour` (MIT lido no arquivo LICENSE), extraídas só das tabelas de
+decisão — as duas tabelas de `codebase-onboarding` foram rejeitadas por serem placeholder de template
+(`<!-- Example ... replace with detected paths -->`). Proveniência e hash de cada CSV em
+`dados/PROVENIENCIA.md`; fidelidade conferida célula por célula na geração (44 células, zero divergência).
+
+Consulte antes de escrever um tour, não depois de reclamar que ficou longo:
+
+```bash
+python scripts/consulta-codebase.py listar
+python scripts/consulta-codebase.py profundidade arquitetura
+python scripts/consulta-codebase.py antipadrao "lista de arquivos"
+python scripts/consulta-codebase.py quando-nao refatorar
+```
+
+Português funciona por mapa fechado de 44 termos (`chute`→Guessed anchors, `quebrou`→rca-investigator).
+Sem correspondência, o consultor recusa e lista os valores existentes — nunca aproxima. A prova
+A prova deste acervo (sinônimos vivos, esquema, integridade por hash) está em `prova-consulta-codebase.py` na raiz do arsenal — fora da skill, portanto não é referência embarcada — e roda no gate como `gate:autoteste-consulta-codebase`.
+do acervo pelo hash; está no gate.
+
+Template do artefato: `templates/code-tour.md`. A prova deste acervo (sinônimos vivos, esquema, integridade
+por hash) roda no gate do arsenal como `gate:autoteste-consulta-codebase`; o arquivo de teste fica na raiz
+do repositório, não dentro da skill.
 
 ## Estados de evidência
 | Estado | Critério |
@@ -84,7 +110,7 @@ ORIENTAR → VARRER → LER DIRIGIDO → MAPEAR → VALIDAR → ENTREGAR → MAN
 3. **LER DIRIGIDO**: amostragem por relevância (entry points, camada de domínio, ponto da mudança), não leitura linear. Declare o que ficou de fora.
 4. **MAPEAR**: topologia, dependências reais (não a pasta), fluxo de dado, convenções, zonas de risco. Leia `references/dependency-graph.md` e `references/data-and-flow.md`.
 5. **VALIDAR**: cada afirmação com ponteiro; conferir hipótese contra o código; marcar inferência como inferência. Leia `references/verification-and-freshness.md`.
-6. **ENTREGAR**: `codebase-map.md` + `context-brief.md` enxuto + `change-impact.md` quando a pergunta for mudança. Leia `references/context-brief.md`.
+6. **ENTREGAR**: `codebase-map.md` + `context-brief.md` enxuto + `change-impact.md` quando a pergunta for mudança. Leia `references/context-brief.md`. Se o entregável pedido for um passeio guiado pelo código (`.tour`), consulte antes `python scripts/consulta-codebase.py profundidade <formato do pedido>` — ele diz que persona o pedido indica e quantos passos esse leitor suporta; e `... antipadrao <suspeita>` lista os seis modos conhecidos de entregar um tour inútil (listagem plana, descrição genérica, âncora não verificada).
 7. **MANTER**: data, commit SHA e gatilho de revalidação no topo do mapa. Mapa velho engana mais que ausência de mapa.
 
 ## Módulos de decisão (5.1–5.6)

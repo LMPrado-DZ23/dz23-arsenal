@@ -1,0 +1,7 @@
+No,anti_pattern,fix,origem_arquivo,origem_secao
+1,Flat file listing,Tell a story with dependency between steps,ECC/skills/code-tour/SKILL.md,Anti-Patterns
+2,Generic descriptions,Name the concrete code path or pattern,ECC/skills/code-tour/SKILL.md,Anti-Patterns
+3,Guessed anchors,Verify every file and line first,ECC/skills/code-tour/SKILL.md,Anti-Patterns
+4,Too many steps for a quick tour,Cut aggressively,ECC/skills/code-tour/SKILL.md,Anti-Patterns
+5,First step is content-only,Anchor the first step to a real file or directory,ECC/skills/code-tour/SKILL.md,Anti-Patterns
+6,Persona mismatch,"Write for the actual reader, not a generic engineer",ECC/skills/code-tour/SKILL.md,Anti-Patterns

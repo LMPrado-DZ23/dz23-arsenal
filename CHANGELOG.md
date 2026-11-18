@@ -1,6 +1,36 @@
 > Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
 > delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
 
+## [1.6.5] — 2026-11-18
+
+### Adicionado — quarto acervo consultável: code tour (`dz23-codebase-cartographer` 1.1.1 → 1.2.0)
+`dados/` com 18 decisões tabuladas da ECC `code-tour` (MIT lido no arquivo LICENSE): 8 personas com
+formato de pedido e profundidade sugerida, 6 antipadrões com correção, 4 casos em que o tour não é o
+entregável certo. Consultor `scripts/consulta-codebase.py` com mapa fechado de 44 sinônimos PT→EN
+(`chute`→Guessed anchors, `quebrou`→rca-investigator), casamento por palavra inteira e recusa honesta
+listando os valores existentes. Template `templates/code-tour.md` com as regras ligadas a cada
+antipadrão e o comando de verificação de âncoras antes de entregar; passo 6 do workflow agora manda
+consultar o acervo antes de escrever o tour. Gate ganhou `codebase:consulta` +
+`gate:autoteste-consulta-codebase`.
+
+**Rejeitado dentro da mesma família:** "Tech Stack" e "Where to Look" de `codebase-onboarding` têm forma
+de tabela mas vivem dentro de `<!-- Example ... replace with detected paths -->` — placeholder com
+valores inventados. Copiar seria encher o acervo de exemplo alheio disfarçado de conhecimento.
+
+### Corrigido — dois verificadores que quebravam no dia em que qualquer skill sobe de versão
+`audita-sensibilidade.py` e `audita-alegacoes.py` injetavam a violação com padrão literal fixo
+(`"| 1.1.1 | Explora"`), apontando para a versão que a cartographer tinha quando o teste foi escrito. O
+bump 1.1.1 → 1.2.0 tornou o `re.sub` um no-op, e o auditor reportou corretamente `SETUP!/medição vazia`:
+verde obtido por injeção que não aconteceu não mede nada. As duas injeções agora localizam a linha pelo
+nome da skill e trocam a versão que ela de fato carrega — sobrevivem a qualquer bump futuro.
+
+Também corrigido nesta rodada: o `RAIZ` do consultor subia dois níveis fixos, conta que só valia para uma
+das cópias — rodando pela pasta da skill ele procurava `dados/` fora dela e declarava o acervo ausente.
+Agora resolve subindo até encontrar `skills/`, verificado executando das três origens (repo, skill,
+instalação em HOME).
+
+Gate 58 → **60 checks**, todos verdes. Instalação 10/10 em dia.
+
 ## [1.6.4] — 2026-11-18
 
 ### Corrigido — filtro de severidade que existia na interface e nunca casava nada

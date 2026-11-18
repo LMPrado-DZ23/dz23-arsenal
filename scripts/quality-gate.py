@@ -189,6 +189,15 @@ def main(argv: list[str]) -> int:
     # devolvia nada, e que dataset-design.md apresentava 14 arquivos dos quais o script lia 5.
     resultados.append(rodar("docs:exemplos-executaveis",
                             [py, "scripts/checa-exemplos-executaveis.py"]))
+    # Acervo de code tour (ECC, MIT). A prova nao depende da fonte ECC estar nesta maquina -- ela e
+    # verificada na geracao (44 celulas) e o hash de cada CSV fica registrado em dados/PROVENIENCIA.md,
+    # entao a prova confere invariantes (contagem, origem preenchida, hash) em qualquer ambiente. Um
+    # N/A silencioso quando a fonte falta deixaria o grupo sem dentes.
+    resultados.append(rodar("codebase:consulta",
+                            [py, "skills/dz23-codebase-cartographer/scripts/consulta-codebase.py",
+                             "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-codebase",
+                            [py, "scripts/prova-consulta-codebase.py"]))
     # Repositório PÚBLICO, e até esta rodada nenhum verificador abria um arquivo em busca de
     # credencial: colar um token GitHub válido em `.env.example` dava gate 46/46 verde. Os quatro
     # scripts que mencionam "segredo" no fonte falam de outra coisa (scan descrito em prosa, design

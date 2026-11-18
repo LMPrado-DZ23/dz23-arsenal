@@ -35,15 +35,15 @@
     },
     {
       "name": "dz23-codebase-cartographer",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "description": ">",
       "user_invocable": true,
-      "files": 33,
+      "files": 39,
       "references": 15,
-      "templates": 7,
-      "scripts": 5,
+      "templates": 8,
+      "scripts": 6,
       "evals": 15,
-      "sha256_skill_md": "bc6dd883f5ac3e55487f72c80a268588f236f4ffcb658b1d4e6afbc3d792c749"
+      "sha256_skill_md": "a161b59ac7d26aa06892b07fd5062491eee2b58a7bd26495a1f5df994738e01e"
     },
     {
       "name": "dz23-devops-cloud-deployer",

@@ -1,0 +1,9 @@
+No,request_shape,persona,suggested_depth,origem_arquivo,origem_secao
+1,"""onboarding"", ""new joiner""",new-joiner,9-13 steps,ECC/skills/code-tour/SKILL.md,2. Infer the reader
+2,"""quick tour"", ""vibe check""",vibecoder,5-8 steps,ECC/skills/code-tour/SKILL.md,2. Infer the reader
+3,"""architecture""",architect,14-18 steps,ECC/skills/code-tour/SKILL.md,2. Infer the reader
+4,"""tour this PR""",pr-reviewer,7-11 steps,ECC/skills/code-tour/SKILL.md,2. Infer the reader
+5,"""why did this break""",rca-investigator,7-11 steps,ECC/skills/code-tour/SKILL.md,2. Infer the reader
+6,"""security review""",security-reviewer,7-11 steps,ECC/skills/code-tour/SKILL.md,2. Infer the reader
+7,"""explain how this feature works""",feature-explainer,7-11 steps,ECC/skills/code-tour/SKILL.md,2. Infer the reader
+8,"""debug this path""",bug-fixer,7-11 steps,ECC/skills/code-tour/SKILL.md,2. Infer the reader
