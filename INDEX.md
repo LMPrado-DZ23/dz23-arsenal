@@ -3,7 +3,7 @@
 > Gerado por `scripts/build-manifest.py` em 2026-11-18. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**10 skills · 14 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
+**10 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -35,12 +35,14 @@
 | [absorcao-2026-11-17](external/absorcao-2026-11-17.md) | — | — |
 | [anthropic-skills](external/anthropic-skills.md) | Anthropic | https://github.com/anthropics/skills |
 | [astryx](external/astryx.md) | — | — |
+| [caldoai-skills](external/caldoai-skills.md) | caldoai | https://github.com/caldoai/skills |
 | [cloudflare-security-audit](external/cloudflare-security-audit.md) | Cloudflare | https://github.com/cloudflare/security-audit-skill |
 | [modern-web-guidance](external/modern-web-guidance.md) | — | — |
 | [pentagi](external/pentagi.md) | — | — |
 | [phone-agent-harness](external/phone-agent-harness.md) | — | — |
 | [playwright-mcp](external/playwright-mcp.md) | Microsoft | https://github.com/microsoft/playwright-mcp |
 | [rea](external/rea.md) | morluto | https://github.com/morluto/rea |
+| [skills-cli](external/skills-cli.md) | vercel-labs | https://github.com/vercel-labs/skills |
 | [supabase-postgres-best-practices](external/supabase-postgres-best-practices.md) | Supabase | https://github.com/supabase/agent-skills |
 | [superpowers](external/superpowers.md) | obra | https://github.com/obra/superpowers |
 | [terraform-aws-vpc](external/terraform-aws-vpc.md) | terraform-aws-modules | https://github.com/terraform-aws-modules/terraform-aws-vpc |

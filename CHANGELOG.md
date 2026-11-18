@@ -1,3 +1,33 @@
+> Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
+> delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
+
+## [1.6.1] — 2026-11-18
+
+**Duas externas de infraestrutura de skills** — o instalador e uma coleção que ele instala.
+
+### Adicionado
+- **`external/skills-cli.md`** — `vercel-labs/skills`: não é coleção, é o **CLI `skills` 1.9.0** que instala
+  skills em ~70 harnesses. Documenta `add`/`find`/`list`/`check`/`update`/`remove`, o lock v3 com
+  `skillFolderHash` e os limites medidos nesta máquina (19 skills rastreadas, ~120 fora do lock).
+- **`external/caldoai-skills.md`** — `caldoai/skills`: `prune-tests` (o que sai da suíte e por quê) e
+  `untangle-codebase` (onde o emaranhado cobra pedágio), com a ordem de uso junto do
+  `codebase-cartographer` e do `master-engineer`.
+- `external/README.md`: 13 → **15** externas; índice, tabela de escolha e seção "plataformas vs skills"
+  atualizados com as duas entradas.
+
+### Verificado
+- Instalação real pelo caminho oficial: `npx skills add <repo> -g -y -a universal -a claude-code -a codex …`
+- Skills em `~/.agents/skills`, `~/.claude/skills` e `~/.codex/skills`; `skills list -g` mostra a origem
+  (`Source: vercel-labs/skills`, `Source: caldoai/skills`); o catálogo do harness passou a listar
+  `find-skills`, `prune-tests` e `untangle-codebase` sem reiniciar.
+
+### Corrigido no caminho
+- `software-factory/SKILL.md` (skill de terceiro já instalada) tinha YAML inválido — `description` com
+  dois-pontos sem aspas — e aparecia como *skipped* em `skills list`. Corrigido nos três diretórios.
+
+### Não testado
+- Runtime de OpenCode, Cline, Cursor, Grok e Hermes: destino criado, agente não exercitado.
+
 ## [1.5.30] — 2026-11-18
 
 ### Incorporado (mudança de política: destilar → incorporar)

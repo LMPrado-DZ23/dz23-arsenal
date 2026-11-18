@@ -1,9 +1,10 @@
 # Skills externas recomendadas
 
-**Treze** projetos mantidos por outras organizações que **complementam** as 10 skills DZ23. Nenhum deles
+**Quinze** projetos mantidos por outras organizações que **complementam** as 10 skills DZ23. Nenhum deles
 está redistribuído aqui — cada arquivo documenta o repositório oficial, o gap que preenche e os cuidados.
 
-Nove são **skills**; quatro são **plataformas** (PentAGI, Modern Web Guidance, Astryx, phone-agent-harness).
+Nove são **skills**, uma é **coleção de skills** (Caldo), quatro são **plataformas** (PentAGI, Modern Web
+Guidance, Astryx, phone-agent-harness) e uma é **ferramenta de instalação** (Skills CLI).
 
 ## Índice
 
@@ -22,6 +23,8 @@ Nove são **skills**; quatro são **plataformas** (PentAGI, Modern Web Guidance,
 | [Modern Web Guidance](modern-web-guidance.md) | Chrome/Edge/Firefox/MDN | plataforma web **moderna** (209 guias) |
 | [Astryx](astryx.md) | Meta | design system React 19 com CLI para agentes |
 | [phone-agent-harness](phone-agent-harness.md) | comunidade | agente que **liga e atende** telefone |
+| [Skills CLI](skills-cli.md) | vercel-labs | **instalador** de skills para ~70 agentes, com lock e update |
+| [Caldo Skills](caldoai-skills.md) | caldoai | poda de testes sem valor e desemaranhado de codebase |
 
 ## Como escolher
 
@@ -40,6 +43,8 @@ Nove são **skills**; quatro são **plataformas** (PentAGI, Modern Web Guidance,
 | escrever UI com API web atual | Modern Web Guidance |
 | app React 19 com biblioteca pronta | Astryx |
 | agente que fala ao telefone | pat-phone-agent-tool (ver `phone-agent-harness.md`) |
+| instalar/atualizar skills em vários harnesses | Skills CLI (`npx skills add`, `check`, `update`) |
+| limpar suíte de testes e emaranhado antes de mexer | Caldo Skills |
 
 ## Regra de convivência
 
@@ -62,5 +67,7 @@ próprio repositório.
 | Modern Web Guidance | skill por agente (`~/.agents/skills`) | skill + CLI `npx modern-web-guidance` |
 | Astryx | CLI global npm + skill | skill + `astryx docs/component/search` |
 | phone-agent-harness | MCP `pat-phone` (Python) | ferramentas `place_call`/`get_call`/`end_call` |
+| Skills CLI | binário npm global (`skills`) | comando `skills` + lock em `~/.agents/.skill-lock.json` |
+| Caldo Skills | 2 skills via Skills CLI | skills `prune-tests` e `untangle-codebase` |
 
 Como registrar em cada harness: [`docs/harness-integration.md`](../docs/harness-integration.md).

@@ -148,12 +148,12 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 
 ## Estado verificado (não é marketing)
 
-Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **14 referências
+Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **16 referências
 externas** documentadas. **O que está publicado é diferente do que está verificado.**
 
 | Métrica | Valor |
 |---|---|
-| Skills publicadas | **10** DZ23 + **2 MCP** + 1 bundle + 7 externas (+14 referências externas) |
+| Skills publicadas | **10** DZ23 + **2 MCP** + 1 bundle + 7 externas (+16 referências externas) |
 | Evals declarados | **144** |
 | **Evals executados** | **45/144 (31,2%)** — 43 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |

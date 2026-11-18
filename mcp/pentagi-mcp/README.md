@@ -58,6 +58,16 @@ node scripts/selftest.js
 
 O token **não** é copiado para os configs: todos apontam para `PENTAGI_TOKEN_FILE`.
 
+## Notas de API (custaram iteração)
+
+| Sintoma | Causa real | Correção |
+|---|---|---|
+| `Variable "$input" of type "String" used in position expecting "String!"` | `createFlow` exige não-nulos | `mutation($input: String!, $provider: String!)` |
+| `Cannot query field "tasks" on type "Flow"` | `tasks` é **query própria**, não campo de `Flow` | `tasks(flowId: $id) { id title status result }` |
+| `Cannot query field "message" on type "ResultType"` | `ResultType` é **ENUM** sem campos | seleção nenhuma: `stopFlow(flowId: $id)` |
+| `expected at least one definition, found }` | mesma causa: `{ }` é seleção inválida | idem |
+| `flow is not loaded` | o worker do flow não está na memória do controller | só ocorre em flow que não iniciou; não é erro de sintaxe |
+
 ## Estado verificado (2026-11-12)
 
 | Item | Evidência |
