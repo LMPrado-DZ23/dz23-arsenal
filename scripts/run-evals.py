@@ -26,6 +26,42 @@ import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
+
+
+def apontar_raiz(argv: list[str]) -> list[str]:
+    """Consome `--raiz <pasta>` e reposiciona RAIZ e tudo que deriva dela.
+
+    Sem isso, apontar o verificador para uma fixture é impossível: ele sempre enxerga o repo
+    de onde o arquivo foi copiado. Um ataque a estes scripts caiu nessa armadilha -- rodar com
+    `cwd=fixture` não muda nada, porque a raiz vem de `__file__`, e o resultado é verde sem
+    medir absolutamente nada.
+
+    Reatribuir só o global não basta: SKILLS/RESULTADOS/PROMPTS/SCHEMA são calculados no
+    import, a partir da RAIZ original. Foram incluídos aqui de propósito; qualquer outro
+    derivado novo precisa entrar nesta lista, senão passa a apontar para dois lugares.
+    """
+    global RAIZ, SKILLS, RESULTADOS, PROMPTS, SCHEMA
+    restante = list(argv)
+    nova = None
+    for i, a in enumerate(restante):
+        if a == "--raiz" and i + 1 < len(restante):
+            nova = Path(restante[i + 1]).resolve()
+            del restante[i:i + 2]
+            break
+        if a.startswith("--raiz="):
+            nova = Path(a.split("=", 1)[1]).resolve()
+            del restante[i]
+            break
+    if nova is not None:
+        RAIZ = nova
+        SKILLS = RAIZ / "skills"
+        RESULTADOS = RAIZ / "evals-results"
+        PROMPTS = RAIZ / "evals-prompts"
+        SCHEMA = RAIZ / "evals.schema.json"
+        if not SKILLS.is_dir():
+            print(f"ERRO: {SKILLS} não existe -- nada para avaliar", file=sys.stderr)
+            raise SystemExit(2)
+    return restante
 SKILLS = RAIZ / "skills"
 RESULTADOS = RAIZ / "evals-results"
 PROMPTS = RAIZ / "evals-prompts"
@@ -322,6 +358,7 @@ def cmd_verify_quotes(laudo: str | None, como_json: bool) -> int:
 
 
 def main(argv: list[str]) -> int:
+    argv = apontar_raiz(argv)
     for s in (sys.stdout, sys.stderr):
         try:
             s.reconfigure(encoding="utf-8", errors="replace")
@@ -329,6 +366,7 @@ def main(argv: list[str]) -> int:
             pass
 
     ap = argparse.ArgumentParser()
+    ap.add_argument("--raiz", default=None, help="conferir outra árvore (fixture)")
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--list", action="store_true")
     g.add_argument("--check", action="store_true")

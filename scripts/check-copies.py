@@ -25,6 +25,29 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 
+
+def apontar_raiz(argv: list[str]) -> list[str]:
+    """Consome `--raiz <pasta>` e reposiciona o global RAIZ.
+
+    Sem isso, apontar o verificador para uma fixture é impossível: ele sempre enxerga o repo
+    de onde o arquivo foi copiado. Um ataque a estes scripts caiu nessa armadilha -- rodar com
+    `cwd=fixture` não muda nada, porque a raiz vem de `__file__`, e o resultado é verde sem
+    medir absolutamente nada.
+    """
+    global RAIZ
+    restante = list(argv)
+    for i, a in enumerate(restante):
+        if a == "--raiz" and i + 1 < len(restante):
+            RAIZ = Path(restante[i + 1]).resolve()
+            del restante[i:i + 2]
+            break
+        if a.startswith("--raiz="):
+            RAIZ = Path(a.split("=", 1)[1]).resolve()
+            del restante[i]
+            break
+    return restante
+
+
 # Arquivo-fonte cujo conteúdo deve aparecer idêntico dentro de cada skill.
 MODULOS_EMBUTIDOS = ("skill_validator.py", "_achar_arsenal.py")
 
@@ -34,6 +57,7 @@ def sha(p: Path) -> str:
 
 
 def main(argv: list[str]) -> int:
+    argv = apontar_raiz(argv)
     for s in (sys.stdout, sys.stderr):
         try:
             s.reconfigure(encoding="utf-8", errors="replace")
@@ -42,6 +66,7 @@ def main(argv: list[str]) -> int:
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--raiz", default=None, help="conferir outra árvore (fixture)")
     args = ap.parse_args(argv)
 
     problemas: list[dict] = []

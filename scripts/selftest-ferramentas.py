@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import shutil
 import sys
 import tempfile
 
@@ -305,12 +306,116 @@ def testa_guardas_de_arvore() -> list[str]:
     return problemas
 
 
+# --- os verificadores rejeitam o que devem? ------------------------------------
+
+FM_BOM = ("---\nname: dz23-t\nversion: 1.0.0\ndescription: d\nuser-invocable: true\n---\n# t\n")
+EVALS_BOM = json.dumps({
+    "schema_version": "1.0", "skill_name": "dz23-t",
+    "cases": [{"id": "a", "title": "t", "input": "p", "prompt": "p",
+               "expected": ["x"], "fails_if": ["y"]}],
+}).encode()
+
+
+def _fixture(tmp: pathlib.Path, **mud) -> pathlib.Path:
+    """Repo mínimo com uma skill; `mud` sobrescreve partes específicas."""
+    (tmp / "scripts").mkdir(exist_ok=True)
+    for n in ("check-structure.py", "check-copies.py", "check-licenses.py"):
+        shutil.copy(RAIZ / "scripts" / n, tmp / "scripts" / n)
+    sk = tmp / "skills" / "dz23-t"
+    (sk / "scripts").mkdir(parents=True)
+    (sk / "references").mkdir()
+    (sk / "evals").mkdir()
+    (sk / "SKILL.md").write_text(mud.get("fm", FM_BOM), encoding="utf-8")
+    (sk / "VERSION").write_text(mud.get("version", "1.0.0") + "\n", encoding="utf-8")
+    (sk / "CHANGELOG.md").write_text(
+        mud.get("changelog", "## [1.0.0] — x\n\n- nasceu\n"), encoding="utf-8")
+    (sk / "README.md").write_text("# r\n\n## Arsenal\n\nx\n", encoding="utf-8")
+    (sk / "evals" / "evals.json").write_bytes(mud.get("evals", EVALS_BOM))
+    modelo = RAIZ / "skills/dz23-devops-cloud-deployer/scripts/validate_skill.py"
+    shutil.copy(modelo, sk / "scripts" / "validate_skill.py")
+    for n in ("_achar_arsenal.py", "skill_validator.py"):
+        shutil.copy(RAIZ / "scripts" / n, sk / "scripts" / n)
+    return tmp
+
+
+def testa_rejeicao() -> list[str]:
+    """Não basta sobreviver: o verificador tem que REPROVAR conteúdo inválido.
+
+    Esta foi a lacuna mais cara da sessão. Um ataque anterior rodava os verificadores com
+    `cwd=fixture` e media apenas ausência de traceback -- mas todos derivam RAIZ de
+    `__file__`, então escaneavam o repo real ao lado e davam verde sem tocar no caso
+    inventado. Saía "5 inválidos aceitos" quando na verdade nada havia sido lido. Com
+    `--raiz` explícito dá para medir a decisão, não só a sobrevivência.
+    """
+    import subprocess
+    problemas: list[str] = []
+
+    invalidos = {
+        "sem name no frontmatter": {"fm": "---\nversion: 1.0.0\ndescription: d\n"
+                                          "user-invocable: true\n---\n# x\n"},
+        "VERSION != frontmatter": {"version": "9.9.9"},
+        "CHANGELOG sem secao da versao": {"changelog": "# hist\n\nnada aqui\n"},
+        "evals JSON corrompido": {"evals": b"{ isto nao e json"},
+        "evals sem schema_version": {"evals": json.dumps(
+            {"skill_name": "dz23-t", "cases": [{"id": "a", "title": "t", "input": "p",
+                                                "expected": ["x"], "fails_if": ["y"]}]}
+        ).encode()},
+        "evals case duplicado": {"evals": json.dumps(
+            {"schema_version": "1.0", "skill_name": "dz23-t", "cases": [
+                {"id": "a", "title": "t", "input": "p", "expected": ["x"], "fails_if": ["y"]},
+                {"id": "a", "title": "u", "input": "q", "expected": ["x"], "fails_if": ["y"]}]}
+        ).encode()},
+    }
+
+    def roda_raiz(tmp: pathlib.Path, script: str, *args: str) -> tuple[int, str]:
+        p = subprocess.run([sys.executable, str(RAIZ / "scripts" / script),
+                            "--raiz", str(tmp), *args],
+                           capture_output=True, timeout=180, cwd=str(RAIZ))
+        return p.returncode, (p.stdout.decode("utf-8", "replace")
+                              + p.stderr.decode("utf-8", "replace"))
+
+    # baseline válido: precisa ser ACEITO, senão toda rejeição abaixo é ruído.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = _fixture(pathlib.Path(td))
+        rc, s = roda_raiz(tmp, "check-structure.py")
+        if "Traceback" in s:
+            problemas.append(f"rejeicao/baseline: traceback -- {s.strip()[-140:]}")
+        elif rc != 0:
+            problemas.append(f"rejeicao/baseline: skill válida foi recusada -- {s.strip()[:160]}")
+
+    for rotulo, mud in invalidos.items():
+        with tempfile.TemporaryDirectory() as td:
+            tmp = _fixture(pathlib.Path(td), **mud)
+            rc, s = roda_raiz(tmp, "check-structure.py")
+            if "Traceback" in s:
+                problemas.append(f"rejeicao/{rotulo}: traceback -- {s.strip()[-140:]}")
+            elif rc == 0:
+                problemas.append(f"rejeicao/{rotulo}: aceito, deveria reprovar "
+                                 f"-- {s.strip()[:140]}")
+
+    # Árvore vazia não pode virar aprovação em nenhum dos três.
+    def confere_arvore_vazia() -> None:
+        with tempfile.TemporaryDirectory() as td:
+            tmp = pathlib.Path(td)
+            for script in ("check-copies.py", "check-licenses.py"):
+                rc, s = roda_raiz(tmp, script)
+                if "Traceback" in s:
+                    raise AssertionError(f"{script} explodiu em árvore vazia")
+                if rc == 0:
+                    raise AssertionError(f"{script} aprovou árvore sem nada conferir: "
+                                         f"{s.strip()[:110]}")
+    problemas += sem_excecao("rejeicao/arvore-vazia-nao-aprova", confere_arvore_vazia)
+
+    return problemas
+
+
 def rodar_tudo() -> dict:
     grupos = {
         "triagem": testa_triagem(),
         "claims": testa_claims(),
         "descoberta": testa_descoberta(),
         "guardas": testa_guardas_de_arvore(),
+        "rejeicao": testa_rejeicao(),
     }
     total = sum(len(v) for v in grupos.values())
     return {"ok": total == 0, "problemas": total, "por_grupo": grupos}

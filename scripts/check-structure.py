@@ -106,7 +106,30 @@ def checar(skill: Path) -> list[str]:
     return erros
 
 
-def main() -> int:
+def apontar_raiz(argv: list[str]) -> list[str]:
+    """Consome `--raiz <pasta>` e reposiciona o global RAIZ (ver check-copies.py).
+
+    Aqui isso é mais importante do que parece: sem o parâmetro, um teste com fixture aponta
+    `cwd` para a árvore falsa e o script continua escaneando as dez skills reais -- "skills
+    verificadas: 10" com PROBLEMAS: 0, verde absoluto sobre o caso inventado. A suíte
+    permanente desta sessão tropeçou exatamente nisso.
+    """
+    global RAIZ
+    restante = list(argv)
+    for i, a in enumerate(restante):
+        if a == "--raiz" and i + 1 < len(restante):
+            RAIZ = Path(restante[i + 1]).resolve()
+            del restante[i:i + 2]
+            break
+        if a.startswith("--raiz="):
+            RAIZ = Path(a.split("=", 1)[1]).resolve()
+            del restante[i]
+            break
+    return restante
+
+
+def main(argv: list[str] | None = None) -> int:
+    argv = apontar_raiz(list(sys.argv[1:] if argv is None else argv))
     for s in (sys.stdout, sys.stderr):
         try:
             s.reconfigure(encoding="utf-8", errors="replace")
@@ -134,4 +157,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))

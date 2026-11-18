@@ -27,6 +27,27 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 
+
+def apontar_raiz(argv: list[str]) -> list[str]:
+    """Consome `--raiz <pasta>` e reposiciona o global RAIZ (ver check-copies.py).
+
+    Os derivados (`base`, `skills`, `ext`) são calculados dentro de main(), depois desta
+    chamada, então reatribuir RAIZ basta aqui -- ao contrário de run-evals.py, que congela
+    SKILLS/RESULTADOS no import.
+    """
+    global RAIZ
+    restante = list(argv)
+    for i, a in enumerate(restante):
+        if a == "--raiz" and i + 1 < len(restante):
+            RAIZ = Path(restante[i + 1]).resolve()
+            del restante[i:i + 2]
+            break
+        if a.startswith("--raiz="):
+            RAIZ = Path(a.split("=", 1)[1]).resolve()
+            del restante[i]
+            break
+    return restante
+
 # Licenças que impedem redistribuição num repo MIT sem separação explícita de obra.
 # Precisam casar como token, não como substring: "ND" solto aparece dentro de
 # "GRAND", "SECOND", "Kubernetes ND..." e gerava centenas de falsos positivos.
@@ -92,6 +113,7 @@ def licenca_de_pasta(pasta: Path) -> tuple[str | None, str | None]:
 
 
 def main(argv: list[str]) -> int:
+    argv = apontar_raiz(argv)
     for s in (sys.stdout, sys.stderr):
         try:
             s.reconfigure(encoding="utf-8", errors="replace")
@@ -100,10 +122,18 @@ def main(argv: list[str]) -> int:
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--raiz", default=None, help="conferir outra árvore (fixture de teste)")
     args = ap.parse_args(argv)
 
     problemas: list[str] = []
     inventario: list[dict] = []
+
+    # Nada conferido não é nada aprovado. Cada laço abaixo usa `continue` quando a pasta não
+    # existe, então uma árvore vazia -- ou um `--raiz` apontando para o lugar errado -- saía
+    # com "licenças consistentes" e exit 0. É o mesmo gate-fantasma que motivou a v1.5.0,
+    # reaparecendo aqui por outra porta: ausência de material tem que ser declarada, não
+    # confundida com sucesso.
+    conferidos = 0
 
     # 1. Componentes próprios precisam de licença.
     for subpasta in ("mcp", "bundle"):
@@ -111,6 +141,7 @@ def main(argv: list[str]) -> int:
         if not base.is_dir():
             continue
         for pasta in sorted(p for p in base.iterdir() if p.is_dir()):
+            conferidos += 1
             fonte, valor = licenca_de_pasta(pasta)
             inventario.append({"componente": f"{subpasta}/{pasta.name}",
                                "fonte": fonte, "licenca": valor})
@@ -126,6 +157,7 @@ def main(argv: list[str]) -> int:
         for arq in sorted(ext.glob("*.md")):
             if arq.name == "README.md":
                 continue
+            conferidos += 1
             texto = _ler(arq)
             # Aceita tanto o formato de tabela (`| Licença | MIT |`) quanto o de linha
             # (`**Licença:** MIT`). O separador pode ser `:` ou `|`, e o valor pode vir
@@ -182,8 +214,16 @@ def main(argv: list[str]) -> int:
             f"{len(mojibake)} arquivo(s) com texto corrompido (U+FFFD ou sequências de "
             f"mojibake): {', '.join(mojibake[:5])}. Isso é lido pelo agente como está.")
 
+    if conferidos == 0 and not problemas:
+        # Sem mcp/, sem bundle/ e sem external/*.md não há o que aprovar. Sair 0 aqui faria um
+        # `--raiz` errado parecer aprovação -- exatamente o gate-fantasma desta sessão.
+        problemas.append(
+            f"nenhum componente nem referência externa encontrado em {RAIZ} — "
+            f"nada foi conferido, o que não é a mesma coisa que estar correto")
+
     if args.json:
         print(json.dumps({"ok": not problemas, "problemas": problemas,
+                          "conferidos": conferidos,
                           "componentes": inventario, "mojibake": mojibake},
                          ensure_ascii=False, indent=2))
     else:
