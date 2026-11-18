@@ -1,6 +1,6 @@
 ---
 name: dz23-autonomous-improvement-ultimate
-version: 2.1.7
+version: 2.1.8
 description: Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.
 user-invocable: true
 argument-hint: "<objetivo, ou 'audit <path>', ou cole o /goal>"
@@ -75,7 +75,7 @@ Leia `references/quality-gates.md` e execute os gates aplicáveis: lint, typeche
 - Se restarem itens `MEDIUM/LOW` em escopo, só encerre como completo se o contrato de aceite explicitamente permitir e eles estiverem documentados; caso contrário continue ou informe pendência.
 
 ### 6.1 Avaliação da skill
-Consulte `evals/evals.json` (path relativo à skill): 12 cenários com o comportamento esperado em cada situação. **Cenários de avaliação não são testes executados** — rode-os em harness real, com agente e ferramentas reais, e registre por cenário o resultado (passou/falhou) com a evidência. Avalie aderência às regras do corpo (proteção do projeto, contrato de aceite, gates, parada honesta) e a integração com `/goal`, não a simples menção de palavras-chave.
+Consulte `evals/evals.json` (path relativo à skill): 13 cenários com o comportamento esperado em cada situação. **Cenários de avaliação não são testes executados** — rode-os em harness real, com agente e ferramentas reais, e registre por cenário o resultado (passou/falhou) com a evidência. Avalie aderência às regras do corpo (proteção do projeto, contrato de aceite, gates, parada honesta) e a integração com `/goal`, não a simples menção de palavras-chave.
 
 ### 7. Retomada
 Ao retomar, leia checkpoint, **revalide** branch/HEAD, working tree, serviços, evidências e backlog; não confie cegamente no estado salvo. Não repita automaticamente migrações, pagamentos, exclusões, deploys ou comandos não idempotentes. Leia `references/checkpoint-and-resume.md`.

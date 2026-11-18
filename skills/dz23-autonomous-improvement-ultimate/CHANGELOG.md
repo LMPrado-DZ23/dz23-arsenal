@@ -1,5 +1,12 @@
 # Changelog — dz23-autonomous-improvement-ultimate
 
+## [2.1.8] — 2026-11-18
+
+### Corrigido
+- `SKILL.md` dizia "12 cenários" com 13 em `evals/evals.json`. O validador desta skill conferia marcas de seção, anti-loop e vocabulário, mas nenhuma checagem comparava número citado contra contagem real -- a classe que a v2.1.5 combateu no vocabulário continuou aberta nos números.
+- Nova checagem no validador: todo `\d+ cenários` no corpo tem de bater com o arquivo, reportando com `raise SystemExit(1)` (não `assert`, que `python -O` apagaria). Provado em três casos: contagem certa passa nos dois modos; "12 havendo 13" e "130 havendo 13" recusam nos dois modos.
+- Limitação registrada: a checagem cobre apenas cenários, porque é o que esta skill declara em prosa. Referências e templates não têm contagem fixada no texto.
+
 ## [2.1.7] — 2026-11-18
 
 ### Corrigido

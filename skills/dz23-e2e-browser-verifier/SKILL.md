@@ -1,6 +1,6 @@
 ---
 name: dz23-e2e-browser-verifier
-version: 1.1.2
+version: 1.1.3
 description: >
   Automação de testes E2E com browser real (Playwright + cross-browser).
   Verifica fluxos críticos de UI, captura evidências (screenshot, vídeo,
@@ -13,7 +13,9 @@ argument-hint: "<url-alvo, 'audit <path>' ou cole o fluxo a testar>"
 ---
 
 > v1.1 — merge com 3 propostas (Claude, Gemini, ChatGPT) + verificação Manus: tiers P0/P1/P2,
-> `browser-security` e `visual-accessibility`, 4 templates e 15 evals.
+> `browser-security` e `visual-accessibility`. Os números citados nesta linha eram os da v1.1; a
+> skill evoluiu desde então, e contagens correntes não se declaram aqui de propósito -- cada bump
+> as deixaria mentindo. Ver `CHANGELOG.md`.
 
 # DZ23 E2E BROWSER VERIFIER — v1.1
 

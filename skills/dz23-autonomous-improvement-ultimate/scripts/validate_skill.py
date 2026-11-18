@@ -14,6 +14,7 @@ Checa o que é específico desta skill, além das checagens comuns do arsenal:
 """
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -113,6 +114,22 @@ if estranhos:
     print(f"FALHA: estados de evidência fora do vocabulário do arsenal: "
           f"{sorted(estranhos)} — use NOT_TESTED", file=sys.stderr)
     raise SystemExit(1)
+
+# Quantidade de cenários declarada no corpo tem de bater com o arquivo. Observado nesta skill:
+# o texto dizia "12 cenários" com 13 em evals.json -- sobreviveu a duas unificações de vocabulário
+# porque nenhum verificador comparava número citado contra contagem real. Não usar assert: sob
+# `python -O` a checagem desapareceria, exatamente o defeito banido deste arquivo na 2.1.6.
+try:
+    _dados = json.loads((root / "evals" / "evals.json").read_text(encoding="utf-8"))
+    _real = len(_dados.get("cases", [])) if isinstance(_dados.get("cases"), list) else None
+except (OSError, ValueError):
+    _real = None
+if _real is not None:
+    for _m in re.finditer(r"\b(\d{1,3})\s+cen[áa]rios\b", s, re.I):
+        if int(_m.group(1)) != _real:
+            print(f"FALHA: SKILL.md declara {_m.group(1)} cenários; evals/evals.json tem {_real}",
+                  file=sys.stderr)
+            raise SystemExit(1)
 
 # O CHANGELOG precisa documentar a versão corrente, senão VERSION avança e o histórico
 # fica mentindo sobre o que mudou.

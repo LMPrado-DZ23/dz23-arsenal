@@ -1,5 +1,10 @@
 # Changelog — dz23-e2e-browser-verifier
 
+## [1.1.3] — 2026-11-18
+
+### Corrigido
+- Nota histórica do cabeçalho afirmava "4 templates e 15 evals", valores da v1.1. Hoje são 6 templates e 16 evals, e nenhum dos números batia nem com .ts (3) nem com .md (3): a frase era resíduo de versão, não contagem estrutural. Reescrita para não declarar contagens correntes em prosa -- cada bump as deixaria mentindo -- apontando ao CHANGELOG.
+
 ## [1.1.2] — 2026-11-17
 
 ### Corrigido

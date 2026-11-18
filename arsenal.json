@@ -11,7 +11,7 @@
   "skills": [
     {
       "name": "dz23-autonomous-improvement-ultimate",
-      "version": "2.1.7",
+      "version": "2.1.8",
       "description": "Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.",
       "user_invocable": true,
       "files": 17,
@@ -19,7 +19,7 @@
       "templates": 2,
       "scripts": 3,
       "evals": 13,
-      "sha256_skill_md": "e7d3f1510f3f7a002c292bb2778c1d510de0d04874f688d0360dbe65245de284"
+      "sha256_skill_md": "95a237c84ff8f598f9d2c505cde6e1dadf42f4f8c1ffb6ddf2a96b958cd1c5ea"
     },
     {
       "name": "dz23-backend-data-architect",
@@ -59,7 +59,7 @@
     },
     {
       "name": "dz23-e2e-browser-verifier",
-      "version": "1.1.2",
+      "version": "1.1.3",
       "description": ">",
       "user_invocable": true,
       "files": 25,
@@ -67,7 +67,7 @@
       "templates": 6,
       "scripts": 3,
       "evals": 16,
-      "sha256_skill_md": "0a2a7178218194de4ee512dba6abae422ae811448491e66fb52078ba01480ed2"
+      "sha256_skill_md": "b1b85351170a18817acb2ae6a80c4146f7a43aa85942fe614b83c32251b16e01"
     },
     {
       "name": "dz23-performance-scalability-engine",
