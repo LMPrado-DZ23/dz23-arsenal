@@ -14,7 +14,7 @@
       "version": "2.2.0",
       "description": "Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.",
       "user_invocable": true,
-      "files": 21,
+      "files": 22,
       "references": 5,
       "templates": 2,
       "scripts": 4,

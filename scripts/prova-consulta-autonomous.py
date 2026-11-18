@@ -8,7 +8,7 @@ import sys
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 CONS = RAIZ / "scripts" / "consulta-autonomous.py"
 DADOS = RAIZ / "skills" / "dz23-autonomous-improvement-ultimate" / "dados"
-ARQS = ["gates-de-qualidade.csv", "verificacao-por-componente.csv"]
+ARQS = ["gates-de-qualidade.csv", "verificacao-por-componente.csv", "falhas-de-agente.csv"]
 
 
 def _run(args):
@@ -34,7 +34,8 @@ def main() -> int:
 
     # 2. consultas legitimas respondem a categoria certa
     positivos = {("gate", "e2e"): "fluxo", ("gate", "multitenancy"): "Tenant",
-                 ("componente", "modal"): "foco", ("gate", "banco"): "rollback"}
+                 ("componente", "modal"): "foco", ("gate", "banco"): "rollback",
+                 ("falhas", "loop"): "repeticao", ("falhas", "429"): "backoff"}
     for (ds, termo), esperado in positivos.items():
         out = _run([ds] + ([termo] if termo else []))
         if "sem correspondencia" in out:
@@ -43,7 +44,8 @@ def main() -> int:
             erros.append(f"'{ds} {termo}' sem o esperado {esperado!r}")
 
     # 3. controles negativos: termo inexistente RECUSA
-    for ds, termo in (("gate", "futebolxyz"), ("componente", "blockchainxyz"), ("gate", "zzzz")):
+    for ds, termo in (("gate", "futebolxyz"), ("componente", "blockchainxyz"), ("gate", "zzzz"),
+                      ("falhas", "quasarxyz")):
         out = _run([ds, termo])
         if "sem correspondencia" not in out:
             erros.append(f"controle negativo falhou: '{ds} {termo}' nao foi recusado")
@@ -59,8 +61,8 @@ def main() -> int:
         for e in erros:
             print(f"FALHA: {e}")
         return 1
-    print(f"OK: 4 consultas corretas, 3 recusas honestas, esquema valido, {total} registros em "
-          f"{len(ARQS)} datasets")
+    print(f"OK: {len(positivos)} consultas corretas, 4 recusas honestas, esquema valido, "
+          f"{total} registros em {len(ARQS)} datasets")
     return 0
 
 

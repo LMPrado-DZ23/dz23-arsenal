@@ -37,9 +37,14 @@ DATASETS = {
     "componente": {"arquivo": "verificacao-por-componente.csv",
                    "campos": ["componente", "o_que_verificar"],
                    "titulo": "O que verificar por componente/fluxo"},
+    "falhas": {"arquivo": "falhas-de-agente.csv",
+               "campos": ["pattern", "causa_provavel", "verificar"],
+               "titulo": "Modos de falha de agente e o que checar (ECC agent-introspection-debugging, MIT)"},
 }
 APELIDOS = {"area": "gate", "evidencia": "gate", "qualidade": "gate", "comp": "componente",
-            "ui": "componente", "fluxo": "componente"}
+            "ui": "componente", "fluxo": "componente",
+            "falha": "falhas", "loop": "falhas", "debug": "falhas", "travou": "falhas",
+            "introspec": "falhas", "diagnostico": "falhas"}
 
 
 def _palavras(s: str) -> set[str]:
@@ -123,7 +128,7 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description="Acervo de gates de qualidade (ORIGINAL DZ23).")
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("listar")
-    for nome in ("gate", "componente", "area", "evidencia", "qualidade", "comp", "ui", "fluxo"):
+    for nome in (*DATASETS, *APELIDOS):  # subcomandos derivam do acervo -- sem lista fixa que apodrece
         p = sub.add_parser(nome)
         p.add_argument("termo", nargs="*")
         p.set_defaults(dataset=nome)

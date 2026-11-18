@@ -1,5 +1,7 @@
 # Proveniência — dados/ (acervo de gates de qualidade)
 
+> **falhas-de-agente.csv** (6 linhas) vem da skill `agent-introspection-debugging` do ECC (MIT): os 6 modos de falha de agente (loop/tool-calls, contexto estourado, ECONNREFUSED, 429, arquivo sumido, hipotese errada) com causa provavel e o que checar. Cada linha cita `ECC agent-introspection-debugging/SKILL.md`.
+
 - **Fonte:** **ORIGINAL (DZ23)** — destilado da própria `references/quality-gates.md` da skill. Nada
   externo; é o conhecimento que a skill já tinha, tornado consultável.
 - **O que é:** 2 datasets (19 registros):

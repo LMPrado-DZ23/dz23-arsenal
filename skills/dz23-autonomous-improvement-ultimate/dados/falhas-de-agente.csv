@@ -1,0 +1,7 @@
+No,pattern,causa_provavel,verificar,origem_arquivo,origem_secao
+1,maximo de tool calls ou o mesmo comando repetido,loop ou caminho de observador sem saida,inspecionar as ultimas N tool calls procurando repeticao,ECC agent-introspection-debugging/SKILL.md,Phase 2: Root-Cause Diagnosis
+2,contexto estourado ou raciocinio degradado,notas sem limite; planos repetidos; logs gigantes colados,inspecionar o contexto recente por duplicacao e volume de baixo sinal,ECC agent-introspection-debugging/SKILL.md,Phase 2: Root-Cause Diagnosis
+3,ECONNREFUSED ou timeout,servico indisponivel ou porta errada,verificar saude do servico URL e porta,ECC agent-introspection-debugging/SKILL.md,Phase 2: Root-Cause Diagnosis
+4,429 ou cota esgotada,tempestade de retry ou backoff ausente,contar chamadas repetidas e inspecionar o espacamento dos retries,ECC agent-introspection-debugging/SKILL.md,Phase 2: Root-Cause Diagnosis
+5,arquivo sumido apos escrever ou diff velho,corrida cwd errado ou drift de branch,re-checar caminho cwd git status e a existencia real do arquivo,ECC agent-introspection-debugging/SKILL.md,Phase 2: Root-Cause Diagnosis
+6,testes ainda falham apos a correcao,hipotese errada,isolar o teste exato que falha e re-derivar o bug,ECC agent-introspection-debugging/SKILL.md,Phase 2: Root-Cause Diagnosis
