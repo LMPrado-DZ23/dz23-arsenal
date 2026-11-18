@@ -88,14 +88,22 @@ jobs:
         run: python scripts/check-eval-results.py
 
       - name: Estado de execução dos evals
-        # Rodar --report em CI expõe a cobertura real a cada push. O script sai 1
-        # enquanto houver cenário sem resultado (estado atual: 99/144), então aqui ele
-        # é informativo: publica o número no resumo do run sem bloquear merge. Quando a
-        # cobertura subir de patamar, trocar para `python scripts/run-evals.py --report`
-        # puro para passar a bloquear.
+        # Rodar --report em CI expõe a cobertura real a cada push. O script sai 1 enquanto
+        # houver cenário sem resultado (estado atual: 99/144), então aqui ele é informativo:
+        # publica o número no resumo do run sem bloquear merge. Quando a cobertura subir de
+        # patamar, trocar para `python scripts/run-evals.py --report` puro para bloquear.
+        #
+        # O `|| true` está escrito de propósito. Sem ele o passo dependeria de um detalhe do
+        # shell para ser informativo: `cmd | tee` sem `pipefail` devolve o código do último
+        # elemento, então o exit 1 do report já era engolido por acidente. Verificado neste
+        # bash (`false | tee x >/dev/null` -> exit 0). Confiar nisso deixaria o passo quebrar o
+        # build inteiro no dia em alguém adicionar `defaults.run.shell: bash -euo pipefail` ao
+        # workflow -- uma mudança inofensiva no papel. Explicitado, e com rm para não deixar
+        # report.txt solto no workspace.
         run: |
-          python scripts/run-evals.py --report | tee report.txt
+          python scripts/run-evals.py --report | tee report.txt || true
           tail -n 3 report.txt >> "$GITHUB_STEP_SUMMARY"
+          rm -f report.txt
 
       - name: Links relativos
         run: python scripts/check-links.py .
@@ -158,7 +166,7 @@ jobs:
               print("gate.json ausente — o gate não chegou a completar")
               # Isso é falha, não estado neutro.
               raise SystemExit(1)
-          d = json.loads(p.read_text())
+          d = json.loads(p.read_text(encoding="utf-8"))
           resumo = f"checks: {d['total']} | falhas: {d['falhas']}"
           print(resumo)
           for c in d["checks"]:
