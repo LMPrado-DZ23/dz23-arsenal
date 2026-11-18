@@ -51,6 +51,10 @@ jobs:
       - name: Estrutura das skills
         run: python scripts/check-structure.py
 
+      - name: Cópias embutidas batem com a fonte
+        # skill_validator.py e _achar_arsenal.py vivem em scripts/ e dentro de cada skill.
+        run: python scripts/check-copies.py
+
       - name: Validador de cada skill
         # Uma skill sem validate_skill.py não pode contar como aprovada: o loop era
         # `[ -f "$v" ] || continue`, que pulava em silêncio. Agora se exige um por skill.

@@ -109,6 +109,10 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("numeros", [py, "scripts/check-numbers.py"]))
     resultados.append(rodar("links", [py, "scripts/check-links.py", "."]))
     resultados.append(rodar("estrutura", [py, "scripts/check-structure.py"]))
+    # As skills embutem cópias de scripts/skill_validator.py e scripts/_achar_arsenal.py
+    # para se auto-validarem fora do checkout. Duplicação intencional — mas só é segura
+    # enquanto as cópias baterem com a fonte.
+    resultados.append(rodar("copias", [py, "scripts/check-copies.py"]))
     resultados.append(rodar("licencas", [py, "scripts/check-licenses.py"]))
     resultados.append(rodar("evals:coerencia", [py, "scripts/run-evals.py", "--check"]))
     resultados.append(rodar("evals:schema", [py, "scripts/run-evals.py", "--schema"]))
