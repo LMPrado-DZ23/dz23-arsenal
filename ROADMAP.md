@@ -48,7 +48,7 @@ uma regra órfã é indistinguível de uma checagem aprovada.
 
 ## O buraco maior: evals não executados
 
-As 10 skills DZ23 declaram **144 cenários** em `evals/evals.json`. Executados em harness real e julgados: **45**.
+As 10 skills DZ23 declaram **144 cenários** (ledger DZ23). Executados e registrados: **73 (50,7%)**, todos Camada 1 (autoavaliação, viés do autor). `run-evals.py --report` conta as 18 skills = **192 avaliações** (144 DZ23 + 48 incorporadas, estas 0/48, verificadas pela prova do consultor no gate).
 Os demais seguem `NOT_TESTED`; a tabela por skill abaixo é a fonte, e `scripts/check-numbers.py`
 confere estes números contra o disco.
 

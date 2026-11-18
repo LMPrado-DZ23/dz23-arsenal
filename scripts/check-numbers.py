@@ -189,6 +189,7 @@ def _qual_node() -> str | None:
 REGRAS: list[tuple[str, str, str, str]] = [
     ("README.md", r"Coleção de (\d+) skills", "skills", "abertura do README"),
     ("README.md", r"badge/skills-(\d+)", "skills", "badge de skills"),
+    ("README.md", r"badge/mcp-(\d+)", "mcp", "badge de MCP"),
     ("README.md", r"Skills DZ23 \((\d+)\)", "skills_dz23", "título do índice"),
     ("README.md", r"(\d+) MCP", "mcp", "contagem de MCP"),
     ("README.md", r"(\d+) bundle", "bundle", "contagem de bundles"),

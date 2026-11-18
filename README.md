@@ -4,7 +4,7 @@ Coleção de 18 skills, 2 MCP e 1 bundle de engenharia para agentes de IA (Claud
 Cursor, Codex). Cada item é uma capacidade completa — não um prompt solto.
 
 ![Skills](https://img.shields.io/badge/skills-18-blue)
-![MCP](https://img.shields.io/badge/mcp-1-green)
+![MCP](https://img.shields.io/badge/mcp-2-green)
 ![Bundle](https://img.shields.io/badge/bundle-1-purple)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
 
@@ -154,8 +154,8 @@ externas** documentadas. **O que está publicado é diferente do que está verif
 | Métrica | Valor |
 |---|---|
 | Skills publicadas | **10** DZ23 + **8 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines, replica-recon, replica-entrepreneur, replica-diff, replica-brand, replica-launch — MIT) + **2 MCP** + 1 bundle + 7 externas (+16 referências externas) |
-| Evals declarados | **144** |
-| **Evals executados** | **73/144 (50,7%)** — 71 PASS · 2 PARTIAL · 0 FAIL |
+| Evals declarados (ledger DZ23) | **144** |
+| **Evals executados (DZ23)** | **73/144 (50,7%)** — 71 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |
 | **Laudo original da auditoria** | **`INVALIDO_COMO_EVIDENCIA`** — 54 de 68 citações não existem nas respostas |
 | Críticos executados | **32 de 45 identificados (71%)** — 13 exigem infra |
@@ -257,13 +257,23 @@ referências externas pertencem aos seus respectivos autores e mantêm suas lice
 
 ## Aviso honesto sobre evals
 
-As 10 skills DZ23 declaram **144 cenários** em `evals/evals.json`. Executados em harness real e julgados:
-**3** — mais 1 (`pass-sem-teste`) na skill de orquestração. O resto é `NOT_TESTED`, declarado no
-`CHANGELOG.md` de cada skill e no [`ROADMAP.md`](ROADMAP.md).
+As 10 skills DZ23 declaram **144 cenários** (o "ledger DZ23"). Executados e registrados em
+`evals-results/`: **73 (50,7%)**, todos como **Camada 1 — autoavaliação na mesma sessão (viés do
+autor)**, não prova independente. O resto é `NOT_TESTED`/`BLOCKED`, declarado no `CHANGELOG.md` de cada
+skill e no [`ROADMAP.md`](ROADMAP.md).
+
+**Total real vs ledger (transparência):** `python scripts/run-evals.py --report` conta as **18 skills**
+= **192 avaliações** (144 das 10 DZ23 + 48 das 8 incorporadas). As 48 das incorporadas estão em **0/48** no
+ledger — a verificação delas é a **prova do consultor/script no gate**, não o registro de eval. Logo,
+contra as 18 skills a cobertura registrada é **73/192 (38%)**; contra o ledger DZ23, **73/144 (50,7%)**.
+Os dois números são verdadeiros: o 144 é o escopo de verificação histórica das DZ23; o 192 é o que o
+comando soma.
 
 Skill com eval não executado é skill com comportamento **não comprovado**. Trate `evals/evals.json` como
 especificação de comportamento, não como certificado.
 
-O próximo passo para fechar esse buraco está descrito no `ROADMAP.md` (dívida #1): um harness
-`scripts/run-evals.py` que executa, registra veredito e guarda evidência. Enquanto ele não existir, o
-número honesto continua sendo **3 de 137**.
+O harness `scripts/run-evals.py` já existe: executa `--report`, registra veredito e guarda evidência em
+`evals-results/`. O número honesto hoje é **73/144 registrados (50,7%)** no ledger DZ23, **todos
+Camada 1 (autoavaliação)**. O que falta para fechar a dívida #1 do `ROADMAP.md` é **execução
+independente + infra**: os ~71 pendentes exigem browser, Postgres, Docker, Ghidra, medição ou render —
+executá-los sem a infra seria fabricar, e auto-avaliar não é prova independente.
