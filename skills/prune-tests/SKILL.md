@@ -44,7 +44,7 @@ depende de:
   esperado deriva da mesma lógica do código (resultado errado ainda passa); afirma estado privado,
   ordem interna de chamadas ou qual helper foi invocado.
 
-Taxonomia completa com exemplos em `references/taxonomia-do-que-podar.md`.
+Taxonomia completa com exemplos em `references/taxonomia-do-que-podar.md` — ou, offline, `python scripts/consulta-prune.py familia <passado|nada|implementacao|duplicado>` e `... busca <termo>` (responde "sem correspondência" quando não há). O acervo é a própria taxonomia, em `dados/familias-de-poda.csv`. O consultor **classifica, nunca remove**.
 
 ## Como podar (o detalhe mora nas referências)
 

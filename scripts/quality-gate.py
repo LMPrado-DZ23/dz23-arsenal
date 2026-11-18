@@ -190,6 +190,10 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("untangle:consulta", [py, "scripts/consulta-untangle.py", "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-untangle",
                             [py, "scripts/prova-consulta-untangle.py"]))
+    # prune-tests: acervo das familias de teste podavel (taxonomia propria). Classifica, nunca remove.
+    resultados.append(rodar("prune:consulta", [py, "scripts/consulta-prune.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-prune",
+                            [py, "scripts/prova-consulta-prune.py"]))
     resultados.append(rodar("cobertura:incorporadas", [py, "scripts/check-cobertura-incorporadas.py"]))
     resultados.append(rodar("cobertura:autoteste",
                             [py, "scripts/check-cobertura-incorporadas.py", "--selftest"]))

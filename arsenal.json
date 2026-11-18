@@ -134,12 +134,12 @@
       "version": "1.0.0",
       "description": ">",
       "user_invocable": true,
-      "files": 14,
+      "files": 17,
       "references": 4,
       "templates": 1,
-      "scripts": 3,
+      "scripts": 4,
       "evals": 6,
-      "sha256_skill_md": "5cc960f0c74558cc182ff3ff781cedc6c4ce91c4a425a57f54da7914edbbcbc5"
+      "sha256_skill_md": "c4e438acd747b7c8bad71f645de8fa636bc0c3595e30e7a3ea9f086559c6e7eb"
     },
     {
       "name": "replica-brand",

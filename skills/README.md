@@ -18,7 +18,7 @@
 | [reverse-engineer-anything](dz23-reverse-engineer-anything/) | 1.2.0 | Eng. reversa | advanced | 12 | 4 | 6 | 15 |
 | [spec-to-system-engine](dz23-spec-to-system-engine/) | 1.3.0 | Especificação | advanced | 17 | 9 | 6 | 15 |
 | [ultimate-pro-max](dz23-ultimate-pro-max/) | 2.2.6 | UI/UX | advanced | 10 | 0 | 4 | 13 |
-| [prune-tests](prune-tests/) | 1.0.0 | — | — | 4 | 1 | 3 | 6 |
+| [prune-tests](prune-tests/) | 1.0.0 | — | — | 4 | 1 | 4 | 6 |
 | [replica-brand](replica-brand/) | 1.0.0 | — | — | 2 | 1 | 4 | 6 |
 | [replica-diff](replica-diff/) | 1.0.0 | — | — | 2 | 1 | 5 | 6 |
 | [replica-entrepreneur](replica-entrepreneur/) | 1.0.0 | — | — | 2 | 1 | 5 | 6 |

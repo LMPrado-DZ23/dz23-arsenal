@@ -62,6 +62,7 @@ CONSULTORES_EMBUTIDOS = {
     "consulta-backend.py": "dz23-backend-data-architect",
     "consulta-performance.py": "dz23-performance-scalability-engine",
     "consulta-untangle.py": "untangle-codebase",
+    "consulta-prune.py": "prune-tests",
 }
 
 # Prefixos cuja LINHA inteira pode diferir entre as duas copias, por definir onde mora o dado.

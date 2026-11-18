@@ -1,10 +1,6 @@
 {
   "descricao": "Furo fechado (achado do Qwen): uma skill incorporada (não dz23-*) com evals declarados precisa de evidência EXECUTADA (acervo/consultor com dados/, fixture de replay, ou resultado registrado) OU uma declaração honesta NOT_TESTED aqui, com motivo. O gate (cobertura:incorporadas) reprova skill incorporada que não esteja coberta nem declarada. Isto NÃO entra no denominador 144 das DZ23 -- só impede o verde silencioso. 'evidência ou silêncio': NOT_TESTED declarado é honesto; isento em silêncio não é.",
   "declaradas": {
-    "prune-tests": {
-      "status": "NOT_TESTED",
-      "motivo": "Poda de testes; rubrica é processo de risco (nunca remove sem baseline/aprovação), não mecânica. Sem acervo nem resposta registrada ainda; comportamento a exercitar em projeto real."
-    },
     "replica-brand": {
       "status": "NOT_TESTED",
       "motivo": "Suíte de clone clean-room (brand kit); rubrica de análise subjetiva. Sem acervo nem resposta registrada ainda."
