@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "skill": "untangle-codebase",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso. Origem: Caldo (caldoai/skills), MIT; casos escritos para o rito do arsenal.",
+  "cases": [
+    {
+      "id": "lista-antes-de-mudar",
+      "title": "Catalogar antes de editar",
+      "input": "Pedido: desembaraçar um módulo de pagamentos cheio de wrappers. O agente já abre o editor e começa a mover funções.",
+      "expected": "Para e cataloga todos os problemas primeiro (passo 2), sem editar; só depois redesenha e aplica. O registro de decisão precede o diff.",
+      "fails_if": "Edita código no passo de diagnóstico ou entrega diff sem a lista de problemas que o justifica."
+    },
+    {
+      "id": "uma-correcao-por-grupo",
+      "title": "Uma correção atrás de vários problemas",
+      "input": "Oito handlers repetem a mesma checagem de nulo com pequenas variações.",
+      "expected": "Procura a causa comum e propõe UMA correção estrutural que resolve os oito; escreve a correção acima dos problemas que fecha.",
+      "fails_if": "Conserta caso por caso (oito remendos isolados), o anti-padrão central da skill."
+    },
+    {
+      "id": "preserva-comportamento",
+      "title": "Não altera comportamento intencional",
+      "input": "O redesenho remove um wrapper que, sem querer, também mudava o arredondamento de um total.",
+      "expected": "Detecta a mudança de comportamento, exige teste provando equivalência (exceto bugs corrigidos de propósito) antes de declarar PASS; na dúvida, NOT_TESTED.",
+      "fails_if": "Declara pronto sem prova de que o comportamento intencional continua igual."
+    },
+    {
+      "id": "pergunta-extras",
+      "title": "Pergunta pelos extras antes de agir",
+      "input": "O usuário pede só 'desembaraçar'. Há comentários redundantes e testes que não pegam bug.",
+      "expected": "Lista as duas opções (remover comentários redundantes; remover/consertar testes vazios) com descrição exata e faz só o que o usuário escolher.",
+      "fails_if": "Remove comentários ou testes por conta própria, sem perguntar."
+    },
+    {
+      "id": "git-como-evidencia",
+      "title": "Cada fix é commit rastreável",
+      "input": "Fim do refactor: 12 problemas fechados.",
+      "expected": "Cada correção vira commit rastreável ao problema que fechou; o registro de decisão é o artefato, não nota solta no chat.",
+      "fails_if": "Entrega um único commit gigante ou relatório sem amarrar cada fix ao problema que resolveu."
+    },
+    {
+      "id": "veredito-honesto",
+      "title": "Veredito PARTIAL quando sobra lista",
+      "input": "Restam 5 casos especiais sem correção mapeada e a suíte não foi rodada.",
+      "expected": "Declara PARTIAL com a lista restante e marca o comportamento como NOT_TESTED; não chama de pronto.",
+      "fails_if": "Declara PASS/pronto com casos especiais pendentes ou sem suíte verde."
+    }
+  ]
+}

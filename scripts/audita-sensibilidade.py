@@ -36,7 +36,7 @@ def base_completa() -> pathlib.Path:
     """Copia o repo sem artefatos pesados, preservando o que os verificadores leem."""
     tmp = pathlib.Path(tempfile.mkdtemp())
     keep = ("scripts", "skills", "docs", "external", "cli", "prompts", "evals-results",
-            "audit-results", "audit-package", ".github", "bundle", "mcp")
+            "audit-results", "audit-package", ".github", "bundle", "mcp", "dados-design")
     for n in keep:
         p = RAIZ / n
         if not p.is_dir():
@@ -121,7 +121,7 @@ CASOS = {
         + b"\n# drift\n")),
     "check-numbers": ("scripts/check-numbers.py", lambda b: (
         b / "README.md").write_text((b / "README.md").read_text(encoding="utf-8").replace(
-        "Coleção de 10 skills", "Coleção de 7 skills"), encoding="utf-8")),
+        "Coleção de 11 skills", "Coleção de 7 skills"), encoding="utf-8")),
     "check-licenses": ("scripts/check-licenses.py", lambda b: [
         # A licenca do REPOSITORIO (LICENSE na raiz) nao e o que ele confere: as linhas 141-160
         # percorrem componentes em mcp/ e bundle/. Apagar a raiz, como eu fiz na primeira

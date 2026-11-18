@@ -3,7 +3,7 @@
 > Gerado por `scripts/build-manifest.py` em 2026-11-18. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**10 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
+**11 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -19,6 +19,7 @@
 | [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.1.4 | 27 | 12 | 4 | 5 | 15 |
 | [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.3.0 | 49 | 17 | 11 | 6 | 15 |
 | [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.6 | 20 | 10 | 0 | 4 | 13 |
+| [untangle-codebase](skills/untangle-codebase/) | 1.0.0 | 14 | 4 | 1 | 3 | 6 |
 
 ## MCP e bundles
 

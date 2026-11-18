@@ -144,6 +144,22 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
   hashear bytes crus fez o CI reprovar um clone Linux cujo conteúdo era idêntico ao disco Windows só por fim
   de linha. Verificado também num clone limpo do HEAD com HOME vazio (etapa agora obrigatória do ciclo).
 
+### `skills/untangle-codebase/` — skill inteira (SKILL.md + 4 references + 1 template)
+- **Origem:** Caldo (`caldoai/skills`), skill `untangle-codebase`. Licença **MIT lida no arquivo `LICENSE`
+  da raiz** (Copyright 2026 Maze).
+- **O que entrou:** a orientação da skill (diagnóstico por "estas peças mudam juntas?", quatro famílias de
+  defeito, redesenho dos primeiros princípios, git como evidência), internalizada e reescrita no rito do
+  arsenal — `SKILL.md` com frontmatter e seções próprias, `references/` (method, defect-taxonomy,
+  verification, git-as-evidence), `templates/decision-log.md`, `evals/evals.json` com 6 cenários próprios,
+  `scripts/validate_skill.py` + validadores comuns do arsenal.
+- **O que NÃO entrou:** scripts, testes e fixtures da skill de origem; só a orientação, reescrita. Não é
+  cópia byte a byte — é a primeira skill de terceiro trazida como skill-cidadã do arsenal (vs. só `dados-`).
+- **Fora do ledger DZ23:** os 6 evals da untangle são declarados e **`NOT_TESTED`** na própria pasta, mas
+  ficam **fora** do total de "144 cenários" das 10 skills DZ23 — `check-numbers.py` só soma evals de skills
+  `dz23-*`, para que incorporar terceiros não mexa no denominador de cobertura das DZ23.
+- **Verificação:** `scripts/validate_skill.py` próprio (6 casos exigidos, frontmatter, licença/origin,
+  referências citadas existem) + o validador comum; entra no `quality-gate.py` e no CI como 11ª skill.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

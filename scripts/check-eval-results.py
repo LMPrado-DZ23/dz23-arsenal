@@ -118,6 +118,11 @@ def main() -> int:
 
         declarados: set[tuple[str, str]] = set()
         for pasta_skill in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
+            # Ledger de cobertura é das skills DZ23. Skills incorporadas (ex.: untangle-codebase)
+            # declaram os próprios evals na própria pasta, NOT_TESTED, mas fora deste total —
+            # mesma regra de check-numbers.py, para não mover o denominador das DZ23.
+            if not pasta_skill.name.startswith("dz23-"):
+                continue
             ev = pasta_skill / "evals" / "evals.json"
             if not ev.is_file():
                 continue

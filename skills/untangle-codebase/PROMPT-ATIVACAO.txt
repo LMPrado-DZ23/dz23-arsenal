@@ -1,0 +1,23 @@
+Use a skill untangle-codebase (v1.0.0).
+
+Quando: um codebase está difícil de mudar — espalhado por camadas, cheio de wrappers e flags
+pontuais, lento de navegar — ou antes de delegar trabalho pesado a agentes que gastam tokens
+procurando onde mexer. Não é revisão de estilo nem caçada de bug isolado: é reorganização de
+dependência e coesão.
+
+Regra única de diagnóstico: "estas peças deveriam mudar juntas?". Quatro famílias de defeito —
+elo oculto, elo desnecessário, sobra, caso especial (ver references/defect-taxonomy.md).
+
+Fluxo (detalhe em references/method.md):
+1. Pergunte quais extras entram (remover comentários redundantes; remover/consertar testes vazios).
+2. Catalogue TODOS os problemas sem mudar nada. Lista primeiro, mudança depois.
+3. Redesenhe dos primeiros princípios: UMA correção atrás de vários problemas, não caso por caso.
+4. Aplique a lista toda; testes por último (rede de regressão).
+5. Confira e repita até não sobrar nada que valha corrigir.
+
+Inegociável: não altere comportamento intencional (prove por teste — references/verification.md);
+cada fix é commit rastreável ao problema (references/git-as-evidence.md); registro de decisão é o
+artefato, não nota solta (templates/decision-log.md).
+
+Veredito: PASS só com suíte verde e comportamento comprovadamente igual; senão PARTIAL com a lista
+restante, ou NOT_TESTED se não provou. Nunca "parece que funciona".

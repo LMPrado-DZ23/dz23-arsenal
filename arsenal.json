@@ -2,7 +2,7 @@
   "schema": 2,
   "generated_by": "scripts/build-manifest.py",
   "counts": {
-    "skills": 10,
+    "skills": 11,
     "external": 16,
     "prompts": 1,
     "mcp": 2,
@@ -128,6 +128,18 @@
       "scripts": 4,
       "evals": 13,
       "sha256_skill_md": "0fdfdcb55a22aa948f0e39ff9a5beb4e77dacf1b4174db2d7c5ca4653953c678"
+    },
+    {
+      "name": "untangle-codebase",
+      "version": "1.0.0",
+      "description": ">",
+      "user_invocable": true,
+      "files": 14,
+      "references": 4,
+      "templates": 1,
+      "scripts": 3,
+      "evals": 6,
+      "sha256_skill_md": "9ef5b16a1e31668e604e44b32a8229b75a37d1bb1492f3d2984220ef4066fbe8"
     }
   ],
   "external": [

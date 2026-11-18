@@ -58,6 +58,12 @@ def _conta_disco() -> dict:
     skills = subpastas("skills")
     declarados = 0
     for sk in skills:
+        # O ledger de cenários ("144 cenários") é a história de verificação das skills DZ23.
+        # Skills incorporadas (ex.: untangle-codebase, MIT) trazem os próprios evals, declarados
+        # e NOT_TESTED na própria pasta, mas fora deste total — senão a incorporação de terceiros
+        # mexeria no denominador de cobertura das DZ23 a cada skill nova. Contado por skill, não aqui.
+        if not sk.name.startswith("dz23-"):
+            continue
         ev = sk / "evals" / "evals.json"
         if not ev.is_file():
             continue
@@ -76,6 +82,7 @@ def _conta_disco() -> dict:
 
     return {
         "skills": len(skills),
+        "skills_dz23": len([s for s in skills if s.name.startswith("dz23-")]),
         "external": len(external),
         "prompts": len(prompts),
         "mcp": len(subpastas("mcp")),
@@ -119,6 +126,7 @@ def estado_disco() -> dict:
 
     return {
         "skills": c["skills"],
+        "skills_dz23": c["skills_dz23"],
         "external": c["external"],
         "mcp": c["mcp"],
         "bundle": c["bundle"],
@@ -181,7 +189,7 @@ def _qual_node() -> str | None:
 REGRAS: list[tuple[str, str, str, str]] = [
     ("README.md", r"Coleção de (\d+) skills", "skills", "abertura do README"),
     ("README.md", r"badge/skills-(\d+)", "skills", "badge de skills"),
-    ("README.md", r"Skills DZ23 \((\d+)\)", "skills", "título do índice"),
+    ("README.md", r"Skills DZ23 \((\d+)\)", "skills_dz23", "título do índice"),
     ("README.md", r"(\d+) MCP", "mcp", "contagem de MCP"),
     ("README.md", r"(\d+) bundle", "bundle", "contagem de bundles"),
     ("README.md", r"(\d+) referências", "external", "referências externas"),
@@ -193,7 +201,7 @@ REGRAS: list[tuple[str, str, str, str]] = [
     # então não há número digitado a conferir. A regra existiu, ficou órfã quando o número
     # saiu do texto, e é exatamente o caso que o detector de regra órfã abaixo passou a
     # denunciar em vez de dar verde mentiroso.
-    ("ROADMAP.md", r"(\d+) skills DZ23", "skills", "tabela 'Onde estamos'"),
+    ("ROADMAP.md", r"(\d+) skills DZ23", "skills_dz23", "tabela 'Onde estamos'"),
 ]
 
 # Regras cujo valor pode ser None sem culpa (ferramenta ausente no ambiente). Diferente de
