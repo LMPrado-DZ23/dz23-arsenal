@@ -112,6 +112,43 @@ def licenca_de_pasta(pasta: Path) -> tuple[str | None, str | None]:
     return (None, None)
 
 
+EXT_TEXTO_CONHECIDOS = {".md", ".txt", ".json", ".py", ".yml", ".yaml", ".toml", ".cfg",
+                        ".ini", ".csv", ".js", ".mjs", ".ts", ".sh", ".ps1", ".cmd"}
+
+
+def _parece_texto(p: Path) -> bool:
+    """Texto de verdade, decidido pelo conteúdo -- não pela extensão.
+
+    Extensão conhecida resolve rápido; sem extensão (LICENSE, NOTICE, VERSION, Dockerfile) ou com
+    extensão rara (.env.example, audit-public-file), testa UTF-8 decodificável sem byte nulo. Isso
+    fecha o buraco em que 22 arquivos versionados eram invisíveis à checagem de encoding.
+    """
+    if p.suffix.lower() in EXT_TEXTO_CONHECIDOS or not p.suffix:
+        try:
+            dados = p.read_bytes()
+        except OSError:
+            return False
+        if b"\x00" in dados[:8192]:
+            return False
+        return True
+    return False
+
+
+def _arquivos_para_encoding() -> list[Path]:
+    """Só o conteúdo versionado. rglob puro varreria 3.639 arquivos de node_modules e qualquer
+    artefato local, transformando a checagem em ruído; git ausente (tarball, snapshot) cai no
+    rglob com exclusão explícita de dependências."""
+    import subprocess
+
+    r = subprocess.run(["git", "ls-files"], capture_output=True, cwd=str(RAIZ), timeout=60)
+    if r.returncode == 0 and r.stdout.strip():
+        nomes = r.stdout.decode("utf-8", "replace").splitlines()
+        return [RAIZ.joinpath(*n.split("/")) for n in nomes]
+    ign = ("node_modules", "__pycache__", ".git", "dist", "build")
+    return [p for p in RAIZ.rglob("*")
+            if p.is_file() and not any(x in p.parts for x in ign)]
+
+
 def main(argv: list[str]) -> int:
     argv = apontar_raiz(argv)
     for s in (sys.stdout, sys.stderr):
@@ -194,10 +231,17 @@ def main(argv: list[str]) -> int:
     #    lê exatamente esses bytes, então U+FFFD dentro de uma regra é bug funcional.
     mojibake: list[str] = []
     este_script = Path(__file__).resolve()
-    for arq in sorted(RAIZ.rglob("*")):
+    for arq in _arquivos_para_encoding():
         if not arq.is_file() or ".git" in arq.parts:
             continue
-        if arq.suffix.lower() not in (".md", ".txt", ".json", ".py", ".yml", ".yaml"):
+        # Decidir por extensao deixava 22 arquivos versionados invisiveis a esta checagem: os tres
+        # LICENSE, NOTICE, os onze VERSION, Dockerfile e os pontos de configuracao -- exatamente os
+        # textos que mais importam para licenca. Reproduzido nesta sessao: gravando sequencia UTF-8
+        # invalida em LICENSE na raiz, o check saia com 'licencas consistentes' e exit 0. Mesma
+        # familia de audit-zips (rodada 51) e build-manifest (rodada 47): criterio por sufixo
+        # silenciantdo arquivo sem sufixo. Agora decide-se pelo conteudo, dentro do escopo
+        # versionado -- rglob puro varreria 3.639 arquivos de node_modules.
+        if not _parece_texto(arq):
             continue
         if arq.resolve() == este_script:
             continue  # este arquivo contém as marcas de propósito, para detectá-las
