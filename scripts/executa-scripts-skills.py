@@ -191,6 +191,22 @@ def main(argv=None):
         # sem coluna url/text: erro limpo (rc 2), nunca traceback
         registra("reviews(sem coluna obrigatoria)", caso("reviews-neg", [_rev, str(_bad)], rc_ok=(2,)))
 
+    # --- replica-diff: parity.py (score de features) e imgdiff.py (diff de layout, decoder PNG) ----
+    _par = S / "replica-diff/scripts/parity.py"
+    _img = S / "replica-diff/scripts/imgdiff.py"
+    _fx = S / "replica-diff/examples/features-exemplo.csv"
+    _o = S / "replica-diff/examples/orig.png"
+    _c = S / "replica-diff/examples/clone.png"
+    registra("parity(exemplo)", caso("parity", [_par, str(_fx)], marca="Parity:"))
+    registra("imgdiff(exemplo)", caso("imgdiff", [_img, str(_o), str(_c), "--json"], marca='"mode"'))
+    with _tf.TemporaryDirectory() as _td2:
+        _bad2 = _pl.Path(_td2) / "ruim.csv"
+        _bad2.write_text("feature,area\nx,y\n", encoding="utf-8")   # sem coluna clone/priority
+        registra("parity(sem coluna)", caso("parity-neg", [_par, str(_bad2)], rc_ok=(2,)))
+        _notpng = _pl.Path(_td2) / "nao.png"
+        _notpng.write_text("isto nao e um png\n", encoding="utf-8")
+        registra("imgdiff(nao-png)", caso("imgdiff-neg", [_img, str(_notpng), str(_notpng)], rc_ok=(2,)))
+
     dados = {"ok": not problemas, "executados": len(medidos), "problemas": problemas}
     if args.json:
         print(json.dumps(dados, ensure_ascii=False, indent=2))

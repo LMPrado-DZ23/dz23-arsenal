@@ -1,0 +1,19 @@
+Use a skill replica-diff (v1.0.0).
+
+Quando: "quão perto está meu clone", "compara com o original", "o que falta", "parity check", "está
+pronto", ou depois de replica-test. Paridade aqui é fazer o MESMO TRABALHO, não parecer igual.
+
+Duas ferramentas stdlib:
+- `python scripts/parity.py replica/features.csv` — score de features (must 3, should 2, could 1;
+  partial 0.5; skip e extras fora), must-haves feitos de total, áreas da pior pra melhor, e o que falta
+  em ordem de construção. Must-have não feito = NÃO shippable, e ele diz. `--fail-under N` dá exit 1.
+- `python scripts/imgdiff.py orig.png clone.png` — diff de LAYOUT (edge map em grade) que IGNORA COR de
+  propósito (o rebrand muda toda cor). Score 90+ match, 75+ perto, 50+ parcial. `--mode pixel` só para
+  suas regressões, nunca contra o original. Não persiga pixel do original (trade dress, muda no rebrand).
+
+Passo 3: diff de comportamento à mão — cliques, erros, memória, e-mails. Menos cliques é vitória.
+Passo 4: grave replica/parity.md com o veredito.
+
+Veredito: NÃO shippable (qualquer must-have faltando ou S1 aberto); shippable (must-haves feitos,
+features 80+, sem S1/S2); melhor que o original (shippable + correções do replica-entrepreneur = o
+objetivo). Números honestos: 62% é 62%. Nunca score de memória — rode o parity.py.

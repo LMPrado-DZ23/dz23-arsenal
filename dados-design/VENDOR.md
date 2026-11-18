@@ -212,6 +212,17 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
   reviews.py é exercitado no gate (`skills:scripts-executados`, 2 casos: exemplo + controle negativo).
 - **Fora do ledger DZ23:** 6 evals. 2ª skill da camada produto-para-clone.
 
+### `skills/replica-diff/` — skill inteira + `parity.py` e `imgdiff.py` (scripts MIT, stdlib)
+- **Origem:** `Jakeschincariol/replica-skill` (skill `replica-diff`). Licença **MIT lida no arquivo
+  `LICENSE` da raiz** (Copyright 2026 Jake Schincariol).
+- **O que entrou:** orientação de medir paridade de clone (features via matriz pesada; layout por
+  screenshot que ignora cor; veredito honesto) internalizada em PT + `scripts/parity.py` (score de
+  features) + `scripts/imgdiff.py` (diff de layout, decoder PNG stdlib próprio) + `examples/` (CSV + 2
+  PNGs) + 2 references + template + 6 evals + validate.
+- **Scripts funcionais, sem edição de comportamento:** exercitados no gate (`skills:scripts-executados`,
+  4 casos: parity e imgdiff com exemplo + 2 controles negativos — CSV sem coluna, arquivo não-PNG).
+- **Fora do ledger DZ23:** 6 evals. 3ª skill da camada produto-para-clone.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

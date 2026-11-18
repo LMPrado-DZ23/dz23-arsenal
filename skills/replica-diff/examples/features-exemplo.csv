@@ -1,0 +1,9 @@
+feature,area,priority,original,clone,notes
+Sign up with email,onboarding,must,yes,yes,
+Connect a calendar,onboarding,must,yes,partial,read-only por ora
+Public booking page,booking,must,yes,yes,
+Reschedule from a link,booking,should,yes,no,
+Payment at booking,payments,should,yes,no,
+Team round-robin,team,could,yes,no,
+Marketplace of apps,integrations,could,yes,skip,"rede de parceiros, fora de escopo"
+Dark mode (nosso),ui,should,no,yes,extra nosso

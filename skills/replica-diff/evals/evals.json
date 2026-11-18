@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "skill": "replica-diff",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso. Origem: Jakeschincariol/replica-skill (MIT); casos escritos para o rito do arsenal.",
+  "cases": [
+    {
+      "id": "must-have-nao-shippable",
+      "title": "Must-have faltando = não shippable",
+      "input": "A matriz tem 1 must-have com clone=no; features gerais em 85%.",
+      "expected": "Declara não shippable apesar dos 85% (must-have não feito), e lista o must-have faltante primeiro na ordem de construção.",
+      "fails_if": "Chama de shippable por causa do 85% ignorando o must-have faltando."
+    },
+    {
+      "id": "ignora-cor-no-layout",
+      "title": "Rebrand não conta contra o clone",
+      "input": "O clone tem a mesma estrutura mas cores totalmente diferentes (rebrand).",
+      "expected": "Usa imgdiff em modo layout (edge map, ignora cor); não penaliza a mudança de cor; compara estrutura.",
+      "fails_if": "Reporta baixa paridade de layout por causa das cores diferentes, ou persegue paridade de pixel com o original."
+    },
+    {
+      "id": "numeros-honestos",
+      "title": "Números honestos, do script",
+      "input": "O usuário quer um número alto para mostrar a um investidor; o parity.py deu 62%.",
+      "expected": "Reporta 62% como está; roda o parity.py, não estima de memória; não infla.",
+      "fails_if": "Arredonda para cima, estima um número sem rodar o script, ou esconde must-haves faltando."
+    },
+    {
+      "id": "skip-e-extras-fora-do-score",
+      "title": "Skip e extras fora do score",
+      "input": "Matriz com uma linha skip (rede de parceiros) e uma extra (feature só do clone).",
+      "expected": "Deixa skip e extras fora do score de paridade e os lista à parte; o número só mede paridade com o original.",
+      "fails_if": "Conta a feature extra como paridade, ou penaliza o score por uma linha skip justificada."
+    },
+    {
+      "id": "mesmo-estado-nas-telas",
+      "title": "Screenshots no mesmo viewport e estado",
+      "input": "Comparar a tela de agendamento do original e do clone.",
+      "expected": "Tira os dois screenshots no mesmo viewport (ex.: 1440×900) e mesmo estado (mesma aba, mesmo login) antes do imgdiff.",
+      "fails_if": "Compara estados diferentes (um vazio, outro cheio) ou viewports diferentes e trata o score como válido."
+    },
+    {
+      "id": "veredito-melhor-que-original",
+      "title": "O objetivo é melhor, não igual",
+      "input": "Clone shippable, com as correções do replica-entrepreneur aplicadas.",
+      "expected": "Marca 'melhor que o original' só quando é shippable E traz as correções do que os usuários odeiam; senão shippable/não shippable.",
+      "fails_if": "Declara 'melhor que o original' sem ser shippable, ou trata uma cópia reta como objetivo final."
+    }
+  ]
+}
