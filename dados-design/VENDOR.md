@@ -160,6 +160,21 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
 - **Verificação:** `scripts/validate_skill.py` próprio (6 casos exigidos, frontmatter, licença/origin,
   referências citadas existem) + o validador comum; entra no `quality-gate.py` e no CI como 11ª skill.
 
+### `skills/prune-tests/` — skill inteira (SKILL.md + 4 references + 1 template)
+- **Origem:** Caldo (`caldoai/skills`), skill `prune-tests`. Licença **MIT lida no arquivo `LICENSE` da
+  raiz** (Copyright 2026 Maze) — mesma fonte da `untangle-codebase`.
+- **O que entrou:** a orientação (diagnóstico por dependência; três famílias a podar — passado, nada,
+  implementação — mais duplicata; reescrever contra comportamento em vez de deletar quando há rede;
+  deletar a produção que só existia para o teste removido), internalizada e reescrita no rito do
+  arsenal — `SKILL.md`, 4 `references/`, `templates/prune-log.md`, `evals/evals.json` com 6 cenários,
+  `scripts/validate_skill.py` + validadores comuns.
+- **O que NÃO entrou:** o `SKILL.md` de origem era só texto (sem scripts nem fixtures); nada além da
+  orientação, reescrita em português. Não é cópia byte a byte.
+- **Fora do ledger DZ23:** os 6 evals ficam fora do total de "144 cenários" das 10 DZ23 — mesma regra
+  da untangle (`check-numbers.py`/`check-eval-results.py` só somam `dz23-*`).
+- **Verificação:** `validate_skill.py` próprio (6 casos, frontmatter, licença/origin, refs citadas
+  existem) + validador comum; entra no `quality-gate.py` e no CI como 12ª skill.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

@@ -1,0 +1,24 @@
+Use a skill prune-tests (v1.0.0).
+
+Quando: antes de confiar numa suíte, ao herdar testes alheios, ou junto da untangle-codebase num
+refactor. Não é aumentar cobertura nem caçar flaky — é remover teste que não guarda comportamento,
+preservando toda cobertura de comportamento real.
+
+Pergunta única por teste: "que mudança no código de produção o faz falhar?"
+- "uma regressão do comportamento X" → MANTÉM.
+- "nenhuma, afirma código removido" → família PASSADO → deletar.
+- "nenhuma" (testa framework, mocka a própria unidade, afirma o que o tipo garante) → NADA → deletar.
+- "só mudar a forma interna, sem mudar o que o chamador vê" → IMPLEMENTAÇÃO → reescrever contra o
+  comportamento observável (valor literal, API pública); deletar só se outro teste já cobre.
+- "outro teste já falha na mesma regressão" → DUPLICATA → deletar o que fala por caminho interno.
+
+Método (references/method.md): baseline (rode a suíte) → mapa teste→família→ação SEM apagar →
+pode e reescreve → delete a produção que só existia pros testes removidos → rode a suíte de novo.
+
+Inegociável: mapa antes da poda; não reduzir cobertura de comportamento (prove a rede ou reescreva —
+references/verification.md); cada poda é commit rastreável à razão (references/git-as-evidence.md);
+suíte verde antes e depois.
+
+Veredito: PASS só com suíte verde nos dois pontos e toda deleção classificada; senão PARTIAL com a
+lista, ou NOT_TESTED se não rodou a suíte. Na dúvida entre implementação e comportamento, reescreva —
+não delete.

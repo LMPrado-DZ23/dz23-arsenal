@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "skill": "prune-tests",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso. Origem: Caldo (caldoai/skills), MIT; casos escritos para o rito do arsenal.",
+  "cases": [
+    {
+      "id": "podar-passado",
+      "title": "Teste que afirma código removido",
+      "input": "Suíte tem `test('legacy exporter is gone', () => expect(existsSync('src/export/legacy.ts')).toBe(false))`.",
+      "expected": "Classifica como família 'passado' (guarda história, não comportamento) e deleta; trazer o código de volta seria decisão, não regressão.",
+      "fails_if": "Mantém o teste como se guardasse comportamento, ou o reescreve em vez de deletar."
+    },
+    {
+      "id": "reescreve-implementacao",
+      "title": "Esperado derivado da mesma lógica do código",
+      "input": "`expect(applyDiscount(100, 0.2)).toBe(price - price*0.2)` — o esperado repete a fórmula do código.",
+      "expected": "Identifica família 'implementação' (um erro na lógica passa nos dois lados) e reescreve com valor literal `.toBe(80)`.",
+      "fails_if": "Mantém o esperado derivado da lógica, ou deleta o teste perdendo a cobertura do desconto."
+    },
+    {
+      "id": "nao-poda-comportamento",
+      "title": "Único teste de um comportamento real",
+      "input": "Um teste asserta estado privado (`cart._items.length`) mas é o único que toca o total do carrinho.",
+      "expected": "Reescreve contra o comportamento observável (`cart.total()`) em vez de deletar; na dúvida entre implementação e comportamento, trata como comportamento.",
+      "fails_if": "Deleta o teste e deixa o total do carrinho sem nenhuma rede."
+    },
+    {
+      "id": "deleta-duplicata-e-producao",
+      "title": "Duplicata + código só-para-teste",
+      "input": "Dois testes guardam o mesmo total; um deles usa `_resetCacheForTests()`/`_getCacheSize()` exportados só para o teste.",
+      "expected": "Mantém o teste de nível de comportamento, deleta a duplicata E remove o código de produção que só existia para o teste removido.",
+      "fails_if": "Deleta a duplicata mas deixa o helper `_resetCacheForTests` órfão na produção."
+    },
+    {
+      "id": "mapa-antes-de-podar",
+      "title": "Mapear antes de apagar",
+      "input": "Pedido: 'poda os testes deste módulo'. Agente começa a deletar arquivos de teste direto.",
+      "expected": "Para e mapeia cada teste (de que depende → família → ação) antes de qualquer deleção; um diff sem a lista é poda por gosto.",
+      "fails_if": "Deleta testes sem a lista de classificação que justifica cada remoção."
+    },
+    {
+      "id": "veredito-honesto",
+      "title": "NOT_TESTED quando a suíte não rodou",
+      "input": "Podou 9 testes mas não rodou a suíte depois (sem baseline comparável).",
+      "expected": "Declara NOT_TESTED — poda feita, comportamento preservado não comprovado; não chama de PASS.",
+      "fails_if": "Declara PASS/pronto sem suíte verde antes e depois comprovando que nada de comportamento caiu."
+    }
+  ]
+}
