@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""check-sbom.py -- o SBOM diz a verdade sobre a cadeia real, e sabe reprovar.
+"""check-sbom.py -- o SBOM diz a verdade sobre a cadeia COMMITADA, e sabe reprovar.
 
-Independente do gerador de propósito: reparseia os lockfiles por conta própria e compara com o
-SBOM no disco. Se o gera-sbom.py tiver um bug, este verificador pega. Exige:
+Independente do gerador de propósito: relê os package.json por conta própria e compara com o SBOM
+no disco. Política do repo (ver .gitignore): lockfiles npm não são versionados; a fonte de verdade
+committada são as faixas de versão do package.json. Logo o SBOM lista as dependências DIRETAS
+declaradas -- não a árvore resolvida de um lockfile efêmero (que no Windows-CI nem existe, pois lá
+não roda npm install). Exige:
 
-  1. Formato: bomFormat=CycloneDX, lista de components.
-  2. Cada componente de biblioteca tem version, purl coerente (pkg:npm/<nome>@<ver>) e
-     integrity sha512 não-vazio (evidência de origem; supply-chain sem hash é afirmação).
-  3. Drift: o conjunto de bibliotecas no SBOM bate EXATAMENTE com o que os lockfiles declaram
-     hoje. Adicionar/atualizar dependência sem regenerar o SBOM reprova.
+  1. Formato: bomFormat=CycloneDX, lista de components, sem bom-ref duplicado.
+  2. Cada biblioteca tem version (a faixa) e purl coerente (pkg:npm/<nome>@<faixa>).
+  3. Drift: o conjunto de bibliotecas no SBOM bate EXATAMENTE com as deps diretas dos
+     package.json de hoje. Mudar uma dependência sem regenerar o SBOM reprova.
 
 Uso:
     python scripts/check-sbom.py            # exit 1 se houver problema
@@ -25,23 +27,19 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 SBOM = RAIZ / "supply-chain" / "sbom.json"
-LOCKS = [RAIZ / "mcp" / "pentagi-mcp" / "package-lock.json",
-         RAIZ / "mcp" / "dz23-subagents-universal-mcp" / "package-lock.json"]
+PKGS = [RAIZ / "mcp" / "pentagi-mcp" / "package.json",
+        RAIZ / "mcp" / "dz23-subagents-universal-mcp" / "package.json"]
 
 
-def _npm_do_lock(lock: Path) -> set[str]:
-    """Conjunto de pkg:npm/<nome>@<ver> declarados num package-lock.json."""
+def _deps_do_pkg(pkg: Path) -> set[str]:
+    """Conjunto de pkg:npm/<nome>@<faixa> das deps diretas de um package.json."""
     out: set[str] = set()
-    if not lock.is_file():
+    if not pkg.is_file():
         return out
-    dados = json.loads(lock.read_text(encoding="utf-8"))
-    for caminho, info in (dados.get("packages") or {}).items():
-        if caminho == "":
-            continue
-        nome = caminho.split("node_modules/")[-1]
-        ver = info.get("version")
-        if ver:
-            out.add(f"pkg:npm/{nome}@{ver}")
+    pj = json.loads(pkg.read_text(encoding="utf-8"))
+    deps = {**(pj.get("dependencies") or {}), **(pj.get("devDependencies") or {})}
+    for nome, faixa in deps.items():
+        out.add(f"pkg:npm/{nome}@{faixa}")
     return out
 
 
@@ -69,47 +67,39 @@ def valida(sbom: dict, esperado_npm: set[str]) -> list[str]:
         ref = c.get("bom-ref", c.get("name", "?"))
         nome, ver = c.get("name"), c.get("version")
         if not ver:
-            problemas.append(f"{ref}: sem version")
+            problemas.append(f"{ref}: sem version (faixa)")
         purl = c.get("purl", "")
         if nome and ver and purl != f"pkg:npm/{nome}@{ver}":
             problemas.append(f"{ref}: purl incoerente ({purl!r})")
-        integ = next((p["value"] for p in c.get("properties", []) if p.get("name") == "npm:integrity"), "")
-        if not integ or "sha512-" not in integ:
-            problemas.append(f"{ref}: sem integrity sha512 (origem não comprovada)")
         if purl:
             libs.add(purl)
 
-    faltando = esperado_npm - libs
-    sobrando = libs - esperado_npm
-    for p in sorted(faltando):
-        problemas.append(f"lockfile declara {p} mas o SBOM não — regenere (drift)")
-    for p in sorted(sobrando):
-        problemas.append(f"SBOM lista {p} que nenhum lockfile declara — regenere (drift)")
+    for p in sorted(esperado_npm - libs):
+        problemas.append(f"package.json declara {p} mas o SBOM não — regenere (drift)")
+    for p in sorted(libs - esperado_npm):
+        problemas.append(f"SBOM lista {p} que nenhum package.json declara — regenere (drift)")
     return problemas
 
 
 def _selftest() -> int:
     tmp = Path(tempfile.mkdtemp())
-    lock = tmp / "package-lock.json"
-    lock.write_text(json.dumps({"packages": {
-        "": {"name": "root"},
-        "node_modules/zod": {"version": "3.25.0", "integrity": "sha512-AAAA"},
-    }}), encoding="utf-8")
-    esperado = _npm_do_lock(lock)
+    pkg = tmp / "package.json"
+    pkg.write_text(json.dumps({"dependencies": {"zod": "^3.25.0"}}), encoding="utf-8")
+    esperado = _deps_do_pkg(pkg)
     bom_ok = {"bomFormat": "CycloneDX", "components": [
-        {"type": "library", "bom-ref": "pkg:npm/zod@3.25.0", "name": "zod", "version": "3.25.0",
-         "purl": "pkg:npm/zod@3.25.0", "properties": [{"name": "npm:integrity", "value": "sha512-AAAA"}]},
+        {"type": "library", "bom-ref": "pkg:npm/zod@^3.25.0", "name": "zod", "version": "^3.25.0",
+         "purl": "pkg:npm/zod@^3.25.0"},
     ]}
     if valida(bom_ok, esperado):
         print("FALHA selftest: SBOM válido foi reprovado (falso positivo)")
         return 1
     casos = [
-        ("sem integrity", lambda b: b["components"][0].update(properties=[])),
         ("version faltando", lambda b: b["components"][0].pop("version")),
-        ("drift: componente a mais", lambda b: b["components"].append(
-            {"type": "library", "name": "evil", "version": "1.0.0", "purl": "pkg:npm/evil@1.0.0",
-             "properties": [{"name": "npm:integrity", "value": "sha512-X"}]})),
-        ("drift: componente a menos", lambda b: b["components"].clear()),
+        ("purl incoerente", lambda b: b["components"][0].update(purl="pkg:npm/zod@9")),
+        ("drift: a mais", lambda b: b["components"].append(
+            {"type": "library", "name": "evil", "version": "1", "purl": "pkg:npm/evil@1"})),
+        ("drift: a menos", lambda b: b["components"].clear()),
+        ("bom-ref duplicado", lambda b: b["components"].append(dict(b["components"][0]))),
     ]
     for desc, mut in casos:
         b = json.loads(json.dumps(bom_ok))
@@ -117,7 +107,7 @@ def _selftest() -> int:
         if not valida(b, esperado):
             print(f"FALHA selftest: mutação '{desc}' não detectada")
             return 1
-    print("OK selftest: SBOM válido aprova; 4 mutações reprovam")
+    print("OK selftest: SBOM válido aprova; 5 mutações reprovam")
     return 0
 
 
@@ -138,8 +128,8 @@ def main(argv: list[str]) -> int:
         print(f"FALHA: {SBOM} ausente — rode gera-sbom.py")
         return 1
     esperado: set[str] = set()
-    for lk in LOCKS:
-        esperado |= _npm_do_lock(lk)
+    for pk in PKGS:
+        esperado |= _deps_do_pkg(pk)
     problemas = valida(json.loads(SBOM.read_text(encoding="utf-8")), esperado)
     if args.json:
         print(json.dumps({"ok": not problemas, "problemas": problemas}, ensure_ascii=False, indent=2))
@@ -148,7 +138,7 @@ def main(argv: list[str]) -> int:
         for p in problemas:
             print(f"FALHA: {p}")
         return 1
-    print(f"OK: SBOM coerente com {len(esperado)} componentes npm dos lockfiles, integrity presente")
+    print(f"OK: SBOM coerente com {len(esperado)} deps diretas dos package.json committados")
     return 0
 
 

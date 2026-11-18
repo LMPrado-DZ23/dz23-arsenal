@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
-"""gera-sbom.py -- gera o SBOM (CycloneDX) a partir dos lockfiles REAIS do repo.
+"""gera-sbom.py -- gera o SBOM (CycloneDX) da FONTE DE VERDADE COMMITADA: os package.json.
 
-Mandato, layer supply-chain/: um SBOM que diz a verdade sobre a cadeia de dependências. Não é
-inventado: cada componente npm vem do package-lock.json (versão resolvida + integrity sha512). Os
-MCP em Node são as únicas superfícies com dependências de terceiros; os scripts Python do arsenal
-são stdlib pura (o CI instala jsonschema ad-hoc, fora do runtime).
+Mandato, layer supply-chain/: um SBOM que diz a verdade sobre a cadeia de dependências. Este repo
+tem política deliberada (ver .gitignore: 'Lockfiles npm nao sao versionados neste repo ... a
+reprodutibilidade vem das versoes no package.json, nao de um lock gerado local'). Então o SBOM
+versionado é construído do que é COMMITADO -- as dependências DIRETAS declaradas em cada
+package.json, com a faixa de versão declarada -- e NÃO de um package-lock.json efêmero (que só
+existe após npm install e muda por máquina). A árvore resolvida completa + integrity é artefato de
+CI, não entra no SBOM commitado, justamente para o --check ser determinístico em qualquer SO.
 
-Fontes reais:
-  - mcp/pentagi-mcp/package-lock.json      (árvore resolvida, com integrity)
-  - mcp/dz23-subagents-universal-mcp/      (zero dependências — asserção de cadeia mínima)
+Fontes (committadas):
+  - mcp/pentagi-mcp/package.json                     (deps diretas, com faixa declarada)
+  - mcp/dz23-subagents-universal-mcp/package.json    (zero dependências -- cadeia mínima)
+  - scripts Python do arsenal: stdlib pura (jsonschema só no CI, fora do runtime)
 
-Determinístico: sem timestamp, componentes ordenados por bom-ref, para que --check (drift) seja
-estável. Adicionar/atualizar dependência sem regenerar o SBOM quebra o gate.
+Determinístico: sem timestamp, sem lockfile, componentes ordenados por bom-ref.
 
 Uso:
     python scripts/gera-sbom.py            # reescreve supply-chain/sbom.json e SBOM.md
@@ -32,35 +35,26 @@ NODE_PROJ = [
 ]
 
 
-def _pkg_meta(proj_dir: Path) -> tuple[str, str]:
-    pj = json.loads((proj_dir / "package.json").read_text(encoding="utf-8"))
-    return pj.get("name", proj_dir.name), pj.get("version", "0.0.0")
+def _pkg(proj_dir: Path) -> dict:
+    return json.loads((proj_dir / "package.json").read_text(encoding="utf-8"))
 
 
-def _componentes_npm(proj_nome: str, proj_dir: Path) -> list[dict]:
-    """Componentes de um projeto Node, lidos do package-lock.json (lockfileVersion 2/3)."""
+def _componentes_npm(proj_nome: str, pj: dict) -> list[dict]:
+    """Dependências DIRETAS de um package.json, com a faixa de versão declarada (não resolvida)."""
     comps: list[dict] = []
-    lock = proj_dir / "package-lock.json"
-    if not lock.is_file():
-        return comps
-    dados = json.loads(lock.read_text(encoding="utf-8"))
-    for caminho, info in (dados.get("packages") or {}).items():
-        if caminho == "":  # raiz do projeto, representada à parte como application
-            continue
-        nome = caminho.split("node_modules/")[-1]
-        ver = info.get("version")
-        if not ver:
-            continue
+    deps = {**(pj.get("dependencies") or {}), **(pj.get("devDependencies") or {})}
+    devset = set(pj.get("devDependencies") or {})
+    for nome, faixa in sorted(deps.items()):
         comps.append({
             "type": "library",
-            "bom-ref": f"pkg:npm/{nome}@{ver}",
+            "bom-ref": f"pkg:npm/{nome}@{faixa}",
             "name": nome,
-            "version": ver,
-            "purl": f"pkg:npm/{nome}@{ver}",
+            "version": faixa,
+            "purl": f"pkg:npm/{nome}@{faixa}",
             "properties": [
                 {"name": "dz23:projeto", "value": proj_nome},
-                {"name": "npm:integrity", "value": info.get("integrity", "")},
-                {"name": "npm:dev", "value": str(bool(info.get("dev", False))).lower()},
+                {"name": "dz23:fonte", "value": "package.json (faixa declarada; lockfile não versionado)"},
+                {"name": "npm:dev", "value": str(nome in devset).lower()},
             ],
         })
     return comps
@@ -71,7 +65,8 @@ def montar() -> dict:
     for proj_nome, proj_dir in NODE_PROJ:
         if not (proj_dir / "package.json").is_file():
             continue
-        nome, ver = _pkg_meta(proj_dir)
+        pj = _pkg(proj_dir)
+        nome, ver = pj.get("name", proj_dir.name), pj.get("version", "0.0.0")
         components.append({
             "type": "application",
             "bom-ref": f"pkg:npm/{nome}@{ver}",
@@ -81,7 +76,7 @@ def montar() -> dict:
             "properties": [{"name": "dz23:projeto", "value": proj_nome},
                            {"name": "dz23:papel", "value": "mcp-server"}],
         })
-        components += _componentes_npm(proj_nome, proj_dir)
+        components += _componentes_npm(proj_nome, pj)
     # Superfície Python: stdlib pura, asserção explícita (não é "sem SBOM", é "zero deps").
     components.append({
         "type": "application",
@@ -120,26 +115,29 @@ def _md(bom: dict) -> str:
     apps = [c for c in comps if c["type"] == "application"]
     libs = [c for c in comps if c["type"] == "library"]
     por_proj: dict[str, int] = {}
-    sem_integrity = 0
     for c in libs:
         proj = next((p["value"] for p in c.get("properties", []) if p["name"] == "dz23:projeto"), "?")
         por_proj[proj] = por_proj.get(proj, 0) + 1
-        integ = next((p["value"] for p in c.get("properties", []) if p["name"] == "npm:integrity"), "")
-        if not integ:
-            sem_integrity += 1
     linhas = [
         "# SBOM — dz23-arsenal",
         "",
-        "> **Gerado** por `scripts/gera-sbom.py` dos lockfiles reais. Não edite à mão — o gate "
-        "(`sbom:verifica`) reprova divergência. Formato CycloneDX 1.5.",
+        "> **Gerado** por `scripts/gera-sbom.py` dos `package.json` committados. Não edite à mão — o "
+        "gate (`sbom:verifica`) reprova divergência. Formato CycloneDX 1.5.",
         "",
-        f"- **{len(libs)}** componentes de biblioteca (npm, do `package-lock.json`), "
-        f"todos com `integrity` sha512 ({sem_integrity} sem hash).",
+        f"- **{len(libs)}** dependências diretas de npm (faixa declarada no `package.json`).",
         f"- **{len(apps)}** componentes de aplicação (os MCP + a superfície Python stdlib-only).",
         "",
-        "## Componentes de biblioteca por projeto",
+        "## Política de versão (deliberada neste repo)",
         "",
-        "| Projeto | Dependências (npm) |",
+        "Lockfiles npm **não são versionados** aqui (ver `.gitignore`): a reprodutibilidade vem das "
+        "faixas no `package.json`, não de um lock gerado por máquina. Por isso o SBOM committado "
+        "lista as **dependências diretas declaradas**; a árvore resolvida completa + integrity "
+        "sha512 é artefato de CI (gerado por `npm install`), não entra aqui — assim o `--check` é "
+        "determinístico em qualquer SO.",
+        "",
+        "## Dependências diretas por projeto",
+        "",
+        "| Projeto | Deps diretas (npm) |",
         "|---|---:|",
     ]
     for proj in sorted(por_proj):
@@ -151,7 +149,7 @@ def _md(bom: dict) -> str:
         "- `dz23-subagents-universal-mcp`: **zero dependências** de terceiros (toda a lógica em "
         "stdlib Node) — menor superfície de ataque possível.",
         "- Scripts Python do arsenal: **stdlib apenas** no runtime; `jsonschema` entra só no CI.",
-        "- Dependabot acompanha os lockfiles npm; Gitleaks e CodeQL cobrem segredo e SAST.",
+        "- Dependabot acompanha os `package.json`; Gitleaks e CodeQL cobrem segredo e SAST.",
         "",
     ]
     return "\n".join(linhas) + "\n"
@@ -180,9 +178,9 @@ def main(argv: list[str]) -> int:
             if atual.replace("\r\n", "\n") != novo.replace("\r\n", "\n"):
                 falhas.append(p.name)
         if falhas:
-            print(f"FALHA: {', '.join(falhas)} diverge(m) dos lockfiles — rode gera-sbom.py")
+            print(f"FALHA: {', '.join(falhas)} diverge(m) dos package.json — rode gera-sbom.py")
             return 1
-        print(f"OK: SBOM em sincronia com os lockfiles ({len(bom['components'])} componentes)")
+        print(f"OK: SBOM em sincronia com os package.json ({len(bom['components'])} componentes)")
         return 0
 
     DEST.mkdir(exist_ok=True)
