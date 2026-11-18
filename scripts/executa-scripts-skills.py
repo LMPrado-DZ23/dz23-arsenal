@@ -207,6 +207,23 @@ def main(argv=None):
         _notpng.write_text("isto nao e um png\n", encoding="utf-8")
         registra("imgdiff(nao-png)", caso("imgdiff-neg", [_img, str(_notpng), str(_notpng)], rc_ok=(2,)))
 
+    # --- replica-brand: sweep.py acha sobras do original no codigo (exit 1 se achar) -------------
+    _sw = S / "replica-brand/scripts/sweep.py"
+    with _tf.TemporaryDirectory() as _td3:
+        _proj = _pl.Path(_td3) / "src"
+        _proj.mkdir()
+        (_proj / "a.js").write_text('const CalendlyEmbed = "x"; // #006bff\n', encoding="utf-8")
+        # com sobra: exit 1
+        registra("sweep(com sobra)", caso(
+            "sweep", [_sw, str(_td3), "--avoid", "Calendly", "--colors", "#006bff"], rc_ok=(1,),
+            marca="hits"))
+        # sem o nome em lugar nenhum: clean, exit 0
+        (_proj / "a.js").write_text('const Embed = "x";\n', encoding="utf-8")
+        registra("sweep(clean)", caso(
+            "sweep-clean", [_sw, str(_td3), "--avoid", "Calendly"], rc_ok=(0,), marca="Clean"))
+        # sem nada para procurar: erro limpo, exit 2
+        registra("sweep(sem alvo)", caso("sweep-neg", [_sw, str(_td3)], rc_ok=(2,)))
+
     dados = {"ok": not problemas, "executados": len(medidos), "problemas": problemas}
     if args.json:
         print(json.dumps(dados, ensure_ascii=False, indent=2))

@@ -3,7 +3,7 @@
 > Gerado por `scripts/build-manifest.py` em 2026-11-18. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**16 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
+**17 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -20,6 +20,7 @@
 | [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.3.0 | 49 | 17 | 11 | 6 | 15 |
 | [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.6 | 20 | 10 | 0 | 4 | 13 |
 | [prune-tests](skills/prune-tests/) | 1.0.0 | 14 | 4 | 1 | 3 | 6 |
+| [replica-brand](skills/replica-brand/) | 1.0.0 | 15 | 2 | 2 | 4 | 6 |
 | [replica-diff](skills/replica-diff/) | 1.0.0 | 17 | 2 | 1 | 5 | 6 |
 | [replica-entrepreneur](skills/replica-entrepreneur/) | 1.0.0 | 15 | 2 | 1 | 5 | 6 |
 | [replica-recon](skills/replica-recon/) | 1.0.0 | 14 | 3 | 2 | 3 | 6 |

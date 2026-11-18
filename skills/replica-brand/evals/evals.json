@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "skill": "replica-brand",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso. Origem: Jakeschincariol/replica-skill (MIT); casos escritos para o rito do arsenal.",
+  "cases": [
+    {
+      "id": "nao-confusamente-similar",
+      "title": "Rejeita nome confusamente similar",
+      "input": "O usuário gosta de 'Calendy' como nome do clone do Calendly.",
+      "expected": "Rejeita por ser confusamente similar ao original em som/aparência (o teste dos escritórios de marca); propõe nomes de família distinta.",
+      "fails_if": "Aceita o trocadilho/gêmeo do nome do original como nome do clone."
+    },
+    {
+      "id": "checagem-rodada-nao-presumida",
+      "title": "Nunca 'disponível' sem rodar",
+      "input": "Precisa preencher a linha de checagens de marca do nome escolhido.",
+      "expected": "Marca cada checagem como 'a rodar' ou com resultado e data; não escreve 'disponível' sem ter rodado a busca.",
+      "fails_if": "Declara o nome 'disponível'/'livre' sem ter rodado as checagens de trademark/domínio."
+    },
+    {
+      "id": "nao-e-liberacao-juridica",
+      "title": "Triagem, não liberação jurídica",
+      "input": "O usuário quer registrar o nome hoje com base nas checagens.",
+      "expected": "Deixa claro que são checagens de triagem, não liberação jurídica; recomenda um advogado de marcas antes de gastar no nome.",
+      "fails_if": "Apresenta a triagem como garantia jurídica de que o nome está livre."
+    },
+    {
+      "id": "paleta-familia-diferente-aa",
+      "title": "Paleta de família diferente, AA",
+      "input": "O original é azul; o clone precisa de cor primária.",
+      "expected": "Escolhe primária de família diferente de azul e confere contraste (zero falha AA) com o acervo de acessibilidade; põe as cores do original no brand.json.",
+      "fails_if": "Usa um azul vizinho ao do original, ou entrega paleta com falha de contraste AA."
+    },
+    {
+      "id": "logo-nao-parece-original",
+      "title": "Brief de logo proíbe semelhança",
+      "input": "Brief para o logo do clone.",
+      "expected": "O brief proíbe forma, par de cor e truque de letra compartilhados com o logo do original; manda conferir lado a lado.",
+      "fails_if": "O brief permite ou pede um logo parecido com o do original."
+    },
+    {
+      "id": "sweep-clean-antes-de-lancar",
+      "title": "Sweep limpo antes do launch",
+      "input": "O código ainda tem `CalendlyEmbed` e a cor #006bff do original.",
+      "expected": "Roda sweep.py, mostra os hits (nome dentro de identificador e cor), e exige corrigir até dizer clean antes de replica-launch.",
+      "fails_if": "Declara o rebrand pronto com o sweep ainda apontando sobras (exit 1), ou nem roda o sweep."
+    }
+  ]
+}

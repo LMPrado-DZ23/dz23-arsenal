@@ -223,6 +223,19 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
   4 casos: parity e imgdiff com exemplo + 2 controles negativos — CSV sem coluna, arquivo não-PNG).
 - **Fora do ledger DZ23:** 6 evals. 3ª skill da camada produto-para-clone.
 
+### `skills/replica-brand/` — skill inteira + `sweep.py` (script MIT, stdlib)
+- **Origem:** `Jakeschincariol/replica-skill` (skill `replica-brand`). Licença **MIT lida no arquivo
+  `LICENSE` da raiz** (Copyright 2026 Jake Schincariol).
+- **O que entrou:** orientação de nomear/rebrandar o clone (regras legais: não confusamente similar,
+  checagem rodada não presumida, logo não parece o do original, triagem ≠ liberação jurídica)
+  internalizada em PT + `scripts/sweep.py` (acha nome/domínio/cor do original no código, exit 1 se
+  achar) + `examples/brand-exemplo.json` + 2 references + 2 templates + 6 evals + validate.
+- **Rerota:** o passo de contraste referenciava `replica-design/contrast.py` (skill não incorporada,
+  duplicava `ultimate-pro-max`); rerotado para `web-design-guidelines`/`dz23-ultimate-pro-max`.
+- **sweep.py funcional, sem edição:** exercitado no gate (`skills:scripts-executados`, 3 casos: com
+  sobra → exit 1, limpo → exit 0, sem alvo → exit 2).
+- **Fora do ledger DZ23:** 6 evals. 4ª skill da camada produto-para-clone.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

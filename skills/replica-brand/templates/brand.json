@@ -1,0 +1,6 @@
+{
+  "name": "{{seu nome}}",
+  "avoid": ["{{Nome do Original}}", "{{Empresa do Original}}"],
+  "domains": ["{{original.com}}"],
+  "colors": ["{{#hex de marca do original}}"]
+}

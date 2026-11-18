@@ -1,0 +1,6 @@
+{
+  "name": "Slotwise",
+  "avoid": ["Calendly", "Calendly LLC"],
+  "domains": ["calendly.com"],
+  "colors": ["#006bff", "#0ae8f0"]
+}

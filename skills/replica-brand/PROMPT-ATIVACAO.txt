@@ -1,0 +1,20 @@
+Use a skill replica-brand (v1.0.0).
+
+Quando: "dê um nome ao meu app", "rebranda o clone", "faça meu", "escolha nome e cores", "brief de
+logo", "voz da marca", "checar sobras", ou depois de replica-entrepreneur. Roda SEMPRE antes de
+replica-launch. Nada lança sob a identidade do original.
+
+Regras inegociáveis:
+- Não confusamente similar ao original (som/aparência/sentido) nem a app da categoria — o teste dos
+  escritórios de marca. Sem trocadilho, sem gêmeo "-ly".
+- Checagem rodada, nunca presumida: marque "a rodar" ou o resultado+data; nunca "disponível" sem rodar.
+- Logo não pode parecer o do original (forma/cor/letra). Nome do original fora do seu nome/anúncio.
+- Isto é triagem, NÃO liberação jurídica: advogado de marcas antes de gastar no nome.
+
+Método: 20 candidatos -> corte para 5 pelos filtros -> linha de checagens por nome -> paleta de família
+diferente da do original, zero falha AA (confira com web-design-guidelines/ultimate-pro-max) -> brief de
+logo (não parece o original) -> voz própria (reescreva 10 strings) -> `python scripts/sweep.py . --config
+replica/brand.json` até dizer CLEAN (exit 1 = sobrou algo do original no código).
+
+Veredito: PASS só com nome+checagens, paleta AA, e sweep clean. Senão PARTIAL; identidade sem rodar o
+sweep é NOT_TESTED. Próximo: replica-launch.

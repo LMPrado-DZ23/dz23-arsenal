@@ -115,7 +115,7 @@ def orfa():
             shutil.copytree(RAIZ / "mcp", tmp / "mcp")
         readme = tmp / "README.md"
         t = readme.read_text(encoding="utf-8")
-        readme.write_text(t.replace("Coleção de 16 skills", "Coleção de X skills"),
+        readme.write_text(t.replace("Coleção de 17 skills", "Coleção de X skills"),
                           encoding="utf-8")
         rc, s = exec_(["scripts/check-numbers.py"], cwd=tmp)
         return "REGRA ÓRFÃ" in s or rc != 0
