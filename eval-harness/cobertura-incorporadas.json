@@ -5,10 +5,6 @@
       "status": "NOT_TESTED",
       "motivo": "Poda de testes; rubrica é processo de risco (nunca remove sem baseline/aprovação), não mecânica. Sem acervo nem resposta registrada ainda; comportamento a exercitar em projeto real."
     },
-    "untangle-codebase": {
-      "status": "NOT_TESTED",
-      "motivo": "Reorganização de dependências de um codebase; rubrica estrutural subjetiva, não graduável por grader determinístico. Sem acervo nem resposta registrada ainda."
-    },
     "replica-brand": {
       "status": "NOT_TESTED",
       "motivo": "Suíte de clone clean-room (brand kit); rubrica de análise subjetiva. Sem acervo nem resposta registrada ainda."

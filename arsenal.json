@@ -206,12 +206,12 @@
       "version": "1.0.0",
       "description": ">",
       "user_invocable": true,
-      "files": 14,
+      "files": 17,
       "references": 4,
       "templates": 1,
-      "scripts": 3,
+      "scripts": 4,
       "evals": 6,
-      "sha256_skill_md": "9ef5b16a1e31668e604e44b32a8229b75a37d1bb1492f3d2984220ef4066fbe8"
+      "sha256_skill_md": "c772672a3a285b98ffa0f9433f0142c4ce7c3c6efe0e6ec0fdd73e874cdd1346"
     },
     {
       "name": "web-design-guidelines",

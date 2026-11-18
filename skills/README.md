@@ -24,7 +24,7 @@
 | [replica-entrepreneur](replica-entrepreneur/) | 1.0.0 | — | — | 2 | 1 | 5 | 6 |
 | [replica-launch](replica-launch/) | 1.0.0 | — | — | 2 | 3 | 4 | 6 |
 | [replica-recon](replica-recon/) | 1.0.0 | — | — | 3 | 1 | 3 | 6 |
-| [untangle-codebase](untangle-codebase/) | 1.0.0 | — | — | 4 | 1 | 3 | 6 |
+| [untangle-codebase](untangle-codebase/) | 1.0.0 | — | — | 4 | 1 | 4 | 6 |
 | [web-design-guidelines](web-design-guidelines/) | 1.0.0 | — | — | 1 | 1 | 4 | 6 |
 
 Totais do disco: **133 referências** e **192 cenários de eval** declarados.

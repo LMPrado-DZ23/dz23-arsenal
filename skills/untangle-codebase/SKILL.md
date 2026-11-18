@@ -32,7 +32,7 @@ Comece um refactor profundo deste codebase e leve até o fim. Trate isto como ob
 
 O método completo, em cinco passos, está em `references/method.md`. O formato do registro de decisão
 (problemas + a correção que resolve vários de uma vez) está em `templates/decision-log.md`. Antes de
-catalogar, consulte a taxonomia das quatro famílias de defeito em `references/defect-taxonomy.md`.
+catalogar, consulte a taxonomia das quatro famílias de defeito em `references/defect-taxonomy.md` — ou, offline, `python scripts/consulta-untangle.py familia <elo-oculto|elo-desnecessario|sobra|caso-especial>` e `... busca <termo>` (responde "sem correspondência" quando não há). O acervo é a própria taxonomia, tabulada em `dados/familias-de-defeito.csv`.
 
 ## Resumo do fluxo (o detalhe mora nas referências)
 

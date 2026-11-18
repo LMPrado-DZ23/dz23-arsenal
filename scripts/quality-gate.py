@@ -185,6 +185,11 @@ def main(argv: list[str]) -> int:
     # Fecha o furo achado na revisão (Qwen): skill incorporada (não dz23-*) com evals declarados não
     # pode ficar verde em silêncio. Exige evidência executada (dados/ ou replay) OU NOT_TESTED
     # declarado com motivo em eval-harness/cobertura-incorporadas.json. Não move o denominador 144.
+    # untangle-codebase: acervo das 4 familias de defeito estrutural (taxonomia propria da skill),
+    # agora consultavel offline -- fecha o item 3 da revisao para a skill que tinha taxonomia real.
+    resultados.append(rodar("untangle:consulta", [py, "scripts/consulta-untangle.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-untangle",
+                            [py, "scripts/prova-consulta-untangle.py"]))
     resultados.append(rodar("cobertura:incorporadas", [py, "scripts/check-cobertura-incorporadas.py"]))
     resultados.append(rodar("cobertura:autoteste",
                             [py, "scripts/check-cobertura-incorporadas.py", "--selftest"]))
