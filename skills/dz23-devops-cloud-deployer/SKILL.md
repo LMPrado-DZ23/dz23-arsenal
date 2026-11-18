@@ -1,6 +1,6 @@
 ---
 name: dz23-devops-cloud-deployer
-version: 1.2.3
+version: 1.3.0
 description: >
   DevSecOps, containers e deploy autônomo com evidência: imagem mínima e
   reproduzível, pipeline com gates, configuração e segredos por ambiente,
@@ -90,6 +90,12 @@ Cada fase grava evidência em arquivo (log/JSON) e falha em `exit ≠ 0` interro
 
 Critério de sucesso e gatilho de aborto definidos **antes** do deploy. Deploy ≠ release: feature flag
 desacopla.
+
+**Acervo consultável** (antes de escolher estratégia, escrever Dockerfile ou dar deploy): o
+conhecimento de deploy/cloud vive em `dados/` (ECC/deployment-patterns, MIT) e responde offline:
+`python scripts/consulta-devops.py estrategia canary` (trade-offs das estratégias),
+`... docker root` (FAZ/EVITA de Docker), `... checklist seguranca` (prontidão de produção + rollback),
+`... busca rollback`. Responde "sem correspondência" quando não há.
 
 ## Gestão de segredos
 1. Nunca em código, `Dockerfile` (`ARG`/`ENV`), manifesto em texto puro, log, artifact ou vault.

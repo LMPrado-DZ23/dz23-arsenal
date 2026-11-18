@@ -47,15 +47,15 @@
     },
     {
       "name": "dz23-devops-cloud-deployer",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "description": ">",
       "user_invocable": true,
-      "files": 35,
+      "files": 40,
       "references": 17,
       "templates": 7,
-      "scripts": 5,
+      "scripts": 6,
       "evals": 16,
-      "sha256_skill_md": "8fadc3ac9c24aeb84c098ceafb65457f3795fd78198a542bd064d66245e211cc"
+      "sha256_skill_md": "4fe51f8943bc70a08f749e13b4404911a2a90a1197a73d4a252bc70d18d5ba71"
     },
     {
       "name": "dz23-e2e-browser-verifier",

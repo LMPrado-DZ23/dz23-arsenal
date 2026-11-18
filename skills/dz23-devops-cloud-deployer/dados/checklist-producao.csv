@@ -1,0 +1,29 @@
+categoria,item,origem_arquivo,origem_secao
+Rollback,Imagem/artefato anterior disponível e tagueado,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Rollback,Migrações retrocompatíveis (sem mudança destrutiva),ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Rollback,Feature flags desligam o novo sem deploy,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Rollback,Alertas de pico de erro configurados,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Rollback,Rollback testado em staging antes de produção,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Aplicacao,"Todos os testes passam (unit, integração, E2E)",ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Aplicacao,Nenhum segredo hardcoded em código/config,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Aplicacao,Tratamento de erro cobre os casos de borda,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Aplicacao,Log estruturado (JSON) e sem PII,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Aplicacao,Health check retorna status significativo,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Infra,Imagem Docker reprodutível (versões pinadas),ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Infra,Env vars documentadas e validadas no startup,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Infra,"Limites de recurso (CPU, memória)",ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Infra,Scaling horizontal (min/max instâncias),ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Infra,SSL/TLS em todos os endpoints,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Monitoracao,"Métricas exportadas (req rate, latência, erros)",ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Monitoracao,Alerta para taxa de erro > limite,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Monitoracao,"Agregação de logs (estruturado, buscável)",ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Monitoracao,Uptime no endpoint de health,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Seguranca,Dependências escaneadas por CVE,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Seguranca,CORS só para origens permitidas,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Seguranca,Rate limiting em endpoint público,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Seguranca,Auth e authz verificados,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Seguranca,"Security headers (CSP, HSTS, X-Frame-Options)",ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Operacoes,Plano de rollback documentado e testado,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Operacoes,Migração testada contra dado do tamanho de produção,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Operacoes,Runbook para falhas comuns,ECC/deployment-patterns (MIT),Production/Rollback Checklist
+Operacoes,On-call e caminho de escalonamento definidos,ECC/deployment-patterns (MIT),Production/Rollback Checklist

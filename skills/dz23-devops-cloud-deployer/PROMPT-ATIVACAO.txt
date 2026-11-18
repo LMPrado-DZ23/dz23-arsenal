@@ -1,4 +1,4 @@
-PROMPT DE ATIVAÇÃO — DZ23 DevOps Cloud Deployer v1.2.3
+PROMPT DE ATIVAÇÃO — DZ23 DevOps Cloud Deployer v1.3.0
 
 Use a skill dz23-devops-cloud-deployer.
 
@@ -32,3 +32,5 @@ rebuild por ambiente; deploy sem volta; DROP/delete sem backup verificado.
 
 Critério de entrega: cada gate de references/quality-gates.md com estado
 PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.
+
+Acervo consultável (offline): python scripts/consulta-devops.py estrategia canary | docker root | checklist seguranca | busca rollback.

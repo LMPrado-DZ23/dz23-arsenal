@@ -261,6 +261,15 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
 - **Dedup:** não repete o acervo de `dz23-backend-data-architect` (índices por query, tipos); aqui é só
   pré-deploy (gates, migração, lock). Evals da skill não mudaram (fora o acervo; verificado pela prova).
 
+### `skills/dz23-devops-cloud-deployer/dados/` — acervo de deploy/cloud (Trilha A, melhora skill DZ23)
+- **Origem:** ECC (`affaan-m/ECC`), skill `deployment-patterns`. Licença **MIT lida no `LICENSE` da
+  raiz** do ECC.
+- **O que entrou:** 3 CSVs (43 registros) — estratégias de deploy (Rolling/Blue-Green/Canary com
+  prós/contras/quando), FAZ/EVITA de Docker, checklist de prontidão de produção + rollback — com
+  `origem_arquivo`/`origem_secao`. Consultor `scripts/consulta-devops.py` + prova, no gate.
+- **Melhora a DZ23 existente** `dz23-devops-cloud-deployer` (1.2.3 → 1.3.0): consulta o próprio acervo
+  offline. 2ª das 5 DZ23 restantes da Trilha A. Evals da skill inalterados (ledger 144 intacto).
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

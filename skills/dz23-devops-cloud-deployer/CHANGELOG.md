@@ -1,5 +1,17 @@
 # Changelog — dz23-devops-cloud-deployer
 
+## [1.3.0] — 2026-11-18
+
+### Adicionado — acervo consultável de deploy/cloud (Trilha A)
+- `dados/`: 3 CSVs (43 registros) — `estrategias-de-deploy.csv` (Rolling/Blue-Green/Canary com
+  prós/contras/quando), `docker-boas-praticas.csv` (FAZ/EVITA), `checklist-producao.csv` (prontidão de
+  produção + rollback). Fonte ECC `deployment-patterns` (**MIT**, lida no `LICENSE` do ECC).
+  Proveniência em `dados/PROVENIENCIA.md`.
+- `scripts/consulta-devops.py` + prova (`scripts/prova-consulta-devops.py`): subcomando PT
+  (estrategia/canary, docker/container, checklist/rollback/seguranca, busca), palavra inteira, recusa
+  honesta. Ambos no gate (`devops:consulta`, `gate:autoteste-consulta-devops`) e no CI.
+- Índice de uso no `SKILL.md`. A skill consulta o próprio acervo offline. Bump MINOR 1.2.3 → 1.3.0.
+
 ## [1.2.3] — 2026-11-17
 
 ### Corrigido

@@ -1,0 +1,4 @@
+estrategia,pros,contras,quando_usar,origem_arquivo,origem_secao
+Rolling (default),"Zero downtime, rollout gradual",Duas versões rodam juntas — exige mudança retrocompatível,"Deploy padrão, mudança retrocompatível",ECC/deployment-patterns (MIT),Deployment Strategies
+Blue-Green,"Rollback instantâneo (volta pro blue), cutover limpo",Exige 2x infra durante o deploy,"Serviço crítico, zero tolerância a problema",ECC/deployment-patterns (MIT),Deployment Strategies
+Canary,Pega problema com tráfego real antes do rollout total,Exige split de tráfego e monitoração,"Serviço de alto tráfego, mudança arriscada, feature flags",ECC/deployment-patterns (MIT),Deployment Strategies

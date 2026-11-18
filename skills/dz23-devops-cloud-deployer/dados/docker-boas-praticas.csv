@@ -1,0 +1,13 @@
+lado,pratica,origem_arquivo,origem_secao
+FAZ,"Use tag de versão específica (node:22-alpine, não :latest)",ECC/deployment-patterns (MIT),Docker Best Practices
+FAZ,Multi-stage build para imagem menor,ECC/deployment-patterns (MIT),Docker Best Practices
+FAZ,Rode como usuário não-root,ECC/deployment-patterns (MIT),Docker Best Practices
+FAZ,Copie os arquivos de dependência primeiro (cache de layer),ECC/deployment-patterns (MIT),Docker Best Practices
+FAZ,".dockerignore excluindo node_modules, .git, tests",ECC/deployment-patterns (MIT),Docker Best Practices
+FAZ,Instrução HEALTHCHECK,ECC/deployment-patterns (MIT),Docker Best Practices
+FAZ,Limites de recurso (compose/k8s),ECC/deployment-patterns (MIT),Docker Best Practices
+EVITA,Rodar como root,ECC/deployment-patterns (MIT),Docker Best Practices
+EVITA,Usar tag :latest,ECC/deployment-patterns (MIT),Docker Best Practices
+EVITA,Copiar o repo inteiro num COPY só,ECC/deployment-patterns (MIT),Docker Best Practices
+EVITA,Instalar dev dependencies na imagem de produção,ECC/deployment-patterns (MIT),Docker Best Practices
+EVITA,Guardar segredo na imagem (use env/secrets manager),ECC/deployment-patterns (MIT),Docker Best Practices
