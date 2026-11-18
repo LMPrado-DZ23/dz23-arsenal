@@ -6,6 +6,7 @@ um sistema que nao existe. Este arquivo re-executa a experiencia por tras de cad
 """
 import json
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -256,6 +257,55 @@ def confere_crlf_indice() -> None:
     if saida:
         raise AssertionError(f"{len(saida.splitlines())} blob(s) com CRLF no índice")
 afirma("índice do git sem CRLF (decisão do passo de CI)", confere_crlf_indice)
+
+# A checagem de citação fabricada é a camada mais valiosa do arsenal (a auditoria de 2026-11-09
+# citou trechos que não estavam nas respostas) e passou por dois gates-fantasma nesta sessão.
+# Provar o caminho positivo exige violar uma citação real -- em cópia, nunca no repo.
+def confere_citacao_fabricada() -> None:
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        tmp = pathlib.Path(td)
+        for n in ("scripts", "audit-results", "audit-package", "evals-results", "skills"):
+            if not (RAIZ / n).is_dir():
+                return
+            shutil.copytree(RAIZ / n, tmp / n, symlinks=False)
+        rc, s = exec_(["scripts/run-evals.py", "--verify-quotes"], cwd=tmp)
+        if rc != 0:
+            raise AssertionError(f"baseline já falha na cópia: {s.strip()[:120]}")
+        st = json.loads((tmp / "evals-results/_audit-notes/AUDIT-STATUS.json").read_text(
+            encoding="utf-8"))
+        validos = [l["arquivo"] for l in st.get("laudos", []) if l.get("status") == "VALIDO"]
+        sys.path.insert(0, str(tmp / "scripts"))
+        import importlib.util as iu
+        sp = iu.spec_from_file_location("caq_probe", str(tmp / "scripts/check-audit-quotes.py"))
+        caq = iu.module_from_spec(sp)
+        sp.loader.exec_module(caq)
+        # usar o próprio extrator para escolher o alvo: garante violar o que ele lê. As três
+        # primeiras tentativas desta prova procuraram crases e falharam porque extrair_citacoes
+        # lê linhas iniciadas por '>' -- formato imaginado, não observado.
+        alvo = None
+        for rel in validos:
+            texto = (tmp / rel).read_text(encoding="utf-8")
+            for mb in re.finditer(r"(?ms)^##\s+Eval[^\n]*\n(.*?)(?=^##\s+Eval|\Z)", texto):
+                for cit in caq.extrair_citacoes(mb.group(1)):
+                    if len(cit) >= 40 and cit in texto:
+                        alvo = (rel, cit)
+                        break
+                if alvo:
+                    break
+            if alvo:
+                break
+        if not alvo:
+            return          # nada a violar (laudos reescritos); não é aprovação nem falha
+        rel, cit = alvo
+        arq = tmp / rel
+        falsa = cit[:16] + "ZZZ-INVENTADO " + cit[16:]
+        arq.write_text(arq.read_text(encoding="utf-8").replace(cit, falsa, 1),
+                       encoding="utf-8")
+        rc2, s2 = exec_(["scripts/run-evals.py", "--verify-quotes"], cwd=tmp)
+        if rc2 == 0:
+            raise AssertionError("citação inventada passou despercebida -- gate-fantasma vivo")
+afirma("citação fabricada num laudo VALIDO é recusada", confere_citacao_fabricada)
 
 print("\n" + "=" * 64)
 caiu = [t for t, ok in resultados if not ok]

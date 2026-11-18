@@ -102,6 +102,18 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.12] — 2026-11-17
+
+### Adicionado
+- **Prova da cadeia de citação** em `scripts/audita-alegacoes.py` (14ª alegação): copia laudo +
+  respostas para diretório temporário, inventa texto dentro de uma citação real de um laudo
+  `VALIDO` e exige que `--verify-quotes` saia com erro. Resultado: `fabricado= 1`, exit 1,
+  apontando exatamente o laudo violado -- a checagem que protege contra evidência inventada
+  (o defeito original da auditoria de 2026-11-09) está viva nos dois sentidos.
+- Auditor mapeou também a cobertura de execução: dos 27 scripts em `scripts/`, 21 são
+  alcançáveis pelo gate ou pelo CI por cadeia de chamada. Os seis restantes são instaladores
+  (`install-all.*`, `verify-cli.ps1`), gerador pontual (`add_arsenal_readme.py`) e o
+  próprio `prova-verificadores.py`, que altera disco e por isso roda à mão.
 ## [1.5.11] — 2026-11-17
 
 ### Corrigido — o auditor de alegações corrompia o repositório que auditava
