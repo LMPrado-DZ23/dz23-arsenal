@@ -1,4 +1,4 @@
-PROMPT DE ATIVAÇÃO — DZ23 DevOps Cloud Deployer v1.0.0
+PROMPT DE ATIVAÇÃO — DZ23 DevOps Cloud Deployer v1.2.2
 
 Use a skill dz23-devops-cloud-deployer.
 

@@ -62,3 +62,5 @@ desenvolvedor e instalá-lo no aparelho. Fora do escopo deste ambiente.
 | MCP `pat-phone` registrado | ❌ de propósito, até o hardware existir |
 | Chamada telefônica de teste | ❌ `BLOCKED_BY_EXTERNAL_DEPENDENCY` |
 | `PhoneClaw` | ❌ não aplicável (iOS) |
+
+**Licença:** não localizada no repositório de origem — tratar como todos os direitos reservados até provar o contrário (verificado em 2026-11-17).

@@ -2,7 +2,7 @@
 
 **Autor:** Cloudflare
 **Repo:** https://github.com/cloudflare/security-audit-skill
-**Licença:** verificar no repositório
+**Licença:** MIT (github api cloudflare/security-audit-skill, 2026-11-17)
 
 ## O que faz
 

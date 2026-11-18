@@ -1,9 +1,9 @@
 # dz23-arsenal
 
-Coleção de 9 skills, 1 MCP e 1 bundle de engenharia para agentes de IA (Claude Code, DeepSeek Harness,
+Coleção de 10 skills, 2 MCP e 1 bundle de engenharia para agentes de IA (Claude Code, DeepSeek Harness,
 Cursor, Codex). Cada item é uma capacidade completa — não um prompt solto.
 
-![Skills](https://img.shields.io/badge/skills-9-blue)
+![Skills](https://img.shields.io/badge/skills-10-blue)
 ![MCP](https://img.shields.io/badge/mcp-1-green)
 ![Bundle](https://img.shields.io/badge/bundle-1-purple)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
@@ -129,7 +129,7 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 | Documento | Para quê |
 |---|---|
 | [`docs/getting-started.md`](docs/getting-started.md) | Do zero ao primeiro uso |
-| [`docs/skills-overview.md`](docs/skills-overview.md) | Tabela comparativa das 9 skills |
+| [`docs/skills-overview.md`](docs/skills-overview.md) | Tabela comparativa das 10 skills |
 | [`docs/integration-map.md`](docs/integration-map.md) | Como as skills se conectam |
 | [`docs/installing-skills.md`](docs/installing-skills.md) | DZ23 → `~/.agents/skills` |
 | [`docs/faq.md`](docs/faq.md) | Perguntas frequentes |
@@ -185,8 +185,8 @@ Detalhes da Camada 4: [`docs/camada-4-2026-11-09.md`](docs/camada-4-2026-11-09.m
 Verificar agora:
 
 ```bash
-python scripts/quality-gate.py              # 16 checks
-python scripts/run-evals.py --report        # 45/131
+python scripts/quality-gate.py              # roda todos os checks (o total sai da própria saída)
+python scripts/run-evals.py --report        # 45/144 registrados
 python scripts/run-evals.py --verify-quotes # citações dos laudos válidos
 ```
 
@@ -240,7 +240,7 @@ referências externas pertencem aos seus respectivos autores e mantêm suas lice
 
 ## Aviso honesto sobre evals
 
-As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em harness real e julgados:
+As 10 skills declaram **144 cenários** em `evals/evals.json`. Executados em harness real e julgados:
 **3** — mais 1 (`pass-sem-teste`) na skill de orquestração. O resto é `NOT_TESTED`, declarado no
 `CHANGELOG.md` de cada skill e no [`ROADMAP.md`](ROADMAP.md).
 

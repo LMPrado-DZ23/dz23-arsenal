@@ -13,7 +13,7 @@ Extraia do comando: resultado desejado, escopo, não escopo, repositório, ambie
 - Limits: session, cost, iterations (if provided)
 | ID | Criterion | Evidence | Status |
 |---|---|---|---|
-| REQ-001 | ... | ... | NOT_RUN |
+| REQ-001 | ... | ... | NOT_TESTED |
 ```
 
 ## Skills simultâneas

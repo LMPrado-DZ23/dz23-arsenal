@@ -25,14 +25,38 @@ jobs:
         with:
           python-version: "3.12"
 
+      # run-evals.py --schema depende de jsonschema. Sem instalar, o script cai no
+      # fallback manual e o passo "Evals contra o schema" passa a checar menos do que
+      # diz checar — verde silencioso. Instalamos explicitamente para o passo valer.
+      - name: Dependências dos verificadores
+        run: python -m pip install --quiet jsonschema
+
+      - name: Fins de linha normalizados
+        # O repo declara `* text=auto eol=lf`. Se algum blob voltou a ser commitado com
+        # CRLF, todo clone Windows nasce com git status sujo e as pessoas param de
+        # confiar no diff. Este passo transforma isso em falha visível.
+        run: |
+          if git grep -Il -P "\r$" -- '*.md' '*.py' '*.sh' '*.yml' '*.json' '*.txt' | head -20; then
+            echo "::error::há arquivos com CRLF no índice, contra o .gitattributes (eol=lf)"
+            exit 1
+          fi
+          echo "CRLF: nenhum arquivo fora da norma"
+
       - name: Estrutura das skills
         run: python scripts/check-structure.py
 
       - name: Validador de cada skill
+        # Uma skill sem validate_skill.py não pode contar como aprovada: o loop era
+        # `[ -f "$v" ] || continue`, que pulava em silêncio. Agora se exige um por skill.
         run: |
           falhou=0
-          for v in skills/*/scripts/validate_skill.py; do
-            [ -f "$v" ] || continue
+          for d in skills/*/; do
+            v="${d}scripts/validate_skill.py"
+            if [ ! -f "$v" ]; then
+              echo "::error::$v ausente — cobertura de validação não é aprovação"
+              falhou=1
+              continue
+            fi
             echo "== $v"
             python "$v" || falhou=1
           done
@@ -47,29 +71,57 @@ jobs:
       - name: Registros de evals
         run: python scripts/check-eval-results.py
 
+      - name: Estado de execução dos evals
+        # Rodar --report em CI expõe a cobertura real a cada push. O script sai 1
+        # enquanto houver cenário sem resultado (estado atual: 99/144), então aqui ele
+        # é informativo: publica o número no resumo do run sem bloquear merge. Quando a
+        # cobertura subir de patamar, trocar para `python scripts/run-evals.py --report`
+        # puro para passar a bloquear.
+        run: |
+          python scripts/run-evals.py --report | tee report.txt
+          tail -n 3 report.txt >> "$GITHUB_STEP_SUMMARY"
+
       - name: Links relativos
         run: python scripts/check-links.py .
+
+      - name: Números da documentação batem com o disco
+        run: python scripts/check-numbers.py
+
+      - name: Licenças dos componentes
+        run: python scripts/check-licenses.py
 
       - name: Manifesto atualizado
         run: python scripts/build-manifest.py --check
 
       - name: Quality gate completo
-        run: python scripts/quality-gate.py --json > gate.json || (cat gate.json; exit 1)
+        # `set -o pipefail` + gravação atômica: antes, se o gate morresse antes de
+        # escrever gate.json, o passo "Resumo" via always() imprimia "gate.json ausente"
+        # e saía 0 — CI verde com o verificador morto.
+        run: |
+          set -euo pipefail
+          python scripts/quality-gate.py --json > gate.json.tmp
+          mv gate.json.tmp gate.json
 
       - name: Resumo
         if: always()
         run: |
           python - <<'PY'
-          import json, pathlib
+          import json, pathlib, sys
           p = pathlib.Path("gate.json")
           if not p.is_file():
-              print("gate.json ausente — o gate não chegou a rodar")
-              raise SystemExit(0)
+              print("gate.json ausente — o gate não chegou a completar")
+              # Isso é falha, não estado neutro.
+              raise SystemExit(1)
           d = json.loads(p.read_text())
-          print(f"checks: {d['total']} | falhas: {d['falhas']}")
+          resumo = f"checks: {d['total']} | falhas: {d['falhas']}"
+          print(resumo)
           for c in d["checks"]:
               if not c["ok"]:
                   print(f"  FALHA {c['check']}: {c['resumo']}")
+          sumario = pathlib.Path(__import__("os").environ.get("GITHUB_STEP_SUMMARY", "/dev/null"))
+          with sumario.open("a", encoding="utf-8") as fh:
+              fh.write(f"## Quality gate\n\n{resumo}\n")
+          raise SystemExit(0 if d["ok"] else 1)
           PY
 
       - name: Publicar relatório do gate

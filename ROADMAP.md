@@ -7,7 +7,7 @@ o que não foi testado está marcado como `NOT_TESTED`, não como "funciona".
 
 | Componente | Versão | Estado verificado |
 |---|---|---|
-| 9 skills DZ23 | ver [`INDEX.md`](INDEX.md) | estrutura ✅ · validadores ✅ · **evals `NOT_TESTED`** |
+| 10 skills DZ23 | ver [`INDEX.md`](INDEX.md) | estrutura ✅ · validadores ✅ · **cobertura de evals parcial (45/144)** |
 | `mcp/dz23-subagents-universal-mcp` | 4.4.1 | instalado e configurado no ambiente de origem; **não iniciado em CI** |
 | `bundle/dz23-dsh-agency` | 1.0.0 | estrutura ✅; `build.py` não executado em CI |
 | 9 skills externas | — | apenas documentadas (não redistribuídas) |
@@ -24,7 +24,9 @@ Constantes do CI: [`.github/workflows/quality.yml`](.github/workflows/quality.ym
 
 ## O buraco maior: evals não executados
 
-As 9 skills declaram **~137 cenários** em `evals/evals.json`. Executados em harness real e julgados: **3**.
+As 10 skills declaram **144 cenários** em `evals/evals.json`. Executados em harness real e julgados: **45**.
+Os demais seguem `NOT_TESTED`; a tabela por skill abaixo é a fonte, e `scripts/check-numbers.py`
+confere estes números contra o disco.
 
 | Skill | Cenários | Executados |
 |---|---|---|
@@ -104,7 +106,7 @@ de outra pessoa, onde o erro custa retrabalho e não parágrafo.
 **O que ele não faz:** executar o comportamento. Isso exige uma sessão de agente real por cenário; o harness
 prova que o eval é **coerente e executável** e guarda o veredito de quem executou.
 
-Auditoria de 2026-11-09: **128 cenários, 0 erros de coerência, 3 avisos de cobertura**. Dois defeitos reais
+Auditoria de 2026-11-09: **128 cenários então existentes, 0 erros de coerência, 3 avisos de cobertura** (o total hoje é 144 — ver tabela acima). Dois defeitos reais
 foram encontrados e corrigidos nesse processo (evals de UI na skill de orquestração; `ultimate-pro-max` sem
 nenhum eval).
 
@@ -112,7 +114,7 @@ nenhum eval).
 
 | # | Dívida | Impacto | Esforço |
 |---|---|---|---|
-| 1 | Evals não executados (128 cenários) | alto — comportamento não comprovado | alto |
+| 1 | Evals não executados (99 de 144 cenários) | alto — comportamento não comprovado | alto |
 | 2 | `install-all.sh` nunca rodou em Linux/macOS | médio — caminho Linux não exercitado | baixo |
 | 3 | **CI** — resolvido: rodando desde 2026-11-09 (2 runs verdes). Verificar: `gh run list --limit 5` | — | — |
 | 4 | `mcp/` e `bundle/` não são testados em CI | médio | médio |

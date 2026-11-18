@@ -31,17 +31,11 @@ RESULTADOS = RAIZ / "evals-results"
 PROMPTS = RAIZ / "evals-prompts"
 SCHEMA = RAIZ / "evals.schema.json"
 
-CURTO = {
-    "dz23-autonomous-improvement-ultimate": "autonomous",
-    "dz23-backend-data-architect": "backend",
-    "dz23-codebase-cartographer": "cartographer",
-    "dz23-devops-cloud-deployer": "devops",
-    "dz23-e2e-browser-verifier": "e2e",
-    "dz23-performance-scalability-engine": "performance",
-    "dz23-reverse-engineer-anything": "reverse-engineer",
-    "dz23-spec-to-system-engine": "spec",
-    "dz23-ultimate-pro-max": "ultimate-pro-max",
-}
+# Fonte única em scripts/_tracks.py (era uma cópia manual que esqueceu a 10ª skill).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _tracks import para_apelido as _para_apelido  # noqa: E402
+
+CURTO = _para_apelido()
 
 STOP = set("""a o as os um uma de da do das dos e ou que em no na nos nas para por com sem ao aos
 se ser é são estar está como quando onde qual quais seu sua seus suas este esta isso isto
@@ -280,14 +274,22 @@ def cmd_verify_quotes(laudo: str | None, como_json: bool) -> int:
     else:
         arq = RESULTADOS / "_audit-notes" / "AUDIT-STATUS.json"
         if not arq.is_file():
-            print("sem AUDIT-STATUS.json — nada a verificar")
-            return 0
-        dados = json.loads(arq.read_text(encoding="utf-8"))
+            # Antes isto devolvia 0 ("nada a verificar"), entao apagar o arquivo de
+            # estado desligava silenciosamente a checagem de citacao fabricada.
+            # Ausencia de estado e falha, nao aprovacao.
+            print(f"FALHA: {arq.relative_to(RAIZ)} ausente — nao ha o que verificar, "
+                  f"e isso nao e uma aprovacao")
+            return 1
+        try:
+            dados = json.loads(arq.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError) as exc:
+            print(f"FALHA: {arq.relative_to(RAIZ)} ilegivel: {exc}")
+            return 1
         alvos = [l["arquivo"] for l in dados.get("laudos", []) if l.get("status") == "VALIDO"]
 
     if not alvos:
-        print("nenhum laudo VALIDO para verificar")
-        return 0
+        print("FALHA: nenhum laudo com status VALIDO registrado em AUDIT-STATUS.json")
+        return 1
 
     saida = []
     falhou = False

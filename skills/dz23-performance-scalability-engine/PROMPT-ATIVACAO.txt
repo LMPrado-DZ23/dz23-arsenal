@@ -1,4 +1,4 @@
-PROMPT DE ATIVAÇÃO — DZ23 Performance & Scalability Engine v1.0.0
+PROMPT DE ATIVAÇÃO — DZ23 Performance & Scalability Engine v1.3.0
 
 Use a skill dz23-performance-scalability-engine.
 

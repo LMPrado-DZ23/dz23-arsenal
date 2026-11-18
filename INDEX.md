@@ -1,14 +1,15 @@
 # Índice do arsenal
 
-> Gerado por `scripts/build-manifest.py` em 2026-11-14. **Não editar à mão** — rode o script.
+> Gerado por `scripts/build-manifest.py` em 2026-11-17. **Não editar à mão** — rode o script.
+> A data acima é informativa e não entra na comparação do `--check`.
 
-**10 skills · 13 externas · 1 prompt(s) · 1 MCP · 1 bundle**
+**10 skills · 13 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
 | Skill | Versão | Arquivos | Refs | Templates | Scripts | Evals |
 |---|---|---|---|---|---|---|
-| [dz23-autonomous-improvement-ultimate](skills/dz23-autonomous-improvement-ultimate/) | 2.1.4 | 14 | 5 | 2 | 0 | 13 |
+| [dz23-autonomous-improvement-ultimate](skills/dz23-autonomous-improvement-ultimate/) | 2.1.4 | 15 | 5 | 2 | 1 | 13 |
 | [dz23-backend-data-architect](skills/dz23-backend-data-architect/) | 1.1.0 | 19 | 10 | 2 | 1 | 12 |
 | [dz23-codebase-cartographer](skills/dz23-codebase-cartographer/) | 1.1.0 | 31 | 15 | 7 | 3 | 15 |
 | [dz23-devops-cloud-deployer](skills/dz23-devops-cloud-deployer/) | 1.2.2 | 33 | 17 | 7 | 3 | 16 |
@@ -19,12 +20,13 @@
 | [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.2.0 | 44 | 17 | 11 | 3 | 15 |
 | [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.2 | 16 | 9 | 0 | 1 | 13 |
 
-## MCP e bundle
+## MCP e bundles
 
-| Item | Versão |
-|---|---|
-| [dz23-subagents-universal-mcp](mcp/dz23-subagents-universal-mcp/) | 4.4.1 |
-| [dz23-dsh-agency](bundle/dz23-dsh-agency/) | 1.0.0 |
+| Item | Caminho | Versão | Licença declarada |
+|---|---|---|---|
+| [dz23-subagents-universal-mcp](mcp/dz23-subagents-universal-mcp/) | `mcp/dz23-subagents-universal-mcp` | 4.4.1 | MIT |
+| [pentagi-mcp](mcp/pentagi-mcp/) | `mcp/pentagi-mcp` | 1.0.0 | MIT |
+| [dz23-dsh-agency](bundle/dz23-dsh-agency/) | `bundle/dz23-dsh-agency` | 1.0.0 | arquivo LICENSE |
 
 ## Skills externas
 

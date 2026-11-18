@@ -1,8 +1,25 @@
+import sys
 from pathlib import Path
 import json
 import re
 
 root = Path(__file__).resolve().parents[1]
+# --- checagens comuns do arsenal (scripts/skill_validator.py) ---------------
+# Reunifica o que estava espalhado em dez copias divergentes: frontmatter, VERSION x
+# frontmatter, PROMPT-ATIVACAO congelada, referencias quebradas, evals coerentes e
+# nome de skill descontinuada em frontmatter vivo. As checagens especificas desta skill
+# continuam abaixo.
+_ARSENAL = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(_ARSENAL / "scripts"))
+try:
+    from skill_validator import validar_comum
+except ImportError as exc:  # ambiente fora do repo (skill instalada sozinha)
+    print(f"WARN: checagens comuns indisponiveis ({exc})")
+    validar_comum = None
+else:
+    _erros_comuns = validar_comum(root)
+    assert not _erros_comuns, "checagens comuns falharam:\n  - " + "\n  - ".join(_erros_comuns)
+
 
 REQUIRED_REFS = [
     'measurement-first.md',

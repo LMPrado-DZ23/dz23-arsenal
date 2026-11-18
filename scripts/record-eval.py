@@ -35,17 +35,11 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 RESULTADOS = RAIZ / "evals-results"
 
-CURTO = {
-    "dz23-autonomous-improvement-ultimate": "autonomous",
-    "dz23-backend-data-architect": "backend",
-    "dz23-codebase-cartographer": "cartographer",
-    "dz23-devops-cloud-deployer": "devops",
-    "dz23-e2e-browser-verifier": "e2e",
-    "dz23-performance-scalability-engine": "performance",
-    "dz23-reverse-engineer-anything": "reverse-engineer",
-    "dz23-spec-to-system-engine": "spec",
-    "dz23-ultimate-pro-max": "ultimate-pro-max",
-}
+# Fonte única em scripts/_tracks.py (era uma cópia manual que esqueceu a 10ª skill).
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _tracks import para_apelido as _para_apelido  # noqa: E402
+
+CURTO = _para_apelido()
 
 MODELO = """# Eval: {eval_id}
 

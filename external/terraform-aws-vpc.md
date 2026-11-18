@@ -2,7 +2,7 @@
 
 **Autor:** terraform-aws-modules
 **Repo:** https://github.com/terraform-aws-modules/terraform-aws-vpc
-**Licença:** Apache-2.0 (verificar no repositório)
+**Licença:** Apache-2.0 (github api terraform-aws-modules/terraform-aws-vpc, 2026-11-17)
 
 ## O que faz
 

@@ -1,12 +1,11 @@
 {
-  "schema": 1,
+  "schema": 2,
   "generated_by": "scripts/build-manifest.py",
-  "generated_at": "2026-11-14",
   "counts": {
     "skills": 10,
     "external": 13,
     "prompts": 1,
-    "mcp": 1,
+    "mcp": 2,
     "bundle": 1
   },
   "skills": [
@@ -15,12 +14,12 @@
       "version": "2.1.4",
       "description": "Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.",
       "user_invocable": true,
-      "files": 14,
+      "files": 15,
       "references": 5,
       "templates": 2,
-      "scripts": 0,
+      "scripts": 1,
       "evals": 13,
-      "sha256_skill_md": "15ca2e819371d3c857094c6b4e58d04cd8d96997b4cda0c3be578715e27597ec"
+      "sha256_skill_md": "424d11dc2148f4938739a7b2171fb432ff9ffea28e86a1d83b35bbbf2d2412cb"
     },
     {
       "name": "dz23-backend-data-architect",
@@ -201,14 +200,25 @@
   "prompts": [
     "prompts/performance-4-camadas.md"
   ],
-  "bundles": [
+  "mcp": [
     {
       "path": "mcp/dz23-subagents-universal-mcp",
-      "version": "4.4.1"
+      "version": "4.4.1",
+      "license": "MIT",
+      "tem_license_file": true
     },
     {
+      "path": "mcp/pentagi-mcp",
+      "version": "1.0.0",
+      "license": "MIT",
+      "tem_license_file": false
+    }
+  ],
+  "bundles": [
+    {
       "path": "bundle/dz23-dsh-agency",
-      "version": "1.0.0"
+      "version": "1.0.0",
+      "tem_license_file": true
     }
   ]
 }

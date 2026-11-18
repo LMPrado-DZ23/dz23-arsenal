@@ -1,7 +1,4 @@
----
-name: dz23-premium-ui-ultimate
-description: Skill de direção de arte, product design e engenharia frontend para criar, redesenhar, implementar e auditar sites, landing pages, SaaS, dashboards, ERPs e aplicativos web com identidade própria, sem estética genérica de IA. Ative em qualquer tarefa de UI, UX, frontend, design system, responsividade ou inspeção visual.
----
+> **Arquivo histórico — não é uma skill.** Preserva a metodologia da v1 (`dz23-premium-ui-ultimate`), substituída pela `dz23-ultimate-pro-max`. Consulte por contexto; nada aqui é carregado nem executado.
 
 # DZ23 Premium UI Ultimate — v1.0
 

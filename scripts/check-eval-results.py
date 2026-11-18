@@ -23,17 +23,14 @@ RES = RAIZ / "evals-results"
 SKILLS = RAIZ / "skills"
 ROADMAP = RAIZ / "ROADMAP.md"
 
-CURTO = {
-    "autonomous": "dz23-autonomous-improvement-ultimate",
-    "backend": "dz23-backend-data-architect",
-    "cartographer": "dz23-codebase-cartographer",
-    "devops": "dz23-devops-cloud-deployer",
-    "e2e": "dz23-e2e-browser-verifier",
-    "performance": "dz23-performance-scalability-engine",
-    "reverse-engineer": "dz23-reverse-engineer-anything",
-    "spec": "dz23-spec-to-system-engine",
-    "ultimate-pro-max": "dz23-ultimate-pro-max",
-}
+# Mapa apelido → skill vem de scripts/_tracks.py, derivado do disco. As três cópias
+# manuais deste dicionário eram o motivo de dz23-postgres-prod-preflight não conseguir
+# registrar eval: record-eval criava uma pasta e este script a rejeitava como "não
+# mapeada".
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _tracks import para_skill as _para_skill  # noqa: E402
+
+CURTO = _para_skill()
 
 VEREDITOS = ("PASS", "PARTIAL", "FAIL", "NOT_TESTED", "BLOCKED", "NOT_RECOVERED")
 SECOES = ("## Cenário", "## Resposta", "## Esperado", "## Avaliação", "## Notas")
@@ -92,10 +89,48 @@ def main() -> int:
         if veredito == "BLOCKED" and "BLOCKED_BY_EXTERNAL_DEPENDENCY" not in texto:
             problemas.append(f"{md.relative_to(RAIZ)}: BLOCKED sem dependência declarada")
 
-    # todo cenário não executado deve estar declarado no ROADMAP
+    # Todo cenário sem registro precisa estar declarado no ROADMAP — não basta a seção
+    # existir. Antes o teste era apenas `if "Status de evals" not in roadmap`, que passava
+    # com a seção vazia e nunca cruzava nada: um NOT_TESTED fantasma dava PROBLEMAS: 0.
     roadmap = ROADMAP.read_text(encoding="utf-8", errors="replace") if ROADMAP.is_file() else ""
     if "Status de evals" not in roadmap:
         problemas.append("ROADMAP.md: falta a seção 'Status de evals'")
+    else:
+        registrados: set[str] = set()
+        for md in arquivos:
+            m_id = re.match(r"\d{4}-\d{2}-\d{2}-(.+)$", md.stem)
+            if m_id:
+                registrados.add(m_id.group(1))
+
+        declarados: set[str] = set()
+        for pasta_skill in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
+            ev = pasta_skill / "evals" / "evals.json"
+            if not ev.is_file():
+                continue
+            try:
+                dados_sk = json.loads(ev.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                continue
+            for case in dados_sk.get("cases", []):
+                cid = case.get("id")
+                if isinstance(cid, str) and cid:
+                    declarados.add(cid)
+
+        pendentes = len(declarados - registrados)
+
+        # O ROADMAP declara o total pendente em tabela ("**Total pendente** | **99**").
+        # Exigir que esse número bata pega ROADMAP desatualizado sem obrigar o documento
+        # a citar cada id individualmente.
+        m_pend = re.search(r"Total pendente\*{0,2}\s*\|\s*\*{0,2}(\d+)", roadmap)
+        if m_pend:
+            declarado = int(m_pend.group(1))
+            if declarado != pendentes:
+                problemas.append(
+                    f"ROADMAP.md: diz 'Total pendente {declarado}', mas há {pendentes} "
+                    f"cenários sem registro em evals-results/")
+        elif pendentes:
+            problemas.append(
+                f"ROADMAP.md: não declara quantos cenários estão pendentes ({pendentes})")
 
     print(f"registros verificados: {len(arquivos)}")
     if problemas:

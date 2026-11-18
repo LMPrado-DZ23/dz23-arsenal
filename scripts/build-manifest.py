@@ -117,35 +117,71 @@ def montar() -> dict:
 
     prompts = sorted(f"prompts/{p.name}" for p in (RAIZ / "prompts").glob("*.md") if p.name != "README.md")
 
+    # MCP e bundle sao enumerados a partir do disco. Antes havia uma lista hardcoded
+    # que punha o MCP principal dentro de "bundles" e omitia o pentagi-mcp inteiro.
+    def componentes(subpasta: str, chave: str) -> list[dict]:
+        base = RAIZ / subpasta
+        saida = []
+        for pasta in sorted(p for p in base.iterdir() if p.is_dir()) if base.is_dir() else []:
+            item = {"path": f"{subpasta}/{pasta.name}", "version": ler_versao(pasta)}
+            pkg = pasta / "package.json"
+            if pkg.is_file():
+                try:
+                    item["license"] = json.loads(pkg.read_text(encoding="utf-8")).get("license")
+                except json.JSONDecodeError:
+                    item["license"] = None
+            tem_licenca = any((pasta / n).is_file() for n in ("LICENSE", "LICENSE.md", "LICENSE.txt"))
+            item["tem_license_file"] = tem_licenca
+            saida.append(item)
+        return saida
+
+    mcp = componentes("mcp", "mcp")
+    bundles = componentes("bundle", "bundle")
+
     return {
-        "schema": 1,
+        "schema": 2,
         "generated_by": "scripts/build-manifest.py",
-        "generated_at": date.today().isoformat(),
         "counts": {
             "skills": len(skills),
             "external": len(externos),
             "prompts": len(prompts),
-            "mcp": 1 if (RAIZ / "mcp").is_dir() else 0,
-            "bundle": 1 if (RAIZ / "bundle").is_dir() else 0,
+            "mcp": len(mcp),
+            "bundle": len(bundles),
         },
         "skills": skills,
         "external": externos,
         "prompts": prompts,
-        "bundles": [
-            {"path": "mcp/dz23-subagents-universal-mcp", "version": ler_versao(RAIZ / "mcp" / "dz23-subagents-universal-mcp")},
-            {"path": "bundle/dz23-dsh-agency", "version": ler_versao(RAIZ / "bundle" / "dz23-dsh-agency")},
-        ],
+        "mcp": mcp,
+        "bundles": bundles,
     }
 
 
-def gerar_index(man: dict) -> str:
+def corpo_comparavel(man: dict) -> str:
+    """Serializacao estavel usada para comparar e para gravar.
+
+    Nao inclui data nem hash de geracao: `generated_at` com `date.today()` fazia o
+    `--check` falhar em qualquer dia diferente do ultimo push, sem nada ter mudado.
+    A data vive no comentario do INDEX.md, fora do payload comparado.
+    """
+    return json.dumps(man, indent=2, ensure_ascii=False) + "\n"
+
+
+def gerar_index(man: dict, data_geracao: str) -> str:
+    c = man["counts"]
+    contagens = [
+        f"{c['skills']} skills",
+        f"{c['external']} externas",
+        f"{c['prompts']} prompt(s)",
+        f"{c['mcp']} MCP",
+        f"{c['bundle']} bundle(s)",
+    ]
     linhas = [
         "# Índice do arsenal",
         "",
-        f"> Gerado por `scripts/build-manifest.py` em {man['generated_at']}. **Não editar à mão** — rode o script.",
+        f"> Gerado por `scripts/build-manifest.py` em {data_geracao}. **Não editar à mão** — rode o script.",
+        "> A data acima é informativa e não entra na comparação do `--check`.",
         "",
-        f"**{man['counts']['skills']} skills · {man['counts']['external']} externas · "
-        f"{man['counts']['prompts']} prompt(s) · 1 MCP · 1 bundle**",
+        "**" + " · ".join(contagens) + "**",
         "",
         "## Skills",
         "",
@@ -158,9 +194,11 @@ def gerar_index(man: dict) -> str:
             f"{s['references']} | {s['templates']} | {s['scripts']} | {s['evals']} |"
         )
 
-    linhas += ["", "## MCP e bundle", "", "| Item | Versão |", "|---|---|"]
-    for b in man["bundles"]:
-        linhas.append(f"| [{b['path'].split('/')[-1]}]({b['path']}/) | {b['version']} |")
+    linhas += ["", "## MCP e bundles", "", "| Item | Caminho | Versão | Licença declarada |", "|---|---|---|---|"]
+    for item in man["mcp"] + man["bundles"]:
+        nome = item["path"].split("/")[-1]
+        lic = item.get("license") or ("arquivo LICENSE" if item.get("tem_license_file") else "—")
+        linhas.append(f"| [{nome}]({item['path']}/) | `{item['path']}` | {item['version']} | {lic} |")
 
     linhas += ["", "## Skills externas", "", "| Skill | Autor | Repositório |", "|---|---|---|"]
     for e in man["external"]:
@@ -191,29 +229,45 @@ def main(argv: list[str]) -> int:
     args = ap.parse_args(argv)
 
     man = montar()
-    json_txt = json.dumps(man, indent=2, ensure_ascii=False) + "\n"
-    index_txt = gerar_index(man)
-
+    json_txt = corpo_comparavel(man)
+    # A data so importa para quem le o INDEX; comparar por ela faria o gate depender do calendario.
+    index_txt_atual = None
     alvo_json = RAIZ / "arsenal.json"
     alvo_index = RAIZ / "INDEX.md"
 
     if args.check:
         problemas = []
-        if not alvo_json.is_file() or alvo_json.read_text(encoding="utf-8") != json_txt:
-            problemas.append("arsenal.json desatualizado")
-        if not alvo_index.is_file() or alvo_index.read_text(encoding="utf-8") != index_txt:
-            problemas.append("INDEX.md desatualizado")
+        if not alvo_json.is_file():
+            problemas.append("arsenal.json ausente")
+        else:
+            try:
+                atual = json.loads(alvo_json.read_text(encoding="utf-8"))
+            except json.JSONDecodeError as exc:
+                problemas.append(f"arsenal.json ilegível: {exc}")
+                atual = None
+            if atual is not None and corpo_comparavel(atual) != json_txt:
+                problemas.append("arsenal.json desatualizado em relação ao disco")
+        if not alvo_index.is_file():
+            problemas.append("INDEX.md ausente")
+        else:
+            texto = alvo_index.read_text(encoding="utf-8")
+            m = re.search(r"build-manifest\.py` em (\S+)\.", texto)
+            index_txt_atual = gerar_index(man, m.group(1) if m else "?")
+            if texto != index_txt_atual:
+                problemas.append("INDEX.md desatualizado em relação ao manifesto")
         if problemas:
             print("DESATUALIZADO: " + "; ".join(problemas))
             print("Rode: python scripts/build-manifest.py")
             return 1
-        print("manifesto em dia")
+        print(f"manifesto em dia ({man['counts']['skills']} skills, "
+              f"{man['counts']['mcp']} MCP, {man['counts']['bundle']} bundle)")
         return 0
 
+    index_txt = gerar_index(man, date.today().isoformat())
     alvo_json.write_text(json_txt, encoding="utf-8", newline="\n")
     alvo_index.write_text(index_txt, encoding="utf-8", newline="\n")
     print(f"arsenal.json: {len(man['skills'])} skills, {len(man['external'])} externas, "
-          f"{len(man['prompts'])} prompt(s)")
+          f"{len(man['prompts'])} prompt(s), {len(man['mcp'])} MCP, {len(man['bundles'])} bundle(s)")
     print("INDEX.md gerado")
     return 0
 

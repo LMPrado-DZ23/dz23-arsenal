@@ -1,4 +1,4 @@
-PROMPT DE ATIVAÇÃO — DZ23 Spec-to-System Engine v1.0.0
+PROMPT DE ATIVAÇÃO — DZ23 Spec-to-System Engine v1.2.0
 
 Use a skill dz23-spec-to-system-engine.
 

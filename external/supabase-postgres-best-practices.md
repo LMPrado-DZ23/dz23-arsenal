@@ -2,7 +2,7 @@
 
 **Autor:** Supabase
 **Repo:** https://github.com/supabase/agent-skills
-**Licença:** verificar no repositório
+**Licença:** MIT (github api supabase/agent-skills, 2026-11-17)
 
 ## O que faz
 

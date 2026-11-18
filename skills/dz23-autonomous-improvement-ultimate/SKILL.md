@@ -37,7 +37,7 @@ Seleção por risco/escopo; QUICK nunca dispensa segurança, testes essenciais o
 
 ### 1. Traduzir /goal em contrato verificável
 - Defina objetivo, escopo e **não escopo**, ambientes, dependências, orçamento/tempo, critérios de aceite e evidências requeridas.
-- Registre `REQ-001...` com: critério, risco, gate, comando/fluxo, estado e evidência. Use `PASS`, `FAIL`, `PARTIAL`, `NOT_RUN`, `BLOCKED` — nunca `PASS` sem observação real.
+- Registre `REQ-001...` com: critério, risco, gate, comando/fluxo, estado e evidência. Use `PASS`, `FAIL`, `PARTIAL`, `NOT_TESTED`, `BLOCKED` — nunca `PASS` sem observação real.
 - Estabeleça baseline anterior às alterações para distinguir defeitos preexistentes de regressões introduzidas.
 - Registre no repositório, se apropriado, `docs/quality-loop/acceptance.md` e `docs/quality-loop/state.md`; caso contrário mantenha um checkpoint externo sem poluir o projeto.
 
@@ -81,7 +81,7 @@ Consulte `evals/evals.json` (path relativo à skill): 12 cenários com o comport
 Ao retomar, leia checkpoint, **revalide** branch/HEAD, working tree, serviços, evidências e backlog; não confie cegamente no estado salvo. Não repita automaticamente migrações, pagamentos, exclusões, deploys ou comandos não idempotentes. Leia `references/checkpoint-and-resume.md`.
 
 ### 8. Relatório obrigatório
-Apresente: `STATUS`; objetivo/escopo; baseline; `REQ-ID → estado → evidência`; correções por causa raiz; arquivos alterados; comandos/testes executados e resultados; inspeções reais; riscos/defeitos restantes; gates `NOT_RUN/BLOCKED`; checkpoint e próxima ação. Nunca invente logs, capturas, scores ou execução de ferramentas.
+Apresente: `STATUS`; objetivo/escopo; baseline; `REQ-ID → estado → evidência`; correções por causa raiz; arquivos alterados; comandos/testes executados e resultados; inspeções reais; riscos/defeitos restantes; gates `NOT_TESTED/BLOCKED`; checkpoint e próxima ação. Nunca invente logs, capturas, scores ou execução de ferramentas.
 
 ### 9. Retomada após desbloqueio
 Quando uma credencial, permissão ou dependência externa é desbloqueada, descreva a retomada em passos —

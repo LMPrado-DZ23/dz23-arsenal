@@ -2,7 +2,7 @@
 
 **Autor:** Microsoft
 **Repo:** https://github.com/microsoft/playwright-mcp
-**Licença:** Apache-2.0 (verificar no repositório)
+**Licença:** Apache-2.0 (arquivo LICENSE no zip microsoft/playwright-mcp, 2026-11-17)
 
 ## O que faz
 

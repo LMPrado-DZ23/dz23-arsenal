@@ -7,6 +7,6 @@ Baseline (branch/commit/status):
 
 | ID | Critério verificável | Teste/evidência | Estado | Observação |
 |---|---|---|---|---|
-| AC-001 | | | NOT_RUN | |
+| AC-001 | | | NOT_TESTED | |
 
 Critérios de parada:

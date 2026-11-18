@@ -35,16 +35,21 @@ def rodar(nome: str, cmd: list[str]) -> dict:
 
 
 def validar_skills(py: str) -> list[dict]:
-    """Roda o validate_skill.py de cada skill que tiver um."""
+    """Roda o validate_skill.py de cada skill que tiver um.
+
+    Skill sem validador NÃO é "passou": é cobertura ausente. Antes isto devolvia
+    ok=True com "sem validate_skill.py (pulado)", então a skill mais importante do
+    arsenal (a de loop autônomo) podia degradar silenciosamente sem quebrar o CI.
+    """
     resultados = []
     for skill in sorted(p for p in (RAIZ / "skills").iterdir() if p.is_dir()):
         v = skill / "scripts" / "validate_skill.py"
         if not v.is_file():
             resultados.append({
                 "check": f"validate:{skill.name}",
-                "ok": True,
-                "exit": 0,
-                "resumo": "sem validate_skill.py (pulado)",
+                "ok": False,
+                "exit": 1,
+                "resumo": "sem validate_skill.py — cobertura ausente, não é aprovação",
             })
             continue
         r = rodar(f"validate:{skill.name}", [py, str(v)])
@@ -72,8 +77,10 @@ def main(argv: list[str]) -> int:
 
     resultados += validar_skills(py)
     resultados.append(rodar("manifesto:check", [py, "scripts/build-manifest.py", "--check"]))
+    resultados.append(rodar("numeros", [py, "scripts/check-numbers.py"]))
     resultados.append(rodar("links", [py, "scripts/check-links.py", "."]))
     resultados.append(rodar("estrutura", [py, "scripts/check-structure.py"]))
+    resultados.append(rodar("licencas", [py, "scripts/check-licenses.py"]))
     resultados.append(rodar("evals:coerencia", [py, "scripts/run-evals.py", "--check"]))
     resultados.append(rodar("evals:schema", [py, "scripts/run-evals.py", "--schema"]))
     resultados.append(rodar("evals:registros", [py, "scripts/check-eval-results.py"]))

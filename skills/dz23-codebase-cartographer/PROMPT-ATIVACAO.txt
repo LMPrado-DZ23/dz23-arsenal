@@ -1,4 +1,4 @@
-PROMPT DE ATIVAÇÃO — DZ23 Codebase Cartographer v1.0.0
+PROMPT DE ATIVAÇÃO — DZ23 Codebase Cartographer v1.1.0
 
 Use a skill dz23-codebase-cartographer.
 

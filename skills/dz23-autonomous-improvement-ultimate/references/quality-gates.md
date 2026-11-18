@@ -16,7 +16,7 @@
 | Performance | medições comparáveis | LCP, INP, CLS, regressões |
 | Operação | health/logs e plano de rollback | TLS, backup, restore, deploy |
 
-Use estados `PASS`, `FAIL`, `PARTIAL`, `NOT_RUN`, `BLOCKED` por gate. Só use PASS após execução ou inspeção observável; anote ferramenta, comando, resultado, ambiente e localização da evidência. Gate não aplicável deve ser justificado como `N/A`, nunca contado como PASS.
+Use estados `PASS`, `FAIL`, `PARTIAL`, `NOT_TESTED`, `BLOCKED` por gate. Só use PASS após execução ou inspeção observável; anote ferramenta, comando, resultado, ambiente e localização da evidência. Gate não aplicável deve ser justificado como `N/A`, nunca contado como PASS.
 
 ## Componentes e fluxos
 - Botão: ação real, hover/focus/disabled/loading, teclado.

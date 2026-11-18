@@ -2,7 +2,7 @@
 
 **Autor:** vercel-labs
 **Repo:** https://github.com/vercel-labs/agent-skills
-**Licença:** verificar no repositório
+**Licença:** **não declarada no repositório de origem** — a API do GitHub devolve `license: null` (verificado em 2026-11-17). Sem licença explícita, aplicam-se os direitos reservados por padrão: usar só via instalação oficial, nunca copiar o conteúdo para este arsenal.
 
 ## O que faz
 

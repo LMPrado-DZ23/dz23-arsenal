@@ -1,4 +1,4 @@
-PROMPT DE ATIVAÇÃO — DZ23 E2E Browser Verifier v1.0.0
+PROMPT DE ATIVAÇÃO — DZ23 E2E Browser Verifier v1.1.1
 
 Use a skill dz23-e2e-browser-verifier.
 
