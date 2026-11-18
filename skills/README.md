@@ -1,6 +1,6 @@
 # Skills DZ23 — índice
 
-12 skills de engenharia, cada uma com uma responsabilidade clara. Todas seguem o mesmo padrão:
+13 skills de engenharia, cada uma com uma responsabilidade clara. Todas seguem o mesmo padrão:
 `SKILL.md` com as regras, `references/` para conhecimento sob demanda, `templates/` para artefatos,
 `scripts/` quando há código executável e `evals/` com cenários de avaliação.
 
@@ -20,8 +20,9 @@
 | [ultimate-pro-max](dz23-ultimate-pro-max/) | 2.2.6 | UI/UX | advanced | 10 | 0 | 4 | 13 |
 | [prune-tests](prune-tests/) | 1.0.0 | — | — | 4 | 1 | 3 | 6 |
 | [untangle-codebase](untangle-codebase/) | 1.0.0 | — | — | 4 | 1 | 3 | 6 |
+| [web-design-guidelines](web-design-guidelines/) | 1.0.0 | — | — | 1 | 1 | 4 | 6 |
 
-Totais do disco: **121 referências** e **156 cenários de eval** declarados.
+Totais do disco: **122 referências** e **162 cenários de eval** declarados.
 
 > Esta tabela é gerada -- `python scripts/gera-indice-skills.py` -- e conferida pelo
 > `check-numbers.py` a cada gate. Versões, contagens de refs/templates/scripts/evals vêm do

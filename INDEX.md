@@ -3,7 +3,7 @@
 > Gerado por `scripts/build-manifest.py` em 2026-11-18. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**12 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
+**13 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -21,6 +21,7 @@
 | [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.6 | 20 | 10 | 0 | 4 | 13 |
 | [prune-tests](skills/prune-tests/) | 1.0.0 | 14 | 4 | 1 | 3 | 6 |
 | [untangle-codebase](skills/untangle-codebase/) | 1.0.0 | 14 | 4 | 1 | 3 | 6 |
+| [web-design-guidelines](skills/web-design-guidelines/) | 1.0.0 | 14 | 1 | 1 | 4 | 6 |
 
 ## MCP e bundles
 

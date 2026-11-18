@@ -2,7 +2,7 @@
   "schema": 2,
   "generated_by": "scripts/build-manifest.py",
   "counts": {
-    "skills": 12,
+    "skills": 13,
     "external": 16,
     "prompts": 1,
     "mcp": 2,
@@ -152,6 +152,18 @@
       "scripts": 3,
       "evals": 6,
       "sha256_skill_md": "9ef5b16a1e31668e604e44b32a8229b75a37d1bb1492f3d2984220ef4066fbe8"
+    },
+    {
+      "name": "web-design-guidelines",
+      "version": "1.0.0",
+      "description": ">",
+      "user_invocable": true,
+      "files": 14,
+      "references": 1,
+      "templates": 1,
+      "scripts": 4,
+      "evals": 6,
+      "sha256_skill_md": "0b7e778dc8c35870d91cc2d87a5a8afb752c0418ec94a70edff03ec9a7eb660f"
     }
   ],
   "external": [

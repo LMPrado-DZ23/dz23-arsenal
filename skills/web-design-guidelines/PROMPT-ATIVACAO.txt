@@ -1,0 +1,21 @@
+Use a skill web-design-guidelines (v1.0.0).
+
+Quando: "revise minha UI", "audite acessibilidade", "cheque contra boas práticas", antes de PR de
+frontend, ou depois da dz23-ultimate-pro-max desenhar a UI. Não é lint de estilo nem reescrita — é
+auditoria de conformidade que REPORTA achados.
+
+O conhecimento é interno (104 regras em dados/regras-por-categoria.csv + references/). Revise OFFLINE,
+nunca busque de URL remota.
+
+Fluxo:
+1. Pegue os arquivos (o argumento, ou pergunte o padrão).
+2. Antes de afirmar violação, consulte a categoria: `python scripts/consulta-web.py categoria <PT>`
+   (acessibilidade, foco, formulario, animacao, tipografia, conteudo, imagens, performance, navegacao,
+   toque, layout, dark, i18n, hidratacao, hover, copy, antipadroes) ou `... busca <termo>`.
+3. Cheque cada arquivo contra as regras, categoria por categoria.
+4. Reporte em arquivo:linha — categoria + regra do acervo + correção (templates/relatorio-revisao.md).
+
+Inegociável: todo achado cita uma das 104 regras (preferência pessoal é recomendação separada, não
+achado); não altere código, só reporte; arquivo:linha real; offline.
+
+Veredito: sem violação → PASS; com achados → PARTIAL com a lista; se não leu os arquivos → NOT_TESTED.

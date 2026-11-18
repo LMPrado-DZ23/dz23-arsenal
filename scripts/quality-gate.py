@@ -185,6 +185,10 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("espec:consulta", [py, "scripts/consulta-espec.py", "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-espec",
                             [py, "scripts/prova-consulta-espec.py"]))
+    # web-design-guidelines: regras internalizadas (Vercel WIG, MIT), consultaveis offline.
+    resultados.append(rodar("web:consulta", [py, "scripts/consulta-web.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-web",
+                            [py, "scripts/prova-consulta-web.py"]))
     # A skill que MANDA rodar um script tem de levar o script e o dado junto. Medido na rodada 58:
     # os tres consultores instruidos pelo SKILL.md viviam em scripts/ do repo, e `install-all` copia
     # apenas a pasta da skill -- a habilidade instalada em ~/.agents/skills/ mandava executar arquivo

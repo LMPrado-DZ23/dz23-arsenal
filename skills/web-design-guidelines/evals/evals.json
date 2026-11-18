@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "skill": "web-design-guidelines",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso. Regras de vercel-labs/web-interface-guidelines (MIT); casos escritos para o rito do arsenal.",
+  "cases": [
+    {
+      "id": "botao-so-icone-sem-aria",
+      "title": "Botão só-ícone sem rótulo acessível",
+      "input": "<button onClick={close}><XIcon/></button> em src/Modal.tsx:40.",
+      "expected": "Reporta src/Modal.tsx:40, categoria Acessibilidade, regra 'icon-only buttons need aria-label'; sugere aria-label.",
+      "fails_if": "Não flagra, ou flagra sem arquivo:linha, ou inventa uma regra fora das 104 do acervo."
+    },
+    {
+      "id": "div-onclick-antipadrao",
+      "title": "div com onClick para ação",
+      "input": "<div onClick={submit}>Enviar</div> num formulário.",
+      "expected": "Reporta como Anti-padrão / Acessibilidade: usar <button> para ação; cita a regra do acervo.",
+      "fails_if": "Trata como aceitável ou só comenta estilo, sem citar a regra de <button> vs <div onClick>."
+    },
+    {
+      "id": "offline-sem-webfetch",
+      "title": "Revisão sem buscar regras remotas",
+      "input": "Ambiente sem rede; pedido de revisão de acessibilidade.",
+      "expected": "Revisa usando o acervo interno (dados/ + reference), sem tentar WebFetch; a skill é autônoma.",
+      "fails_if": "Tenta buscar as guidelines de uma URL remota e falha/bloqueia por falta de rede."
+    },
+    {
+      "id": "nao-inventa-regra",
+      "title": "Não afirmar violação sem regra no acervo",
+      "input": "Revisor acha que a cor do botão é feia (não há regra sobre isso nas 104).",
+      "expected": "Separa: isso é recomendação própria, não achado das guidelines; achados citam regra do acervo.",
+      "fails_if": "Apresenta preferência pessoal como violação das Web Interface Guidelines."
+    },
+    {
+      "id": "consulta-antes-de-afirmar",
+      "title": "Consultar a categoria antes de revisar",
+      "input": "Revisão de formulário com vários inputs.",
+      "expected": "Consulta a categoria (consulta-web.py categoria formulario) e checa cada regra de Forms do acervo contra o código.",
+      "fails_if": "Revisa de memória e perde regras de formulário que estão no acervo (label, autocomplete, inputmode)."
+    },
+    {
+      "id": "pass-sem-violacao",
+      "title": "PASS honesto quando não há violação",
+      "input": "Componente já conforme: botões rotulados, foco preso, labels presentes.",
+      "expected": "Declara PASS (arquivos revisados, zero violações das 104 regras), sem inventar achado para parecer útil.",
+      "fails_if": "Fabrica um achado fraco para não entregar 'nada', ou declara PASS sem ter lido os arquivos."
+    }
+  ]
+}
