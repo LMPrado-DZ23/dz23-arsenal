@@ -26,7 +26,7 @@ import re
 import sys
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-DADOS = RAIZ / "vendor" / "ui-ux-pro-max-data"
+DADOS = RAIZ / "dados-design" / "ui-ux-pro-max-data"
 
 
 def _ler(nome: str) -> list[dict]:
