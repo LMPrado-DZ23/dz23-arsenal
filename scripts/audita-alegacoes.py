@@ -138,15 +138,42 @@ afirma("verifica_claims reprova referencia quebrada", claims_pega)
 
 # python -O nao desliga validador (rodada 19).
 def modo_o():
-    import shutil
-    import tempfile
+    """Exige que seja o -O a mudar o resultado, não apenas 'algo reprova'.
+
+    A versão anterior devolvia `rc != 0` depois de injetar uma referência quebrada. Como essa
+    violação é pega também pela checagem própria da skill, qualquer exit != 0 bastava -- e se o
+    conserto do -O regredisse, a prova continuaria verde. Medido nesta sessão: reescrevendo o
+    validador com o padrão antigo (`assert not _erros_comuns`), o modo normal sai 1 e o `-O` sai 0
+    com PASS; hoje os dois saem 1. Essa diferença entre modos é o que a alegação enuncia, então é
+    o que ela passa a exigir.
+    """
     with tempfile.TemporaryDirectory() as td:
         esp = pathlib.Path(td) / "skill"
         shutil.copytree(RAIZ / "skills/dz23-e2e-browser-verifier", esp)
         sm = esp / "SKILL.md"
         sm.write_bytes(sm.read_bytes() + "\nVer `references/painel-de-metricas.md`.\n".encode())
-        rc, s = exec_([str(esp / "scripts/validate_skill.py")], cwd=RAIZ)
-        return rc != 0
+        alvo = str(esp / "scripts/validate_skill.py")
+        rc_normal, s_normal = exec_([alvo])
+        rc_o, s_o = exec_(["-O", alvo])
+        if rc_normal == 0:
+            raise AssertionError("referência quebrada não reprovada nem no modo normal")
+        if rc_o == 0:
+            raise AssertionError(f"python -O ainda desliga a reprovacao: {s_o[-140:]}")
+        # sensibilidade: reproduzir o padrao antigo e exigir que ele mude o resultado sob -O
+        v = esp / "scripts/validate_skill.py"
+        texto = v.read_text(encoding="utf-8")
+        antigo = re.sub(
+            r"( *)for e in _erros_comuns:\n\1    print\(f\"FALHA: \{e\}\", file=sys\.stderr\)\n"
+            r"\1raise SystemExit\(1\)",
+            r"\1assert not _erros_comuns, _erros_comuns", texto)
+        if antigo == texto:
+            raise AssertionError("padrao corrigido nao encontrado no fonte; prova cega")
+        v.write_text(antigo, encoding="utf-8")
+        rc_antigo_o, _ = exec_(["-O", alvo])
+        if rc_antigo_o != 0:
+            raise AssertionError(
+                "a regressao historica (assert) tambem reprovaria sob -O -- logo a prova nao e "
+                "sensivel ao que alega; ela so mede 'alguma checagem reprova'")
 afirma("validador nao aprova sob python -O", modo_o)
 
 # skill instalada se auto-valida sem o checkout (rodada 7).
@@ -296,19 +323,57 @@ afirma("nº de checks é derivado da execução, não digitado", confere_contage
 
 # Índice de skills gerado (rodada 27): se alguém editar a tabela à mão, isto cai.
 def confere_indice() -> None:
+    """Não basta exit 0: é preciso provar que o --check sabe reprovar.
+
+    Um verificador que passou a não comparar nada devolve 0 para sempre -- foi literalmente o
+    defeito do build.py --check na rodada 28. A prova então aplica uma violação e exige reclame,
+    além do estado limpo.
+    """
     rc, s = exec_(["scripts/gera-indice-skills.py", "--check"])
     if rc != 0:
         raise AssertionError(f"índice de skills desatualizado: {s.strip()[:120]}")
+    with tempfile.TemporaryDirectory() as td:
+        base = pathlib.Path(td)
+        for n in ("scripts", "skills"):
+            shutil.copytree(RAIZ / n, base / n, symlinks=False)
+        alvo = base / "skills/README.md"
+        texto = alvo.read_text(encoding="utf-8")
+        violado = re.sub(r"\| 1\.1\.1 \| Exploração", "| 0.0.1 | Exploração", texto, count=1)
+        if violado == texto:
+            raise AssertionError("não consegui violar o índice; prova cega")
+        alvo.write_text(violado, encoding="utf-8")
+        rc2, _ = exec_(["scripts/gera-indice-skills.py", "--check"], cwd=base)
+        if rc2 == 0:
+            raise AssertionError("--check aprovou indice com versao errada: verificador oco")
+
+
 afirma("índice de skills bate com o disco", confere_indice)
 
 # Bundle: os 88 agentes versionados batem com as fontes (rodada 28).
 def confere_bundle() -> None:
     import os
+    bund = RAIZ / "bundle/dz23-dsh-agency"
     p = subprocess.run([sys.executable, "build.py", "--check"], capture_output=True,
-                       cwd=str(RAIZ / "bundle/dz23-dsh-agency"), timeout=180, env=os.environ)
+                       cwd=str(bund), timeout=180, env=os.environ)
     saida = p.stdout.decode("utf-8", "replace") + p.stderr.decode("utf-8", "replace")
     if p.returncode != 0:
         raise AssertionError(f"agents/ fora de sincronia: {saida.strip()[-140:]}")
+    # O --check do bundle foi, por meses, um verificador que não comparava nada: media bytes e
+    # imprimia OK. Conferir só o estado limpo deixaria a mesma classe de regressão passar verde,
+    # então adulterar uma cópia dos agentes e exigir reclame.
+    with tempfile.TemporaryDirectory() as td:
+        base = pathlib.Path(td) / "dz23-dsh-agency"
+        shutil.copytree(bund, base, symlinks=False)
+        alvo = base / "agents/00-diretor.txt"
+        if not alvo.is_file():
+            return          # layout mudou; nada a violar sem chutar
+        alvo.write_bytes(alvo.read_bytes() + b"\nintruso-de-prova\n")
+        rc2 = subprocess.run([sys.executable, "build.py", "--check"], capture_output=True,
+                             cwd=str(base), timeout=180, env=os.environ).returncode
+        if rc2 == 0:
+            raise AssertionError("--check aprovou agents/ adulterado: voltou a ser verificador oco")
+
+
 afirma("bundle agents/ sincronizado com as fontes", confere_bundle)
 
 # Comandos da documentação apontam para arquivos que existem (rodada 26).
@@ -316,6 +381,28 @@ def confere_docs() -> None:
     rc, s = exec_(["scripts/check-docs-runnable.py"])
     if rc != 0:
         raise AssertionError(f"comando de doc quebrado: {s.strip()[:140]}")
+    # Estado limpo sozinho não prova nada: um verificador que parou de ler blocos também devolve
+    # 0. Violar em cópia e exigir reclame -- e ainda conferir que ele le alguma coisa, porque
+    # "zero linhas conferidas" seria o gate-fantasma da rodada 15 de volta.
+    with tempfile.TemporaryDirectory() as td:
+        base = pathlib.Path(td)
+        for n in ("scripts", "skills", "docs", "bundle", "mcp", "external", "cli"):
+            if (RAIZ / n).is_dir():
+                shutil.copytree(RAIZ / n, base / n, symlinks=False)
+        for f in ("README.md", "ROADMAP.md", "CONTRIBUTING.md", "CHANGELOG.md",
+                  "evals.schema.json", ".gate-contagem"):
+            if (RAIZ / f).is_file():
+                shutil.copy2(RAIZ / f, base / f)
+        alvo = base / "CONTRIBUTING.md"
+        alvo.write_bytes(alvo.read_bytes()
+                         + b"\n```bash\npython scripts/nao-existe-zz-prova.py\n```\n")
+        rc2, s2 = exec_(["scripts/check-docs-runnable.py"], cwd=base)
+        if rc2 == 0:
+            raise AssertionError("check-docs-runnable aprovou comando quebrado: verificador oco")
+        if "linhas de comando conferidas em" not in s2:
+            raise AssertionError("sem contagem de linhas conferidas; pode estar lendo zero docs")
+
+
 afirma("toda referência de comando na documentação existe", confere_docs)
 
 # Clone limpo: o índice não tem CRLF mesmo com a cópia de trabalho convertida (rodada 9). Esta é

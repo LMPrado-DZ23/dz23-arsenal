@@ -3,6 +3,23 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.5.18] -- 2026-11-18
+
+### Corrigido -- quatro alegacoes dependiam de `exit != 0` sem dizer o que reprovou
+Varredura da fragilidade achada na rodada 42 (prova que aceita qualquer reprovação) sobre todo o
+`audita-alegacoes.py`: quatro provas mediam apenas codigo de saida. Cada uma agora exige tambem
+que a violacao correspondente ao que ela enuncia seja detectada, em copia:
+
+| Alegacao | Risco anterior | Reforco |
+|---|---|---|
+| validador nao aprova sob `python -O` | a referencia injetada e pega tambem pela checagem propria; qualquer exit != 0 bastava | reproduz o padrao antigo (`assert not _erros_comuns`) numa copia e exige que ele mude o resultado sob `-O`; medido: normal=1, `-O`=0 com bug historico, hoje ambos =1 |
+| indice de skills bate com o disco | `--check` virar no-op daria 0 para sempre | viola a versao numa copia e exige reclame |
+| `agents/` do bundle sincronizado | foi literalmente um verificador oco por meses (rodada 28) | adultera um agente em copia e exige reclame |
+| comandos da documentacao resolvem | idem; alem disso poderia ler zero docs | injeta comando quebrado em copia, exige reclame e confere que houve contagem de linhas lidas |
+
+Custo medido: auditor de 6 s para 12 s. Nenhuma escrita fora de diretorio temporario (arvore
+verificada limpa apos a execucao).
+
 ## [1.5.17] -- 2026-11-18
 
 ### Corrigido
