@@ -42,7 +42,54 @@ confirmar com o dono se o molde de consultor faz sentido para datasets de 4–11
 `references/` destilada nesses casos — construir seis consultores sobre meia centena de linhas pode ser
 cerimônia, não capacidade.
 
-## Padrão que se consolidou nestes dois itens
+## Skills fechadas no molde completo -- com hash de cada uma
+
+Regra aceita do auditor: nenhuma skill é "pronta" sem ciclo completo (commit → resync → push → CI
+verde) registrado aqui com o hash.
+
+| # | Skill | Conteúdo | Commit | CI na época |
+|---|---|---|---|---|
+| 1 | `dz23-backend-data-architect` 1.1.2 | `dados/` 30 decisões + consultor + prova 15 casos + 2 `.sql` executados + eval | `7433fda` | run 44282647790 ✓ |
+| 2 | `dz23-performance-scalability-engine` 1.3.4 | `dados/` 13 linhas + consultor + prova 41 sinônimos + eval medido | `296fdd4` | run 44286241293 ✓ |
+| 3 | `dz23-ultimate-pro-max` 2.2.6 | `dados-design/` 3 MB + consultor (7 comandos) + prova 15 casos + `grafico`/`motion` + correção de `--severidade` | `9fd4a3f` | run 44294369696 ✓ |
+
+Gate foi de 51 → **58 checks** neste ciclo; todos os três commits acima têm CI verde no `main`.
+
+## Padrão que se consolidou nestes itens
+
+Copiar tabela ≠ incorporar. Cada item seguiu seis passos, e os últimos três são os que evitam dano:
+
+1. Ler licença no **arquivo** `LICENSE` (não README, não campo da API).
+2. Medir o ganho: comparar termo a termo contra o que a skill DZ23 já tem. Se cobre, não copiar.
+3. Extrair só tabela de decisão; narrativa que já existe na skill fica de fora (senão são duas fontes).
+4. **Conferir célula por célula contra a fonte**, porque regex desloca coluna sem avisar.
+5. Prova do consultor **exaustiva no mapa de sinônimos**, não amostrada.
+6. **Executar os comandos como o documento os promove** -- e verificar na *instalação*, não só no
+   checkout. Um passo 6 ausente foi o que deixou três habilidades instruindo script inexistente, e um
+   passo 5 amostrado foi o que escondeu 15 sinônimos apontando para valores inventados.
+
+## Pendência 1 da auditoria: aceita e corrigida
+O HEAD publicado estava vermelho (`instalacao:conteudo`, 3 divergentes) porque eu rodei `git add -A`
+**antes** de mover os CSVs dos acervos: o índice ficou conhecendo 49 arquivos apagados do disco, e
+`repo_inventory` devolvia `INVENTORY_PARTIAL` por `stat()` falhando. Confirmei a causa contando ausentes
+(49 → 0 após re-staging) e validei o conserto num **worktree destacado no HEAD**, não só na árvore de
+trabalho -- que era justamente o erro metodológico apontado. A regra "quem constrói não homologa; verde
+na minha árvore não é verde" valeu contra mim mesmo desta vez.
+
+### Pendência 2 da auditoria: premissa medida antes de agir, e o diagnóstico estava parcialmente errado
+Pedi para alinhar backend/performance ao "padrão texto-livre do design". Verificado: **o design também é
+por subcomando** -- `consulta-design.py "estilo vidro"` retorna exit 2 igual. Os três já eram
+consistentes entre si; o único exemplo em texto livre do repo era um placeholder de documentação
+(`<domínio> <termo>`). Reformar três scripts nessa base teria criado interface nova por leitura errada.
+
+Mas o teste certo para a queixa real ("comando copiado e colado falha") era executar os exemplos, e aí
+apareceu defeito genuíno: `ux formulario --severidade alta` devolvia **zero** -- a planilha guarda
+`High`, o código comparava `alta` normalizado contra `high`. Opção que aceita qualquer string e filtra
+para nada é pior que opção ausente. Corrigido com ponte PT→EN e recusa explícita; e o verificador novo
+`checa-exemplos-executaveis.py` agora roda os 18 comandos promovidos pelos documentos, para a classe não
+voltar. Ou seja: o apontamento produziu valor, mas pela rota de medir, não de executar literalmente.
+
+
 
 Copiar tabela ≠ incorporar. Cada item seguiu cinco passos, e os dois últimos são os que evitam dano:
 
