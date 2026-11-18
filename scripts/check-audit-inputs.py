@@ -150,10 +150,18 @@ def main(argv: list[str]) -> int:
     if args.selftest:
         return selftest()
 
+    # `laudo` é nargs="?" e esta era a única forma de chamá-lo sem argumento:
+    # Path(None) levantava TypeError antes da mensagem de uso, que existia logo
+    # abaixo mas nunca era alcançada. Ordem corrigida — validar, depois construir.
+    if not args.laudo:
+        ap.print_usage(sys.stderr)
+        print("ERRO: informe o laudo (ou --selftest)", file=sys.stderr)
+        return 2
+
     laudo_path = Path(args.laudo)
     if not laudo_path.is_absolute():
         laudo_path = RAIZ / laudo_path
-    if laudo_path is None or not laudo_path.is_file():
+    if not laudo_path.is_file():
         print(f"ERRO: laudo não encontrado: {laudo_path}", file=sys.stderr)
         return 2
 
