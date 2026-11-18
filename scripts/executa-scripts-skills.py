@@ -224,6 +224,18 @@ def main(argv=None):
         # sem nada para procurar: erro limpo, exit 2
         registra("sweep(sem alvo)", caso("sweep-neg", [_sw, str(_td3)], rc_ok=(2,)))
 
+    # --- replica-launch: listing.py (lint de listagem de loja) ----------------------------------
+    _lst = S / "replica-launch/scripts/listing.py"
+    _ex3 = S / "replica-launch/examples/listing-exemplo.json"
+    registra("listing(exemplo)", caso("listing", [_lst, str(_ex3)], marca="errors"))
+    # nome do original presente na listagem -> erro (exit 1)
+    registra("listing(nome do original)", caso(
+        "listing-neg", [_lst, str(_ex3), "--avoid", "Slotwise"], rc_ok=(1,), marca="mentions"))
+    with _tf.TemporaryDirectory() as _td4:
+        _bad4 = _pl.Path(_td4) / "ruim.json"
+        _bad4.write_text("{ nao e json valido", encoding="utf-8")
+        registra("listing(json invalido)", caso("listing-json", [_lst, str(_bad4)], rc_ok=(2,)))
+
     dados = {"ok": not problemas, "executados": len(medidos), "problemas": problemas}
     if args.json:
         print(json.dumps(dados, ensure_ascii=False, indent=2))

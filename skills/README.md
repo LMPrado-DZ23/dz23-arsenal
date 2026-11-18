@@ -1,6 +1,6 @@
 # Skills DZ23 — índice
 
-17 skills de engenharia, cada uma com uma responsabilidade clara. Todas seguem o mesmo padrão:
+18 skills de engenharia, cada uma com uma responsabilidade clara. Todas seguem o mesmo padrão:
 `SKILL.md` com as regras, `references/` para conhecimento sob demanda, `templates/` para artefatos,
 `scripts/` quando há código executável e `evals/` com cenários de avaliação.
 
@@ -22,11 +22,12 @@
 | [replica-brand](replica-brand/) | 1.0.0 | — | — | 2 | 1 | 4 | 6 |
 | [replica-diff](replica-diff/) | 1.0.0 | — | — | 2 | 1 | 5 | 6 |
 | [replica-entrepreneur](replica-entrepreneur/) | 1.0.0 | — | — | 2 | 1 | 5 | 6 |
+| [replica-launch](replica-launch/) | 1.0.0 | — | — | 2 | 3 | 4 | 6 |
 | [replica-recon](replica-recon/) | 1.0.0 | — | — | 3 | 1 | 3 | 6 |
 | [untangle-codebase](untangle-codebase/) | 1.0.0 | — | — | 4 | 1 | 3 | 6 |
 | [web-design-guidelines](web-design-guidelines/) | 1.0.0 | — | — | 1 | 1 | 4 | 6 |
 
-Totais do disco: **131 referências** e **186 cenários de eval** declarados.
+Totais do disco: **133 referências** e **192 cenários de eval** declarados.
 
 > Esta tabela é gerada -- `python scripts/gera-indice-skills.py` -- e conferida pelo
 > `check-numbers.py` a cada gate. Versões, contagens de refs/templates/scripts/evals vêm do

@@ -3,7 +3,7 @@
 > Gerado por `scripts/build-manifest.py` em 2026-11-18. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**17 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
+**18 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -23,6 +23,7 @@
 | [replica-brand](skills/replica-brand/) | 1.0.0 | 15 | 2 | 2 | 4 | 6 |
 | [replica-diff](skills/replica-diff/) | 1.0.0 | 17 | 2 | 1 | 5 | 6 |
 | [replica-entrepreneur](skills/replica-entrepreneur/) | 1.0.0 | 15 | 2 | 1 | 5 | 6 |
+| [replica-launch](skills/replica-launch/) | 1.0.0 | 16 | 2 | 3 | 4 | 6 |
 | [replica-recon](skills/replica-recon/) | 1.0.0 | 14 | 3 | 2 | 3 | 6 |
 | [untangle-codebase](skills/untangle-codebase/) | 1.0.0 | 14 | 4 | 1 | 3 | 6 |
 | [web-design-guidelines](skills/web-design-guidelines/) | 1.0.0 | 14 | 1 | 1 | 4 | 6 |

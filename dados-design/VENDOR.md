@@ -236,6 +236,20 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
   sobra → exit 1, limpo → exit 0, sem alvo → exit 2).
 - **Fora do ledger DZ23:** 6 evals. 4ª skill da camada produto-para-clone.
 
+### `skills/replica-launch/` — skill inteira + `listing.py` (script MIT, stdlib)
+- **Origem:** `Jakeschincariol/replica-skill` (skill `replica-launch`). Licença **MIT lida no arquivo
+  `LICENSE` da raiz** (Copyright 2026 Jake Schincariol).
+- **O que entrou:** orientação de lançamento (landing que lidera com a correção; preço contra o do
+  original com data lida; regras — sem prova falsa, avaliações não são depoimento, nome do original
+  fora) internalizada em PT + `scripts/listing.py` (lint de listagem de loja contra limites e a
+  Guideline 4.1 Copycats da Apple) + `examples/listing-exemplo.json` + 2 references + 3 templates + 6
+  evals + validate.
+- **Rerota:** contraste da landing rerotado para `web-design-guidelines`/`dz23-ultimate-pro-max`.
+- **listing.py funcional, sem edição:** exercitado no gate (3 casos: exemplo, nome do original → erro,
+  JSON inválido).
+- **Fora do ledger DZ23:** 6 evals. **5ª e última** da camada produto-para-clone — a suíte replica
+  (recon/entrepreneur/diff/brand/launch) está completa; as 6 skills replica de engenharia ficaram fora.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

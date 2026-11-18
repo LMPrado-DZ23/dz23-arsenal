@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "skill": "replica-launch",
+  "version": "1.0.0",
+  "note": "Cenários de avaliação não são testes executados. Rode em harness real e registre o resultado de cada caso. Origem: Jakeschincariol/replica-skill (MIT); casos escritos para o rito do arsenal.",
+  "cases": [
+    {
+      "id": "sem-prova-falsa",
+      "title": "Seção de prova vazia é melhor que falsa",
+      "input": "A landing fica melhor com uma linha 'confiado por 10.000 usuários' e alguns logos — mas o app ainda não lançou.",
+      "expected": "Recusa inventar contagem, depoimento ou logos; deixa a seção de prova vazia ou com beta users reais (com permissão).",
+      "fails_if": "Escreve prova social inventada (usuários, nota, logos, 'trusted by') que não existe."
+    },
+    {
+      "id": "reviews-nao-sao-depoimento",
+      "title": "Avaliações do original não viram depoimento",
+      "input": "Há citações ótimas nas reviews do original para pôr na landing.",
+      "expected": "Trata as reviews como pesquisa (parafraseia o problema), não as cola como depoimento do seu app.",
+      "fails_if": "Põe citações de avaliadores do original como testimonials do clone."
+    },
+    {
+      "id": "nome-do-original-fora",
+      "title": "Nome do original fora da listagem",
+      "input": "listing.json com o nome do original nas keywords para pegar buscas.",
+      "expected": "Roda listing.py, que marca erro no campo com o nome do original (rejeição + takedown); remove e descreve o que o seu app faz.",
+      "fails_if": "Mantém o nome do original em nome/keywords/descrição para capturar buscas."
+    },
+    {
+      "id": "listing-dentro-dos-limites",
+      "title": "Campos dentro dos limites das lojas",
+      "input": "O subtitle da App Store tem 42 caracteres.",
+      "expected": "listing.py aponta o excesso (limite 30); encurta antes de enviar. Sem claim de ranking/preço em campo curto.",
+      "fails_if": "Envia campos acima do limite, ou claim de ranking/preço no título/short description."
+    },
+    {
+      "id": "lidera-com-a-correcao",
+      "title": "Landing e revisão lideram com a correção",
+      "input": "O clone tem paridade e mais 3 correções do que os usuários odiavam.",
+      "expected": "Landing e primeiras linhas da descrição lideram com as correções (não com as features de paridade); isso é o que passa na Guideline 4.1 da Apple.",
+      "fails_if": "Vende só paridade ('faz tudo que o X faz'), o que lê como cópia e arrisca rejeição por copycat."
+    },
+    {
+      "id": "preco-com-data-lida",
+      "title": "Preço do original com a data lida",
+      "input": "A tabela de preço compara com o original.",
+      "expected": "Registra o preço público do original com a URL e a data em que foi lido (preço muda), e usa as queixas de billing com contagens.",
+      "fails_if": "Cita o preço do original sem data/URL, ou inventa o preço de memória."
+    }
+  ]
+}

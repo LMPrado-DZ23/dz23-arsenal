@@ -1,0 +1,18 @@
+Use a skill replica-launch (v1.0.0).
+
+Quando: "landing page", "preço", "quanto cobrar", "listagem da App Store", "screenshots da loja",
+"plano de lançamento", "Product Hunt", ou depois de replica-brand. É a última etapa de clonar um app.
+Lê replica/fixes.md, brand.md, brand.json; grava replica/launch/ (landing, pricing, listing, plano).
+
+Regras: sem prova falsa (depoimento/contagem/logos inventados — seção vazia é melhor); avaliações do
+original são pesquisa, não depoimento; o nome do original fica FORA do nome/listagem/keywords/anúncios
+(Apple e Google rejeitam + takedown).
+
+Método: 1) landing que LIDERA com as correções (não a paridade), problema parafraseado (não citar
+avaliadores), contraste conferido (web-design-guidelines/ultimate-pro-max). 2) preço com o do original
++ data lida + queixas de billing. 3) listagem: preencha listing.json e rode `python scripts/listing.py
+replica/launch/listing.json` (limites das lojas + Guideline 4.1 Copycats da Apple; exit 1 em erro).
+4) plano: waitlist, analytics, onde os infelizes do original falam, post que lidera com a correção.
+
+Veredito: PASS só com landing/pricing/listing/plano, listing.py sem erro, sem prova falsa. Senão
+PARTIAL; listagem sem rodar o listing.py é NOT_TESTED. Deploy fica com dz23-devops-cloud-deployer.

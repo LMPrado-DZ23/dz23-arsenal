@@ -2,7 +2,7 @@
   "schema": 2,
   "generated_by": "scripts/build-manifest.py",
   "counts": {
-    "skills": 17,
+    "skills": 18,
     "external": 16,
     "prompts": 1,
     "mcp": 2,
@@ -176,6 +176,18 @@
       "scripts": 5,
       "evals": 6,
       "sha256_skill_md": "54c17902743767d631e3813cde82b0a593e187f17bf0ba4b819c56051b5c24a9"
+    },
+    {
+      "name": "replica-launch",
+      "version": "1.0.0",
+      "description": ">",
+      "user_invocable": true,
+      "files": 16,
+      "references": 2,
+      "templates": 3,
+      "scripts": 4,
+      "evals": 6,
+      "sha256_skill_md": "39fdee66bdca2ae1e2906d620edb861e4c0ce5bb445d946d7ebc1eb513490d8e"
     },
     {
       "name": "replica-recon",
