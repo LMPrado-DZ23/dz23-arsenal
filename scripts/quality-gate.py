@@ -119,6 +119,10 @@ def main(argv: list[str]) -> int:
     # um validador não-copiável e mostrava um evals.json que o schema rejeita. Nenhuma checagem
     # automatizada via isso, porque nenhuma delas é um humano lendo o guia.
     resultados.append(rodar("docs-executaveis", [py, "scripts/check-docs-runnable.py"]))
+    # Registro estrutural: ordem do changelog, numeração das dívidas, versão corrente no topo
+    # de cada skill. Existe porque duas edições minhas nesta sessão não casaram com o texto
+    # alvo e ninguém percebeu -- editar por busca-e-substituição silenciosa sempre dá exit 0.
+    resultados.append(rodar("ancoras", [py, "scripts/checa-ancoras.py"]))
     resultados.append(rodar("estrutura", [py, "scripts/check-structure.py"]))
     # As skills embutem cópias de scripts/skill_validator.py e scripts/_achar_arsenal.py
     # para se auto-validarem fora do checkout. Duplicação intencional — mas só é segura
