@@ -102,6 +102,35 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.6] — 2026-11-17
+
+### Corrigido — `CONTRIBUTING.md` não permitia criar uma skill
+Verificado atuando como mantenedor novo: criei uma skill seguindo **somente** o documento e o
+gate recusou em sete checks. Três defeitos eram do próprio texto:
+- Mandava copiar os três arquivos de `scripts/` de uma skill existente. O
+  `validate_skill.py` carrega a lista própria de referências e templates daquela skill (a
+  cartographer fixa 19 nomes, a spec-to-system 23), então herdar o validador alheio faz a skill
+  nova exigir arquivos que nunca vão existir. Passou a mandar copiar só os dois módulos
+  compartilhados e escrever o `validate_skill.py` próprio, com esqueleto mínimo.
+- Nada dizia que `skill_validator.py` e `_achar_arsenal.py` precisam estar dentro de cada
+  skill -- exigência que o `check-copies` (v1.5.1) reprova sem avisar o porquê. Agora há seção
+  própria com a razão funcional (auto-validação fora do checkout) e o comando de propagação.
+- A forma de `evals.json` estava errada: listava quatro campos omitindo `title`, obrigatório
+  no schema, e mostrava `expected`/`fails_if` como listas quando o schema declara string com
+  `minLength: 5` -- os 144 casos do repo usam string. Também usava `skill_name` e
+  `schema_version: "1.0"`, ambos rejeitados pelo topo do schema (`additionalProperties: false`,
+  número inteiro). Reescrito copiando do `evals.schema.json`, com a fonte apontada.
+
+Re-testado ao pé da letra: skill criada pelo documento passa em `validate_skill.py`,
+`run-evals.py --schema` e `check-copies.py`; o gate reclama apenas das contagens que a skill
+nova muda de fato (145 cenários, 100 pendentes) -- comportamento correto, não defeito.
+
+### Registrado sem corrigir
+Nove `validate_skill.py` acumulam ~120 `assert` de checagens próprias. Não são exploráveis
+hoje: as checagens comuns usam `SystemExit` e pegam os mesmos casos (verificado removendo um
+template e rodando com e sem `-O` -- exit 1 nos dois modos). Documentado no CONTRIBUTING para
+converter ao tocar nesses arquivos, em vez de mexer em nove validadores às vésperas de fechar a
+sessão.
 ## [1.5.5] — 2026-11-17
 
 ### Corrigido
