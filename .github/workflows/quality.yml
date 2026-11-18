@@ -32,15 +32,21 @@ jobs:
         run: python -m pip install --quiet jsonschema
 
       - name: Fins de linha normalizados
-        # O repo declara `* text=auto eol=lf`. Se algum blob voltou a ser commitado com
-        # CRLF, todo clone Windows nasce com git status sujo e as pessoas param de
-        # confiar no diff. Este passo transforma isso em falha visível.
+        # O repo declara `* text=auto eol=lf`. Blob com CRLF dentro faz todo clone em
+        # Windows nascer com git status sujo, e as pessoas param de confiar no diff.
+        #
+        # --cached é obrigatório aqui: sem ele o git grep varre a cópia de trabalho, e
+        # numa máquina com core.autocrlf=true o working tree tem CRLF mesmo com o blob
+        # correto no índice — o teste falharia localmente passando no CI, ou pior, o
+        # contrário. Queremos saber o que foi COMMITADO, não como o checkout foi montado.
         run: |
-          if git grep -Il -P "\r$" -- '*.md' '*.py' '*.sh' '*.yml' '*.json' '*.txt' | head -20; then
-            echo "::error::há arquivos com CRLF no índice, contra o .gitattributes (eol=lf)"
+          sujos=$(git grep -Il --cached -P "\r$" -- '*.md' '*.py' '*.sh' '*.yml' '*.json' '*.txt' || true)
+          if [ -n "$sujos" ]; then
+            echo "$sujos"
+            echo "::error::há blobs com CRLF no índice, contra o .gitattributes (eol=lf)"
             exit 1
           fi
-          echo "CRLF: nenhum arquivo fora da norma"
+          echo "CRLF: nenhum blob fora da norma"
 
       - name: Estrutura das skills
         run: python scripts/check-structure.py
