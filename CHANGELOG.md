@@ -102,6 +102,16 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.5] — 2026-11-17
+
+### Corrigido
+- **`install-all.sh` mandava rodar `scripts/verify-cli.sh`, arquivo que nunca existiu.** Só
+  há o `.ps1`. Quem seguisse o passo final de uma instalação em Linux/macOS recebia "No such
+  file or directory" logo depois de um instalador bem-sucedido -- a pior hora para um comando
+  errado. A linha também usava `python3`, ausente em alguns ambientes Windows (Git-bash sem
+  Python no PATH, verificado aqui). Instrução substituída pelas verificações reais, com nota
+  explícita de que não existe variante shell do contador de CLIs. Achado seguindo o
+  `docs/getting-started.md` literalmente num clone limpo, não lendo o código.
 ## [1.5.4] — 2026-11-17
 
 ### Corrigido

@@ -89,9 +89,15 @@ echo "Instaladas: $instaladas | Puladas: $skipped | Falhas: $falhas"
 
 if [ "$instaladas" -gt 0 ] || [ "$skipped" -gt 0 ]; then
   echo
+  # Não apontar para script que não existe. A versão anterior mandava rodar
+  # `bash scripts/verify-cli.sh`, e esse arquivo nunca foi escrito -- só existe o .ps1. Quem
+  # seguia o passo recebia "No such file or directory" no fim de uma instalação bem-sucedida,
+  # e `python3` também falha em alguns ambientes Windows (Git-bash sem Python no PATH).
+  # As duas verificações reais são as abaixo; a de CLI é opcional e documentada em cli/.
   echo "Verifique com:"
-  echo "  python3 scripts/audit-zips.py"
-  echo "  bash scripts/verify-cli.sh"
+  echo "  python3 scripts/audit-zips.py    # ou: py -3 / python, conforme o ambiente"
+  echo "  pwsh scripts/verify-cli.ps1      # Windows (a contagem de CLIs em cli/verify.md)"
+  echo "  # Linux/macOS não têm verify-cli.sh; use o one-liner de cli/verify.md"
 fi
 
 [ "$falhas" -gt 0 ] && exit 1
