@@ -338,6 +338,20 @@ def confere_citacao_fabricada() -> None:
             raise AssertionError("citação inventada passou despercebida -- gate-fantasma vivo")
 afirma("citação fabricada num laudo VALIDO é recusada", confere_citacao_fabricada)
 
+# Ordem do changelog: registrei entradas novas na posição errada duas vezes nesta sessão,
+# porque usei sempre o mesmo cabeçalho como âncora de inserção em vez do topo corrente. Um
+# changelog com a versão mais antiga no topo não conta história -- inverte a leitura.
+def confere_ordem_changelog() -> None:
+    texto = (RAIZ / "CHANGELOG.md").read_text(encoding="utf-8")
+    vs = re.findall(r"(?m)^## \[([\d.]+)\]", texto)
+    if not vs:
+        raise AssertionError("CHANGELOG.md sem entradas de versão")
+    chave = lambda v: tuple(int(x) for x in v.split("."))
+    ruins = [(vs[i], vs[i + 1]) for i in range(len(vs) - 1) if chave(vs[i]) < chave(vs[i + 1])]
+    if ruins:
+        raise AssertionError(f"entradas fora de ordem descendente: {ruins[:3]}")
+afirma("CHANGELOG em ordem de versão descendente", confere_ordem_changelog)
+
 print("\n" + "=" * 64)
 caiu = [t for t, ok in resultados if not ok]
 if caiu:

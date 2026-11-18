@@ -3,104 +3,22 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
-## [1.5.0] — 2026-11-17
+## [1.5.14] — 2026-11-17
 
-**Instrumentos absorvidos de pacotes externos + dois gates que mentiam consertados.**
-Auditoria de 12 repositórios baixados (ECC, replica-skill, agent-skills/Vercel,
-modern-web-guidance, open-code-review, agent-desktop, rea, shadcn/ui, pomerado,
-suparagent, playwright-mcp, REA) e das skills instaladas nesta máquina. As técnicas foram
-reimplementadas, não copiadas; a triagem por pacote está em `external/absorcao-2026-11-17.md`.
+### Corrigido
+- **`CHANGELOG.md` estava fora de ordem.** As entradas `[1.5.9]`–`[1.5.13]` apareciam
+  *depois* da `[1.5.0]`, e `[1.5.1]` antes de `[1.5.2]`. Causa minha: inseri cada entrada
+  nova usando sempre o mesmo cabeçalho como âncora, em vez do topo corrente -- resultado: um
+  changelog onde a versão mais antiga vem primeiro, que não conta história, inverte a leitura.
+  Reordenado por bloco, byte a byte, com prova de preservação (multiconjunto de linhas idêntico
+  antes e depois: zero linhas sem par). `[1.5.1]`/`[1.5.2]` já estavam trocados antes desta
+  sessão; mesma correção se aplicou.
+- **`.github/workflows/quality.yml` passo `Resumo`** lia `gate.json` com
+  `read_text()` sem encoding -- funciona no Ubuntu por sorte de locale, quebra fora dele.
 
-### Corrigido — verificadores que davam verde sem verificar
-- **`run-evals.py --verify-quotes` retornava exit 0 quando `AUDIT-STATUS.json` não
-  existia.** Apagar o arquivo de estado desligava silenciosamente a checagem de citação
-  fabricada — a camada 5 inteira. Agora ausência ou ilegitibilidade é falha. Prova:
-  renomear o arquivo → antes `exit 0`, agora `exit 1`.
-- **`check-eval-results.py` não cruzava NOT_TESTED com o ROADMAP**, embora o docstring
-  prometesse. O código só testava se a string `"Status de evals"` existia; um registro
-  fantasma dava `PROBLEMAS: 0`. Agora compara declarados × registrados e confere o
-  "Total pendente" escrito no ROADMAP. Prova: mudar para 7 → `diz 7, mas há 99 sem registro`.
-- **`build-manifest.py` usava `date.today()` no `generated_at`**, então `manifesto:check`
-  falhava em qualquer dia diferente do último push sem nada ter mudado. O CI da main estava
-  verde em 2026-11-14 porque rodou no dia certo; no mesmo commit, em 17/11, dava 16/17.
-  Trocado por comparação de conteúdo canônico.
-- **`bundles` era lista hardcoded** que punha o MCP principal dentro de "bundles" e omitia
-  `mcp/pentagi-mcp` do inventário. `mcp/` e `bundle/` agora são enumerados do disco.
-- **93 blobs commitados com CRLF** contra o próprio `.gitattributes` (`* text=auto eol=lf`),
-  entrada anterior à regra. Todo clone em Windows nascia com `git status` sujo em 93
-  arquivos, e quem trabalha no Windows para de confiar no diff — onde justamente se veria
-  edição indevida. Renormalizados; o CI agora tem passo que impede regressão.
-- **Skill sem `validate_skill.py` contava como OK** (`sem validate_skill.py (pulado)`), no
-  gate e no CI. A skill que define o contrato de evidência — `dz23-autonomous-improvement-ultimate`
-  — era justamente a não verificada. Ganhou validador próprio e a ausência passou a falhar.
-- **Passo "Resumo" do CI saía 0 quando `gate.json` estava ausente**: imprimia "o gate não
-  chegou a rodar" e aprovava. Agora falha, com escrita atômica e `set -euo pipefail`.
-- **Ponte de checagem comum não funcionava na instalação**: `parents[3]` a partir de
-  `~/.agents/skills` aponta para `~/.agents`, sem o módulo — a skill em produção era a menos
-  verificada. Novo `_achar_arsenal.py` sobe a árvore, lê `~/.agents/skills/.dz23-arsenal`
-  (gravado pelo install-all) ou respeita `DZ23_ARSENAL`.
-- **Números da documentação divergiam do disco** (7 casos): README dizia "9 skills" com 10,
-  badge `skills-9`, "1 MCP" com 2, "16 checks" com 19, "45/131" (131 não existe; são 144),
-  e um bloco obsoleto afirmando "executados: 3" quando a tabela do próprio arquivo diz 45.
-- **`dz23-performance-scalability-engine` alegava preservação falsa**: "o original está
-  preservado em `_sources/user-spec.md`". Os arquivos existem na máquina de origem, mas
-  `_sources/` está no `.gitignore` e `git log --all -- '*_sources*'` não retorna nenhum
-  commit — quem clona recebe promessa vazia. SKILL.md corrigido; CHANGELOG ganhou entrada
-  de correção em vez de reescrita da linha antiga.
-- **Vocabulário de estados rivais**: `NOT_RUN` em 4 arquivos da autonomous contra
-  `NOT_TESTED` nas outras nove, aceitos ambos pelo regex do runner. Unificado.
-- **`PROMPT-ATIVACAO.txt` congelado em v1.0/v1.0.0** em 7 skills cujas VERSION tinham
-  avançado (1.1.0, 1.2.2, 1.3.0). Quem colasse o prompt usaria texto velho.
-- **`references/legacy-v1.md` carregava frontmatter de skill descontinuada**
-  (`name: dz23-premium-ui-ultimate`) — uma segunda skill se passando por referência,
-  carregável por agente. Virou cabeçalho explícito de arquivo histórico.
-
-### Adicionado — técnicas absorvidas
-- **`scripts/gate_candidatos.py`**: triagem determinística *antes* de investigar. Função pura,
-  threshold como expressão, `GATE_VERSION` rastreável, três cestos (lançado / contido com
-  motivo / não-avaliável). Ausência de sinal nunca vira zero. Auto-teste cobre positivo,
-  negativo, vazio, determinismo e guarda de amostra pobre. De `vercel-optimize/lib/gates/*.mjs`.
-- **`scripts/verifica_claims.py`**: evidência conferida por comando, com
-  `passRate = verificados/(verificados+falhos)`; não-verificável e sem-suporte ficam fora do
-  denominador. Ancorado na skill auditada, não em "existe em qualquer pasta". De
-  `vercel-optimize/references/verification.md`.
-- **`scripts/skill_validator.py`**: checagens comuns reunificadas (frontmatter, VERSION ×
-  frontmatter, PROMPT-ATIVACAO defasada, referências quebradas, evals coerentes, nome morto
-  em frontmatter vivo). Havia dez cópias divergentes; a maior tinha 15 linhas. Provado por
-  injeção: citar `references/NAO-EXISTE-teste.md` dava PASS.
-- **`scripts/check-numbers.py`**: confere números da documentação contra o disco e denuncia
-  **regra órfã** (padrão que não casa em lugar nenhum = autoengano; foi o que aconteceu com a
-  regra de contagem de checks). Lê a contagem real do artefato `.gate-contagem`; a primeira
-  tentativa, parsear o fonte do gate por regex, contou 24 contra 31 reais.
-- **`scripts/check-licenses.py`**: licença obrigatória por componente e por referência
-  externa. Achou `bundle/dz23-dsh-agency` sem LICENSE algum (criado, herdando MIT do repo) e
-  8 externas com "verificar no repositório". Resolvidas com prova: 4 lidas do arquivo LICENSE
-  do projeto baixado, 3 via API do GitHub. `anthropic-skills` e `vercel-react-best-practices`
-  seguem sem licença — a API devolve `license: null` — e agora dizem isso explicitamente,
-  porque sem licença explícita não se redistribui conteúdo.
-- **`scripts/_tracks.py`**: mapa skill ↔ pasta derivado do disco. Eram três cópias iguais,
-  nenhuma com `dz23-postgres-prod-preflight`: `record-eval` criava a pasta e
-  `check-eval-results` a rejeitava como "não mapeada". A única skill com 0 de 13 evals
-  executados era justamente a que o instrumento não conseguia registrar.
-- **CI**: instala `jsonschema` (sem ele, "Evals contra o schema" caía em fallback parcial com
-  selo de completa), publica o `--report` no resumo do run, e falha ante CRLF fora da norma.
-
-### Bumps de versão nas skills (regra dura do CONTRIBUTING: conteúdo mudou, versão muda)
-- `dz23-autonomous-improvement-ultimate` 2.1.4 → **2.1.5** — vocabulário `NOT_RUN` →
-  `NOT_TESTED` unificado com as outras nove; ganhou validador próprio.
-- `dz23-performance-scalability-engine` 1.3.0 → **1.3.1** — retirada a alegação de que a spec
-  original estava preservada em `_sources/user-spec.md`, caminho que o clone não tem.
-- `dz23-ultimate-pro-max` 2.2.2 → **2.2.3** — `references/legacy-v1.md` deixou de declarar
-  frontmatter da skill descontinuada; `PROMPT-ATIVACAO.txt` ganhou cabeçalho de versão, que
-  nunca teve (as irmãs têm).
-
-Conferência cruzada aplicada às dez skills: VERSION × frontmatter × seção do CHANGELOG ×
-cabeçalho do PROMPT-ATIVACAO. Foi o validador novo da autonomous que encontrou o `NOT_RUN`,
-e o check comum que encontrou o PROMPT-ATIVACAO defasado depois do próprio bump — os dois
-defeitos apareceram por ferramenta, não por leitura.
-### Estado medido
-`quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
-com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
+### Adicionado
+- Alegação permanente no `audita-alegacoes.py`: `CHANGELOG em ordem de versão descendente`.
+  Provada ao mover a `[1.0.0]` para o topo numa cópia -- exit 1.
 
 ## [1.5.13] — 2026-11-17
 
@@ -312,6 +230,40 @@ sessão.
   check reclama; frase do tipo "X agora falha quando Y" apodrece em silêncio -- alguém remove a
   guarda e o CHANGELOG continua descrevendo um sistema que não existe. Roda no gate (34 checks)
   e no CI.
+## [1.5.2] — 2026-11-17
+
+### Corrigido — validadores desligáveis por flag do interpretador
+- **`assert not _erros_comuns` nas dez skills**: sob `python -O` o interpretador remove a
+  instrução, e o `validate_skill.py` imprimia `OK — ... 13 evals · 5 referências` com uma
+  referência quebrada, saindo **0**. Reproduzido em todas as dez antes da correção. Um gate que
+  desaparece por uma flag é pior que ausência dele — continua parecendo conferido. Trocado por
+  impressão em stderr + `SystemExit(1)`, válido nos dois modos. Bump PATCH em cada skill
+  (autonomous 2.1.6, backend-data 1.1.1, cartographer 1.1.1, devops 1.2.3, e2e 1.1.2,
+  performance 1.3.2, postgres 1.1.1, reverse-engineer 1.1.4, spec-to-system 1.2.1,
+  ultimate-pro-max 2.2.4).
+- **Caso permanente** em `selftest-ferramentas.py` (grupo `rejeicao`): espelha uma skill,
+  injeta referência inexistente e exige exit ≠ 0 **com e sem `-O`**. Provado ao reverter uma
+  skill ao `assert`: a suíte acusou "validador aprovou referência quebrada sob python -O".
+
+### Corrigido — erros meus no processo desta versão
+- O script de bump **não era idempotente** e rodou duas vezes: seis skills subiram dois
+  PATCHes para um único defeito, com o mesmo parágrafo sob dois números. Detectado ao
+  inspecionar a sequência de versões, não pela checagem automática.
+- A primeira tentativa de detectar essa duplicação reportou **"nenhuma entrada duplicada"** —
+  falso negativo: eu contava `` `assert` `` com crase simples num texto que usa crase dupla,
+  então o padrão nunca casava. Falso negativo em ferramenta de verificação é o pior resultado
+  possível, porque fabrica confiança. Reescrito comparando o corpo normalizado das entradas;
+  aí sim apareceu a repetição, e sete foram colapsadas.
+- As lacunas de número (ex.: 2.1.5 → 2.1.7 sem 2.1.6) foram reindexadas para o passo correto,
+  ajustando VERSION, frontmatter e PROMPT-ATIVACAO juntos.
+
+### Verificado sem defeito
+Idempotência e concorrência: `build-manifest.py` produz bytes idênticos em execuções
+sucessivas; `install-all.ps1` duas vezes seguidas resulta no mesmo estado; `quality-gate` e
+`check-numbers` rodando em paralelo não corrompem `.gate-contagem`. Árvore suja: o passo de
+CRLF do CI mantém a decisão no índice (`--cached`) e não acusa a cópia de trabalho; referência
+quebrada não commitada é pega pelo gate pelo conteúdo, não pelo git.
+
 ## [1.5.1] — 2026-11-17
 
 **Verificação por ataque.** Quatro rodadas seguintes à v1.5.0 mudaram o método: em vez de
@@ -377,46 +329,112 @@ quando não há nada?". Cada pergunta rendeu um defeito real.
 caracteres. Clone virgem com `core.autocrlf=false` nasce com `git status` limpo e roda o gate
 inteiro sem nada instalado.
 
-## [1.5.2] — 2026-11-17
+## [1.5.0] — 2026-11-17
 
-### Corrigido — validadores desligáveis por flag do interpretador
-- **`assert not _erros_comuns` nas dez skills**: sob `python -O` o interpretador remove a
-  instrução, e o `validate_skill.py` imprimia `OK — ... 13 evals · 5 referências` com uma
-  referência quebrada, saindo **0**. Reproduzido em todas as dez antes da correção. Um gate que
-  desaparece por uma flag é pior que ausência dele — continua parecendo conferido. Trocado por
-  impressão em stderr + `SystemExit(1)`, válido nos dois modos. Bump PATCH em cada skill
-  (autonomous 2.1.6, backend-data 1.1.1, cartographer 1.1.1, devops 1.2.3, e2e 1.1.2,
-  performance 1.3.2, postgres 1.1.1, reverse-engineer 1.1.4, spec-to-system 1.2.1,
-  ultimate-pro-max 2.2.4).
-- **Caso permanente** em `selftest-ferramentas.py` (grupo `rejeicao`): espelha uma skill,
-  injeta referência inexistente e exige exit ≠ 0 **com e sem `-O`**. Provado ao reverter uma
-  skill ao `assert`: a suíte acusou "validador aprovou referência quebrada sob python -O".
+**Instrumentos absorvidos de pacotes externos + dois gates que mentiam consertados.**
+Auditoria de 12 repositórios baixados (ECC, replica-skill, agent-skills/Vercel,
+modern-web-guidance, open-code-review, agent-desktop, rea, shadcn/ui, pomerado,
+suparagent, playwright-mcp, REA) e das skills instaladas nesta máquina. As técnicas foram
+reimplementadas, não copiadas; a triagem por pacote está em `external/absorcao-2026-11-17.md`.
 
-### Corrigido — erros meus no processo desta versão
-- O script de bump **não era idempotente** e rodou duas vezes: seis skills subiram dois
-  PATCHes para um único defeito, com o mesmo parágrafo sob dois números. Detectado ao
-  inspecionar a sequência de versões, não pela checagem automática.
-- A primeira tentativa de detectar essa duplicação reportou **"nenhuma entrada duplicada"** —
-  falso negativo: eu contava `` `assert` `` com crase simples num texto que usa crase dupla,
-  então o padrão nunca casava. Falso negativo em ferramenta de verificação é o pior resultado
-  possível, porque fabrica confiança. Reescrito comparando o corpo normalizado das entradas;
-  aí sim apareceu a repetição, e sete foram colapsadas.
-- As lacunas de número (ex.: 2.1.5 → 2.1.7 sem 2.1.6) foram reindexadas para o passo correto,
-  ajustando VERSION, frontmatter e PROMPT-ATIVACAO juntos.
+### Corrigido — verificadores que davam verde sem verificar
+- **`run-evals.py --verify-quotes` retornava exit 0 quando `AUDIT-STATUS.json` não
+  existia.** Apagar o arquivo de estado desligava silenciosamente a checagem de citação
+  fabricada — a camada 5 inteira. Agora ausência ou ilegitibilidade é falha. Prova:
+  renomear o arquivo → antes `exit 0`, agora `exit 1`.
+- **`check-eval-results.py` não cruzava NOT_TESTED com o ROADMAP**, embora o docstring
+  prometesse. O código só testava se a string `"Status de evals"` existia; um registro
+  fantasma dava `PROBLEMAS: 0`. Agora compara declarados × registrados e confere o
+  "Total pendente" escrito no ROADMAP. Prova: mudar para 7 → `diz 7, mas há 99 sem registro`.
+- **`build-manifest.py` usava `date.today()` no `generated_at`**, então `manifesto:check`
+  falhava em qualquer dia diferente do último push sem nada ter mudado. O CI da main estava
+  verde em 2026-11-14 porque rodou no dia certo; no mesmo commit, em 17/11, dava 16/17.
+  Trocado por comparação de conteúdo canônico.
+- **`bundles` era lista hardcoded** que punha o MCP principal dentro de "bundles" e omitia
+  `mcp/pentagi-mcp` do inventário. `mcp/` e `bundle/` agora são enumerados do disco.
+- **93 blobs commitados com CRLF** contra o próprio `.gitattributes` (`* text=auto eol=lf`),
+  entrada anterior à regra. Todo clone em Windows nascia com `git status` sujo em 93
+  arquivos, e quem trabalha no Windows para de confiar no diff — onde justamente se veria
+  edição indevida. Renormalizados; o CI agora tem passo que impede regressão.
+- **Skill sem `validate_skill.py` contava como OK** (`sem validate_skill.py (pulado)`), no
+  gate e no CI. A skill que define o contrato de evidência — `dz23-autonomous-improvement-ultimate`
+  — era justamente a não verificada. Ganhou validador próprio e a ausência passou a falhar.
+- **Passo "Resumo" do CI saía 0 quando `gate.json` estava ausente**: imprimia "o gate não
+  chegou a rodar" e aprovava. Agora falha, com escrita atômica e `set -euo pipefail`.
+- **Ponte de checagem comum não funcionava na instalação**: `parents[3]` a partir de
+  `~/.agents/skills` aponta para `~/.agents`, sem o módulo — a skill em produção era a menos
+  verificada. Novo `_achar_arsenal.py` sobe a árvore, lê `~/.agents/skills/.dz23-arsenal`
+  (gravado pelo install-all) ou respeita `DZ23_ARSENAL`.
+- **Números da documentação divergiam do disco** (7 casos): README dizia "9 skills" com 10,
+  badge `skills-9`, "1 MCP" com 2, "16 checks" com 19, "45/131" (131 não existe; são 144),
+  e um bloco obsoleto afirmando "executados: 3" quando a tabela do próprio arquivo diz 45.
+- **`dz23-performance-scalability-engine` alegava preservação falsa**: "o original está
+  preservado em `_sources/user-spec.md`". Os arquivos existem na máquina de origem, mas
+  `_sources/` está no `.gitignore` e `git log --all -- '*_sources*'` não retorna nenhum
+  commit — quem clona recebe promessa vazia. SKILL.md corrigido; CHANGELOG ganhou entrada
+  de correção em vez de reescrita da linha antiga.
+- **Vocabulário de estados rivais**: `NOT_RUN` em 4 arquivos da autonomous contra
+  `NOT_TESTED` nas outras nove, aceitos ambos pelo regex do runner. Unificado.
+- **`PROMPT-ATIVACAO.txt` congelado em v1.0/v1.0.0** em 7 skills cujas VERSION tinham
+  avançado (1.1.0, 1.2.2, 1.3.0). Quem colasse o prompt usaria texto velho.
+- **`references/legacy-v1.md` carregava frontmatter de skill descontinuada**
+  (`name: dz23-premium-ui-ultimate`) — uma segunda skill se passando por referência,
+  carregável por agente. Virou cabeçalho explícito de arquivo histórico.
 
-### Verificado sem defeito
-Idempotência e concorrência: `build-manifest.py` produz bytes idênticos em execuções
-sucessivas; `install-all.ps1` duas vezes seguidas resulta no mesmo estado; `quality-gate` e
-`check-numbers` rodando em paralelo não corrompem `.gate-contagem`. Árvore suja: o passo de
-CRLF do CI mantém a decisão no índice (`--cached`) e não acusa a cópia de trabalho; referência
-quebrada não commitada é pega pelo gate pelo conteúdo, não pelo git.
+### Adicionado — técnicas absorvidas
+- **`scripts/gate_candidatos.py`**: triagem determinística *antes* de investigar. Função pura,
+  threshold como expressão, `GATE_VERSION` rastreável, três cestos (lançado / contido com
+  motivo / não-avaliável). Ausência de sinal nunca vira zero. Auto-teste cobre positivo,
+  negativo, vazio, determinismo e guarda de amostra pobre. De `vercel-optimize/lib/gates/*.mjs`.
+- **`scripts/verifica_claims.py`**: evidência conferida por comando, com
+  `passRate = verificados/(verificados+falhos)`; não-verificável e sem-suporte ficam fora do
+  denominador. Ancorado na skill auditada, não em "existe em qualquer pasta". De
+  `vercel-optimize/references/verification.md`.
+- **`scripts/skill_validator.py`**: checagens comuns reunificadas (frontmatter, VERSION ×
+  frontmatter, PROMPT-ATIVACAO defasada, referências quebradas, evals coerentes, nome morto
+  em frontmatter vivo). Havia dez cópias divergentes; a maior tinha 15 linhas. Provado por
+  injeção: citar `references/NAO-EXISTE-teste.md` dava PASS.
+- **`scripts/check-numbers.py`**: confere números da documentação contra o disco e denuncia
+  **regra órfã** (padrão que não casa em lugar nenhum = autoengano; foi o que aconteceu com a
+  regra de contagem de checks). Lê a contagem real do artefato `.gate-contagem`; a primeira
+  tentativa, parsear o fonte do gate por regex, contou 24 contra 31 reais.
+- **`scripts/check-licenses.py`**: licença obrigatória por componente e por referência
+  externa. Achou `bundle/dz23-dsh-agency` sem LICENSE algum (criado, herdando MIT do repo) e
+  8 externas com "verificar no repositório". Resolvidas com prova: 4 lidas do arquivo LICENSE
+  do projeto baixado, 3 via API do GitHub. `anthropic-skills` e `vercel-react-best-practices`
+  seguem sem licença — a API devolve `license: null` — e agora dizem isso explicitamente,
+  porque sem licença explícita não se redistribui conteúdo.
+- **`scripts/_tracks.py`**: mapa skill ↔ pasta derivado do disco. Eram três cópias iguais,
+  nenhuma com `dz23-postgres-prod-preflight`: `record-eval` criava a pasta e
+  `check-eval-results` a rejeitava como "não mapeada". A única skill com 0 de 13 evals
+  executados era justamente a que o instrumento não conseguia registrar.
+- **CI**: instala `jsonschema` (sem ele, "Evals contra o schema" caía em fallback parcial com
+  selo de completa), publica o `--report` no resumo do run, e falha ante CRLF fora da norma.
+
+### Bumps de versão nas skills (regra dura do CONTRIBUTING: conteúdo mudou, versão muda)
+- `dz23-autonomous-improvement-ultimate` 2.1.4 → **2.1.5** — vocabulário `NOT_RUN` →
+  `NOT_TESTED` unificado com as outras nove; ganhou validador próprio.
+- `dz23-performance-scalability-engine` 1.3.0 → **1.3.1** — retirada a alegação de que a spec
+  original estava preservada em `_sources/user-spec.md`, caminho que o clone não tem.
+- `dz23-ultimate-pro-max` 2.2.2 → **2.2.3** — `references/legacy-v1.md` deixou de declarar
+  frontmatter da skill descontinuada; `PROMPT-ATIVACAO.txt` ganhou cabeçalho de versão, que
+  nunca teve (as irmãs têm).
+
+Conferência cruzada aplicada às dez skills: VERSION × frontmatter × seção do CHANGELOG ×
+cabeçalho do PROMPT-ATIVACAO. Foi o validador novo da autonomous que encontrou o `NOT_RUN`,
+e o check comum que encontrou o PROMPT-ATIVACAO defasado depois do próprio bump — os dois
+defeitos apareceram por ferramenta, não por leitura.
+### Estado medido
+`quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
+com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
 ## [1.4.9] — 2026-11-09
 
 **Camada 4** — 3 skills do arsenal usadas no próprio repo, com o CI como juiz.
 
 ### Adicionado
-- **--verify-quotes** no un-evals.py: verifica se as citações dos laudos marcados VALIDO existem nas
+- **--verify-quotes** no 
+un-evals.py: verifica se as citações dos laudos marcados VALIDO existem nas
   respostas. xit 1 quando há citação fabricada.
 - **quality-gate.py: 16 checks** (era 15) — vals:citacoes roda no CI.
 - **docs/camada-4-2026-11-09.md** — spec (REQ-001..008), contrato de exit code, 5 iterações com o defeito
@@ -476,7 +494,8 @@ Os 5 evals cujo veredito não se aplica passam a estado explícito NOT_AUDITED.
 ### Adicionado
 - **vals-results/_audit-notes/AUDIT-STATUS.json** — estado de auditoria dos 16: **4 LITERAL · 7 PARÁFRASE ·
   5 NOT_AUDITED**, com o motivo de cada um.
-- **un-evals.py --audit** — comando que mostra o estado da camada 3 por eval.
+- **
+un-evals.py --audit** — comando que mostra o estado da camada 3 por eval.
 - Seção **Camada 5 — conferência do método** em docs/eval-methodology.md: a camada que confere a auditoria
   também erra (a primeira conferência reportou 2 de 16 porque olhou só o óbvio).
 - Os 5 registros ganharam o bloco ## Auditoria externa — NOT_AUDITED com o motivo e o link para o prompt de
@@ -535,7 +554,8 @@ com **5 observações de regra vizinha** abaixo do limiar de PARTIAL. Três fora
 
 ### Adicionado
 - **3 evals novos** (denominador 128 → **131**): credential-unblock-without-resume,
-  to-rpo-without-numeric-target, 	est-in-prose-not-code. Agora as três regras são testadas
+  
+to-rpo-without-numeric-target, 	est-in-prose-not-code. Agora as três regras são testadas
   explicitamente em vez de depender de re-leitura.
 - [vals-results/_audit-notes/AUDIT-2026-11-09-OBSERVATIONS.md](evals-results/_audit-notes/AUDIT-2026-11-09-OBSERVATIONS.md)
   — as 5 observações classificadas, os 3 fixes e o defer de OB-01/OB-02 para v1.5.0.
