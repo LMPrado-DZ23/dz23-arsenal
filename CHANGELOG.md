@@ -1,3 +1,20 @@
+## [1.5.24] — 2026-11-18
+
+### Corrigido -- `check-copies.py` tinha o mesmo defeito da rodada 47
+Varredura sistematica por todo ponto que derivava identidade de bytes crus achou `sha()` do
+`check-copies` hasheando `read_bytes()` sem normalizar. Convertendo uma das vinte copias
+embarcadas para CRLF, o verificador saia com 'DIVERGENCIA ... conteudo difere' -- sugerindo
+reescrever um arquivo ja identico semanticamente. Corrigido com a disciplina do arsenal (EOL nunca
+e divergencia de conteudo). Tres comportamentos medidos: EOL sozinho passa, conteudo diferente
+falha com instrucao de conserto, baseline passa.
+
+### Verificado sem defeito
+- `audit-zips.py` ja normalizava texto e mantinha binarios byte a byte desde a rodada 9 -- prova
+  executada com instalacao em CRLF deu 10/10 em dia.
+- `check-licenses.py` le bytes crus de proposito: decodificar com `errors='strict'` para
+  denunciar UTF-8 invalido e mojibake exige ver os bytes como estao. Normalizar ali apagaria o
+  sintoma que a checagem procura. Nao e defeito.
+
 ## [1.5.23] — 2026-11-18
 
 ### Corrigido -- `build-manifest` gravava hash dependente do checkout

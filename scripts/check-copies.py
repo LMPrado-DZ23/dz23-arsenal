@@ -53,7 +53,21 @@ MODULOS_EMBUTIDOS = ("skill_validator.py", "_achar_arsenal.py")
 
 
 def sha(p: Path) -> str:
-    return hashlib.sha256(p.read_bytes()).hexdigest()
+    """Hash de conteúdo, ignorando fim de linha.
+
+    Comparar bytes crus faz uma cópia materializada com CRLF parecer conteúdo divergente -- e o
+    conserto sugerido seria reescrever um arquivo que já é idêntico semânticamente. Reproduzido
+    nesta sessão: convertendo uma das vinte cópias para CRLF, o verificador saía com
+    "DIVERGÊNCIA ... conteudo difere", exatamente o mesmo defeito que derrubou o CI na rodada 47
+    via build-manifest. É a regra do arsenal: EOL nunca é divergência de conteúdo (audit-zips,
+    audita-sensibilidade, build.py --check). Binário continua byte a byte.
+    """
+    dados = p.read_bytes()
+    try:
+        texto = dados.decode("utf-8")
+    except UnicodeDecodeError:
+        return hashlib.sha256(dados).hexdigest()
+    return hashlib.sha256(texto.replace("\r\n", "\n").encode("utf-8")).hexdigest()
 
 
 def main(argv: list[str]) -> int:
