@@ -158,6 +158,12 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("catalogo:verifica", [py, "scripts/check-catalog.py"]))
     resultados.append(rodar("catalogo:indice", [py, "scripts/gera-catalog.py", "--check"]))
     resultados.append(rodar("catalogo:autoteste", [py, "scripts/check-catalog.py", "--selftest"]))
+    # SBOM (mandato: layer supply-chain/). CycloneDX gerado dos lockfiles reais; cada biblioteca
+    # com integrity sha512. O verificador reparseia os lockfiles por conta própria (independente
+    # do gerador) e reprova drift; o gerador --check pega edição manual; autoteste é controle negativo.
+    resultados.append(rodar("sbom:verifica", [py, "scripts/check-sbom.py"]))
+    resultados.append(rodar("sbom:drift", [py, "scripts/gera-sbom.py", "--check"]))
+    resultados.append(rodar("sbom:autoteste", [py, "scripts/check-sbom.py", "--selftest"]))
     # Documento era a única superfície sem verificador de conteúdo: existência e link eram
     # conferidos, mas texto corrompido passava. Nesta sessão eu mesmo injetei duas vezes resíduo
     # de ferramenta num .md (caractere CJK no meio do português e uma expressão Python inteira no
