@@ -55,6 +55,21 @@ e exige exit ≠ 0 em todos; no fim verifica que a árvore voltou ao HEAD. Resta
 um teste que mexe no disco concorrente consigo mesmo produziria resultado instável. Rode à mão
 antes do PR.
 
+Duas lentes para descobrir lacunas que nenhum check denuncia -- rode-as ao suspeitar de cobertura,
+não a cada push:
+
+```bash
+python scripts/mede-cobertura.py        # quais arquivos versionados cada verificador abre
+python scripts/audita-sensibilidade.py  # cada verificador sabe ficar vermelho
+```
+
+``mede-cobertura.py`` não é um check do gate: é diagnóstico, com limitação declarada na docstring.
+O hook só vale para o processo instrumentado, então um verificador que lê dentro de um subprocesso
+aparece com contagem menor ou zero sem ler menos. Na prática ele apontou os dois últimos defeitos
+desta linha de trabalho (arquivos invisíveis por filtro de sufixo, e a ausência total de guarda de
+credencial num repositório público), mas nunca dá veredito: antes de tratar um "nunca lido" como
+defeito, injete uma violação no arquivo e veja se algum check reclama. Cobertura é indício.
+
 O mínimo de um verificador novo, extraído das rodadas de ataque desta linha de trabalho:
 
 - caso positivo (rejeita o inválido) **e** negativo (aceita o válido), ambos executados;
