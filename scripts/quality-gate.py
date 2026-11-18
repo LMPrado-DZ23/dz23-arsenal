@@ -206,6 +206,12 @@ def main(argv: list[str]) -> int:
                             [py, "skills/dz23-spec-to-system-engine/scripts/consulta-espec.py", "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-espec",
                             [py, "scripts/prova-consulta-espec.py"]))
+    # Trilha C: a dz23-subagents-universal-mcp tem 293 testes proprios em node:test (zero dependencias), mas
+    # ate aqui o gate do ARSENAL nunca os executava -- so pentagi-mcp tinha check. Cobertura ausente do tipo
+    # que a rodada 46 achou nos scripts embutidos: o teste existia, ninguem o rodava no lugar certo. Rodar a
+    # suite dela e mais honesto que escrever um selftest paralelo. Sem node no PATH declara NOT_TESTED (exit 0)
+    # em vez de PASS silencioso; com node exige fail 0 E tests > 0 (runner que nao descobriu caso daria 0/0/ok).
+    resultados.append(rodar("mcp:subagents-selftest", [py, "scripts/selftest-subagents-mcp.py"]))
     # Repositório PÚBLICO, e até esta rodada nenhum verificador abria um arquivo em busca de
     # credencial: colar um token GitHub válido em `.env.example` dava gate 46/46 verde. Os quatro
     # scripts que mencionam "segredo" no fonte falam de outra coisa (scan descrito em prosa, design
