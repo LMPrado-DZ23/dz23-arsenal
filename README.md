@@ -264,6 +264,8 @@ o job Windows existe porque o bug de encoding cp1252 só aparecia lá. Mapa das 
 | Documento | Conteúdo |
 |---|---|
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | mapa das camadas (o que existe × planejado) |
+| [`INSTALL.md`](INSTALL.md) · [`OFFLINE-MODE.md`](OFFLINE-MODE.md) | guia de instalação e o que roda sem rede |
+| [`EVALUATIONS.md`](EVALUATIONS.md) · [`COMPATIBILITY.md`](COMPATIBILITY.md) | estado dos evals e compatibilidade por SO/runtime |
 | [`LIMITATIONS.md`](LIMITATIONS.md) | limites honestos: o que não está provado |
 | [`matriz-de-requisitos.md`](matriz-de-requisitos.md) | requisitos do mandato com evidência e estado |
 | [`THIRD-PARTY.md`](THIRD-PARTY.md) · [`LICENSE-MATRIX.md`](LICENSE-MATRIX.md) | proveniência e compatibilidade de licença (gerados de `catalog/catalog.json`) |

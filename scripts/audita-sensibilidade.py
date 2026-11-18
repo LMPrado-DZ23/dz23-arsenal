@@ -48,7 +48,8 @@ def base_completa() -> pathlib.Path:
               "arsenal.json", "LICENSE", "SECURITY.md", "CODE_OF_CONDUCT.md", "VERSION",
               ".gitattributes", ".gitignore", "evals.schema.json",
               "ARCHITECTURE.md", "LIMITATIONS.md", "THIRD-PARTY.md", "LICENSE-MATRIX.md",
-              "matriz-de-requisitos.md"):
+              "matriz-de-requisitos.md", "INSTALL.md", "OFFLINE-MODE.md", "EVALUATIONS.md",
+              "COMPATIBILITY.md"):
         if (RAIZ / f).is_file():
             shutil.copy2(RAIZ / f, tmp / f)
     return tmp
