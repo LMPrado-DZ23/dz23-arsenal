@@ -76,7 +76,7 @@ O HEAD publicado estava vermelho (`instalacao:conteudo`, 3 divergentes) porque e
 trabalho -- que era justamente o erro metodológico apontado. A regra "quem constrói não homologa; verde
 na minha árvore não é verde" valeu contra mim mesmo desta vez.
 
-### Pendência 2 da auditoria: premissa medida antes de agir, e o diagnóstico estava parcialmente errado
+## Pendência 2 da auditoria: premissa medida antes de agir, e o diagnóstico estava parcialmente errado
 Pedi para alinhar backend/performance ao "padrão texto-livre do design". Verificado: **o design também é
 por subcomando** -- `consulta-design.py "estilo vidro"` retorna exit 2 igual. Os três já eram
 consistentes entre si; o único exemplo em texto livre do repo era um placeholder de documentação
@@ -158,7 +158,12 @@ performance): extrair as 31 linhas tabulares de ECC `code-tour` (4 tabelas) + `c
 conferir célula por célula contra a fonte, montar `consulta-codebase.py` com mapa fechado e recusa
 honesta, prova **exaustiva nos sinônimos** (não amostrada — foi o que pegou quatro entradas mortas no
 último item), índice dizendo quando consultar, linha no método, eval executado, VENDOR.md, gate verde,
-commit atômico, CI verde, push.
+commit atômico, **resync da instalação, push, CI verde no HEAD publicado** -- só então anotar aqui o
+hash e chamar de pronta.
+
+Passo que a auditoria acrescentou ao padrão (e que faltou em `d310a31`): verificar o gate no **HEAD
+commitado**, não na árvore de trabalho. Árvore verde com índice sujo é o estado que um clone recebe.
+`git worktree add --detach $tmp HEAD && python scripts/quality-gate.py` dentro dele é a checagem.
 
 Antes de investir nisso, porém, vale a pergunta registrada acima: restam ~48 linhas tabulares para seis
 skills. Se o dono preferir, os itens sem dado tabular (`e2e-browser-verifier`, `devops-cloud-deployer`)
