@@ -1,0 +1,7 @@
+source,url,date,rating,text
+app-store,https://example.com/r/1,2026-10-01,2,The new update made it so slow it takes forever to load. I wish there was an offline mode.
+app-store,https://example.com/r/2,2026-10-02,1,"Way too expensive for what it does, the subscription is overpriced and there is no free plan."
+google-play,https://example.com/r/3,2026-09-15,2,"Keeps crashing after the latest version, lost all my data when it froze."
+reddit,https://example.com/r/4,2026-09-20,,Switched from this because customer support never replied to my ticket for weeks.
+g2,https://example.com/r/5,2026-08-11,3,"Love it but it is confusing and hard to navigate, too many steps to do a simple thing."
+trustpilot,https://example.com/r/6,2026-10-05,1,"They charged me after I cancelled, the refund never came. Felt like a scam."

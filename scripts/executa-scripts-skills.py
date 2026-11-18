@@ -177,6 +177,20 @@ def main(argv=None):
                         ("re_toolkit", S / "dz23-reverse-engineer-anything/scripts/re_toolkit.py")):
         registra(f"{rotulo}(--help)", caso(arq.name, [arq, "--help"], rc_ok=(0, 1, 2)))
 
+    # --- replica-entrepreneur: reviews.py ranqueia avaliacoes reais e degrada sem explodir -------
+    import tempfile as _tf
+    import pathlib as _pl
+    _rev = S / "replica-entrepreneur/scripts/reviews.py"
+    _ex = S / "replica-entrepreneur/examples/reviews-exemplo.csv"
+    registra("reviews(exemplo)", caso(
+        "reviews", [_rev, str(_ex), "--today", "2026-11-18"],
+        marca="What users of the original"))
+    with _tf.TemporaryDirectory() as _td:
+        _bad = _pl.Path(_td) / "ruim.csv"
+        _bad.write_text("source,date,rating\nx,2026-01-01,5\n", encoding="utf-8")
+        # sem coluna url/text: erro limpo (rc 2), nunca traceback
+        registra("reviews(sem coluna obrigatoria)", caso("reviews-neg", [_rev, str(_bad)], rc_ok=(2,)))
+
     dados = {"ok": not problemas, "executados": len(medidos), "problemas": problemas}
     if args.json:
         print(json.dumps(dados, ensure_ascii=False, indent=2))
@@ -186,7 +200,7 @@ def main(argv=None):
         for p in problemas:
             print(f"PROBLEMA: {p}")
         if not problemas:
-            print("todos os onze rodam com a entrada que documentam e recusam violacao")
+            print(f"todos os {len(medidos)} rodam com a entrada que documentam e recusam violacao")
     return 1 if problemas else 0
 
 

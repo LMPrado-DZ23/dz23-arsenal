@@ -200,6 +200,18 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
   (binário/firmware): esta é black-box de produto por fontes públicas.
 - **Fora do ledger DZ23:** 6 evals, fora dos 144 cenários das 10 DZ23.
 
+### `skills/replica-entrepreneur/` — skill inteira + `reviews.py` (script MIT)
+- **Origem:** `Jakeschincariol/replica-skill` (skill `replica-entrepreneur`). Licença **MIT lida no
+  arquivo `LICENSE` da raiz** (Copyright 2026 Jake Schincariol).
+- **O que entrou:** orientação de pesquisa de usuário por avaliações públicas (regras de ética: nunca
+  fabricar, citação verbatim+link, ler não raspar, nunca review falsa/FTC) internalizada em PT +
+  `scripts/reviews.py` (stdlib, ranqueia avaliações em temas) + `scripts/themes.json` +
+  `examples/reviews-exemplo.csv` + 2 references + template + 6 evals + validate.
+- **Modificação no `reviews.py`:** entrou funcional, mas estourava traceback num CSV levemente
+  malformado (vírgula sem aspas). Endurecido para degradar sem explodir (`ferramentas:ataque`). O
+  reviews.py é exercitado no gate (`skills:scripts-executados`, 2 casos: exemplo + controle negativo).
+- **Fora do ledger DZ23:** 6 evals. 2ª skill da camada produto-para-clone.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

@@ -2,7 +2,7 @@
   "schema": 2,
   "generated_by": "scripts/build-manifest.py",
   "counts": {
-    "skills": 14,
+    "skills": 15,
     "external": 16,
     "prompts": 1,
     "mcp": 2,
@@ -140,6 +140,18 @@
       "scripts": 3,
       "evals": 6,
       "sha256_skill_md": "5cc960f0c74558cc182ff3ff781cedc6c4ce91c4a425a57f54da7914edbbcbc5"
+    },
+    {
+      "name": "replica-entrepreneur",
+      "version": "1.0.0",
+      "description": ">",
+      "user_invocable": true,
+      "files": 15,
+      "references": 2,
+      "templates": 1,
+      "scripts": 5,
+      "evals": 6,
+      "sha256_skill_md": "54c17902743767d631e3813cde82b0a593e187f17bf0ba4b819c56051b5c24a9"
     },
     {
       "name": "replica-recon",

@@ -1,0 +1,22 @@
+Use a skill replica-entrepreneur (v1.0.0).
+
+Quando: "o que as pessoas odeiam no X", "ler as avaliações", "achar a lacuna", "como posiciono isto",
+"deixar vendável", ou depois de replica-diff. Uma cópia reta de um app não tem razão de existir; esta
+skill acha a razão nas palavras dos usuários do original e conserta no clone.
+
+Regras inegociáveis:
+- Nunca fabricar avaliação, citação, nota, contagem, usuário ou fonte. Se há 14, são 14.
+- Toda citação verbatim e com link (reviews.py descarta linha sem link).
+- Ler, não raspar: no navegador, ou feeds/APIs oficiais dentro dos termos (RSS da Apple, Algolia do HN,
+  API do Reddit). Se a fonte proíbe/bloqueia, diga e siga.
+- Nunca review falsa (ilegal, regra FTC 2024). Avaliadores são pesquisa, não vão na landing.
+- O nome do original não entra no nome/anúncio/listagem do seu app.
+
+Método: colete 100+ avaliações em >=3 fontes em replica/reviews.csv (source,url,date,rating,text, texto
+exato) -> ranqueie com `python scripts/reviews.py replica/reviews.csv --out replica/feedback.md` ->
+três listas (odeiam / falta / sem solução, thin marcado como thin) -> plano de correção top 5-8
+(evidência x custo), cada um vira linha em features.csv -> ângulo de posicionamento ancorado em
+evidência.
+
+Veredito: PASS só com >=3 fontes, amostra declarada, citações verbatim+link, thin marcado; <30
+avaliações é direção, não ranking (PARTIAL); citação sem link é NOT_TESTED. Próximo: replica-brand.
