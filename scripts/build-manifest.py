@@ -23,10 +23,26 @@ IGNORAR = re.compile(r"(/__pycache__/|/\.git/|\.bak-|_sources|\.DS_Store|\.pyc$)
 
 
 def sha256(p: Path) -> str:
+    """Hash de conteúdo SEMÂNTICO, com quebras de linha normalizadas.
+
+    Hash de bytes crus grava um valor que depende de como o arquivo foi materializado no disco, e
+    não do que o repositório contém. Reproduzido nesta sessão: `--check` passava na minha máquina e
+    falhava em todo clone limpo (run 44248537821), porque meu working tree tinha CRLF em 15 arquivos
+    versionados -- `core.autocrlf=false` preserva o que foi commitado, mas edições feitas por
+    ferramentas Windows escrevem CRLF sem que o git reclame, já que o blob continua LF. O manifesto
+    gravava o hash do disco; o clone produzia outro. Mesma disciplina de audit-zips, check-copies e
+    build.py --check: EOL nunca é divergência de conteúdo neste arsenal.
+
+    Só texto é normalizado. Binários seguem byte a byte, onde CRLF seria dado real.
+    """
     h = hashlib.sha256()
-    with open(p, "rb") as fh:
-        for bloco in iter(lambda: fh.read(1 << 20), b""):
-            h.update(bloco)
+    dados = p.read_bytes()
+    try:
+        texto = dados.decode("utf-8")
+    except UnicodeDecodeError:
+        return hashlib.sha256(dados).hexdigest()
+    norm = texto.replace("\r\n", "\n").encode("utf-8")
+    h.update(norm)
     return h.hexdigest()
 
 

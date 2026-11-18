@@ -79,7 +79,7 @@
       "templates": 6,
       "scripts": 6,
       "evals": 16,
-      "sha256_skill_md": "e36117ba6f6b1a438522aeda44f9bf5c7cf35d7966ffb067be652a080294d85d"
+      "sha256_skill_md": "91a319812201f11ebdd94deac54230def731316b263625889931863084ed7f71"
     },
     {
       "name": "dz23-postgres-prod-preflight",
@@ -91,7 +91,7 @@
       "templates": 2,
       "scripts": 4,
       "evals": 13,
-      "sha256_skill_md": "20750d3c4808d591d4bd6c72eb5261e3971cda6fd55ad3f0b9216474d0a4588c"
+      "sha256_skill_md": "8381f7c8548e10db0da22bcb2a1b66132f4a438a1f6761906c7f154a15ad8468"
     },
     {
       "name": "dz23-reverse-engineer-anything",
