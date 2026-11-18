@@ -20,8 +20,14 @@ if importar_validador_comum is not None:
         print("WARN: arsenal nao localizado — checagens comuns puladas")
     else:
         _erros_comuns = _validar_comum(root)
-        assert not _erros_comuns, ("checagens comuns falharam:\n  - "
-                                   + "\n  - ".join(_erros_comuns))
+        if _erros_comuns:
+            # `assert` nao serve para gate: python -O remove a instrucao e o validador
+            # passa a imprimir OK com referencia quebrada -- reproduzido nas dez skills
+            # desta sessao. Um verificador que desaparece por uma flag do interpretador e
+            # pior que a ausencia dele, porque continua parecendo conferido.
+            for e in _erros_comuns:
+                print(f"FALHA: {e}", file=sys.stderr)
+            raise SystemExit(1)
 
 required = [
     'SKILL.md',

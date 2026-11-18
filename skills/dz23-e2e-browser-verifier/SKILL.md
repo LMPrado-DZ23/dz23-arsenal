@@ -1,6 +1,6 @@
 ---
 name: dz23-e2e-browser-verifier
-version: 1.1.1
+version: 1.1.2
 description: >
   Automação de testes E2E com browser real (Playwright + cross-browser).
   Verifica fluxos críticos de UI, captura evidências (screenshot, vídeo,

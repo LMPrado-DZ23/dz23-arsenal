@@ -167,6 +167,40 @@ quando não há nada?". Cada pergunta rendeu um defeito real.
 caracteres. Clone virgem com `core.autocrlf=false` nasce com `git status` limpo e roda o gate
 inteiro sem nada instalado.
 
+## [1.5.2] — 2026-11-17
+
+### Corrigido — validadores desligáveis por flag do interpretador
+- **`assert not _erros_comuns` nas dez skills**: sob `python -O` o interpretador remove a
+  instrução, e o `validate_skill.py` imprimia `OK — ... 13 evals · 5 referências` com uma
+  referência quebrada, saindo **0**. Reproduzido em todas as dez antes da correção. Um gate que
+  desaparece por uma flag é pior que ausência dele — continua parecendo conferido. Trocado por
+  impressão em stderr + `SystemExit(1)`, válido nos dois modos. Bump PATCH em cada skill
+  (autonomous 2.1.6, backend-data 1.1.1, cartographer 1.1.1, devops 1.2.3, e2e 1.1.2,
+  performance 1.3.2, postgres 1.1.1, reverse-engineer 1.1.4, spec-to-system 1.2.1,
+  ultimate-pro-max 2.2.4).
+- **Caso permanente** em `selftest-ferramentas.py` (grupo `rejeicao`): espelha uma skill,
+  injeta referência inexistente e exige exit ≠ 0 **com e sem `-O`**. Provado ao reverter uma
+  skill ao `assert`: a suíte acusou "validador aprovou referência quebrada sob python -O".
+
+### Corrigido — erros meus no processo desta versão
+- O script de bump **não era idempotente** e rodou duas vezes: seis skills subiram dois
+  PATCHes para um único defeito, com o mesmo parágrafo sob dois números. Detectado ao
+  inspecionar a sequência de versões, não pela checagem automática.
+- A primeira tentativa de detectar essa duplicação reportou **"nenhuma entrada duplicada"** —
+  falso negativo: eu contava `` `assert` `` com crase simples num texto que usa crase dupla,
+  então o padrão nunca casava. Falso negativo em ferramenta de verificação é o pior resultado
+  possível, porque fabrica confiança. Reescrito comparando o corpo normalizado das entradas;
+  aí sim apareceu a repetição, e sete foram colapsadas.
+- As lacunas de número (ex.: 2.1.5 → 2.1.7 sem 2.1.6) foram reindexadas para o passo correto,
+  ajustando VERSION, frontmatter e PROMPT-ATIVACAO juntos.
+
+### Verificado sem defeito
+Idempotência e concorrência: `build-manifest.py` produz bytes idênticos em execuções
+sucessivas; `install-all.ps1` duas vezes seguidas resulta no mesmo estado; `quality-gate` e
+`check-numbers` rodando em paralelo não corrompem `.gate-contagem`. Árvore suja: o passo de
+CRLF do CI mantém a decisão no índice (`--cached`) e não acusa a cópia de trabalho; referência
+quebrada não commitada é pega pelo gate pelo conteúdo, não pelo git.
+
 ## [1.4.9] — 2026-11-09
 
 **Camada 4** — 3 skills do arsenal usadas no próprio repo, com o CI como juiz.

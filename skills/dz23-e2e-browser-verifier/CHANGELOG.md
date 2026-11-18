@@ -1,5 +1,11 @@
 # Changelog — dz23-e2e-browser-verifier
 
+## [1.1.2] — 2026-11-17
+
+### Corrigido
+- `scripts/validate_skill.py` não usa mais `assert` para reportar falha das checagens comuns. Sob `python -O` a instrução é removida pelo interpretador e o validador imprimia OK com referência quebrada, saindo 0 — verificado nas dez skills desta data. Agora imprime cada erro em stderr e sai 1 nos dois modos.
+- Reprodução: injetar ``Ver `references/quebrada-O-teste.md`.`` no SKILL.md e rodar `python -O scripts/validate_skill.py` → antes exit 0, agora exit 1. Coberto por caso permanente em `scripts/selftest-ferramentas.py` (grupo `rejeicao`).
+
 ## [1.1.1] — 2026-11-09
 
 ### Adicionado

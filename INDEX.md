@@ -9,16 +9,16 @@
 
 | Skill | Versão | Arquivos | Refs | Templates | Scripts | Evals |
 |---|---|---|---|---|---|---|
-| [dz23-autonomous-improvement-ultimate](skills/dz23-autonomous-improvement-ultimate/) | 2.1.5 | 17 | 5 | 2 | 3 | 13 |
-| [dz23-backend-data-architect](skills/dz23-backend-data-architect/) | 1.1.0 | 21 | 10 | 2 | 3 | 12 |
-| [dz23-codebase-cartographer](skills/dz23-codebase-cartographer/) | 1.1.0 | 33 | 15 | 7 | 5 | 15 |
-| [dz23-devops-cloud-deployer](skills/dz23-devops-cloud-deployer/) | 1.2.2 | 35 | 17 | 7 | 5 | 16 |
-| [dz23-e2e-browser-verifier](skills/dz23-e2e-browser-verifier/) | 1.1.1 | 25 | 10 | 6 | 3 | 16 |
-| [dz23-performance-scalability-engine](skills/dz23-performance-scalability-engine/) | 1.3.1 | 28 | 10 | 6 | 6 | 16 |
-| [dz23-postgres-prod-preflight](skills/dz23-postgres-prod-preflight/) | 1.1.0 | 16 | 5 | 2 | 4 | 13 |
-| [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.1.3 | 27 | 12 | 4 | 5 | 15 |
-| [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.2.0 | 46 | 17 | 11 | 5 | 15 |
-| [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.3 | 18 | 9 | 0 | 3 | 13 |
+| [dz23-autonomous-improvement-ultimate](skills/dz23-autonomous-improvement-ultimate/) | 2.1.6 | 17 | 5 | 2 | 3 | 13 |
+| [dz23-backend-data-architect](skills/dz23-backend-data-architect/) | 1.1.1 | 21 | 10 | 2 | 3 | 12 |
+| [dz23-codebase-cartographer](skills/dz23-codebase-cartographer/) | 1.1.1 | 33 | 15 | 7 | 5 | 15 |
+| [dz23-devops-cloud-deployer](skills/dz23-devops-cloud-deployer/) | 1.2.3 | 35 | 17 | 7 | 5 | 16 |
+| [dz23-e2e-browser-verifier](skills/dz23-e2e-browser-verifier/) | 1.1.2 | 25 | 10 | 6 | 3 | 16 |
+| [dz23-performance-scalability-engine](skills/dz23-performance-scalability-engine/) | 1.3.2 | 28 | 10 | 6 | 6 | 16 |
+| [dz23-postgres-prod-preflight](skills/dz23-postgres-prod-preflight/) | 1.1.1 | 16 | 5 | 2 | 4 | 13 |
+| [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.1.4 | 27 | 12 | 4 | 5 | 15 |
+| [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.2.1 | 46 | 17 | 11 | 5 | 15 |
+| [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.4 | 18 | 9 | 0 | 3 | 13 |
 
 ## MCP e bundles
 

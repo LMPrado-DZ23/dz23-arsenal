@@ -422,6 +422,36 @@ def testa_rejeicao() -> list[str]:
                                      f"{saida.strip()[:110]}")
     problemas += sem_excecao("rejeicao/links-vazios-nao-aprovam", confere_links_vazios)
 
+    # `python -O` não pode desligar nenhum verificador. Os validadores de skill usavam
+    # `assert not _erros_comuns`, que o modo otimizado remove: as dez skills imprimiam OK com
+    # referência quebrada e saíam 0. Um gate que desaparece por uma flag do interpretador é
+    # pior que ausência dele -- continua parecendo conferido.
+    def confere_modo_otimizado() -> None:
+        import subprocess
+        with tempfile.TemporaryDirectory() as td:
+            alvo = pathlib.Path(td) / "SKILL.md"
+            original = (RAIZ / "skills/dz23-e2e-browser-verifier/SKILL.md").read_text(
+                encoding="utf-8")
+            alvo.write_text(original + "\nVer `references/quebrada-O-teste.md`.\n",
+                            encoding="utf-8")
+            # copia a skill inteira para um destino isolado: o validador resolve caminhos
+            # relativos à própria skill, então só o SKILL.md não basta.
+            espelho = pathlib.Path(td) / "skill"
+            shutil.copytree(RAIZ / "skills/dz23-e2e-browser-verifier", espelho)
+            (espelho / "SKILL.md").write_text(
+                original + "\nVer `references/quebrada-O-teste.md`.\n", encoding="utf-8")
+            for flags in ([], ["-O"]):
+                p = subprocess.run([sys.executable, *flags,
+                                    str(espelho / "scripts/validate_skill.py")],
+                                   capture_output=True, timeout=120, cwd=str(RAIZ))
+                saida = p.stdout.decode("utf-8", "replace") + p.stderr.decode("utf-8", "replace")
+                if p.returncode == 0:
+                    raise AssertionError(
+                        f"validador aprovou referência quebrada"
+                        f"{' sob python -O' if flags else ''}: {saida.strip()[:110]}")
+    problemas += sem_excecao("rejeicao/python -O nao desliga validador",
+                             confere_modo_otimizado)
+
     return problemas
 
 

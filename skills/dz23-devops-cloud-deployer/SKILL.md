@@ -1,6 +1,6 @@
 ---
 name: dz23-devops-cloud-deployer
-version: 1.2.2
+version: 1.2.3
 description: >
   DevSecOps, containers e deploy autônomo com evidência: imagem mínima e
   reproduzível, pipeline com gates, configuração e segredos por ambiente,

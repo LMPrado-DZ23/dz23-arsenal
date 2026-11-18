@@ -1,6 +1,6 @@
 ---
 name: dz23-codebase-cartographer
-version: 1.1.0
+version: 1.1.1
 description: >
   Engenharia de contexto e mapeamento de codebase: transforma um repositório
   desconhecido em mapa verificável antes de qualquer mudança — topologia,

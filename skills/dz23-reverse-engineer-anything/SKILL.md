@@ -1,6 +1,6 @@
 ---
 name: dz23-reverse-engineer-anything
-version: 1.1.3
+version: 1.1.4
 description: >
   Engenharia reversa de binários nativos e firmware com motor próprio em Python puro
   (zero dependências, offline): parser de U-Boot uImage com CRC, tabela de partição ESP

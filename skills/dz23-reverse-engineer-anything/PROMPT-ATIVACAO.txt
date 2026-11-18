@@ -1,4 +1,4 @@
-PROMPT DE ATIVAÇÃO — DZ23 Reverse-Engineer-Anything v1.1.3
+PROMPT DE ATIVAÇÃO — DZ23 Reverse-Engineer-Anything v1.1.4
 
 Use a skill dz23-reverse-engineer-anything.
 

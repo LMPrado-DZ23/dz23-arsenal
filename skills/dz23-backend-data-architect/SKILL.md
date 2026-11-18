@@ -1,6 +1,6 @@
 ---
 name: dz23-backend-data-architect
-version: 1.1.0
+version: 1.1.1
 description: Skill de engenharia de backend, banco de dados, contratos de API, migrações seguras, multi-tenancy, segurança de aplicação e observabilidade. Ative ao criar, revisar, refatorar ou depurar serviços, endpoints, schemas, migrações, integrações e pipelines de dados.
 user-invocable: true
 argument-hint: "<serviço/rota/entidade, 'audit <path>' ou 'design <feature>'>"

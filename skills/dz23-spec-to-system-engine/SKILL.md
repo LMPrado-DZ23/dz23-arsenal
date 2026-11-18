@@ -1,6 +1,6 @@
 ---
 name: dz23-spec-to-system-engine
-version: 1.2.0
+version: 1.2.1
 description: >
   Transforma pedido, ideia ou documento em especificação executável e plano de
   construção: requisitos verificáveis, critério de aceite, decomposição em
