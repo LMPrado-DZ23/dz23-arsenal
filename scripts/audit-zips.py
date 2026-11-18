@@ -59,7 +59,34 @@ EXT_TEXTO = {".md", ".txt", ".json", ".py", ".sh", ".ps1", ".yml", ".yaml", ".to
 
 
 def _e_parece_texto(p: Path) -> bool:
-    return p.suffix.lower() in EXT_TEXTO
+    """Decide by CONTENT, not by extension.
+
+    A checagem por sufixo deixou `VERSION` de fora -- arquivo sem extensão, portanto "binário",
+    hasheado byte a byte. Resultado medido nesta sessão: com o blob em LF e o disco em CRLF
+    (`core.autocrlf=false` não converte ao materializar), repo e instalação continham o mesmo texto
+    `1.1.3\r\n` vs `1.1.3\n`, e o auditor declarava CONTEUDO_DIVERGENTE apontando exatamente
+    VERSION -- um veredito falso que empurraria alguém a reinstalar algo já igual. Era o quarto
+    membro da classe das rodadas 47/48, escondido justamente no arquivo que guarda a versão.
+
+    Arquivo sem sufixo reconhecido é testado como texto real: se decodifica como UTF-8 e não tem
+    byte nulo, é texto e merece normalização de EOL. Binários autênticos (ícone, zip) falham nos
+    dois critérios e continuam comparados byte a byte.
+    """
+    if p.suffix.lower() in EXT_TEXTO:
+        return True
+    if p.suffix:
+        return False          # extensão desconhecida: tratar como binário, comportamento antigo
+    try:
+        dados = p.read_bytes()
+    except OSError:
+        return False
+    if b"\x00" in dados[:8192]:
+        return False
+    try:
+        dados.decode("utf-8")
+    except UnicodeDecodeError:
+        return False
+    return True
 
 
 def mapa(root: Path) -> dict[str, str]:
