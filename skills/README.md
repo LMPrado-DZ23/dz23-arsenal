@@ -9,7 +9,7 @@
 | Skill | Versão | Categoria | Complexidade | Refs | Templates | Scripts | Evals |
 |---|---|---|---|---|---|---|---|
 | [autonomous-improvement-ultimate](dz23-autonomous-improvement-ultimate/) | 2.1.8 | Orquestração | advanced | 5 | 2 | 3 | 13 |
-| [backend-data-architect](dz23-backend-data-architect/) | 1.1.1 | Backend/DB | advanced | 10 | 2 | 3 | 12 |
+| [backend-data-architect](dz23-backend-data-architect/) | 1.1.2 | Backend/DB | advanced | 10 | 2 | 3 | 12 |
 | [codebase-cartographer](dz23-codebase-cartographer/) | 1.1.1 | Exploração | intermediate | 15 | 7 | 5 | 15 |
 | [devops-cloud-deployer](dz23-devops-cloud-deployer/) | 1.2.3 | DevOps | advanced | 17 | 3 | 5 | 16 |
 | [e2e-browser-verifier](dz23-e2e-browser-verifier/) | 1.1.3 | QA/E2E | advanced | 10 | 3 | 3 | 16 |

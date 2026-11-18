@@ -251,18 +251,39 @@ def cmd_report() -> int:
         curto = CURTO.get(skill.name, skill.name.replace("dz23-", ""))
         pasta = RESULTADOS / curto
         vereditos: list[str] = []
+        cobertos: set[str] = set()
         if pasta.is_dir():
             for md in pasta.glob("*.md"):
                 texto = md.read_text(encoding="utf-8", errors="replace")
                 m = re.search(r"\*\*Veredito:\*\*\s*\*{0,2}(PASS|PARTIAL|FAIL|NOT_TESTED|BLOCKED|NOT_RECOVERED)",
                               texto)
-                if m:
-                    vereditos.append(m.group(1))
-        exec_ = len(vereditos)
+                if not m:
+                    continue
+                vereditos.append(m.group(1))
+                mi = re.match(r"\d{4}-\d{2}-\d{2}-(.+)$", md.stem)
+                if mi:
+                    cobertos.add(mi.group(1))
+        # Cobertura se mede por CENARIO DISTINTO, nao por arquivo. Contar arquivos fazia reexecutar
+        # um caso ja registrado somar +1 de cobertura: com dois registros de
+        # migration-without-rollback (09/11 autoavaliacao e 18/11 execucao real em Postgres), o
+        # relatorio dizia 48 registrados / 96 pendentes enquanto o check correto dizia 47 / 97 -- os
+        # dois "verdes" porque liam premissas diferentes. Reexecucao e historico legitimo; credito
+        # extra e que nao e. O ultimo veredito por cenario e o que vale na contagem de estado.
+        exec_ = len(cobertos & {str(c.get("id")) for c in casos if isinstance(c, dict)})
         total_exec += exec_
         sem = len(casos) - exec_
         faltando += max(0, sem)
-        conta = lambda v: sum(1 for x in vereditos if x == v)  # noqa: E731
+        por_veredito: dict[str, str] = {}
+        if pasta.is_dir():
+            for md in sorted(pasta.glob("*.md")):          # ordem cronologica: o mais novo vence
+                mi = re.match(r"\d{4}-\d{2}-\d{2}-(.+)$", md.stem)
+                if not mi:
+                    continue
+                mv = re.search(r"\*\*Veredito:\*\*\s*\*{0,2}(PASS|PARTIAL|FAIL|NOT_TESTED|BLOCKED|NOT_RECOVERED)",
+                               md.read_text(encoding="utf-8", errors="replace"))
+                if mv:
+                    por_veredito[mi.group(1)] = mv.group(1)
+        conta = lambda v: sum(1 for x in por_veredito.values() if x == v)  # noqa: E731
         print(f"{skill.name:<42}{len(casos):>11}{exec_:>12}{conta('PASS'):>6}{conta('PARTIAL'):>9}"
               f"{conta('FAIL'):>6}{conta('BLOCKED'):>9}")
     print()

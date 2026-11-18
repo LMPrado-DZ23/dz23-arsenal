@@ -96,13 +96,27 @@ def main() -> int:
     if "Status de evals" not in roadmap:
         problemas.append("ROADMAP.md: falta a seção 'Status de evals'")
     else:
-        registrados: set[str] = set()
+        # Identidade de um registro é (skill, id), não id solto. A pasta de destino já era lida acima
+        # (`arquivos` vem do rglob), mas o set descartava a skill -- entao reexecutar o mesmo cenario
+        # em datas diferentes produzia UM elemento para DOIS arquivos e a contagem de pendentes ficava
+        # otimista por construcao. Medido nesta sessao: apos gravar 2026-11-18-migration-without-rollback
+        # ao lado do de 2026-11-09, run-evals dizia 48 registrados e este check, 47 -- os dois "certos"
+        # sob premissas diferentes. Ids hoje sao globais entre skills (verificado: zero colisoes), mas
+        # isso e propriedade acidental do conteudo, nao contrato; codificar a premissa e o que quebra
+        # quando alguem reaproveitar um nome de caso.
+        registrados: set[tuple[str, str]] = set()
         for md in arquivos:
             m_id = re.match(r"\d{4}-\d{2}-\d{2}-(.+)$", md.stem)
-            if m_id:
-                registrados.add(m_id.group(1))
+            if not m_id:
+                continue
+            # resolver para o NOME da skill, nao o apelido da pasta: declarados monta a outra ponta
+            # com nome completo, e comparar apelido contra nome nunca casaria nada (o que, por
+            # silencio, contaria todos os cenarios como pendentes).
+            skill = CURTO.get(md.parent.name)
+            if skill:
+                registrados.add((skill, m_id.group(1)))
 
-        declarados: set[str] = set()
+        declarados: set[tuple[str, str]] = set()
         for pasta_skill in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
             ev = pasta_skill / "evals" / "evals.json"
             if not ev.is_file():
@@ -114,7 +128,7 @@ def main() -> int:
             for case in dados_sk.get("cases", []):
                 cid = case.get("id")
                 if isinstance(cid, str) and cid:
-                    declarados.add(cid)
+                    declarados.add((pasta_skill.name, cid))
 
         pendentes = len(declarados - registrados)
 

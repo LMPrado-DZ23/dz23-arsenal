@@ -1,6 +1,38 @@
 > Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
 > delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
 
+## [1.6.2] — 2026-11-18
+
+### Corrigido -- a cobertura de evals contava ARQUIVOS, nao cenarios
+Dois instrumentos do repo liam premissas diferentes e os dois davam verde: `run-evals.py --report`
+dizia "48 registrados · 96 sem resultado" enquanto `check-eval-results.py` dizia 47/97. A causa é uma
+só: `exec_ = len(vereditos)` somava arquivos `.md`, então **reexecutar um cenário já registrado
+inflava a cobertura**. Como eu havia gravado em 18/11 um segundo registro de
+`migration-without-rollback` (autoavaliação de 09/11 → execução real em Postgres), o arsenal aparecia
+com um caso coberto a mais do que tinha.
+
+Corrigido nos dois lados, com semântica explícita:
+- `run-evals.py`: cobertura passa a ser contada por **cenário distinto declarado**, e o estado por
+  cenário usa o veredito **mais recente** (ordem cronológica). Reexecução continua como histórico
+  legítimo na pasta; o que não pode é virar crédito extra.
+- `check-eval-results.py`: identidade de registro era `id` solto em um set. Trocada para
+  `(skill, id)`. Os 144 ids são hoje globais entre skills (verificado: zero colisões), mas isso é
+  propriedade acidental do conteúdo, não contrato -- codificar a premissa é o que quebra quando alguém
+  reaproveitar um nome de caso.
+
+Depois da correção os dois concordam: **47 cenários cobertos, 97 pendentes (32,6%)**; backend ficou
+10/12, que é o número verdadeiro dos seus 11 arquivos. Números caíram porque estavam errados para cima
+-- é a direção certa de uma correção de contagem.
+
+Detectado ao tentar escrever "96" no ROADMAP e o check insistir em 97: em vez de ajustar o documento
+até o verde, fui descobrir quem media o quê.
+
+### Registrado
+- Um erro meu produziu a colisão: gravei um segundo registro para cenário já executado sem conferir se
+  existia. O `record-eval.py` tem proteção (`ERRO: já existe. Use --force`) e eu teria esbarrado nela
+  -- o arquivo foi escrito antes de eu conhecer o mecanismo. Backup do registro antigo tirado antes de
+  qualquer decisão, preservado intacto: as duas datas contam a história real do caso.
+
 ## [1.6.1] — 2026-11-18
 
 **Duas externas de infraestrutura de skills** — o instalador e uma coleção que ele instala.
