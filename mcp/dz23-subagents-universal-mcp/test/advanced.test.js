@@ -78,6 +78,6 @@ test('model discovery is cached and inventory never exposes apiKey', async()=>{
 
 test('provider registry accepts secret file references and aliases', async()=>{
   const dir=await fs.mkdtemp(path.join(os.tmpdir(),'dz23-secret-'));const f=path.join(dir,'key');await fs.writeFile(f,'file-secret\n');
-  const old=process.env.GROQ_API_KEY_FILE;const old2=process.env.TogetherAIAPI_KEY;
-  try{delete process.env.GROQ_API_KEY;process.env.GROQ_API_KEY_FILE=f;process.env.TogetherAIAPI_KEY='alias-secret';const reg=providerRegistry();assert.equal(reg.groq.apiKey,'file-secret');assert.match(reg.groq.credentialSource,/file:/);assert.equal(reg.together.apiKey,'alias-secret');}finally{if(old===undefined)delete process.env.GROQ_API_KEY_FILE;else process.env.GROQ_API_KEY_FILE=old;if(old2===undefined)delete process.env.TogetherAIAPI_KEY;else process.env.TogetherAIAPI_KEY=old2;}
+  const old=process.env.GROQ_API_KEY_FILE;const old2=process.env.TogetherAIAPI_KEY;const old3=process.env.TOGETHER_API_KEY;const oldGroq=process.env.GROQ_API_KEY;
+  try{delete process.env.GROQ_API_KEY;delete process.env.TOGETHER_API_KEY;process.env.GROQ_API_KEY_FILE=f;process.env.TogetherAIAPI_KEY='alias-secret';const reg=providerRegistry();assert.equal(reg.groq.apiKey,'file-secret');assert.match(reg.groq.credentialSource,/file:/);assert.equal(reg.together.apiKey,'alias-secret');}finally{if(old===undefined)delete process.env.GROQ_API_KEY_FILE;else process.env.GROQ_API_KEY_FILE=old;if(old2===undefined)delete process.env.TogetherAIAPI_KEY;else process.env.TogetherAIAPI_KEY=old2;if(old3===undefined)delete process.env.TOGETHER_API_KEY;else process.env.TOGETHER_API_KEY=old3;if(oldGroq===undefined)delete process.env.GROQ_API_KEY;else process.env.GROQ_API_KEY=oldGroq;}
 });
