@@ -1,12 +1,12 @@
 # Dataset de design verificado (acervo externo)
 
-Origem, licença e motivo da incorporação: `vendor/VENDOR.md`. Este arquivo é o **índice de uso** —
+Origem, licença e motivo da incorporação: `dados-design/VENDOR.md`. Este arquivo é o **índice de uso** —
 ele existe para que a skill saiba o que perguntar ao acervo em vez de improvisar estilo.
 
 ## O que é
 
 Base estruturada incorporada do pacote `ui-ux-pro-max` (licença ISC), copiada sem modificação para
-`vendor/ui-ux-pro-max-data/`. Cada linha tem número de registro; cada recomendação sua deve citar o
+`dados-design/ui-ux-pro-max-data/`. Cada linha tem número de registro; cada recomendação sua deve citar o
 número, pela mesma regra de evidência do resto do arsenal.
 
 | Arquivo | Registros | Para que serve |

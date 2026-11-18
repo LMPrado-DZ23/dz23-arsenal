@@ -7,7 +7,7 @@ e descreviam; nada de código ou dado alheio entrava no repositório. A varredur
 cobrança procedia: **11,8 MB de conhecimento verificável** em 667 arquivos `.md`/`.csv`/`.json`
 estavam parados na máquina, tratados como "marginais" sem que o custo de jogar fora fosse medido.
 
-- **`vendor/ui-ux-pro-max-data/`** — 39 arquivos, ~3 MB, licença ISC, cópia byte a byte dos dados
+- **`dados-design/ui-ux-pro-max-data/`** — 39 arquivos, ~3 MB, licença ISC, cópia byte a byte dos dados
   (scripts e testes da skill de origem ficaram fora): 89 estilos de interface com risco de
   acessibilidade por estilo, 192 perfis por tipo de produto com anti-padrão, 120 diretrizes de UX em
   formato fazer/evitar com severidade, 192 paletas, e catálogo de 1.934 famílias de fonte **com a
@@ -23,7 +23,7 @@ estavam parados na máquina, tratados como "marginais" sem que o custo de jogar 
 - **Licenças lidas antes de copiar**, no arquivo `LICENSE` e não no que o README alega: ECC MIT,
   ui-main MIT, modern-web-guidance Apache-2.0, open-code-review Apache-2.0, impeccable Apache-2.0,
   hallmark/diagram-design/design-system/banner-design MIT, ui-ux-pro-max ISC. Nada restritivo
-  encontrado. O que ficou de fora está justificado item por item em **`vendor/VENDOR.md`** --
+  encontrado. O que ficou de fora está justificado item por item em **`dados-design/VENDOR.md`** --
   inclusive por que incorporar 30 MB de componentes React de terceiro seria pior que usá-los por
   dependência.
 

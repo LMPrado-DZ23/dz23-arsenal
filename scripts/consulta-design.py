@@ -1,4 +1,4 @@
-"""consulta-design.py -- acessa o acervo de design incorporado em vendor/.
+"""consulta-design.py -- acessa o acervo de design incorporado em dados-design/.
 
 Por que existe: copiar 3 MB de CSV sem meio de consultar produz referencia morta -- foi exatamente a
 classe de defeito que a rodada 47 achou (guia correto, versionado e invisivel ao agente). Dado
@@ -32,8 +32,8 @@ DADOS = RAIZ / "vendor" / "ui-ux-pro-max-data"
 def _ler(nome: str) -> list[dict]:
     p = DADOS / nome
     if not p.is_file():
-        raise SystemExit(f"FALHA: {p.relative_to(RAIZ)} ausente. O acervo em vendor/ nao foi "
-                         f"instalado? Ver vendor/VENDOR.md.")
+        raise SystemExit(f"FALHA: {p.relative_to(RAIZ)} ausente. O acervo em dados-design/ nao foi "
+                         f"instalado? Ver dados-design/VENDOR.md.")
     with p.open(encoding="utf-8-sig", newline="") as fh:
         return list(csv.DictReader(fh))
 

@@ -1,6 +1,9 @@
 # Dependências de terceiros
 node_modules/
 bower_components/
+# `vendor/` e a pasta de codigo de terceiro INSTALADO (npm/pip), regeneravel do manifesto -- por isso
+# fica fora do versionamento. O acervo de dados incorporado sob licenca e conteudo do arsenal, nao
+# dependencia, entao mora fora de vendor/: ver dados-design/.
 vendor/
 
 # Python
