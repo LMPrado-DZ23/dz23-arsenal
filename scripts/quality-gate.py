@@ -164,6 +164,13 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("sbom:verifica", [py, "scripts/check-sbom.py"]))
     resultados.append(rodar("sbom:drift", [py, "scripts/gera-sbom.py", "--check"]))
     resultados.append(rodar("sbom:autoteste", [py, "scripts/check-sbom.py", "--selftest"]))
+    # Permissões por skill (mandato, regra 7). Toda skill que executa/altera/usa rede ou navegador
+    # declara permissões, riscos, entradas, saídas, dry-run, rollback e aprovação em
+    # security/permissoes.json. O verificador exige uma declaração por skill existente (sem skill
+    # sem declaração, sem declaração órfã); PERMISSIONS.md é gerado; autoteste é controle negativo.
+    resultados.append(rodar("permissoes:verifica", [py, "scripts/check-permissoes.py"]))
+    resultados.append(rodar("permissoes:indice", [py, "scripts/gera-permissoes.py", "--check"]))
+    resultados.append(rodar("permissoes:autoteste", [py, "scripts/check-permissoes.py", "--selftest"]))
     # Documento era a única superfície sem verificador de conteúdo: existência e link eram
     # conferidos, mas texto corrompido passava. Nesta sessão eu mesmo injetei duas vezes resíduo
     # de ferramenta num .md (caractere CJK no meio do português e uma expressão Python inteira no

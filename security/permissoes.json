@@ -1,0 +1,169 @@
+{
+  "descricao": "Declaração de permissões por skill (mandato, regra 7). Toda skill que executa comando, altera arquivo, usa navegador, acessa rede ou controla o computador declara aqui: permissões, riscos, entradas, saídas, dry-run, rollback e necessidade de aprovação. Fonte de verdade verificável; PERMISSIONS.md é gerado deste arquivo. Vocabulário de permissões fechado -- verificado no gate.",
+  "permissoes_validas": ["shell", "filesystem-read", "filesystem-write", "network", "browser", "database", "deploy", "computer-control", "none"],
+  "campos_obrigatorios": ["permissoes", "riscos", "entradas", "saidas", "dry_run", "rollback", "aprovacao"],
+  "skills": {
+    "dz23-autonomous-improvement-ultimate": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write"],
+      "riscos": "orquestra outras skills; pode disparar ações de qualquer uma delas (deploy, DB, rede)",
+      "entradas": "objetivo /goal, critério de aceite, estado/checkpoint",
+      "saidas": "mudanças de código, evidências, backlog, checkpoint retomável",
+      "dry_run": "plano antes de executar; não aplica mudança sem passar pelos quality-gates",
+      "rollback": "git revert do commit da iteração; checkpoint permite retomar estado anterior",
+      "aprovacao": "antes de qualquer ação destrutiva, deploy ou custo externo disparado por uma sub-skill"
+    },
+    "dz23-backend-data-architect": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write", "database", "network"],
+      "riscos": "projeta e pode rodar migrations; altera schema; acessa APIs",
+      "entradas": "requisitos de backend/dados, schema atual, contratos",
+      "saidas": "modelos, migrations, contratos OpenAPI, código de API",
+      "dry_run": "migration em banco local/efêmero; plano de schema antes de aplicar",
+      "rollback": "migration reversível (down); git revert do código",
+      "aprovacao": "OBRIGATÓRIA antes de migration em banco real/produção ou mudança de contrato público"
+    },
+    "dz23-codebase-cartographer": {
+      "permissoes": ["shell", "filesystem-read"],
+      "riscos": "baixo -- leitura e mapeamento; não altera código",
+      "entradas": "caminho do repositório a mapear",
+      "saidas": "mapa de dependências, tour de código, pontos de impacto (consulta)",
+      "dry_run": "n/a -- somente leitura por natureza",
+      "rollback": "n/a -- não escreve",
+      "aprovacao": "nenhuma (análise read-only)"
+    },
+    "dz23-devops-cloud-deployer": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write", "network", "deploy", "computer-control"],
+      "riscos": "ALTO -- build, deploy, infra cloud; pode afetar produção e gerar custo",
+      "entradas": "alvo de deploy, credenciais (do dono), estratégia",
+      "saidas": "artefatos de build, recursos de infra, deploy",
+      "dry_run": "terraform plan / --dry-run; build sem push; ambiente de staging primeiro",
+      "rollback": "rollback de deploy, destroy do recurso provisionado, git revert do IaC",
+      "aprovacao": "OBRIGATÓRIA antes de deploy, provisionamento com custo ou qualquer ação em produção"
+    },
+    "dz23-e2e-browser-verifier": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write", "browser", "network"],
+      "riscos": "medio -- dirige navegador real e pode submeter formulários no alvo",
+      "entradas": "URL-alvo ou fluxo a testar; credenciais de teste quando aplicável",
+      "saidas": "screenshots, vídeo, trace, relatório PASS/PARTIAL/FAIL/BLOCKED",
+      "dry_run": "rodar contra ambiente de teste/local; nunca contra produção sem aprovação",
+      "rollback": "n/a para o teste; dados de teste criados devem ser limpos",
+      "aprovacao": "antes de testar contra produção ou usar credenciais reais"
+    },
+    "dz23-performance-scalability-engine": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write", "network", "browser"],
+      "riscos": "medio -- teste de carga pode degradar um alvo compartilhado",
+      "entradas": "alvo a medir, budget de performance",
+      "saidas": "medições (Lighthouse/k6), relatório antes/depois, recomendações",
+      "dry_run": "medir em baixa concorrência primeiro; alvo local/staging",
+      "rollback": "n/a para medição; reverter otimizações por git revert",
+      "aprovacao": "antes de teste de carga contra alvo compartilhado ou de produção"
+    },
+    "dz23-postgres-prod-preflight": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write", "database"],
+      "riscos": "medio -- inspeciona banco; é advisory, mas habilita migrations de risco",
+      "entradas": "migration/alteração proposta, conexão de banco (preflight)",
+      "saidas": "veredito de segurança/lock, anti-padrões, checklist",
+      "dry_run": "preflight é read-only sobre o banco; não aplica a migration",
+      "rollback": "n/a -- não altera; a migration que habilita precisa de plano de rollback próprio",
+      "aprovacao": "a migration aprovada no preflight exige aprovação antes de rodar em produção"
+    },
+    "dz23-reverse-engineer-anything": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write", "computer-control"],
+      "riscos": "medio -- executa ferramentas de RE sobre binários; binário desconhecido só em sandbox",
+      "entradas": "binário/artefato autorizado a analisar",
+      "saidas": "pseudocódigo, mapa de chamadas, contrato de API reconstruído, evidência",
+      "dry_run": "análise estática antes de dinâmica; binário desconhecido em VM/container sem rede",
+      "rollback": "n/a -- não modifica o alvo; artefatos de análise são descartáveis",
+      "aprovacao": "exige autorização/escopo declarado (RE defensiva); recusa sem direito"
+    },
+    "dz23-spec-to-system-engine": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write"],
+      "riscos": "medio -- gera estrutura de sistema; pode sobrescrever arquivos",
+      "entradas": "especificação/requisitos",
+      "saidas": "scaffolding de sistema, ADRs, contratos, testes",
+      "dry_run": "plano de arquivos antes de gerar; não sobrescreve sem confirmar",
+      "rollback": "git revert do scaffolding gerado",
+      "aprovacao": "antes de sobrescrever arquivos existentes ou scaffolding destrutivo"
+    },
+    "dz23-ultimate-pro-max": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write", "browser"],
+      "riscos": "baixo-medio -- altera UI/frontend; usa navegador para QA visual",
+      "entradas": "requisito de interface, design de referência",
+      "saidas": "código de UI, screenshots de QA visual, relatório",
+      "dry_run": "preview local; screenshots antes de commitar",
+      "rollback": "git revert das mudanças de UI",
+      "aprovacao": "nenhuma para dev local; aprovação antes de publicar"
+    },
+    "prune-tests": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write"],
+      "riscos": "ALTO -- remove testes; adaptada para NUNCA remover sem baseline e aprovação",
+      "entradas": "suíte de testes, baseline de execução",
+      "saidas": "lista de candidatos a remoção com justificativa; remoção só após aprovação",
+      "dry_run": "lista os candidatos primeiro, sem apagar nada",
+      "rollback": "git revert da remoção; a suíte estava versionada",
+      "aprovacao": "OBRIGATÓRIA antes de remover qualquer teste; nunca remove para ficar verde"
+    },
+    "replica-brand": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write", "network"],
+      "riscos": "medio -- coleta identidade de marca da web; respeitar ToS e clean-room",
+      "entradas": "URL/produto de referência",
+      "saidas": "brand kit destilado (cores, tipografia, tom)",
+      "dry_run": "coletar sem reusar ativos protegidos; clean-room",
+      "rollback": "n/a -- produz artefato novo",
+      "aprovacao": "respeitar direitos; nunca clonar marca registrada nem usar nome do original"
+    },
+    "replica-diff": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write"],
+      "riscos": "baixo -- compara features/versões",
+      "entradas": "duas versões/produtos a comparar",
+      "saidas": "diff de features, lacunas",
+      "dry_run": "n/a -- análise",
+      "rollback": "n/a -- produz artefato novo",
+      "aprovacao": "nenhuma"
+    },
+    "replica-entrepreneur": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write"],
+      "riscos": "baixo -- análise de viabilidade/negócio",
+      "entradas": "ideia/produto de referência",
+      "saidas": "análise de oportunidade, plano",
+      "dry_run": "n/a -- análise",
+      "rollback": "n/a -- produz artefato novo",
+      "aprovacao": "nenhuma"
+    },
+    "replica-launch": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write"],
+      "riscos": "medio -- produz material de lançamento/listing",
+      "entradas": "produto a lançar, mercado-alvo",
+      "saidas": "listing, material de lançamento",
+      "dry_run": "gerar rascunho; não publicar",
+      "rollback": "n/a -- artefato novo",
+      "aprovacao": "antes de publicar; nunca usar o nome do original na loja (regra anti-FTC)"
+    },
+    "replica-recon": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write", "network"],
+      "riscos": "medio -- reconhecimento de produto via web/scraping",
+      "entradas": "alvo de recon (URL/produto)",
+      "saidas": "mapa de features, superfície do produto",
+      "dry_run": "coletar respeitando ToS; sem autenticar no alvo",
+      "rollback": "n/a -- produz artefato novo",
+      "aprovacao": "respeitar ToS/robots; autorização quando o alvo exigir"
+    },
+    "untangle-codebase": {
+      "permissoes": ["shell", "filesystem-read", "filesystem-write"],
+      "riscos": "ALTO -- reorganiza dependências de um codebase inteiro",
+      "entradas": "repositório a desembaraçar, baseline de testes",
+      "saidas": "diagnóstico estrutural, redesenho aplicado preservando comportamento",
+      "dry_run": "diagnóstico (mapa de 'muda junto?') antes de qualquer edição",
+      "rollback": "git revert; exige baseline verde antes e depois",
+      "aprovacao": "antes de aplicar o redesenho; preserva comportamento intencional"
+    },
+    "web-design-guidelines": {
+      "permissoes": ["filesystem-read"],
+      "riscos": "baixo -- acervo de regras consultável, read-only",
+      "entradas": "categoria/termo de consulta",
+      "saidas": "regras de design/acessibilidade/performance que casam a consulta",
+      "dry_run": "n/a -- somente leitura por natureza",
+      "rollback": "n/a -- não escreve",
+      "aprovacao": "nenhuma (consulta read-only)"
+    }
+  }
+}
