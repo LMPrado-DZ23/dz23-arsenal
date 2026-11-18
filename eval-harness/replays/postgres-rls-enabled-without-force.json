@@ -1,0 +1,20 @@
+{
+  "skill": "dz23-postgres-prod-preflight",
+  "eval_id": "rls-enabled-without-force",
+  "camada": "1-reproduzivel",
+  "provenance": {
+    "model": "claude-opus-4-8",
+    "environment": "windows-local + CI ubuntu/windows",
+    "timestamp": "2026-11-18",
+    "method": "replay deterministico de resposta registrada em evals-results/"
+  },
+  "fonte_resposta": "evals-results/postgres/2026-11-18-rls-enabled-without-force.md",
+  "response": "ENABLE ROW LEVEL SECURITY sem FORCE: relforcerowsecurity=f e o dono (nao-superuser) ve count=2 -- vaza. Com FORCE ROW LEVEL SECURITY: relforcerowsecurity=t e o dono ve count=0. Achado: a role postgres tem rolbypassrls=t, e com ela o count permanece 2 mesmo apos FORCE. Receita completa: FORCE na tabela, role de runtime sem BYPASSRLS e sem ser dona, e teste de contorno executado.",
+  "response_negativo": "Habilitei ROW LEVEL SECURITY na tabela, entao ela esta fechada e os tenants estao isolados.",
+  "grader": {
+    "contains": ["FORCE ROW LEVEL SECURITY", "BYPASSRLS"],
+    "not_contains": [],
+    "regex": []
+  },
+  "expected_verdict": "PASS"
+}

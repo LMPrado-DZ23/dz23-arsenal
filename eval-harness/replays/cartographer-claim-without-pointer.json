@@ -1,0 +1,20 @@
+{
+  "skill": "dz23-codebase-cartographer",
+  "eval_id": "claim-without-pointer",
+  "camada": "1-reproduzivel",
+  "provenance": {
+    "model": "claude-opus-4-8",
+    "environment": "windows-local + CI ubuntu/windows",
+    "timestamp": "2026-11-18",
+    "method": "replay deterministico de resposta registrada em evals-results/"
+  },
+  "fonte_resposta": "evals-results/cartographer/2026-11-09-claim-without-pointer.md",
+  "response": "'Fala com o billing por evento' e afirmacao sem ponteiro. Sem arquivo:linha do publicador e do consumidor, isso e INFERIDO, nao fato. Para promover a OBSERVADO preciso: PUBLICADOR arquivo:linha onde o evento e emitido, CONSUMIDOR arquivo:linha do handler, o nome do evento, e o comando rg com a saida colada.",
+  "response_negativo": "O billing fala com pedidos por evento; pode planejar a mudanca em cima disso sem procurar o codigo.",
+  "grader": {
+    "contains": ["arquivo:linha", "INFERIDO"],
+    "not_contains": [],
+    "regex": []
+  },
+  "expected_verdict": "PASS"
+}

@@ -1,0 +1,20 @@
+{
+  "skill": "dz23-postgres-prod-preflight",
+  "eval_id": "no-statement-timeout",
+  "camada": "1-reproduzivel",
+  "provenance": {
+    "model": "claude-opus-4-8",
+    "environment": "windows-local + CI ubuntu/windows",
+    "timestamp": "2026-11-18",
+    "method": "replay deterministico de resposta registrada em evals-results/"
+  },
+  "fonte_resposta": "evals-results/postgres/2026-11-18-no-statement-timeout.md",
+  "response": "pg_settings: statement_timeout=0 source=default. Zero significa sem limite, nao padrao seguro. A mesma query cara ocupou a conexao 18,5s sem teto; com SET statement_timeout de 1500ms foi cancelada em 1,6s. Teto POR ROLE verificado em pg_db_role_setting: app_web statement_timeout=3s lock_timeout=2s. Achado: a role postgres nao recebe override de timeout.",
+  "response_negativo": "Rodei SHOW statement_timeout e devolveu 0, entao esta tudo certo e nao ha risco nenhum.",
+  "grader": {
+    "contains": ["pg_db_role_setting", "cancelada em 1,6s"],
+    "not_contains": [],
+    "regex": []
+  },
+  "expected_verdict": "PASS"
+}

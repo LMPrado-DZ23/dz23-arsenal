@@ -17,7 +17,7 @@ autoavaliação). Este harness os torna **reproduzíveis** — adaptando o padr�
 
 | Camada | O que é | Estado neste repo |
 |---|---|---|
-| `1-reproduzivel` | autoavaliação do autor, agora **re-graduável por grader determinístico** | **3 evals** (este harness) |
+| `1-reproduzivel` | autoavaliação do autor, agora **re-graduável por grader determinístico** | **8 evals** em 6 skills (este harness) |
 | `2-adversarial` | releitura adversarial pelo mesmo autor | parcial (alguns registros) |
 | `3-independente` | **juiz externo** (outro modelo/pessoa), conjunto de casos separado, evidência reproduzível | **NOT_TESTED** — fora do alcance desta sessão |
 | `4-uso-real` | uso em projeto de terceiro, resultado observado | **NOT_TESTED** |
@@ -31,7 +31,8 @@ contrário seria o "carimbo" que o verificador reprova.
 Cada `replays/*.json` traz: `skill`, `eval_id`, `camada`, `provenance` (model, environment,
 timestamp, method), `fonte_resposta` (o `.md` real em `evals-results/`), `response` (trecho real,
 → `expected_verdict`), `response_negativo` (resposta ruim sintética, → `FAIL`) e `grader`
-(`contains`/`not_contains`/`regex`). As 3 atuais são ancoradas em respostas **reais** registradas.
+(`contains`/`not_contains`/`regex`). As 8 atuais são ancoradas em respostas **reais** registradas
+(autonomous, backend, devops, postgres, reverse, cartographer).
 
 ## Verificação no gate
 
