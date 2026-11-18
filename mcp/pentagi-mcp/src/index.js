@@ -131,8 +131,8 @@ server.tool(
   async ({ flowId }) => {
     try {
       const d = await gql(
-        `query($id: ID) { flow(flowId: $id) { id title status provider { name } createdAt updatedAt
-           tasks { id title status } } }`,
+        `query($id: ID) { flow(flowId: $id) { id title status provider { name } createdAt updatedAt }
+           tasks(flowId: $id) { id title status result } }`,
         { id: flowId },
       )
       if (!d.flow) return texto({ flowId, encontrado: false })
@@ -153,7 +153,7 @@ server.tool(
   async ({ input, provider }) => {
     try {
       const d = await gql(
-        `mutation($input: String, $provider: String) { createFlow(input: $input, modelProvider: $provider) {
+        `mutation($input: String!, $provider: String!) { createFlow(input: $input, modelProvider: $provider) {
            id title status provider createdAt } }`,
         { input, provider },
       )
@@ -170,7 +170,7 @@ server.tool(
   { flowId: z.string() },
   async ({ flowId }) => {
     try {
-      return texto(await gql('mutation($id: ID) { stopFlow(flowId: $id) { message } }', { id: flowId }))
+      return texto(await gql('mutation($id: ID) { stopFlow(flowId: $id) }', { id: flowId }))
     } catch (e) {
       return falha(e)
     }
@@ -183,7 +183,7 @@ server.tool(
   { flowId: z.string() },
   async ({ flowId }) => {
     try {
-      return texto(await gql('mutation($id: ID) { finishFlow(flowId: $id) { message } }', { id: flowId }))
+      return texto(await gql('mutation($id: ID) { finishFlow(flowId: $id) }', { id: flowId }))
     } catch (e) {
       return falha(e)
     }
@@ -197,7 +197,7 @@ server.tool(
   async ({ flowId, input, provider }) => {
     try {
       const d = await gql(
-        'mutation($id: ID, $input: String, $p: String) { putUserInput(flowId: $id, input: $input, modelProvider: $p) { message } }',
+        'mutation($id: ID, $input: String, $p: String) { putUserInput(flowId: $id, input: $input, modelProvider: $p) }',
         { id: flowId, input, p: provider },
       )
       return texto(d.putUserInput)
@@ -213,7 +213,7 @@ server.tool(
   { flowId: z.string(), confirm: z.literal(true).describe('true para confirmar a exclusão') },
   async ({ flowId }) => {
     try {
-      return texto(await gql('mutation($id: ID) { deleteFlow(flowId: $id) { message } }', { id: flowId }))
+      return texto(await gql('mutation($id: ID) { deleteFlow(flowId: $id) }', { id: flowId }))
     } catch (e) {
       return falha(e)
     }
