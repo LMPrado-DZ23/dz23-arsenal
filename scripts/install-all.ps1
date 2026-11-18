@@ -75,6 +75,7 @@ Get-ChildItem -Path $skillsRoot -Directory | Sort-Object Name | ForEach-Object {
             Remove-Item $alvo -Recurse -Force
         }
         Copy-Item -Path $_.FullName -Destination $alvo -Recurse -Force
+
         Write-Host "OK: $nome v$versao" -ForegroundColor Green
         $instaladas++
     } catch {

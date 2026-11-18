@@ -40,17 +40,41 @@ def localizar_arsenal(comeco: Path) -> Path | None:
     return None
 
 
-def importar_validador_comum(aqui: Path):
-    """Devolve a função validar_comum, ou None se o arsenal não estiver acessível."""
-    import sys
-    arsenal = localizar_arsenal(aqui)
-    if arsenal is None:
+def _carregar(caminho: Path):
+    """Importa validar_comum de um arquivo específico, sem mexer em sys.path."""
+    import importlib.util
+    if not caminho.is_file():
         return None
-    pasta = str(arsenal / "scripts")
-    if pasta not in sys.path:
-        sys.path.insert(0, pasta)
     try:
-        from skill_validator import validar_comum  # type: ignore
-    except ImportError:
+        espec = importlib.util.spec_from_file_location("_skill_validator_local", caminho)
+        if not espec or not espec.loader:
+            return None
+        mod = importlib.util.module_from_spec(espec)
+        espec.loader.exec_module(mod)
+    except Exception:  # noqa: BLE001 — validador quebrado não deve derrubar a skill
         return None
-    return validar_comum
+    fn = getattr(mod, "validar_comum", None)
+    return fn if callable(fn) else None
+
+
+def importar_validador_comum(aqui: Path):
+    """Devolve a função validar_comum, ou None se não for localizável.
+
+    Ordem importa. Primeiro uma cópia ao lado deste arquivo: o install-all leva
+    skill_validator.py para dentro de cada skill, para que a instalação se auto-sustente.
+    Sem isso, movido o checkout, as checagens comuns eram puladas e o validate_skill.py
+    ainda devolvia exit 0 com um WARN que ninguém lê — veredito inflado, não degradação
+    visível (confirmado por teste nesta sessão). Depois vem o repo, fonte canônica quando
+    existe e que pode ter mudado sem reinstalar a skill.
+    """
+    aqui = Path(aqui)
+    pasta_local = aqui.parent if aqui.is_file() else aqui
+
+    fn = _carregar(pasta_local / "skill_validator.py")
+    if fn is not None:
+        return fn
+
+    arsenal = localizar_arsenal(aqui)
+    if arsenal is not None:
+        return _carregar(arsenal / "scripts" / "skill_validator.py")
+    return None
