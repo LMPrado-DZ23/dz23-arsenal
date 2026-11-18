@@ -18,7 +18,7 @@
 | [dz23-postgres-prod-preflight](skills/dz23-postgres-prod-preflight/) | 1.1.2 | 16 | 5 | 2 | 4 | 13 |
 | [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.1.4 | 27 | 12 | 4 | 5 | 15 |
 | [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.2.1 | 46 | 17 | 11 | 5 | 15 |
-| [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.4 | 18 | 9 | 0 | 3 | 13 |
+| [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.5 | 19 | 10 | 0 | 3 | 13 |
 
 ## MCP e bundles
 

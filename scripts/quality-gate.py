@@ -150,6 +150,18 @@ def main(argv: list[str]) -> int:
     # enquanto as cópias baterem com a fonte.
     resultados.append(rodar("copias", [py, "scripts/check-copies.py"]))
     resultados.append(rodar("licencas", [py, "scripts/check-licenses.py"]))
+    # Documento era a única superfície sem verificador de conteúdo: existência e link eram
+    # conferidos, mas texto corrompido passava. Nesta sessão eu mesmo injetei duas vezes resíduo
+    # de ferramenta num .md (caractere CJK no meio do português e uma expressão Python inteira no
+    # CHANGELOG) e cinco verificadores diferentes deram verde com o artefato plantado.
+    resultados.append(rodar("docs-higiene", [py, "scripts/check-doc-hygiene.py"]))
+    # Acervo de design incorporado em vendor/ so vale se for consultavel: dado sem meio de acesso
+    # vira referencia morta, a classe que a rodada 47 achou. A prova cobre os dois lados -- resolve
+    # em portugues e recusa chutar quando nao ha correspondencia.
+    resultados.append(rodar("design:consulta", [py, "scripts/consulta-design.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-design",
+                            [py, "scripts/prova-consulta-design.py"]))
+    resultados.append(rodar("gate:autoteste-higiene", [py, "scripts/prova-higiene-doc.py"]))
     # Repositório PÚBLICO, e até esta rodada nenhum verificador abria um arquivo em busca de
     # credencial: colar um token GitHub válido em `.env.example` dava gate 46/46 verde. Os quatro
     # scripts que mencionam "segredo" no fonte falam de outra coisa (scan descrito em prosa, design

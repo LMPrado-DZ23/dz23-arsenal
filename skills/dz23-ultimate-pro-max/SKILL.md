@@ -1,6 +1,6 @@
 ---
 name: dz23-ultimate-pro-max
-version: 2.2.4
+version: 2.2.5
 description: Skill de direção de arte premium, UX, frontend, arquitetura de interface, segurança, acessibilidade, performance, QA visual e entrega verificável para sites, SaaS, CRM, ERP, B-3PO, desktop e mobile. Ative ao criar, revisar, redesenhar ou implementar interfaces, fluxos e design systems.
 user-invocable: true
 argument-hint: "<página/rota, 'audit <path>' ou 'redesign <path>'>"
@@ -61,6 +61,7 @@ Leia `references/b3po-workspaces.md`. Os seis modos (Engenharia, Empresa, Automa
 - QA, segurança, acessibilidade, performance: `references/qa-and-evidence.md` e `references/quality-gates.md`
 - Instalação no DeepSeek: `references/installation.md`
 - Base anterior preservada: `references/legacy-v1.md`
+- **Dados de design verificados (acervo externo, licença ISC):** `references/dataset-design.md` — 89 estilos, 192 perfis por tipo de produto, 120 diretrizes de UX com fazer/evitar e catálogo de fontes com licença. Consulte `python scripts/consulta-design.py listar` antes de propor estilo, paleta ou fonte; não opine sobre o que o acervo sabe medir.
 
 O módulo **5. ARQUITETURA DE INTERATIVIDADE ENTERPRISE, MÍDIA RICA E MOTION DESIGN** é obrigatório em
 landing page, site institucional e página de produto. Antes de implementar, leia

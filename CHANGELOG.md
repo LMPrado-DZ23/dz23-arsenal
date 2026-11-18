@@ -1,3 +1,84 @@
+## [1.5.30] — 2026-11-18
+
+### Incorporado (mudança de política: destilar → incorporar)
+Cobrança do dono: *"vc deveria copiar pq as skills que montam a UI designer tinham muitas
+referências... a ideia é pegar o que cada um pode servir e unificar"*. As rodadas anteriores triavam
+e descreviam; nada de código ou dado alheio entrava no repositório. A varredura mostrou por que a
+cobrança procedia: **11,8 MB de conhecimento verificável** em 667 arquivos `.md`/`.csv`/`.json`
+estavam parados na máquina, tratados como "marginais" sem que o custo de jogar fora fosse medido.
+
+- **`vendor/ui-ux-pro-max-data/`** — 39 arquivos, ~3 MB, licença ISC, cópia byte a byte dos dados
+  (scripts e testes da skill de origem ficaram fora): 89 estilos de interface com risco de
+  acessibilidade por estilo, 192 perfis por tipo de produto com anti-padrão, 120 diretrizes de UX em
+  formato fazer/evitar com severidade, 192 paletas, e catálogo de 1.934 famílias de fonte **com a
+  licença de cada uma**. Os dados carregam proveniência própria (`data-provenance.json`) laçando W3C
+  e GoogleChrome.
+- **`scripts/consulta-design.py`** — acesso ao acervo. Dado sem meio de consulta vira referência
+  morta, exatamente a classe que a rodada 47 achou. Resolve em português (`estilo vidro`, `produto
+  finanças`, `ux acessibilidade`) via mapa fechado de sinônimos, e responde "sem correspondência"
+  quando não há -- nunca aproxima.
+- **`skills/dz23-ultimate-pro-max/references/dataset-design.md`** + linha no índice de referências:
+  diz *quando* consultar no método operacional (passo 3, direção visual), para que o acervo mude
+  comportamento e não só ocupe disco. Skill 2.2.4 → 2.2.5.
+- **Licenças lidas antes de copiar**, no arquivo `LICENSE` e não no que o README alega: ECC MIT,
+  ui-main MIT, modern-web-guidance Apache-2.0, open-code-review Apache-2.0, impeccable Apache-2.0,
+  hallmark/diagram-design/design-system/banner-design MIT, ui-ux-pro-max ISC. Nada restritivo
+  encontrado. O que ficou de fora está justificado item por item em **`vendor/VENDOR.md`** --
+  inclusive por que incorporar 30 MB de componentes React de terceiro seria pior que usá-los por
+  dependência.
+
+### Corrigido
+- Dois falsos positivos meus no `consulta-design.py`, ambos achados por prova e não por inspeção:
+  escore de substring solta fazia `ux formulario` responder com "Animation :: Duration **Timing**"
+  (porque "for" vive dentro de "performance"), e o fallback de plural amplificava o efeito. Removida
+  a categoria de match -- casar por palavra inteira resolve o caso legítimo e elimina o engano. Um
+  acervo que responde a pergunta certa com a linha errada é pior que um acervo ausente, porque o
+  agente passa a confiar. Prova com 11 casos (8 legítimos + 3 controles negativos) em `gate`.
+- Três defeitos na minha própria prova de lacuna: ela ancorava `RAIZ` no diretório errado (exit 2 em
+  tudo), copiava só uma lista de pastas deixando `CODE_OF_CONDUCT.md` de fora -- o que quebrava
+  `check-links` e `.git`, que quebrou `repo_inventory` -- e então declarava "baseline vermelho". Uma
+  prova cujo baseline falha não mede nada; corrigida para copiar o checkout inteiro.
+
+### Registrado
+- **Dívida 14**: discriminância semântica de eval não é verificável mecanicamente -- fecha-se
+  executando os 97 pendentes, não com mais heurística.
+- **Dívida 15**: nenhum check exige bump de versão quando o conteúdo de uma skill muda. Medido em
+  cópia de baseline verde: linha nova no `SKILL.md`, `VERSION` intacto, gate verde. O único
+  reclamante compara hash e silencia ao reinstalar. Não é hipótese -- aconteceu nesta sessão com a
+  `ultimate-pro-max`, cuja versão eu teria deixado para trás se não tivesse olhado a saída do
+  `install-all`.
+
+Gate 47 → 51 checks (higiene de documento + autoteste, consulta de design + autoteste). CI 31 passos.
+
+## [1.5.29] — 2026-11-18
+
+### Executado
+- **Segundo eval de `dz23-postgres-prod-preflight` contra banco vivo**: ``no-statement-timeout``,
+  registrado como PASS em ``evals-results/postgres/2026-11-18-no-statement-timeout.md``. Cobertura da
+  skill: 0 → 2 de 13; arsenal: 45 → 47 de 144 (97 pendentes). Evidência obtida por comando, com
+  medição de tempo real -- não leitura de docstring:
+
+  | Medição | Resultado |
+  |---|---|
+  | ``pg_settings`` global | statement_timeout / idle_in_transaction / lock_timeout = 0, source=default |
+  | consulta cara sem teto | **18,5 s** ocupando a conexão |
+  | mesma consulta com ``statement_timeout='1500'`` | cancelada em **1,6 s** |
+  | role ``app_web`` com 3s/10s/2s | cortada aos **3,2 s**; os três ``SHOW`` confirmam herança |
+  | role ``batch_job`` com 30min | job longo existe separado, como o expected exige |
+
+  Dois achados que o cenário não cobre, registrados como defeito do próprio eval em ``--defects``:
+  **(a)** as roles de API deste Supabase **já** têm teto configurado pela plataforma (anon 3s,
+  authenticated 8s, service_role 15s, lock_timeout 5s), enquanto a role ``postgres`` -- a que roda
+  migration e consolo, onde se executa DDL e query manual -- não tem override nenhum. Quem conferir
+  só o default do cluster (que lê 0) conclui o contrário de quem conferir role por role. O risco
+  crítico aqui é administrativo, não de aplicação. **(b)** o lugar correto para verificar é
+  ``pg_db_role_setting``; ``pg_roles.roloptions`` não existe nesta versão, e consultá-lo produz erro
+  em vez de evidência.
+
+### Corrigido
+- Contagens de pendência no ROADMAP sincronizadas com o estado real (duas células), e a dívida 1
+  atualizada para 97.
+
 ## [1.5.28] — 2026-11-18
 
 ### Executado

@@ -1,5 +1,11 @@
 # Changelog — dz23-ultimate-pro-max
 
+## [2.2.5] — 2026-11-18
+
+### Adicionado
+- Indice de uso do acervo de design verificado incorporado em `vendor/ui-ux-pro-max-data/` (licenca ISC): `references/dataset-design.md`, com os comandos de `scripts/consulta-design.py`. 89 estilos, 192 perfis por tipo de produto, 120 diretrizes de UX com fazer/evitar e catalogo de 1.934 familias de fonte com a licenca de cada uma.
+- Motivo: a skill orientava direcao visual por criterio proprio enquanto havia dado verificavel sobre o assunto parado na maquina. Agora o passo 3 consulta antes de propor, e `styles.csv` traz risco de acessibilidade por estilo -- informacao que antes so aparecia no QA.
+
 ## [2.2.4] — 2026-11-17
 
 ### Corrigido

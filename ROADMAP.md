@@ -74,7 +74,7 @@ Fonte: `python scripts/run-evals.py --report` · estado de auditoria: `--audit` 
 | **A — reasoning-only** | 56 | 45 | executável sem infra (inclui 13 do pré-flight de banco) |
 | **B — exige infra** | 40 | 0 | `BLOCKED` por Docker/Postgres/Ghidra/browser/hardware |
 | **Novos (v1.4.5)** | 3 | 0 | OB-03/04/05 — nasceram depois da classificação |
-| **Total pendente** | **98** | — | de 144 declarados |
+| **Total pendente** | **97** | — | de 144 declarados |
 
 ### Cobertura
 
@@ -147,7 +147,7 @@ nenhum eval).
 
 | # | Dívida | Impacto | Esforço |
 |---|---|---|---|
-| 1 | Evals não executados (98 de 144 cenários) | alto — comportamento não comprovado | alto |
+| 1 | Evals não executados (97 de 144 cenários) | alto — comportamento não comprovado | alto |
 | 2 | `install-all.sh` nunca rodou em Linux/macOS | médio — caminho Linux não exercitado | baixo |
 | 3 | **CI** — resolvido: rodando desde 2026-11-09 (2 runs verdes). Verificar: `gh run list --limit 5` | — | — |
 | 4 | **Parcialmente resolvido (2026-11-17):** o `bundle/` passou a rodar no gate e no CI -- `check_consistency.py`, `check_sizes.py` e um `build.py --check` que compara `agents/` com as fontes (o flag antigo só media limites de bytes). Continua aberto o `mcp/`: os testes existem (`npm run test:gate`, 293 casos, cobertura 95.4% acima do budget 90/75/80) e foram executados nesta sessão, mas **nenhum passo do `quality.yml` invoca npm** -- verificado por inspeção do workflow. | médio | médio |
@@ -163,6 +163,7 @@ nenhum eval).
 | 12 | MCP e bundle seguem com defeitos funcionais próprios, medidos nesta varredura: `mission_status` e `mission_status_job` apontam para a mesma função; jobs vivem em `Map` in-process cortado em 200 sem nenhuma tool de listagem; badge npm aponta para pacote que devolve 404; pentagi-mcp tem duas cópias divergentes e a registrada no DSH é a que **não** está versionada aqui. | alto | médio |
 | 13 | **`.dsh-tmp-a33.txt` na raiz**: 20 blocos de caso de eval com nome de arquivo temporário, commitados na Rodada 3, e **nenhum script do arsenal lê esse caminho**. Conferido por cruzamento: os 20 ids já existem nos `evals.json` das skills, então não há dado perdido — mas o arquivo é um segundo lugar onde esses casos vivem, sem consumidor, e vai apodrecer em silêncio. Renomear para algo explícito (`docs/` ou `external/`) ou apagar depois de confirmar que ninguém depende; enquanto existir sem leitor, alguém vai achar que é fonte. | baixo | baixo |
 | 14 | **Discriminância semântica dos evals não é verificável mecanicamente** (medido na rodada 55). Uma lente determinística acusou 102 dos 144 casos como "não discriminantes" usando padrão de negação (`não\|nunca\|evite\|rejeita`) -- errado por construção: `fails_if` deste arsenal descreve a **ação errada** em frase afirmativa ("Aceita o retry como nova cobrança", "Omite a lacuna"), com 46 verbos diferentes abrindo esses campos. Corrigida para afirmar só o que consegue ver (igualdade literal, input idêntico, expected duplicado), a lente ainda falhou no controle negativo: "Recusa X" × "Promete X" divide quase todo o vocabulário e é o padrão de um eval *bem* escrito -- contraste lexical entre os lados é esperado, não defeito. O único achado restante (input de 24 caracteres em `ultimate-pro-max/estados-vazio-erro`) é intencional: simula pedido vago, exatamente o que a skill deve tratar. Forma e cobertura já são conferidas por `run-evals.py --check` (144 casos, 0 erros, 4 avisos). Se um cenário separa boa de má resposta exige julgar português, logo executar o eval: fecha-se essa dívida registrando resultado, não acrescentando heurística. | médio | alto |
+| 15 | **Nada exige bump de versão quando o conteúdo de uma skill muda** (medido na rodada 58). Copia fiel do checkout dá baseline verde; adiciona-se uma linha ao `SKILL.md` de uma skill sem tocar em `VERSION` nem no changelog; regenera-se manifesto e índice; o gate continua verde. O único check que reclama (`instalacao:conteudo`) compara **hash**, não número -- e silencia assim que se reinstala. Consequência: `CHANGELOG.md` deixa de ser histórico confiável, justamente o documento cuja coerência de versão (frontmatter == VERSION == topo do changelog) a rodada 38 passou a verificar. Não é hipótese: aconteceu nesta sessão com `dz23-ultimate-pro-max`, que ganhou referência nova, rodou o gate inteiro e permaneceu na versão antiga até eu notar pelo `install-all`. Fechar exige comparar conteúdo da skill contra a última versão commitada e exigir incremento de `VERSION` mais entrada de changelog -- com exceção explícita para mudança que não altere instrução, senão o gate vira atrito e alguém acaba desligando-o. | médio | médio |
 
 ## Não objetivos (para não prometer o que não vamos fazer)
 

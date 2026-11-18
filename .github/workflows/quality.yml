@@ -167,6 +167,11 @@ jobs:
       - name: Números da documentação batem com o disco
         run: python scripts/check-numbers.py
 
+      - name: Documentos sem residuo de ferramenta
+        # Existencia e link ja eram conferidos; conteudo nao. Nesta sessao resíduo de edicao
+        # passou verde por cinco verificadores diferentes.
+        run: python scripts/check-doc-hygiene.py
+
       - name: Nenhuma credencial em conteudo versionado
         # O repositorio e publico. Ate a rodada 53 nada abria um arquivo procurando token: colar
         # ghp_... em .env.example dava gate verde. Padrao de emissor real com excecao para
