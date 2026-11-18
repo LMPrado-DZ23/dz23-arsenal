@@ -60,6 +60,10 @@ jobs:
         # `[ -f "$v" ] || continue`, que pulava em silêncio. Agora se exige um por skill.
         run: |
           falhou=0
+          # Sem interpretador, todo validador "falha" e a mensagem aponta para as skills.
+          # Isso aconteceu em teste local (Git-bash sem python no PATH): dez FALHOU falsos.
+          # Falhar aqui diz a verdade — o problema é o ambiente, não a skill.
+          command -v python >/dev/null 2>&1 || { echo "::error::python indisponível no PATH"; exit 1; }
           for d in skills/*/; do
             v="${d}scripts/validate_skill.py"
             if [ ! -f "$v" ]; then
@@ -67,8 +71,10 @@ jobs:
               falhou=1
               continue
             fi
-            echo "== $v"
-            python "$v" || falhou=1
+            if ! python "$v"; then
+              echo "::error::validador rejeitou $v"
+              falhou=1
+            fi
           done
           exit $falhou
 

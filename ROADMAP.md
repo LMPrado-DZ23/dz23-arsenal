@@ -173,3 +173,23 @@ nenhum eval).
 
 Quando algo passar de `NOT_TESTED` para `PASS`, este arquivo muda **com o comando e a saída** que provaram.
 Enquanto isso, `NOT_TESTED` fica escrito — inclusive aqui.
+
+
+### Verificação em ambiente limpo (rodadas 9--10)
+
+Duas rodadas de verificação exercitaram o que os checks do repo não alcançam: um clone
+virgem e o corpo do CI como shell. Resultado material:
+
+- Clone novo com `core.autocrlf=false` nasce com `git status` limpo e roda 32/32 sem nada
+  instalado -- a renormalização da v1.5.0 segurou fora desta máquina.
+- `audit-zips.py` comparava SHA de bytes crus entre duas árvores montadas por mecanismos
+  diferentes, e num clone assim acusava 2 arquivos idênticos como divergentes. Corrigido: texto
+  conhecido é hasheado com CRLF colapsado, binários seguem byte a byte. Provas com `--dest`
+  numa cópia isolada: só-EOL -> EM_DIA; conteúdo alterado -> DIVERGENTE; arquivo extra ->
+  DIVERGENTE.
+- Os 15 passos `run:` do `quality.yml` foram materializados num bash e passaram em
+  `bash -n`. Executados de fato, revelaram fragilidade: sem `python` no PATH, o passo
+  "Validador de cada skill" produzia dez `FALHOU` apontando para as skills, quando o problema
+  era o interpretador ausente. Agora o passo verifica `command -v python` antes e diz a
+  verdade. No runner isto não ocorre (`setup-python`), mas um passo que mente sobre a causa
+  de uma falha custa mais tempo do que economiza.
