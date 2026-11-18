@@ -1,3 +1,23 @@
+## [1.5.23] — 2026-11-18
+
+### Corrigido -- `build-manifest` gravava hash dependente do checkout
+O CI real (run 44248537821) falhou em 'Manifesto atualizado' enquanto o gate local dava 46/46
+minutos antes. `sha256()` lia bytes crus de `SKILL.md`, entao o manifesto commitado registrava o
+hash do disco de quem gerou. Meu working tree tinha CRLF em 15 arquivos versionados -- os blobs estao
+LF (confirmado objeto por objeto), mas `core.autocrlf=false` nao converte ao materializar, e
+ferramentas Windows escrevem CRLF sem que o git reclame: `git status` limpo, nada denuncia. Um clone
+limpo materializa LF, produz hash diferente e declara o manifesto desatualizado para sempre. O check
+era verde ou vermelho conforme **quem clonou**, nao conforme o conteudo do repositorio.
+
+Corrigido normalizando `\r\n` -> `\n` antes de hashear texto; binarios continuam byte a byte,
+onde CRLF seria dado real. Mesma disciplina de `audit-zips`, `check-copies` e `build.py --check`.
+O passo de CRLF do CI nao pegou isto porque compara blobs com `--cached` -- e os blobs estavam
+certos; o defeito era derivar identidade de bytes do disco.
+
+Prova da correcao: clone novo com 371 arquivos convertidos para CRLF no disco -> `--check` passa.
+Com a funcao antiga, as dez skills divergiriam (0 bateram, 10 divergiram). Working tree tambem
+normalizado para LF, alinhando disco e blob.
+
 # Changelog — dz23-arsenal
 
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
