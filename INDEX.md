@@ -40,12 +40,12 @@
 
 | Skill | Autor | Repositório |
 |---|---|---|
-| [absorcao-2026-11-17](external/absorcao-2026-11-17.md) | — | — |
 | [anthropic-skills](external/anthropic-skills.md) | Anthropic | https://github.com/anthropics/skills |
 | [astryx](external/astryx.md) | — | — |
 | [caldoai-skills](external/caldoai-skills.md) | caldoai | https://github.com/caldoai/skills |
 | [cloudflare-security-audit](external/cloudflare-security-audit.md) | Cloudflare | https://github.com/cloudflare/security-audit-skill |
 | [modern-web-guidance](external/modern-web-guidance.md) | — | — |
+| [openbot](external/openbot.md) | nightly-labs | https://github.com/nightly-labs/openbot |
 | [pentagi](external/pentagi.md) | — | — |
 | [phone-agent-harness](external/phone-agent-harness.md) | — | — |
 | [playwright-mcp](external/playwright-mcp.md) | Microsoft | https://github.com/microsoft/playwright-mcp |

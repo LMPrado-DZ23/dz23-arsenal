@@ -65,7 +65,7 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 | [`pentagi-mcp`](mcp/pentagi-mcp/) | 1.0.0 | 8 ferramentas MCP sobre a API do PentAGI (pentest autônomo) |
 
 
-## Skills e plataformas externas (14)
+## Skills e plataformas externas (16)
 
 | Skill | Autor | Para quê | Repo |
 |---|---|---|---|
@@ -82,6 +82,9 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 | [Modern Web Guidance](external/modern-web-guidance.md) | Chrome/Edge/Firefox/MDN | Guias de plataforma web moderna | [link](https://github.com/GoogleChrome/modern-web-guidance) |
 | [Astryx](external/astryx.md) | Meta | Design system React 19 com CLI para agentes | [link](https://github.com/facebookincubator/astryx) |
 | [phone-agent-harness](external/phone-agent-harness.md) | comunidade | Agente que liga e atende telefone | — |
+| [Skills CLI](external/skills-cli.md) | vercel-labs | Instalador de skills para ~70 harnesses (`skills add/check/update`) | [link](https://github.com/vercel-labs/skills) |
+| [Caldo Skills](external/caldoai-skills.md) | caldoai | Poda de testes sem valor + desemaranhado de codebase | [link](https://github.com/caldoai/skills) |
+| [OpenBot](external/openbot.md) | nightly-labs | Workspace desktop com agentes persistentes, fila e browser | [link](https://github.com/nightly-labs/openbot) |
 
 Cada linha linka para `external/<nome>.md` com instruções completas de instalação e uso.
 
@@ -160,8 +163,8 @@ externas** documentadas. **O que está publicado é diferente do que está verif
 | **Laudo original da auditoria** | **`INVALIDO_COMO_EVIDENCIA`** — 54 de 68 citações não existem nas respostas |
 | Críticos executados | **32 de 45 identificados (71%)** — 13 exigem infra |
 | Camada 4 (projeto real) | **1 tarefa** no próprio repo — CI verde após **5 iterações** de correção |
-| CI | ✅ verde · **16/16** no gate |
-| Release | **v1.4.9** com 18 assets |
+| CI | ✅ verde · **17/17** no gate |
+| Release | **v1.6.1** publicada · este changelog vai até a **1.6.6** (1.6.2–1.6.5 têm entrada, sem release) |
 
 ### 5 camadas de verificação
 

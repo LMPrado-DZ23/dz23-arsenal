@@ -75,8 +75,12 @@ def _conta_disco() -> dict:
         if isinstance(cases, list):
             declarados += len([c for c in cases if isinstance(c, dict)])
 
+    # Notas de processo (external/absorcao-*.md) documentam uma triagem, não uma fonte externa:
+    # não entram na contagem de referências, igual ao que build-manifest.py já faz. Sem esta
+    # exclusão o README seria obrigado a anunciar uma "referência externa" que não existe.
     external = sorted(p for p in (RAIZ / "external").glob("*.md")
-                      if p.name != "README.md") if (RAIZ / "external").is_dir() else []
+                      if p.name != "README.md" and not p.name.startswith("absorcao-")) \
+        if (RAIZ / "external").is_dir() else []
     prompts = sorted(p for p in (RAIZ / "prompts").glob("*.md")
                      if p.name != "README.md") if (RAIZ / "prompts").is_dir() else []
 

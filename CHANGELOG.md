@@ -1,7 +1,30 @@
 > Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
 > delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
 
-## [1.6.5] — 2026-11-18
+## [1.6.6] — 2026-11-18
+
+**OpenBot + tabela de externas do README raiz sincronizada com `external/`.**
+
+### Adicionado
+- **`external/openbot.md`** — `nightly-labs/openbot`: workspace desktop local-first que hospeda Codex, Claude,
+  Grok, OpenCode, Gemini, Cursor, Cline, Kimi, Devin, Copilot, Mistral e Hermes via **ACP**, com fila FIFO,
+  mensagens agente-a-agente, browser embutido e computer use. Documenta a **licença PolyForm Noncommercial
+  1.0.0** e o aviso do próprio projeto: agentes rodam com `danger-full-access` e `approvalPolicy: never`.
+  Estado: **não instalado nesta máquina — `NOT_TESTED`**.
+
+### Corrigido
+- **README raiz**: a tabela "Skills e plataformas externas" dizia `(14)` e listava **13** linhas — faltavam
+  Skills CLI, Caldo Skills e OpenBot. Agora são **16** linhas para 16 referências, e o número do título confere.
+- **`build-manifest.py`**: notas de processo (`external/absorcao-*.md`) não são referência externa e deixam de
+  entrar no manifesto — antes inflavam a contagem.
+- Bloco "Estado verificado": gate **17/17** (dizia 16/16) e linha de release corrigida — a última publicada é
+  **v1.6.1**, enquanto este changelog já vai na 1.6.6 (1.6.2–1.6.5 têm entrada, mas não têm release).
+
+### Verificado
+- `build-manifest.py`: **18 skills, 16 externas**; `arsenal.json` e `INDEX.md` regenerados
+- README raiz × `external/`: 16 linhas de tabela para 16 referências
+
+
 
 ### Adicionado — quarto acervo consultável: code tour (`dz23-codebase-cartographer` 1.1.1 → 1.2.0)
 `dados/` com 18 decisões tabuladas da ECC `code-tour` (MIT lido no arquivo LICENSE): 8 personas com

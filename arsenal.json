@@ -228,11 +228,6 @@
   ],
   "external": [
     {
-      "file": "external/absorcao-2026-11-17.md",
-      "autor": null,
-      "repo": null
-    },
-    {
       "file": "external/anthropic-skills.md",
       "autor": "Anthropic",
       "repo": "https://github.com/anthropics/skills"
@@ -256,6 +251,11 @@
       "file": "external/modern-web-guidance.md",
       "autor": null,
       "repo": null
+    },
+    {
+      "file": "external/openbot.md",
+      "autor": "nightly-labs",
+      "repo": "https://github.com/nightly-labs/openbot"
     },
     {
       "file": "external/pentagi.md",

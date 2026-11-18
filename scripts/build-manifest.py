@@ -122,6 +122,10 @@ def montar() -> dict:
     for p in sorted((RAIZ / "external").glob("*.md")):
         if p.name == "README.md":
             continue
+        # Notas de processo (ex.: absorcao-AAAA-MM-DD.md) não são referência externa:
+        # não têm repo de terceiro e não entram no índice de skills/plataformas.
+        if p.name.startswith("absorcao-"):
+            continue
         texto = p.read_text(encoding="utf-8", errors="replace")
         repo = re.search(r"\*\*Repo:\*\*\s*(\S+)", texto)
         autor = re.search(r"\*\*Autor:\*\*\s*(.+)", texto)

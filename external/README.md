@@ -1,10 +1,10 @@
 # Skills externas recomendadas
 
-**Quinze** projetos mantidos por outras organizações que **complementam** as 10 skills DZ23. Nenhum deles
+**Dezesseis** projetos mantidos por outras organizações que **complementam** as 10 skills DZ23. Nenhum deles
 está redistribuído aqui — cada arquivo documenta o repositório oficial, o gap que preenche e os cuidados.
 
-Nove são **skills**, uma é **coleção de skills** (Caldo), quatro são **plataformas** (PentAGI, Modern Web
-Guidance, Astryx, phone-agent-harness) e uma é **ferramenta de instalação** (Skills CLI).
+Nove são **skills**, uma é **coleção de skills** (Caldo), cinco são **plataformas** (PentAGI, Modern Web
+Guidance, Astryx, phone-agent-harness, OpenBot) e uma é **ferramenta de instalação** (Skills CLI).
 
 ## Índice
 
@@ -25,6 +25,7 @@ Guidance, Astryx, phone-agent-harness) e uma é **ferramenta de instalação** (
 | [phone-agent-harness](phone-agent-harness.md) | comunidade | agente que **liga e atende** telefone |
 | [Skills CLI](skills-cli.md) | vercel-labs | **instalador** de skills para ~70 agentes, com lock e update |
 | [Caldo Skills](caldoai-skills.md) | caldoai | poda de testes sem valor e desemaranhado de codebase |
+| [OpenBot](openbot.md) | nightly-labs | workspace desktop com agentes persistentes, fila e browser |
 
 ## Como escolher
 
@@ -45,6 +46,7 @@ Guidance, Astryx, phone-agent-harness) e uma é **ferramenta de instalação** (
 | agente que fala ao telefone | pat-phone-agent-tool (ver `phone-agent-harness.md`) |
 | instalar/atualizar skills em vários harnesses | Skills CLI (`npx skills add`, `check`, `update`) |
 | limpar suíte de testes e emaranhado antes de mexer | Caldo Skills |
+| equipe de agentes viva, com fila e browser compartilhado | OpenBot (licença noncommercial, ver o arquivo) |
 
 ## Regra de convivência
 
@@ -69,5 +71,6 @@ próprio repositório.
 | phone-agent-harness | MCP `pat-phone` (Python) | ferramentas `place_call`/`get_call`/`end_call` |
 | Skills CLI | binário npm global (`skills`) | comando `skills` + lock em `~/.agents/.skill-lock.json` |
 | Caldo Skills | 2 skills via Skills CLI | skills `prune-tests` e `untangle-codebase` |
+| OpenBot | app desktop (Electron/Bun) + CLIs via ACP | app próprio; agentes ficam dentro dele |
 
 Como registrar em cada harness: [`docs/harness-integration.md`](../docs/harness-integration.md).
