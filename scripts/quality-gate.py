@@ -106,6 +106,11 @@ def main(argv: list[str]) -> int:
 
     resultados += validar_skills(py)
     resultados.append(rodar("manifesto:check", [py, "scripts/build-manifest.py", "--check"]))
+    # O índice de skills (skills/README.md) era mantido à mão e apodreceu inteiro: as nove
+    # linhas divergiam do disco e uma skill não tinha linha. Agora é gerado, e este check
+    # garante que ninguém volta a editá-lo na mão.
+    resultados.append(rodar("indice-skills:check",
+                            [py, "scripts/gera-indice-skills.py", "--check"]))
     resultados.append(rodar("numeros", [py, "scripts/check-numbers.py"]))
     resultados.append(rodar("links", [py, "scripts/check-links.py", "."]))
     # Links apontam para arquivos; isto confere os COMANDOS que a documentação manda rodar.

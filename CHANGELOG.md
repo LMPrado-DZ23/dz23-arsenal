@@ -102,6 +102,30 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.8] — 2026-11-17
+
+### Corrigido — índice de skills descrevia um repositório que não existe
+Verificado lendo skills/README.md contra o disco: **as 9 linhas da tabela divergiam** e uma
+décima skill não tinha linha nenhuma. Não era detalhe cosmético -- é o índice que um agente lê
+para decidir qual skill carregar. Amostra do que estava errado:
+
+| Skill | Tabela dizia | Disco tinha |
+|---|---|---|
+| ultimate-pro-max | 0 evals, versão 2.2.0 | 13 cenários, 2.2.4 |
+| devops-cloud-deployer | 7 templates, 15 evals, v1.2.1 | 3 templates, 16 evals, v1.2.3 |
+| autonomous-improvement-ultimate | 0 scripts, 12 evals, "Nove skills" | 3 scripts, 13 evals, 10 skills |
+| postgres-prod-preflight | ausente da tabela | existe, 13 evals |
+
+Nenhuma checagem via isso porque check-numbers.py só varria README.md e ROADMAP.md, e o
+texto dizia "Nove" por extenso -- fora do alcance de qualquer regex de dígito.
+
+### Adicionado
+- **`scripts/gera-indice-skills.py`** -- regenera a tabela a partir do filesystem (versão,
+  contagens de refs/templates/scripts/evals). Categoria e complexidade continuam julgamento
+  humano, agora explicitamente no script em vez de na tabela. `--check` integra o gate
+  (36 checks) e o CI: editar a tabela à mão volta a ser visível. Provado mudando uma versão na
+  mão → `DESATUALIZADO`, exit 1; regenerado → em dia. Resultado: 10 linhas, zero divergência,
+  110 referências e 144 cenários conferidos contra o declarado.
 ## [1.5.7] — 2026-11-17
 
 ### Adicionado

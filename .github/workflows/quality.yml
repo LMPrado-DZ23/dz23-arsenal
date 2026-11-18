@@ -105,6 +105,10 @@ jobs:
         # rejeitado pelo schema. Quem segue o guia descobre isso perdendo tempo, não aqui.
         run: python scripts/check-docs-runnable.py
 
+      - name: Índice de skills bate com o disco
+        # skills/README.md é gerado; edição à mão aqui apodrece (esteve 9/9 linhas erradas).
+        run: python scripts/gera-indice-skills.py --check
+
       - name: Números da documentação batem com o disco
         run: python scripts/check-numbers.py
 
