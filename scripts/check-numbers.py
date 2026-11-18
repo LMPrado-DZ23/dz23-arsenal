@@ -49,6 +49,13 @@ def estado_disco() -> dict:
     saida_report = _run([PY, str(RAIZ / "scripts" / "run-evals.py"), "--report"])
     executados = _num(saida_report, r"(\d+)\s+registrados")
 
+    # Ferramentas do MCP: medido por sessão JSON-RPC real sobre stdio, não lido de doc.
+    # Importa a contagem que um cliente novo efetivamente vê (instalação mínima, sem
+    # workspace/sandbox). O README afirmava "28 tools" — número do registro completo —
+    # enquanto `tools/list` devolve 24, e a diferença era invisível para quem escreve a
+    # documentação de memória. None quando não há node: ausência pula a regra, não aprova.
+    mcp_tools = _contar_ferramentas_mcp()
+
     # O nº de checks do gate não pode vir de rodar o quality-gate (recursão: este script é
     # um dos checks) nem de parsear o fonte dele — um parser por regex contou 24 contra os
     # 31 reais, silenciosamente errado. Lê-se a contagem que o próprio gate publicou na
@@ -71,7 +78,55 @@ def estado_disco() -> dict:
         "evals_declarados": declarados,
         "evals_executados": executados,
         "quality_gate_checks": total_checks,
+        "mcp_tools_padrao": mcp_tools,
     }
+
+
+def _contar_ferramentas_mcp() -> int | None:
+    """Quantas tools o MCP expõe sem configuração extra. None se não der para medir."""
+    import os
+    import subprocess as sp
+    pasta = RAIZ / "mcp" / "dz23-subagents-universal-mcp"
+    if not (pasta / "src" / "index.js").is_file():
+        return None
+    node = _qual_node()
+    if node is None:
+        return None
+    linhas = [
+        json.dumps({"jsonrpc": "2.0", "id": 1, "method": "initialize",
+                    "params": {"protocolVersion": "2024-11-05", "capabilities": {},
+                               "clientInfo": {"name": "check-numbers", "version": "0"}}}),
+        json.dumps({"jsonrpc": "2.0", "method": "notifications/initialized"}),
+        json.dumps({"jsonrpc": "2.0", "id": 2, "method": "tools/list"}),
+    ]
+    try:
+        p = sp.run([node, "src/index.js", "--stdio"],
+                   input=("\n".join(linhas) + "\n").encode("utf-8"),
+                   capture_output=True, cwd=str(pasta), timeout=90,
+                   env={**os.environ, "DZ23_WORKSPACE_ROOTS": "",
+                        "DZ23_SANDBOX_ENABLED": "false"})
+    except (OSError, sp.TimeoutExpired):
+        return None
+    if p.returncode != 0:
+        return None
+    for bruto in p.stdout.decode("utf-8", errors="replace").splitlines():
+        bruto = bruto.strip()
+        if not bruto.startswith("{"):
+            continue
+        try:
+            msg = json.loads(bruto)
+        except json.JSONDecodeError:
+            continue
+        if msg.get("id") == 2:
+            tools = (msg.get("result") or {}).get("tools")
+            if isinstance(tools, list):
+                return len(tools)
+    return None
+
+
+def _qual_node() -> str | None:
+    import shutil
+    return shutil.which("node")
 
 
 # Afirmações que a documentação faz. Cada regra é (arquivo, regex-com-captura, campo-esperado, descricao).
@@ -82,12 +137,20 @@ REGRAS: list[tuple[str, str, str, str]] = [
     ("README.md", r"(\d+) MCP", "mcp", "contagem de MCP"),
     ("README.md", r"(\d+) bundle", "bundle", "contagem de bundles"),
     ("README.md", r"(\d+) referências", "external", "referências externas"),
+    # Ferramentas do MCP: duas alegações diferentes na mesma linha do README, ambas medidas
+    # por tools/list real (uma com instalação mínima, outra não — ver _contar_ferramentas_mcp).
+    ("README.md", r"Sub-agentes com (\d+) tools expostas", "mcp_tools_padrao",
+     "ferramentas visíveis sem configuração extra"),
     # Sem regra para "N checks do gate": o README agora diz "o total sai da própria saída",
     # então não há número digitado a conferir. A regra existiu, ficou órfã quando o número
     # saiu do texto, e é exatamente o caso que o detector de regra órfã abaixo passou a
     # denunciar em vez de dar verde mentiroso.
     ("ROADMAP.md", r"(\d+) skills DZ23", "skills", "tabela 'Onde estamos'"),
 ]
+
+# Regras cujo valor pode ser None sem culpa (ferramenta ausente no ambiente). Diferente de
+# regra órfã: aqui o padrão casa, só não havia como medir.
+_PERMITE_NENHUM_MEDICAO = {"mcp_tools_padrao"}
 
 
 def main(argv: list[str]) -> int:

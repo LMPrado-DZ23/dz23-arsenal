@@ -60,7 +60,7 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 
 | Item | Tipo | Versão | Para quê |
 |---|---|---|---|
-| [`dz23-subagents-universal-mcp`](mcp/dz23-subagents-universal-mcp/) | MCP (Node) | 4.4.1 | Sub-agentes com 28 tools |
+| [`dz23-subagents-universal-mcp`](mcp/dz23-subagents-universal-mcp/) | MCP (Node) | 4.4.1 | Sub-agentes com 24 tools expostas por padrão (28 no registro; 4 dependem de configuração) |
 | [`dz23-dsh-agency`](bundle/dz23-dsh-agency/) | Bundle | 1.0.0 | 88 agentes especializados + Diretor |
 | [`pentagi-mcp`](mcp/pentagi-mcp/) | 1.0.0 | 8 ferramentas MCP sobre a API do PentAGI (pentest autônomo) |
 
