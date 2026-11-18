@@ -1,0 +1,7 @@
+componente,o_que_verificar,origem_arquivo,origem_secao
+Botão,"ação real, hover/focus/disabled/loading, teclado.",references/quality-gates.md (ORIGINAL DZ23),Componentes e fluxos
+Formulário,"labels, validação, erro próximo, feedback, submit duplicado.",references/quality-gates.md (ORIGINAL DZ23),Componentes e fluxos
+Menu,"rotas, item ativo, foco, Esc, mobile.",references/quality-gates.md (ORIGINAL DZ23),Componentes e fluxos
+Modal,"foco inicial, contenção, fechamento, retorno do foco.",references/quality-gates.md (ORIGINAL DZ23),Componentes e fluxos
+Tabela,"dados reais, filtros, paginação, vazio, loading, erro.",references/quality-gates.md (ORIGINAL DZ23),Componentes e fluxos
+API,"autorização por recurso, schema, erros, retries e isolamento.",references/quality-gates.md (ORIGINAL DZ23),Componentes e fluxos

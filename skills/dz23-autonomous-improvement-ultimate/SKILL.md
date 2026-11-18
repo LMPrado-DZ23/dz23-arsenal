@@ -1,6 +1,6 @@
 ---
 name: dz23-autonomous-improvement-ultimate
-version: 2.1.8
+version: 2.2.0
 description: Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.
 user-invocable: true
 argument-hint: "<objetivo, ou 'audit <path>', ou cole o /goal>"
@@ -103,6 +103,11 @@ nunca responda só "pode continuar":
 - `references/checkpoint-and-resume.md`: persistência, retomada e limites.
 - `references/adversarial-review.md`: roteiros de investigação por camada.
 - `references/diagnostic-playbook.md`: roteiro de diagnóstico por camada.
+
+**Acervo consultável** (ao montar o critério de PASS de um gate): a matriz de gates vira consulta
+offline — `python scripts/consulta-autonomous.py gate e2e` (evidência mínima e casos de risco da área),
+`... componente modal` (o que verificar no componente), `... busca rollback`. Fonte: a própria
+`references/quality-gates.md` (ORIGINAL). Responde "sem correspondência" quando não há.
 
 ## Roteamento com as outras skills
 

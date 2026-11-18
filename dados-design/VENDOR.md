@@ -289,6 +289,14 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
 - **Melhora a DZ23 existente** `dz23-reverse-engineer-anything` (1.1.4 → 1.2.0): consulta os próprios
   anti-padrões offline. 4ª das 5 DZ23 da Trilha A. Evals inalterados (ledger 144 intacto).
 
+### `skills/dz23-autonomous-improvement-ultimate/dados/` — acervo de gates (Trilha A, ORIGINAL, fecha as 10)
+- **Origem:** **ORIGINAL (DZ23)** — destilado da própria `references/quality-gates.md`. Nenhuma fonte
+  externa.
+- **O que entrou:** 2 CSVs (19 registros) — 13 gates (área → evidência mínima PASS → casos de risco) e
+  6 verificações por componente. Consultor `scripts/consulta-autonomous.py` + prova, no gate.
+- **Melhora a DZ23 existente** `dz23-autonomous-improvement-ultimate` (2.1.8 → 2.2.0). **5ª e última da
+  Trilha A: as 10 skills DZ23 agora consultam o próprio conhecimento offline.** Ledger 144 intacto.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

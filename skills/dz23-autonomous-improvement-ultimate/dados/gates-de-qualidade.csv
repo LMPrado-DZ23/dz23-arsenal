@@ -1,0 +1,14 @@
+area,evidencia_minima_pass,casos_de_risco,origem_arquivo,origem_secao
+Git/baseline,"status, HEAD, diff inicial",alterações não commitadas,references/quality-gates.md (ORIGINAL DZ23),Gates
+Lint/typecheck,comando + exit code + log,supressões artificiais,references/quality-gates.md (ORIGINAL DZ23),Gates
+Unit/regression,testes específicos + suite,reproduzir falha anterior,references/quality-gates.md (ORIGINAL DZ23),Gates
+Integration/API,endpoints reais em ambiente autorizado,"timeout, retries, idempotência",references/quality-gates.md (ORIGINAL DZ23),Gates
+E2E,fluxo completo + resultado,"auth, erro de rede, estados vazios",references/quality-gates.md (ORIGINAL DZ23),Gates
+Build/smoke,artefato compilado + execução,"env, assets, rotas",references/quality-gates.md (ORIGINAL DZ23),Gates
+Auth/security,"testes de RBAC, IDOR, validação","escalada, sessão, XSS/CSRF/SSRF",references/quality-gates.md (ORIGINAL DZ23),Gates
+Multitenancy,teste cruzado Tenant A/B,"API, DB, cache, storage, jobs",references/quality-gates.md (ORIGINAL DZ23),Gates
+Banco,migração testada + integridade,"índices, rollback, concorrência",references/quality-gates.md (ORIGINAL DZ23),Gates
+UI,screenshots/inspeção real,"320/375/768/1024/1440, dark mode se aplicável",references/quality-gates.md (ORIGINAL DZ23),Gates
+A11y,axe + inspeção manual teclado,"foco, labels, contraste, reduced motion",references/quality-gates.md (ORIGINAL DZ23),Gates
+Performance,medições comparáveis,"LCP, INP, CLS, regressões",references/quality-gates.md (ORIGINAL DZ23),Gates
+Operação,health/logs e plano de rollback,"TLS, backup, restore, deploy",references/quality-gates.md (ORIGINAL DZ23),Gates

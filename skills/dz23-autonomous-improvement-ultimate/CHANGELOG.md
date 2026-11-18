@@ -1,5 +1,17 @@
 # Changelog — dz23-autonomous-improvement-ultimate
 
+## [2.2.0] — 2026-11-18
+
+### Adicionado — acervo consultável de gates de qualidade (Trilha A, fonte ORIGINAL)
+- `dados/`: 2 CSVs (19 registros) **destilados da própria `references/quality-gates.md`** (sem fonte
+  externa): `gates-de-qualidade.csv` (13 áreas → evidência mínima para PASS → casos de risco) e
+  `verificacao-por-componente.csv` (6: botão/formulário/menu/modal/tabela/API → o que verificar).
+  Proveniência em `dados/PROVENIENCIA.md` (ORIGINAL DZ23).
+- `scripts/consulta-autonomous.py` + prova: subcomando PT (gate/area/qualidade, componente/ui, busca),
+  matcher normaliza acento. Ambos no gate (`autonomous:consulta`, `gate:autoteste-consulta-autonomous`)
+  e no CI. Índice no `SKILL.md`. Bump MINOR 2.1.8 → 2.2.0.
+- **Marca o fim da Trilha A: as 10 skills DZ23 agora consultam o próprio conhecimento offline.**
+
 ## [2.1.8] — 2026-11-18
 
 ### Corrigido

@@ -11,15 +11,15 @@
   "skills": [
     {
       "name": "dz23-autonomous-improvement-ultimate",
-      "version": "2.1.8",
+      "version": "2.2.0",
       "description": "Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.",
       "user_invocable": true,
-      "files": 17,
+      "files": 21,
       "references": 5,
       "templates": 2,
-      "scripts": 3,
+      "scripts": 4,
       "evals": 13,
-      "sha256_skill_md": "95a237c84ff8f598f9d2c505cde6e1dadf42f4f8c1ffb6ddf2a96b958cd1c5ea"
+      "sha256_skill_md": "07a0ca5dd9116569ec00261e80af3f23480e5722225241c668f84348d64ab647"
     },
     {
       "name": "dz23-backend-data-architect",
