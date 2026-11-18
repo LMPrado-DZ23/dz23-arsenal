@@ -1,5 +1,15 @@
 # Changelog — dz23-performance-scalability-engine
 
+## [1.3.4] — 2026-11-18
+
+### Adicionado
+- Acervo de priorizacao incorporado (`dados-performance/`, ECC, MIT lido no arquivo LICENSE): 8 categorias com prioridade e prefixo de regra, 5 metricas Web Vitals mapeadas as categorias que as movem. Consultavel em portugues por `python scripts/consulta-performance.py prioridade|metrica|categoria <termo>`.
+- `references/dataset-performance.md` (quando consultar) e o passo 1 do workflow agora manda consultar a ordem de ataque antes de escolher onde cortar: agente que ataca re-render (prioridade 5) com waterfall de `await` aberto (prioridade 1) gasta a sessao e nao move o numero.
+- Eval `layers-swapped` executado com medicao propria (bytes por extensao em tres builds reais: midia 53%, JS 30%) -- primeira execucao desta skill usando o acervo como instrumento.
+
+### Nota de escopo
+A fonte nomeada pelo plano de consolidacao era `vercel-labs/agent-skills` (declarada MIT). Verificado: nao existe arquivo LICENSE no repositorio, nem na raiz nem em subpasta; a API devolve `license:null`; so ha a palavra MIT numa secao do README. Pela regra do projeto (ler o arquivo, nao a alegacao), nao foi copiada -- a ECC `react-performance` cobre o mesmo terreno prioritario com licenca verificavel. Decisao registrada em `dados-performance/PROVENIENCIA.md` e no vault.
+
 ## [1.3.3] — 2026-11-18
 
 ### Corrigido

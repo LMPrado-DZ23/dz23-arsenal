@@ -71,15 +71,15 @@
     },
     {
       "name": "dz23-performance-scalability-engine",
-      "version": "1.3.3",
+      "version": "1.3.4",
       "description": ">",
       "user_invocable": true,
-      "files": 28,
-      "references": 10,
+      "files": 29,
+      "references": 11,
       "templates": 6,
       "scripts": 6,
       "evals": 16,
-      "sha256_skill_md": "91a319812201f11ebdd94deac54230def731316b263625889931863084ed7f71"
+      "sha256_skill_md": "ae291cecd44837eb0e0276021d6e335145f761707ddbf41800512c42a65cda6b"
     },
     {
       "name": "dz23-postgres-prod-preflight",

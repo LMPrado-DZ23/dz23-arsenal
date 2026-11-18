@@ -80,6 +80,32 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
   colunas realmente contêm (um deles se chamava "estilo de API" e era tabela de paginação — corrigido
   pela própria prova).
 
+### `dados-performance/` — 2 CSVs (13 linhas)
+- **Origem:** ECC (`affaan-m/everything-claude-code` v2.2.3), skill `react-performance`, seções
+  `Priority Index` e `Lighthouse / Web Vitals Mapping`. Licença **MIT lida no arquivo `LICENSE` da
+  raiz** (texto completo, 1.071 chars).
+- **O que entrou:** 8 categorias de otimização com prioridade, prefixo de regra e "quando importa";
+  5 métricas Web Vitals ligadas às categorias que as movem. Só as tabelas de decisão -- a narrativa da
+  skill-fonte (~17 KB) não virou dado, porque já está coberta pelas camadas 5.2–5.5 da skill DZ23;
+  copiá-la criaria segunda fonte de verdade para o mesmo domínio.
+- **Por que esta fonte e não a Vercel, nomeada no plano:** `vercel-labs/agent-skills` foi verificada
+  antes de copiar e **não tem arquivo `LICENSE`** em lugar algum (raiz, subpastas, nem dentro de
+  `skills/react-best-practices/`); a API do GitHub devolve `license: null`; o `package.json` não declara
+  licença; o README traz apenas a palavra "MIT" numa seção `## License`, sem texto nem aviso de
+  copyright. Pela regra deste repo ("licença lida no arquivo LICENSE, não no que o README alega"), não
+  entra como cópia. As ~40 regras da Vercel continuam acessíveis como referência externa
+  (`external/vercel-react-best-practices.md`) sem redistribuição. Detalhe em
+  `dados-performance/PROVENIENCIA.md`.
+- **Verificação:** 42 células conferidas contra a tabela na fonte (zero divergências). Consultor com
+  prova no gate (`gate:autoteste-consulta-performance`): 9 consultas + **os 41 sinônimos do mapa
+  exercitados um a um** + 3 controles negativos + validação de esquema. A exaustão pegou dois defeitos
+  reais: quatro entradas do mapa apontavam para o radical (`waterfall` contra "Waterfalls") e nunca
+  casavam nada, e um termo (`vital`) estava no dataset errado. Injetando sinônimo morto, a prova sai
+  exit 1 apontando chave e valor.
+- **Uso comprovado por execução:** o eval `layers-swapped` desta skill foi respondido consultando o
+  acervo (`prioridade peso` → CRITICAL 2; `metrica lcp` → Waterfalls/Bundle Size/Resource Hints) e
+  medindo builds reais nesta máquina (mídia 53% do artefato, JS 30%) -- não por opinião.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

@@ -1,6 +1,6 @@
 ---
 name: dz23-performance-scalability-engine
-version: 1.3.3
+version: 1.3.4
 description: >
   Plano cirúrgico de otimização de performance e escalabilidade em 4 camadas —
   Frontend/Interface (UX e renderização), Comunicação/Rede (APIs e fluxos),
@@ -28,7 +28,7 @@ Correção e segurança > disponibilidade > integridade de dado > budget de perf
 ## Workflow obrigatório
 MEDIR → LOCALIZAR → ORÇAR → CORTAR → VERIFICAR → GUARDAR.
 
-1. **MEDIR** baseline real — não a sensação. RUM (p75 LCP/INP/CLS), latência p50/p95/p99 por rota, tempo de query, CPU/memória, custo. Leia `references/measurement-first.md`.
+1. **MEDIR** baseline real — não a sensação. RUM (p75 LCP/INP/CLS), latência p50/p95/p99 por rota, tempo de servidor e SQL. Sem número, não há otimização: há opinião. Com a métrica na mão, consulte a ordem de ataque antes de escolher onde cortar: `python scripts/consulta-performance.py metrica <lcp|inp|cls|tbt>` e `... prioridade <candidato>` — agente que ataca re-render (prioridade 5) com waterfall de `await` aberto (prioridade 1) gasta sessão e não move o número. de query, CPU/memória, custo. Leia `references/measurement-first.md`.
 2. **LOCALIZAR** o gargalo na camada certa com evidência: trace, `EXPLAIN (ANALYZE, BUFFERS)`, flamegraph, waterfall de rede. Um gargalo por vez.
 3. **ORÇAR** o alvo antes de mexer: budget por rota/endpoint (ex.: p75 LCP < 2,5 s; p95 API < 300 ms; query < 50 ms). Leia `references/perf-budget.md`.
 4. **CORTAR** na camada do gargalo, na ordem de maior impacto ÷ esforço, com mudança mínima. Leia as 4 camadas (5.2–5.5).
@@ -146,6 +146,7 @@ Leia `references/quality-gates.md`. Resumo — BLOCKER: otimização sem baselin
 ## Seleção de referências (carregamento progressivo)
 - Medição, baseline e instrumentos: `references/measurement-first.md`
 - Sintoma → camada → primeira medição: `references/diagnostic-playbook.md`
+- **Acervo consultável de priorização (13 linhas, MIT/ECC)**: `references/dataset-performance.md` — antes de escolher onde cortar, consulte `python scripts/consulta-performance.py metrica <lcp|inp|cls|tbt>` ou `... prioridade <candidato>`. Serve para não atacar re-render com waterfall aberto.
 - Budget e metas por camada: `references/perf-budget.md`
 - Camada 1 — Frontend e interface: `references/frontend-layer.md`
 - Camada 2 — Comunicação e rede: `references/network-layer.md`

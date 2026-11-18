@@ -74,7 +74,7 @@ Fonte: `python scripts/run-evals.py --report` · estado de auditoria: `--audit` 
 | **A — reasoning-only** | 56 | 45 | executável sem infra (inclui 13 do pré-flight de banco) |
 | **B — exige infra** | 40 | 0 | `BLOCKED` por Docker/Postgres/Ghidra/browser/hardware |
 | **Novos (v1.4.5)** | 3 | 0 | OB-03/04/05 — nasceram depois da classificação |
-| **Total pendente** | **97** | — | de 144 declarados |
+| **Total pendente** | **96** | — | de 144 declarados |
 
 ### Cobertura
 
@@ -147,7 +147,7 @@ nenhum eval).
 
 | # | Dívida | Impacto | Esforço |
 |---|---|---|---|
-| 1 | Evals não executados (97 de 144 cenários) | alto — comportamento não comprovado | alto |
+| 1 | Evals não executados (96 de 144 cenários) | alto — comportamento não comprovado | alto |
 | 2 | `install-all.sh` nunca rodou em Linux/macOS | médio — caminho Linux não exercitado | baixo |
 | 3 | **CI** — resolvido: rodando desde 2026-11-09 (2 runs verdes). Verificar: `gh run list --limit 5` | — | — |
 | 4 | **Parcialmente resolvido (2026-11-17):** o `bundle/` passou a rodar no gate e no CI -- `check_consistency.py`, `check_sizes.py` e um `build.py --check` que compara `agents/` com as fontes (o flag antigo só media limites de bytes). Continua aberto o `mcp/`: os testes existem (`npm run test:gate`, 293 casos, cobertura 95.4% acima do budget 90/75/80) e foram executados nesta sessão, mas **nenhum passo do `quality.yml` invoca npm** -- verificado por inspeção do workflow. | médio | médio |

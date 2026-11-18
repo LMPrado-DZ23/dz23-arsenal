@@ -1,0 +1,6 @@
+No,metric,most_relevant_categories,origem_arquivo,origem_secao
+1,LCP (Largest Contentful Paint),"Waterfalls, Bundle Size, Resource Hints",ECC/skills/react-performance/SKILL.md,Lighthouse / Web Vitals Mapping
+2,INP (Interaction to Next Paint),"Re-render, Rendering, JavaScript",ECC/skills/react-performance/SKILL.md,Lighthouse / Web Vitals Mapping
+3,CLS (Cumulative Layout Shift),"Rendering (Suspense placement, image dimensions)",ECC/skills/react-performance/SKILL.md,Lighthouse / Web Vitals Mapping
+4,TBT (Total Blocking Time),"Bundle Size, JavaScript, Defer Third-Party",ECC/skills/react-performance/SKILL.md,Lighthouse / Web Vitals Mapping
+5,FID (legacy),"Bundle Size, Hydration",ECC/skills/react-performance/SKILL.md,Lighthouse / Web Vitals Mapping

@@ -169,6 +169,12 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("backend:consulta", [py, "scripts/consulta-backend.py", "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-backend",
                             [py, "scripts/prova-consulta-backend.py"]))
+    # Acervo de priorizacao de performance (ECC, MIT com arquivo LICENSE). A prova exercita os 41
+    # sinonimos do mapa um a um -- nao uma amostra -- porque quatro entradas no radical ("waterfall"
+    # contra "Waterfalls") passaram batidas quando a teste so cobria os termos escolhidos para ela.
+    resultados.append(rodar("performance:consulta", [py, "scripts/consulta-performance.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-performance",
+                            [py, "scripts/prova-consulta-performance.py"]))
     # Repositório PÚBLICO, e até esta rodada nenhum verificador abria um arquivo em busca de
     # credencial: colar um token GitHub válido em `.env.example` dava gate 46/46 verde. Os quatro
     # scripts que mencionam "segredo" no fonte falam de outra coisa (scan descrito em prosa, design

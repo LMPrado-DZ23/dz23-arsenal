@@ -1,0 +1,9 @@
+No,priority,category,prefix,when_it_matters,origem_arquivo,origem_secao
+1,1 — CRITICAL,Eliminating Waterfalls,`async-`,Anytime `await` is followed by independent `await`,ECC/skills/react-performance/SKILL.md,Priority Index
+2,2 — CRITICAL,Bundle Size Optimization,`bundle-`,"First-load JS, route-level imports, third-party libs",ECC/skills/react-performance/SKILL.md,Priority Index
+3,3 — HIGH,Server-Side Performance,`server-`,"RSC, Server Actions, API routes, SSR",ECC/skills/react-performance/SKILL.md,Priority Index
+4,4 — MEDIUM-HIGH,Client-Side Data Fetching,`client-`,SWR / TanStack Query / raw `fetch` in hooks,ECC/skills/react-performance/SKILL.md,Priority Index
+5,5 — MEDIUM,Re-render Optimization,`rerender-`,"High-frequency state updates, parent-child fan-out",ECC/skills/react-performance/SKILL.md,Priority Index
+6,6 — MEDIUM,Rendering Performance,`rendering-`,"Long lists, animations, hydration",ECC/skills/react-performance/SKILL.md,Priority Index
+7,7 — LOW-MEDIUM,JavaScript Performance,`js-`,"Hot loops, frequent allocations",ECC/skills/react-performance/SKILL.md,Priority Index
+8,8 — LOW,Advanced Patterns,`advanced-`,"Effect-event integration, stable refs",ECC/skills/react-performance/SKILL.md,Priority Index
