@@ -1,0 +1,7 @@
+No,query_pattern,index_type,example,origem_arquivo,origem_secao
+1,`WHERE col = value`,B-tree (default),`CREATE INDEX idx ON t (col)`,ECC/skills/postgres-patterns/SKILL.md,Index Cheat Sheet
+2,`WHERE col > value`,B-tree,`CREATE INDEX idx ON t (col)`,ECC/skills/postgres-patterns/SKILL.md,Index Cheat Sheet
+3,`WHERE a = x AND b > y`,Composite,"`CREATE INDEX idx ON t (a, b)`",ECC/skills/postgres-patterns/SKILL.md,Index Cheat Sheet
+4,`WHERE jsonb @> '{}'`,GIN,`CREATE INDEX idx ON t USING gin (col)`,ECC/skills/postgres-patterns/SKILL.md,Index Cheat Sheet
+5,`WHERE tsv @@ query`,GIN,`CREATE INDEX idx ON t USING gin (col)`,ECC/skills/postgres-patterns/SKILL.md,Index Cheat Sheet
+6,Time-series ranges,BRIN,`CREATE INDEX idx ON t USING brin (col)`,ECC/skills/postgres-patterns/SKILL.md,Index Cheat Sheet

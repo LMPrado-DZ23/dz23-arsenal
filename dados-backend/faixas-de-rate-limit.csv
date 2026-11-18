@@ -1,0 +1,5 @@
+No,tier,limit,window,use_case,origem_arquivo,origem_secao
+1,Anonymous,30/min,Per IP,Public endpoints,ECC/skills/api-design/SKILL.md,Rate Limit Tiers
+2,Authenticated,100/min,Per user,Standard API access,ECC/skills/api-design/SKILL.md,Rate Limit Tiers
+3,Premium,1000/min,Per API key,Paid API plans,ECC/skills/api-design/SKILL.md,Rate Limit Tiers
+4,Internal,10000/min,Per service,Service-to-service,ECC/skills/api-design/SKILL.md,Rate Limit Tiers

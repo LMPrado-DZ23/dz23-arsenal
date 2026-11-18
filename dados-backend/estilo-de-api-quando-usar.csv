@@ -1,0 +1,5 @@
+No,use_case,pagination_type,origem_arquivo,origem_secao
+1,"Admin dashboards, small datasets (<10K)",Offset,ECC/skills/api-design/SKILL.md,When to Use Which
+2,"Infinite scroll, feeds, large datasets",Cursor,ECC/skills/api-design/SKILL.md,When to Use Which
+3,Public APIs,Cursor (default) with offset (optional),ECC/skills/api-design/SKILL.md,When to Use Which
+4,Search results,Offset (users expect page numbers),ECC/skills/api-design/SKILL.md,When to Use Which

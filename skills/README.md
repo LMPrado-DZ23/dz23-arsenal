@@ -9,7 +9,7 @@
 | Skill | Versão | Categoria | Complexidade | Refs | Templates | Scripts | Evals |
 |---|---|---|---|---|---|---|---|
 | [autonomous-improvement-ultimate](dz23-autonomous-improvement-ultimate/) | 2.1.8 | Orquestração | advanced | 5 | 2 | 3 | 13 |
-| [backend-data-architect](dz23-backend-data-architect/) | 1.1.2 | Backend/DB | advanced | 10 | 2 | 3 | 12 |
+| [backend-data-architect](dz23-backend-data-architect/) | 1.1.2 | Backend/DB | advanced | 11 | 2 | 3 | 12 |
 | [codebase-cartographer](dz23-codebase-cartographer/) | 1.1.1 | Exploração | intermediate | 15 | 7 | 5 | 15 |
 | [devops-cloud-deployer](dz23-devops-cloud-deployer/) | 1.2.3 | DevOps | advanced | 17 | 3 | 5 | 16 |
 | [e2e-browser-verifier](dz23-e2e-browser-verifier/) | 1.1.3 | QA/E2E | advanced | 10 | 3 | 3 | 16 |
@@ -19,7 +19,7 @@
 | [spec-to-system-engine](dz23-spec-to-system-engine/) | 1.2.1 | Especificação | advanced | 17 | 9 | 5 | 15 |
 | [ultimate-pro-max](dz23-ultimate-pro-max/) | 2.2.5 | UI/UX | advanced | 10 | 0 | 3 | 13 |
 
-Totais do disco: **111 referências** e **144 cenários de eval** declarados.
+Totais do disco: **112 referências** e **144 cenários de eval** declarados.
 
 > Esta tabela é gerada -- `python scripts/gera-indice-skills.py` -- e conferida pelo
 > `check-numbers.py` a cada gate. Versões, contagens de refs/templates/scripts/evals vêm do

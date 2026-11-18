@@ -10,7 +10,7 @@
 | Skill | Versão | Arquivos | Refs | Templates | Scripts | Evals |
 |---|---|---|---|---|---|---|
 | [dz23-autonomous-improvement-ultimate](skills/dz23-autonomous-improvement-ultimate/) | 2.1.8 | 17 | 5 | 2 | 3 | 13 |
-| [dz23-backend-data-architect](skills/dz23-backend-data-architect/) | 1.1.2 | 23 | 10 | 2 | 3 | 12 |
+| [dz23-backend-data-architect](skills/dz23-backend-data-architect/) | 1.1.2 | 24 | 11 | 2 | 3 | 12 |
 | [dz23-codebase-cartographer](skills/dz23-codebase-cartographer/) | 1.1.1 | 33 | 15 | 7 | 5 | 15 |
 | [dz23-devops-cloud-deployer](skills/dz23-devops-cloud-deployer/) | 1.2.3 | 35 | 17 | 7 | 5 | 16 |
 | [dz23-e2e-browser-verifier](skills/dz23-e2e-browser-verifier/) | 1.1.3 | 25 | 10 | 6 | 3 | 16 |

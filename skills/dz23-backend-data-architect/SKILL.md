@@ -1,6 +1,6 @@
 ---
 name: dz23-backend-data-architect
-version: 1.1.1
+version: 1.1.2
 description: Skill de engenharia de backend, banco de dados, contratos de API, migrações seguras, multi-tenancy, segurança de aplicação e observabilidade. Ative ao criar, revisar, refatorar ou depurar serviços, endpoints, schemas, migrações, integrações e pipelines de dados.
 user-invocable: true
 argument-hint: "<serviço/rota/entidade, 'audit <path>' ou 'design <feature>'>"
@@ -21,7 +21,7 @@ AUDITAR → ENTENDER O DOMÍNIO → MODELAR DADOS → DESENHAR O CONTRATO → PL
 
 1. AUDITORIA: inspecione repositório, branch/working tree, runtime e versões, schema e migrações aplicadas, ORM/query builder, índices existentes, contratos publicados (OpenAPI/GraphQL/protobuf), filas e jobs, cache, autenticação/autorização, configuração, segredos, observabilidade e testes. Registre baseline: `migrate status`, suíte de testes, latência das rotas críticas e plano de execução das queries mais caras. Sem acesso ao projeto, entregue plano e patch proposto — nunca finja execução.
 2. ENTENDIMENTO DO DOMÍNIO: identifique entidades, invariantes de negócio, quem pode fazer o quê, volumes esperados, ciclo de vida do dado, requisitos de retenção e obrigações legais. Separe o que é regra de negócio do que é detalhe de implementação. Liste o que é desconhecido antes de modelar.
-3. MODELO DE DADOS: defina entidades, chaves, constraints, tipos, índices e política de histórico antes de escrever endpoint. Modele invariantes no banco quando o banco puder garantir (único, FK, check). Leia `references/data-modeling.md`.
+3. MODELO DE DADOS: defina entidades, chaves, constraints, tipos, índices e política de histórico antes de escrever endpoint. Modele invariantes no banco quando o banco puder garantir (único, FK, check). Leia `references/data-modeling.md`. **Consulte o acervo antes de decidir tipo e índice**: `python scripts/consulta-backend.py tipo <caso>` e `... indice <padrão de query>` — trocam uma linha de migração com rewrite por uma pergunta de três segundos.
 4. CONTRATO DE API: defina recurso, verbo, payload, status, erro, paginação, idempotência e versionamento antes da implementação. Contrato é acordo público: breaking change exige deprecação e janela. Leia `references/api-contracts.md`.
 5. ENGENHARIA DE SERVIÇO: implemente as seis decisões estruturais abaixo antes de considerar o serviço pronto.
    5.1 **Fronteiras e arquitetura**: monolito modular bem separado é o padrão; microserviço só com justificativa de escala, time ou isolamento de falha comprovados. Defina fronteira por transação e por dado, não por pasta. Comunicação síncrona só quando o chamador precisa da resposta; o resto vai a evento. Toda chamada externa tem timeout, retry com backoff e limite de tentativas; operação com efeito colateral é idempotente. Leia `references/service-architecture.md`.
@@ -61,6 +61,7 @@ AUDITAR → ENTENDER O DOMÍNIO → MODELAR DADOS → DESENHAR O CONTRATO → PL
 - Query plan, N+1, cache, pool, SLO e telemetria: `references/performance-and-observability.md`
 - Gates, severidade e matriz de teste: `references/quality-gates.md`
 - Catálogo de erros recorrentes com sintoma e correção: `references/anti-patterns.md`
+- **Acervo consultável de decisões (30 linhas, MIT/ECC)**: `references/dataset-backend.md` — antes de escolher tipo de coluna, índice, método HTTP, paginação ou rate limit, consulte `python scripts/consulta-backend.py <domínio> <termo>` em português. Não opine sobre o que a tabela já mediu.
 - ADR e revisão de contrato: `templates/adr.md`, `templates/contract-review.md`
 - Instalação em harness: `references/installation.md`
 

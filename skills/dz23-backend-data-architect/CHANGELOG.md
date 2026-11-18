@@ -1,5 +1,14 @@
 # Changelog — dz23-backend-data-architect
 
+## [1.1.2] — 2026-11-18
+
+### Adicionado
+- Dez conceitos de seguranca de migracao que a referencia nao tinha, destilados do ECC (`database-migrations`, MIT lido no arquivo LICENSE): lock diferente de rewrite, migração aplicada imutavel, forward-only em producao, DDL separado de DML, teste com volume real, drenar writers antigos antes do backfill, validar paridade antes do cutover de leitura, `IS DISTINCT FROM` como predicado de reconciliacao e `FOR UPDATE SKIP LOCKED` por lote.
+- `examples/postgres-add-column.sql` e `examples/postgres-column-rename.sql`: exemplos autoverificaveis (tabela temporaria, `RAISE EXCEPTION`, ROLLBACK no fim). Executados nesta maquina contra Postgres 17.11: 7 assercoes PASS, exit 0, zero residuo no banco.
+
+### Corrigido
+- A tabela de operacoes recomendava `CREATE INDEX CONCURRENTLY` sem avisar que ele **falha dentro de transacao** -- detalhe que faz a migracao quebrar na ferramenta, nao no banco. Agora documentado, com o motivo pelo qual wrappers transacionais (Django, Prisma, golang-migrate) precisam de escape explicito.
+
 ## [1.1.1] — 2026-11-17
 
 ### Corrigido

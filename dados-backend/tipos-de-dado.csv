@@ -1,0 +1,6 @@
+No,use_case,correct_type,avoid,origem_arquivo,origem_secao
+1,IDs,`bigint`,"`int`, random UUID",ECC/skills/postgres-patterns/SKILL.md,Data Type Quick Reference
+2,Strings,`text`,`varchar(255)`,ECC/skills/postgres-patterns/SKILL.md,Data Type Quick Reference
+3,Timestamps,`timestamptz`,`timestamp`,ECC/skills/postgres-patterns/SKILL.md,Data Type Quick Reference
+4,Money,"`numeric(10,2)`",`float`,ECC/skills/postgres-patterns/SKILL.md,Data Type Quick Reference
+5,Flags,`boolean`,"`varchar`, `int`",ECC/skills/postgres-patterns/SKILL.md,Data Type Quick Reference

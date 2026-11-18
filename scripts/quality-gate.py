@@ -162,6 +162,13 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("gate:autoteste-consulta-design",
                             [py, "scripts/prova-consulta-design.py"]))
     resultados.append(rodar("gate:autoteste-higiene", [py, "scripts/prova-higiene-doc.py"]))
+    # Acervo de decisões de backend (ECC, MIT) e o consultor em português. Molde obrigatório do
+    # plano de consolidação: dado dentro do repo + consulta + prova no gate. A prova cobre os dois
+    # modos de falha medidos na construção: substring que aproxima a linha errada e fallback que
+    # despeja a tabela inteira quando não sabe -- ambos passaram verdes antes de existir teste.
+    resultados.append(rodar("backend:consulta", [py, "scripts/consulta-backend.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-backend",
+                            [py, "scripts/prova-consulta-backend.py"]))
     # Repositório PÚBLICO, e até esta rodada nenhum verificador abria um arquivo em busca de
     # credencial: colar um token GitHub válido em `.env.example` dava gate 46/46 verde. Os quatro
     # scripts que mencionam "segredo" no fonte falam de outra coisa (scan descrito em prosa, design

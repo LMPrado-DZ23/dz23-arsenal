@@ -1,0 +1,7 @@
+No,anti-pattern,why_it_fails,better_approach,origem_arquivo,origem_secao
+1,Manual SQL in production,"No audit trail, unrepeatable",Always use migration files,ECC/skills/database-migrations/SKILL.md,Anti-Patterns
+2,Editing deployed migrations,Causes drift between environments,Create new migration instead,ECC/skills/database-migrations/SKILL.md,Anti-Patterns
+3,Adding NOT NULL column without default to populated table,Fails because existing rows would contain NULL,"Add nullable, backfill, then set NOT NULL",ECC/skills/database-migrations/SKILL.md,Anti-Patterns
+4,Inline index on large table,Blocks writes during build,CREATE INDEX CONCURRENTLY,ECC/skills/database-migrations/SKILL.md,Anti-Patterns
+5,Schema + data in one migration,"Hard to rollback, long transactions",Separate migrations,ECC/skills/database-migrations/SKILL.md,Anti-Patterns
+6,Dropping column before removing code,Application errors on missing column,"Remove code first, drop column next deploy",ECC/skills/database-migrations/SKILL.md,Anti-Patterns

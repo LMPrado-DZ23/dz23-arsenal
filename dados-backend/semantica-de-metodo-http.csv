@@ -1,0 +1,6 @@
+No,method,idempotent,safe,use_for,origem_arquivo,origem_secao
+1,GET,Yes,Yes,Retrieve resources,ECC/skills/api-design/SKILL.md,Method Semantics
+2,POST,No,No,"Create resources, trigger actions",ECC/skills/api-design/SKILL.md,Method Semantics
+3,PUT,Yes,No,Full replacement of a resource,ECC/skills/api-design/SKILL.md,Method Semantics
+4,PATCH,No*,No,Partial update of a resource,ECC/skills/api-design/SKILL.md,Method Semantics
+5,DELETE,Yes,No,Remove a resource,ECC/skills/api-design/SKILL.md,Method Semantics
