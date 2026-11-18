@@ -5,6 +5,7 @@ em silencio: alguem remove a guarda, o texto continua no CHANGELOG e passa a ser
 um sistema que nao existe. Este arquivo re-executa a experiencia por tras de cada frase.
 """
 import json
+import os
 import pathlib
 import re
 import shutil
@@ -155,8 +156,11 @@ def instala_sem_repo():
     with tempfile.TemporaryDirectory() as td:
         esp = pathlib.Path(td) / "dz23-codebase-cartographer"
         shutil.copytree(origem, esp)
-        (esp / ".dz23-arsenal").write_text("D:\\repo\\inexistente\\para\\teste\n",
-                                           encoding="utf-8")
+        # Caminho absolutamente ausente, não um caminho Windows: no Linux `D:\repo\...` é
+        # relativo ao cwd e pode resolver para dentro do checkout -- mesmo defeito que fez o
+        # selftest-ferramentas falhar na primeira execução real do CI.
+        morto = str(pathlib.Path(tempfile.gettempdir()) / f"arsenal-morto-{os.getpid()}")
+        (esp / ".dz23-arsenal").write_text(morto + "\n", encoding="utf-8")
         v = esp / "SKILL.md"
         v.write_bytes(v.read_bytes()
                       + "\nVer `references/mapa-de-fluxo-legado.md`.\n".encode())

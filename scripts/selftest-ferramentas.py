@@ -27,6 +27,7 @@ Uso:
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import shutil
 import sys
@@ -191,12 +192,19 @@ def testa_descoberta() -> list[str]:
     problemas += sem_excecao("descoberta/repo-atual", confere_encontra_o_proprio_repo)
 
     def confere_env_invalida() -> None:
-        import os
+        # Caminho inexistente precisa ser inexistente em TODO sistema. A versão anterior usava
+        # r"D:\caminho\que\nao\existe", que no Linux não é absoluto: vira caminho RELATIVO ao
+        # cwd, e como o CI roda dentro do checkout -- que tem scripts/skill_validator.py -- a
+        # string resolvia para um arsenal válido. O teste passou 38 rodadas na minha máquina e
+        # falhou na primeira execução real, no ubuntu-latest.
+        invalido = str(pathlib.Path(tempfile.gettempdir()) /
+                       f"arsenal-inexistente-{os.getpid()}")
         guardado = os.environ.get("DZ23_ARSENAL")
-        os.environ["DZ23_ARSENAL"] = r"D:\caminho\que\nao\existe"
+        os.environ["DZ23_ARSENAL"] = invalido
         try:
-            if localizar_arsenal(pathlib.Path(r"C:\qualquer\lugar\x.py")) is not None:
-                raise AssertionError("aceitou caminho de env inexistente")
+            achado = localizar_arsenal(RAIZ / "skills/dz23-devops-cloud-deployer/scripts/x.py")
+            if achado is not None and str(achado) == invalido:
+                raise AssertionError(f"aceitou caminho de env inexistente: {invalido}")
         finally:
             if guardado is None:
                 os.environ.pop("DZ23_ARSENAL", None)
@@ -207,7 +215,10 @@ def testa_descoberta() -> list[str]:
     def confere_ponteiro_mentiroso() -> None:
         with tempfile.TemporaryDirectory() as td:
             marcador = pathlib.Path(td) / ".dz23-arsenal"
-            marcador.write_text("D:\\nao\\existe\\mais\\arsenal\n", encoding="utf-8")
+            # idem: usar algo absolutamente ausente, não um caminho Windows
+            mentiroso = str(pathlib.Path(tempfile.gettempdir()) /
+                            f"arsenal-morto-{os.getpid()}-x")
+            marcador.write_text(mentiroso + "\n", encoding="utf-8")
             alvo = pathlib.Path(td) / "skills" / "x" / "scripts" / "validate_skill.py"
             if localizar_arsenal(alvo) is not None:
                 raise AssertionError("confiou em ponteiro apontando para nada")
