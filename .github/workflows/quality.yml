@@ -167,6 +167,12 @@ jobs:
       - name: Números da documentação batem com o disco
         run: python scripts/check-numbers.py
 
+      - name: Nenhuma credencial em conteudo versionado
+        # O repositorio e publico. Ate a rodada 53 nada abria um arquivo procurando token: colar
+        # ghp_... em .env.example dava gate verde. Padrao de emissor real com excecao para
+        # placeholder documentado -- ver docstring do script.
+        run: python scripts/check-secrets.py
+
       - name: Licenças dos componentes
         run: python scripts/check-licenses.py
 

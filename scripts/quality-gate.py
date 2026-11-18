@@ -150,6 +150,12 @@ def main(argv: list[str]) -> int:
     # enquanto as cópias baterem com a fonte.
     resultados.append(rodar("copias", [py, "scripts/check-copies.py"]))
     resultados.append(rodar("licencas", [py, "scripts/check-licenses.py"]))
+    # Repositório PÚBLICO, e até esta rodada nenhum verificador abria um arquivo em busca de
+    # credencial: colar um token GitHub válido em `.env.example` dava gate 46/46 verde. Os quatro
+    # scripts que mencionam "segredo" no fonte falam de outra coisa (scan descrito em prosa, design
+    # tokens, tokenização para comparar citações) -- nenhum abre um arquivo procurando credencial.
+    # Padrão de emissor real, não entropia: ver docstring do check-secrets.
+    resultados.append(rodar("secrets", [py, "scripts/check-secrets.py"]))
     # Bundle DSH: os três validadores próprios existiam mas nunca rodaram no gate nem no CI
     # (dívida 4 do ROADMAP). `agents/` é artefato gerado e versionado -- sem o build.py --check
     # real, divergir das fontes era invisível, e o flag antigo só media bytes.
