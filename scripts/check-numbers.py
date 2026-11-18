@@ -41,10 +41,52 @@ def _run(cmd: list[str]) -> str:
     return p.stdout.decode("utf-8", errors="replace")
 
 
+def _conta_disco() -> dict:
+    """Mede as contagens direto do filesystem, sem passar por arsenal.json.
+
+    O checker existia para conferir a documentação contra a realidade. Lendo o manifesto
+    gerado, ele comparava dois artefatos: se `build-manifest.py` ficasse desatualizado, os
+    números "errados" do README passariam a bater com os números errados do manifesto e o
+    gate daria verde sobre duas fontes velhas. Contar do disco fecha esse buraco e, de
+    quebra, torna o checker imune a arsenal.json corrompido ou ausente -- antes, `{}`, `[]`
+    ou um JSON truncado derrubavam o script com KeyError no meio do CI.
+    """
+    def subpastas(*partes: str) -> list[Path]:
+        p = RAIZ.joinpath(*partes)
+        return sorted(x for x in p.iterdir() if x.is_dir()) if p.is_dir() else []
+
+    skills = subpastas("skills")
+    declarados = 0
+    for sk in skills:
+        ev = sk / "evals" / "evals.json"
+        if not ev.is_file():
+            continue
+        try:
+            dados = json.loads(ev.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        cases = dados.get("cases", []) if isinstance(dados, dict) else []
+        if isinstance(cases, list):
+            declarados += len([c for c in cases if isinstance(c, dict)])
+
+    external = sorted(p for p in (RAIZ / "external").glob("*.md")
+                      if p.name != "README.md") if (RAIZ / "external").is_dir() else []
+    prompts = sorted(p for p in (RAIZ / "prompts").glob("*.md")
+                     if p.name != "README.md") if (RAIZ / "prompts").is_dir() else []
+
+    return {
+        "skills": len(skills),
+        "external": len(external),
+        "prompts": len(prompts),
+        "mcp": len(subpastas("mcp")),
+        "bundle": len(subpastas("bundle")),
+        "evals_declarados": declarados,
+    }
+
+
 def estado_disco() -> dict:
-    man = json.loads((RAIZ / "arsenal.json").read_text(encoding="utf-8"))
-    c = man["counts"]
-    declarados = sum(s["evals"] for s in man["skills"])
+    c = _conta_disco()
+    declarados = c["evals_declarados"]
 
     saida_report = _run([PY, str(RAIZ / "scripts" / "run-evals.py"), "--report"])
     executados = _num(saida_report, r"(\d+)\s+registrados")
@@ -64,8 +106,14 @@ def estado_disco() -> dict:
     arq_contagem = RAIZ / ".gate-contagem"
     if arq_contagem.is_file():
         try:
-            n = json.loads(arq_contagem.read_text(encoding="utf-8")).get("total")
-            total_checks = int(n) if isinstance(n, int) and n > 0 else None
+            dados = json.loads(arq_contagem.read_text(encoding="utf-8"))
+            # O artefato pode ser qualquer JSON: lista, string, número. Chamar .get() direto
+            # estourava AttributeError (reproduzido com conteúdo `[]`) dentro do checker que o
+            # CI usa para provar que o repo está coerente -- um arquivo corrompido derrubando
+            # o verificador é pior do que ele falhar corretamente.
+            n = dados.get("total") if isinstance(dados, dict) else None
+            total_checks = int(n) if isinstance(n, (int, float)) and not isinstance(
+                n, bool) and n > 0 else None
         except (json.JSONDecodeError, OSError, ValueError, TypeError):
             total_checks = None
 
