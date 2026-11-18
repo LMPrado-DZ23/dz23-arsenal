@@ -60,6 +60,11 @@ DATASETS = {
         "busca_em": ["instead_of_code_tour", "use"],
         "titulo": "Quando NAO fazer code tour e o que usar no lugar",
     },
+    "impacto": {
+        "arquivo": "dimensoes-de-impacto.csv",
+        "busca_em": ["dimensao", "o_que_verificar"],
+        "titulo": "Dimensoes de impacto antes de mudar (ECC change-impact, MIT)",
+    },
 }
 
 # Ponte PT->EN fechada. Cada valor abaixo foi COPIADO de uma celula que existe na tabela correspondente
@@ -98,6 +103,10 @@ TERMOS = {
                    "pergunta rapida": "a one-off explanation in chat is enough",
                    "simples": "a one-off explanation in chat is enough",
                    "onboarding amplo": "the task is broad codebase onboarding without a tour artifact"},
+    "impacto": {"blast radius": "codigo", "raio de impacto": "codigo", "chamadores": "codigo",
+                "migracao": "dados", "schema": "dados", "contrato": "interfaces",
+                "consumidores": "interfaces", "rollback": "release", "deploy": "release",
+                "regressao": "testes", "irreversivel": "release"},
 }
 
 

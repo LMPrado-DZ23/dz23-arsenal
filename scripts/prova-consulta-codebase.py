@@ -40,6 +40,8 @@ DEVE_ACHAR = [
     (["antipadrao", "chute"], "Guessed anchors"),
     (["antipadrao", "generico"], "Generic descriptions"),
     (["quando-nao", "refatorar"], "implementation or refactoring"),
+    (["impacto", "rollback"], "release"),
+    (["impacto", "dados"], "idempotencia"),
 ]
 print("=== consultas em portugues devem resolver ===")
 for args, esperado in DEVE_ACHAR:
@@ -69,7 +71,8 @@ for chave, pt, en in mortos:
     ruins.append(f"sinonimo morto: {chave}:'{pt}' -> '{en}'")
 
 print("\n=== recusas honestas ===")
-for args in (["antipadrao", "quadrado"], ["profundidade", "xyzabc"], ["quando-nao", "graphql"]):
+for args in (["antipadrao", "quadrado"], ["profundidade", "xyzabc"], ["quando-nao", "graphql"],
+             ["impacto", "quasarxyz"]):
     rc, out = roda(args)
     recusou = rc != 0 and "sem correspondencia" in out.lower()
     entregou = any(l.strip().startswith("[") for l in out.splitlines())
@@ -162,6 +165,6 @@ if ruins:
     for r in ruins:
         print("  -", r)
     sys.exit(1)
-print(f"OK: {len(DEVE_ACHAR)} consultas corretas, {total} sinonimos vivos, 3 recusas honestas, "
+print(f"OK: {len(DEVE_ACHAR)} consultas corretas, {total} sinonimos vivos, 4 recusas honestas, "
       "esquema valido")
 

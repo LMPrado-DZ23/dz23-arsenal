@@ -1,0 +1,7 @@
+No,dimensao,o_que_verificar,origem_arquivo,origem_secao
+1,codigo,pontos de entrada; chamadores diretos; consumidores a jusante; artefatos gerados; camadas de compatibilidade afetados,ECC change-impact/SKILL.md,Before the Change
+2,dados,schemas; migracoes; dados historicos; serializacao; caches; chaves de idempotencia que mudam,ECC change-impact/SKILL.md,Before the Change
+3,interfaces,APIs; mensagens; formatos de arquivo; CLIs; quem sao os consumidores e os provedores,ECC change-impact/SKILL.md,Before the Change
+4,testes,criterios de sucesso; TEST-IDs; testes de contrato; comandos de regressao que provam a mudanca,ECC change-impact/SKILL.md,Before the Change
+5,documentacao,MAP STATUS LOG CONTEXT ADR CONTRACT Spec ou Plan TESTS REGRESSION afetados,ECC change-impact/SKILL.md,Before the Change
+6,release,ordem de deploy; janela de compatibilidade; recuperacao de dados; comando de rollback; efeitos irreversiveis,ECC change-impact/SKILL.md,Before the Change

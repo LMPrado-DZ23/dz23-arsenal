@@ -1,5 +1,7 @@
 # Proveniência de `dados/` (acervo de code tour)
 
+> **dimensoes-de-impacto.csv** (6 linhas) vem da skill `change-impact` do ECC (MIT): as 6 dimensoes de impacto (codigo, dados, interfaces, testes, documentacao, release) a verificar antes de mudar. Cada linha cita `ECC change-impact/SKILL.md`.
+
 ## Fonte e licença
 
 - **Projeto:** ECC (`affaan-m/everything-claude-code` v2.2.3), baixado como `ECC-main.zip`.
