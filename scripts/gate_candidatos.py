@@ -44,7 +44,7 @@ from pathlib import Path
 
 # Mudou um threshold? Sobe a versão. Sem isso, dois relatórios com números diferentes
 # não dizem se o código mudou ou se os dados mudaram.
-GATE_VERSION = "1.0.0"
+GATE_VERSION = "1.1.0"
 
 MAX_CANDIDATOS = 6
 
@@ -54,9 +54,20 @@ class Veredicto:
     id: str
     gate: str
     lancado: bool
-    prioridade: int          # maior = mais urgente
+    prioridade: int          # maior = mais urgente; sempre em PRIORIDADE_MAX
     motivo: str              # a comparação numérica que decidiu
     evidencia: dict = field(default_factory=dict)
+
+
+# A prioridade serve para ORDENAR, não para medir grandeza. Sem teto, um budget minúsculo
+# produzia 99.999.999.900 e passava a dominar qualquer outra sinal — o ranking deixava de
+# comparar coisas comparáveis. Limitar preserva a ordem relativa dentro de cada gate e
+# impede que um outlier defina a fila inteira.
+PRIORIDADE_MAX = 100
+
+
+def _clamp(valor: float) -> int:
+    return max(0, min(int(valor), PRIORIDADE_MAX))
 
 
 def _falta(valor) -> bool:
@@ -75,7 +86,7 @@ def gate_rota_quente_sem_cache(ep: dict) -> Veredicto | None:
     lancado = r > 500 and p95 > 400 and hr < 0.5
     return Veredicto(
         id=f"rota:{ep.get('rota', '?')}", gate="rota-quente-sem-cache", lancado=lancado,
-        prioridade=min(r // 100, 50) + (p95 // 100),
+        prioridade=_clamp(min(r // 100, 50) + (p95 // 100)),
         motivo=(f"requests={r} (>500) e p95={p95}ms (>400) e hit_rate={hr} (<0.5) "
                 f"e cacheavel=true"),
         evidencia={"rota": ep.get("rota"), "requests": r, "p95_ms": p95, "hit_rate": hr},
@@ -96,7 +107,7 @@ def gate_budget_estourado(b: dict) -> Veredicto | None:
     lancado = estouro >= 0.20
     return Veredicto(
         id=f"bench:{b.get('nome', '?')}:{b.get('metrica', '?')}", gate="budget-estourado",
-        lancado=lancado, prioridade=int(estouro * 100),
+        lancado=lancado, prioridade=_clamp(estouro * 100),
         motivo=f"{b.get('metrica')}={medido} vs budget={budget} ({estouro:+.0%}) "
                f"em {n} amostras; limiar 20%",
         evidencia=b)
@@ -110,7 +121,7 @@ def gate_tabela_grande_sem_indice(t: dict) -> Veredicto | None:
     lancado = linhas > 1_000_000 and qpm > 100
     return Veredicto(
         id=f"tabela:{t.get('nome', '?')}", gate="tabela-grande-sem-indice",
-        lancado=lancado, prioridade=min(qpm // 50, 40) + min(linhas // 1_000_000, 20),
+        lancado=lancado, prioridade=_clamp(min(qpm // 50, 40) + min(linhas // 1_000_000, 20)),
         motivo=f"linhas={linhas} (>1M) e consultas={qpm}/min (>100) e sem índice em "
                f"{list(sem_idx)}",
         evidencia=t)
@@ -205,13 +216,23 @@ def selftest() -> int:
                                   "budget": 200, "amostras": 3}]})
     espera(not rp["lancados"], "3 amostras não deveriam lançar")
 
+    # Escala: prioridade ordena, não mede grandeza. Sem teto, budget minúsculo produzia
+    # ~1e11 e passava a dominar a fila inteira.
+    rx = avaliar({"endpoints": [{"rota": "enorme", "requests": 10**9, "p95_ms": 10**7,
+                                 "hit_rate": 0.0, "cacheavel": True}],
+                  "benchmarks": [{"nome": "apertado", "metrica": "LCP", "medido": 10**9,
+                                  "budget": 1, "amostras": 10**6}]})
+    for v in rx["lancados"]:
+        espera(0 <= v["prioridade"] <= PRIORIDADE_MAX,
+               f"prioridade fora do teto em {v['id']}: {v['prioridade']}")
+
     if falhas:
         print("SELFTEST FALHOU:")
         for f in falhas:
             print("  -", f)
         return 1
     print(f"selftest OK · gate_version {GATE_VERSION} · "
-          f"positivo/negativo/vazio/determinismo/amostra-pobre")
+          f"positivo/negativo/vazio/determinismo/amostra-pobre/teto-de-prioridade")
     return 0
 
 

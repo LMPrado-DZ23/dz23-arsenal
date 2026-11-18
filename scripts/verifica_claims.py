@@ -33,9 +33,9 @@ import json
 import re
 import sys
 from dataclasses import dataclass, asdict
-from pathlib import Path
+from pathlib import Path, PurePosixPath as _PurePosixPath
 
-VERSAO = "1.1.0"
+VERSAO = "1.2.0"
 
 RE_CAMINHO = re.compile(
     r"(?<![\w./-])((?:[\w.\-]+[/\\])+[\w.\-]+\.(?:py|md|json|ya?ml|toml|sh|ps1|js|ts|tsx|jsx|"
@@ -97,7 +97,13 @@ def base_da_skill(texto_path: Path | None, raiz: Path) -> Path | None:
 
 
 def _normaliza(valor: str) -> str:
-    return valor.replace("\\", "/").lstrip("./")
+    # Só barras e contra-barra de escape; NÃO stripar '.', senão '../../../x' vira
+    # '././x' e o path traversal some antes da guarda abaixo.
+    return valor.replace("\\", "/").lstrip("/")
+
+
+def _escapa_da_raiz(norm: str) -> bool:
+    return ".." in _PurePosixPath(norm).parts
 
 
 def checar_caminho(valor: str, raiz: Path, texto: str, linha_no: int,
@@ -119,6 +125,13 @@ def checar_caminho(valor: str, raiz: Path, texto: str, linha_no: int,
         return Claim("caminho-arquivo", valor, "nao-verificavel",
                      "referência a outro projeto", alvo)
 
+    # Path traversal: um '../../' escaparia do checkout e o verificador passaria a
+    # consultar o filesystem de quem roda, revelando por canal lateral se um caminho
+    # absoluto existe. Fora da pergunta que este script responde ("este repo contém
+    # este arquivo").
+    if _escapa_da_raiz(norm):
+        return Claim("caminho-arquivo", valor, "nao-verificavel",
+                     "sai do checkout (path traversal)", alvo)
     candidatos: list[Path] = []
     rotulo_ok = "existe"
     if base_skill is not None:
@@ -243,13 +256,20 @@ def selftest() -> int:
            == json.dumps(avaliar(f"`scripts/{aqui}`", raiz), sort_keys=True),
            "avaliar não é determinístico")
 
+    # Path traversal não é pergunta sobre este repo, e respondê-la viraria oracle de
+    # existência para caminhos fora do checkout.
+    r9 = avaliar("Veja `../../../Windows/win.ini`.", raiz)
+    espera(r9["falhos"] == 0 and r9["nao_verificaveis"] == 1,
+           f"path traversal vazou como alegação verificável: {r9['claims']}")
+
     if falhas:
         print("SELFTEST FALHOU:")
         for f in falhas:
             print("  -", f)
         return 1
     print(f"selftest OK · verifica_claims {VERSAO} · "
-          "positivo/âncora/negativo/imperativo/placeholder/code-block/vazio/determinismo")
+          "positivo/âncora/negativo/imperativo/placeholder/code-block/vazio/"
+          "determinismo/traversal")
     return 0
 
 
