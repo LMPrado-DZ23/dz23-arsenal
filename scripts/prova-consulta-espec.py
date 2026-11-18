@@ -121,6 +121,25 @@ for arq, (esperado, digest) in MANIFESTO.items():
         ruins.append(f"{arq}: linhas sem origem declarada: {sem_origem}")
 
 print()
+print("=== busca: varre o acervo inteiro e recusa chute ===")
+_pb = subprocess.run([PY, "scripts/consulta-espec.py", "busca", "schema"], capture_output=True,
+                   cwd=str(RAIZ), timeout=180)
+_ob = (_pb.stdout + _pb.stderr).decode("utf-8", "replace")
+if _pb.returncode != 0 or "[" not in _ob:
+    ruins.append("busca schema nao retornou resultado")
+    print("  ERRADO busca positiva vazia")
+else:
+    print("  OK     busca schema retornou resultado")
+_pn = subprocess.run([PY, "scripts/consulta-espec.py", "busca", "zzxyqwk"], capture_output=True,
+                   cwd=str(RAIZ), timeout=180)
+_on = (_pn.stdout + _pn.stderr).decode("utf-8", "replace")
+if _pn.returncode == 0 or "sem correspondencia" not in _on.lower():
+    ruins.append("busca inexistente deveria recusar")
+    print("  ERRADO busca negativa nao recusou")
+else:
+    print("  OK     busca inexistente recusou honestamente")
+
+print()
 if ruins:
     print("PROBLEMAS:")
     for r in ruins:

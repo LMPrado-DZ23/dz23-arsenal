@@ -228,6 +228,30 @@ def _colunas_validas() -> list[str]:
     return ruins
 
 
+def cmd_busca(args) -> int:
+    """Busca uma palavra em todo o acervo (todos os datasets). Alinhado aos consultores novos."""
+    termo = " ".join(args.termo)
+    achados = []
+    for chave, cfg in DATASETS.items():
+        try:
+            linhas = _ler(cfg["arquivo"])
+        except SystemExit:
+            continue
+        for r in linhas:
+            if any(_casa(termo, str(r.get(c, ""))) for c in cfg["busca_em"]):
+                achados.append((chave, r))
+    if not achados:
+        print(f"sem correspondencia para '{termo}' no acervo. Nao vou aproximar.")
+        return 1
+    for chave, r in achados[: args.top]:
+        print(f"[{chave}] " + "  |  ".join(
+            f"{k}: {str(v)[:90]}" for k, v in r.items()
+            if k not in ("No", "origem_arquivo", "origem_secao")))
+    if len(achados) > args.top:
+        print(f"-- {len(achados)} resultados, mostrando {args.top}")
+    return 0
+
+
 def main(argv=None) -> int:
     for s in (sys.stdout, sys.stderr):
         try:
@@ -242,6 +266,10 @@ def main(argv=None) -> int:
         p.add_argument("termo")
         p.add_argument("--top", type=int, default=4)
         p.set_defaults(fn=cmd_consulta(chave))
+    pb = sub.add_parser("busca", help="busca uma palavra em todo o acervo")
+    pb.add_argument("termo", nargs="+")
+    pb.add_argument("--top", type=int, default=8)
+    pb.set_defaults(fn=cmd_busca)
     args = ap.parse_args(argv)
     quebradas = _colunas_validas()
     if quebradas:

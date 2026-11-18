@@ -31,7 +31,7 @@
       "templates": 2,
       "scripts": 4,
       "evals": 12,
-      "sha256_skill_md": "f32d2d95f7faaa8911e4f129a4a8dd3eb2273701c38d22a67b4a3e8268677c0b"
+      "sha256_skill_md": "fc2e77b85e68b7c663ce3ff3fa2f953c950e9e752b9da382a8fbf5e212b37365"
     },
     {
       "name": "dz23-codebase-cartographer",
@@ -43,7 +43,7 @@
       "templates": 8,
       "scripts": 6,
       "evals": 15,
-      "sha256_skill_md": "a161b59ac7d26aa06892b07fd5062491eee2b58a7bd26495a1f5df994738e01e"
+      "sha256_skill_md": "8e330c003fc067bb8cc8d6648a2a866b9d1027b78ba2447947ab5c1c8dee9ad4"
     },
     {
       "name": "dz23-devops-cloud-deployer",
@@ -79,7 +79,7 @@
       "templates": 6,
       "scripts": 7,
       "evals": 16,
-      "sha256_skill_md": "ae291cecd44837eb0e0276021d6e335145f761707ddbf41800512c42a65cda6b"
+      "sha256_skill_md": "8b31d759d0c4c55485d483a9cb873333a145dffd2d5200714ed4e32fe85dc1b1"
     },
     {
       "name": "dz23-postgres-prod-preflight",
@@ -115,7 +115,7 @@
       "templates": 11,
       "scripts": 6,
       "evals": 15,
-      "sha256_skill_md": "da29654aeb415d6d479ca7ad4188b411654b4de9a7a8774b778f86082d7aa374"
+      "sha256_skill_md": "b509e57edb028de0e15651b247196523d05b87a62c04196eac111731c28638fb"
     },
     {
       "name": "dz23-ultimate-pro-max",

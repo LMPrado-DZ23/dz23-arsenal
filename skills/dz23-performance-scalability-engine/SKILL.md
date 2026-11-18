@@ -146,7 +146,7 @@ Leia `references/quality-gates.md`. Resumo — BLOCKER: otimização sem baselin
 ## Seleção de referências (carregamento progressivo)
 - Medição, baseline e instrumentos: `references/measurement-first.md`
 - Sintoma → camada → primeira medição: `references/diagnostic-playbook.md`
-- **Acervo consultável de priorização (13 linhas, MIT/ECC)**: `references/dataset-performance.md` — antes de escolher onde cortar, consulte `python scripts/consulta-performance.py metrica <lcp|inp|cls|tbt>` ou `... prioridade <candidato>`. Serve para não atacar re-render com waterfall aberto.
+- **Acervo consultável de priorização (13 linhas, MIT/ECC)**: `references/dataset-performance.md` — antes de escolher onde cortar, consulte `python scripts/consulta-performance.py metrica <lcp|inp|cls|tbt>`, `... prioridade <candidato>` ou `... busca <termo>` (varre o acervo; responde "sem correspondência" quando não há). Serve para não atacar re-render com waterfall aberto.
 - Budget e metas por camada: `references/perf-budget.md`
 - Camada 1 — Frontend e interface: `references/frontend-layer.md`
 - Camada 2 — Comunicação e rede: `references/network-layer.md`

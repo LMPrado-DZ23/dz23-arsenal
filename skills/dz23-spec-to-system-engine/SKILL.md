@@ -53,7 +53,7 @@ ENQUADRAR → EXTRAIR REQUISITOS → VERIFICAR → DECOMPOR → CONTRATAR → PR
 - **Rastreabilidade viva**: `REQ → fatia → teste → evidência` — requisito sem teste é requisito não coberto.
 - **Definição de pronto explícita** por fatia (código, teste, doc, observabilidade, rollback quando aplicável).
 - **Estimativa é intervalo com premissas**; número único sem premissa é ficção.
-- **Decisão irreversível exige ADR** antes de executar; reversível se decide e se registra. Para saber *se* algo merece registro, consulte `python scripts/consulta-espec.py categoria <domínio>` ou `... vale <a escolha concreta>` — as 8 categorias da taxonomia ECC dizem quando um ADR é obrigatório em vez de ruído.
+- **Decisão irreversível exige ADR** antes de executar; reversível se decide e se registra. Para saber *se* algo merece registro, consulte `python scripts/consulta-espec.py categoria <domínio>`, `... vale <a escolha concreta>` ou `... busca <termo>` (varre o acervo; responde "sem correspondência" quando não há) — as 8 categorias da taxonomia ECC dizem quando um ADR é obrigatório em vez de ruído.
 - **Nunca inventar requisito** que o usuário não pediu, nem apagar em silêncio o que ele pediu.
 - **Nunca declarar pronto sem evidência** — comando, saída, demo ou teste.
 

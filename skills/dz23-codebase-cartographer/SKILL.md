@@ -56,6 +56,7 @@ python scripts/consulta-codebase.py listar
 python scripts/consulta-codebase.py profundidade arquitetura
 python scripts/consulta-codebase.py antipadrao "lista de arquivos"
 python scripts/consulta-codebase.py quando-nao refatorar
+python scripts/consulta-codebase.py busca tour
 ```
 
 Português funciona por mapa fechado de 44 termos (`chute`→Guessed anchors, `quebrou`→rca-investigator).
