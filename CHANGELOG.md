@@ -1,3 +1,33 @@
+## [1.5.28] — 2026-11-18
+
+### Executado
+- **Primeiro eval de `dz23-postgres-prod-preflight` rodado contra banco vivo** (a skill estava em
+  0/13 desde a criação). ``rls-enabled-without-force`` registrado como PASS em
+  ``evals-results/postgres/2026-11-18-rls-enabled-without-force.md``, com evidência obtida por
+  ``docker exec psql`` no Postgres 17.11 do container local, schema isolado ``eval_rls`` e duas roles
+  criadas para o teste. Cobertura: 45 → 46 de 144 (99 → 98 pendentes). Não foi heurística nem leitura
+  de docstring -- é o tipo de registro que a dívida 14 dizia só fechar por execução.
+
+  A cadeia obtida excede o esperado do cenário: ``ENABLE`` sem ``FORCE`` deixa o dono ver as 2 linhas
+  dos dois tenants (vazamento confirmado); ``FORCE`` reduz isso a zero; **mas com uma role que tem
+  ``rolbypassrls = t`` -- caso do ``postgres`` deste ambiente, que não é superuser -- o vazamento
+  persiste mesmo após ``FORCE``**. Nem ``expected`` nem ``fails_if`` mencionam isso. Registrado como
+  lacuna do próprio eval em ``--defects``: a receita completa exige três condições simultâneas
+  (FORCE + role não-owner + role sem BYPASSRLS), e um guia que ensina duas delas deixa o usuário com
+  vazamento aberto e checklist verde.
+
+### Corrigido
+- **Duas violações da ``audita-sensibilidade.py`` tinham valor fixo e apodreceram na hora.** O
+  ``check-eval-results`` era violado gravando o dígito 99; ao executar o primeiro eval o ROADMAP
+  passou a dizer 98, o regex não casou, nenhum arquivo mudou, e a guarda anti-violação-imaginária
+  reportou "medição vazia" -- funcionou como desenhada. Mesma sorte tinha o ``checa-ancoras``,
+  ancorado em ``## [1.5.``, que teria morrido no primeiro release ``1.6.0``. Agora lê o valor atual e
+  escreve outro (``_viola_pendente``), e a âncora virou padrão genérico ``\d+\.\d+\.\d+``; verificado
+  simulando ``[1.6.0]`` no topo. Uma violação com literal fixo vence uma revisão e apodrece na
+  seguinte.
+- Célula da tabela de pendências do ROADMAP, que meu próprio ``re.sub`` havia corrompido para
+  ``****Total pendente** | **98****`` ao atualizar o número.
+
 ## [1.5.27] — 2026-11-18
 
 ### Corrigido — contagens citadas em prosa de skill sem nenhum verificador comparando
