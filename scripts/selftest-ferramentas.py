@@ -215,11 +215,102 @@ def testa_descoberta() -> list[str]:
     return problemas
 
 
+# --- check-copies / check-licenses com árvore incompleta -----------------------
+
+def testa_guardas_de_arvore() -> list[str]:
+    """Os verificadores de estrutura encontram um repo pela metade sem explodir?
+
+    Um checkout parcial (clone interrompido, merge no meio, skill recém-criada) é o estado
+    em que essas ferramentas mais precisam dizer algo útil -- e é justamente o estado em que
+    um KeyError ou TypeError transformaria o diagnóstico em traceback.
+    """
+    problemas: list[str] = []
+    scripts = ("check-copies.py", "check-licenses.py")
+
+    def monta(cenario: str) -> pathlib.Path:
+        """Cenário isolado, com RAIZ própria -- sem arsenal.json nem skills/ completos.
+
+        Detalhe que importa: copiar os scripts para fora do repo não basta, porque eles
+        derivam RAIZ de __file__ e passariam a enxergar... o repo real ao lado, com o
+        manifesto íntegro. O teste então validava o cenário errado e dava verde. Aqui a
+        árvore montada é autocontida: só existe o que este bloco criou dentro de tmp.
+        """
+        tmp = pathlib.Path(tempfile.mkdtemp())
+        (tmp / "scripts").mkdir()
+        for n in scripts:
+            (tmp / "scripts" / n).write_text((RAIZ / "scripts" / n).read_text(encoding="utf-8"),
+                                             encoding="utf-8")
+        if cenario == "vazio":
+            (tmp / "skills").mkdir()
+        elif cenario == "sem-skills":
+            pass  # arvore nua: sem skills/ nem arsenal.json -- o caso que dava traceback
+        elif cenario == "sem-mcp":
+            (tmp / "skills" / "dz23-x").mkdir(parents=True)
+        elif cenario == "com-skill-pela-metade":
+            sk = tmp / "skills" / "dz23-y"
+            (sk / "scripts").mkdir(parents=True)
+            (sk / "SKILL.md").write_text("---\nname: dz23-y\nversion: 1.0.0\n"
+                                         "description: x\n---\n# y\n", encoding="utf-8")
+        # Arsenal incompleto de propósito: sem arsenal.json, sem external/, sem mcp/.
+        assert not (tmp / "arsenal.json").exists(), "cenário vazou o manifesto do repo real"
+        return tmp
+
+    import subprocess
+    for cenario in ("vazio", "sem-skills", "sem-mcp", "com-skill-pela-metade"):
+        base = monta(cenario)
+        try:
+            for n in scripts:
+                p = subprocess.run([sys.executable, str(base / "scripts" / n)],
+                                   capture_output=True, timeout=120, cwd=str(base))
+                saida = (p.stdout.decode("utf-8", "replace")
+                         + p.stderr.decode("utf-8", "replace"))
+                if "Traceback" in saida:
+                    problemas.append(f"guardas/{cenario}/{n}: traceback")
+        finally:
+            import shutil
+            shutil.rmtree(base, ignore_errors=True)
+
+    # Não basta não explodir: com skills/ ausente o gate tem que reclamar, e não dar verde.
+    def confere_sem_skills_denuncia() -> None:
+        base = monta("sem-skills")
+        try:
+            p = subprocess.run([sys.executable, str(base / "scripts/check-copies.py")],
+                               capture_output=True, timeout=120, cwd=str(base))
+            saida = p.stdout.decode("utf-8", "replace")
+            if p.returncode == 0:
+                raise AssertionError("skills/ ausente reportado como sucesso")
+            if "ausente" not in saida:
+                raise AssertionError(f"não explicou a causa: {saida[:90]}")
+        finally:
+            import shutil
+            shutil.rmtree(base, ignore_errors=True)
+    problemas += sem_excecao("guardas/sem-skills-denuncia", confere_sem_skills_denuncia)
+
+    def confere_copies_denuncia_fonte_ausente() -> None:
+        import subprocess
+        base = monta("sem-mcp")
+        try:
+            # remove a fonte: o gate tem que reclamar, não silenciar
+            (base / "scripts" / "skill_validator.py").write_text("", encoding="utf-8")
+            p = subprocess.run([sys.executable, str(base / "scripts/check-copies.py")],
+                               capture_output=True, timeout=120, cwd=str(base))
+            saida = p.stdout.decode("utf-8", "replace")
+            if "Traceback" in saida:
+                raise AssertionError("traceback com módulo-fonte vazio")
+        finally:
+            import shutil
+            shutil.rmtree(base, ignore_errors=True)
+    problemas += sem_excecao("guardas/copies-sem-fonte", confere_copies_denuncia_fonte_ausente)
+
+    return problemas
+
+
 def rodar_tudo() -> dict:
     grupos = {
         "triagem": testa_triagem(),
         "claims": testa_claims(),
         "descoberta": testa_descoberta(),
+        "guardas": testa_guardas_de_arvore(),
     }
     total = sum(len(v) for v in grupos.values())
     return {"ok": total == 0, "problemas": total, "por_grupo": grupos}

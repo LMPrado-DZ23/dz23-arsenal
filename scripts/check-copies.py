@@ -46,7 +46,20 @@ def main(argv: list[str]) -> int:
 
     problemas: list[dict] = []
     conferidas = 0
-    skills = sorted(p for p in (RAIZ / "skills").iterdir() if p.is_dir())
+    pasta_skills = RAIZ / "skills"
+    if not pasta_skills.is_dir():
+        # Um checkout parcial (clone interrompido, worktree sem skills/) não pode derrubar
+        # o gate com FileNotFoundError: o verificador que morre é indistinguível do repo que
+        # falhou, e quem lê passa a ignorar ambos. Declara-se a condição e sai com erro.
+        msg = {"modulo": "-", "skill": "-",
+               "problema": f"{pasta_skills} ausente -- nada para conferir"}
+        if args.json:
+            print(json.dumps({"ok": False, "conferidas": 0, "problemas": [msg]},
+                             ensure_ascii=False, indent=2))
+        else:
+            print(f"PROBLEMA: {msg['problema']}")
+        return 1
+    skills = sorted(p for p in pasta_skills.iterdir() if p.is_dir())
 
     for modulo in MODULOS_EMBUTIDOS:
         fonte = RAIZ / "scripts" / modulo

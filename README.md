@@ -142,6 +142,8 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 | [`docs/integration-map.md`](docs/integration-map.md) | Como as skills se conectam |
 | [`docs/installing-skills.md`](docs/installing-skills.md) | DZ23 → `~/.agents/skills` |
 | [`docs/faq.md`](docs/faq.md) | Perguntas frequentes |
+| [`docs/defeitos-verificados-2026-11-17.md`](docs/defeitos-verificados-2026-11-17.md) | Auditoria que originou a v1.5.0: cada defeito com comando de reprodução |
+| [`external/absorcao-2026-11-17.md`](external/absorcao-2026-11-17.md) | O que foi absorvido dos 12 pacotes externos, e por que o resto ficou de fora |
 | [`cli/README.md`](cli/README.md) | Guia de CLIs |
 
 ## Estado verificado (não é marketing)
