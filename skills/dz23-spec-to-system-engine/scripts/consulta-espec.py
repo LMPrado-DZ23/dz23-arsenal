@@ -29,28 +29,24 @@ import re
 import sys
 
 
-def _acha_skill() -> pathlib.Path:
-    """O diretorio da skill e o primeiro ancestral que contem `dados/categorias-de-decisao-adr.csv`.
+def _acha_raiz() -> pathlib.Path:
+    """RAIZ e o ancestral que contem um diretorio `skills/`. Mesmo padrao de consulta-codebase.py.
 
-    Contar niveis fixos foi o bug dos itens anteriores: rodando de skills/<nome>/scripts/ a arvore certa e
-    parent.parent (a skill), mas de scripts/ do repo e outra conta, e apontar para a raiz quebrava na
-    instalacao em ~/.agents/skills/. Procurar o arquivo de dados e autoexplicativo e funciona em qualquer
-    uma das tres origens -- se nenhum ancestral tem o acervo, a mensagem diz isso em vez de mentir exit 0.
+    A versao anterior andava os ancestrais procurando `dados/categorias-de-decisao-adr.csv` ao lado do
+    script. Isso funcionava na copia da skill (skills/<nome>/scripts/, com dados/ ao lado) e na
+    instalacao, mas FALHAVA rodando de scripts/ do repo -- onde o acervo nao esta ao lado, e sim em
+    skills/dz23-spec-to-system-engine/dados/. Resolver pela presenca de skills/ funciona nas tres
+    origens: repo (scripts/ sobe um), copia da skill (sobe tres ate ~/.agents ou o checkout), instalacao.
     """
-    alvo = pathlib.Path(__file__).resolve().parent
-    for _ in range(6):
-        if (alvo / "dados" / "categorias-de-decisao-adr.csv").is_file():
+    aqui = pathlib.Path(__file__).resolve()
+    for alvo in (a.parent for a in [aqui.parent, aqui.parent.parent.parent]):
+        if (alvo / "skills").is_dir():
             return alvo
-        if alvo.parent == alvo:
-            break
-        alvo = alvo.parent
-    raise SystemExit(
-        "FALHA: nao encontrei dados/categorias-de-decisao-adr.csv em nenhum ancestral deste script. "
-        "O acervo deveria estar ao lado, dentro da skill -- verifique install-all.ps1 -Force.")
+    return aqui.parent.parent
 
 
-SKILL = _acha_skill()
-RAIZ = SKILL.parent.parent          # checkout do arsenal (skills/<nome> sobe dois ate a raiz)
+RAIZ = _acha_raiz()
+SKILL = RAIZ / "skills" / "dz23-spec-to-system-engine"
 DADOS = SKILL / "dados"
 
 DATASETS = {

@@ -175,6 +175,16 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("performance:consulta", [py, "scripts/consulta-performance.py", "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-performance",
                             [py, "scripts/prova-consulta-performance.py"]))
+    # codebase e espec: as provas existiam desde que os acervos entraram, mas nao eram rodadas pelo
+    # gate -- lacuna real. Sem isto, o consulta-espec de scripts/ do repo apontava o dado so por
+    # ancestral e falhava rodando da raiz (verde no uso instalado, quebrado ao testar no checkout),
+    # e nada denunciava. Agora os cinco consultores sao exercitados e provados aqui.
+    resultados.append(rodar("codebase:consulta", [py, "scripts/consulta-codebase.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-codebase",
+                            [py, "scripts/prova-consulta-codebase.py"]))
+    resultados.append(rodar("espec:consulta", [py, "scripts/consulta-espec.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-espec",
+                            [py, "scripts/prova-consulta-espec.py"]))
     # A skill que MANDA rodar um script tem de levar o script e o dado junto. Medido na rodada 58:
     # os tres consultores instruidos pelo SKILL.md viviam em scripts/ do repo, e `install-all` copia
     # apenas a pasta da skill -- a habilidade instalada em ~/.agents/skills/ mandava executar arquivo
