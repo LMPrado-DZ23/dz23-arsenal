@@ -125,6 +125,25 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
   adulteração: mudar uma célula quebra o hash e o check sai exit 1 apontando o arquivo.
 - **Proveniência completa:** `skills/dz23-codebase-cartographer/dados/PROVENIENCIA.md`.
 
+### `skills/dz23-spec-to-system-engine/dados/` — 1 CSV (8 linhas)
+- **Origem:** ECC (`affaan-m/everything-claude-code` v2.2.3), skill `architecture-decision-records`, seção
+  *Categories of Decisions Worth Recording*. Licença **MIT lida no arquivo `LICENSE` da raiz** (texto
+  completo com aviso de copyright).
+- **O que entrou:** taxonomia de quando uma decisão merece ADR (technology choices, architecture patterns,
+  API design, data modeling, infrastructure, security, testing, process), cada linha com
+  `origem_arquivo`/`origem_secao`. Consultor `scripts/consulta-espec.py` com mapa fechado de 40 sinônimos
+  PT→EN; prova no gate com exaustão dos termos + esquema + integridade por hash **canônico**.
+- **Rejeitado dentro da mesma fonte:** a tabela "ADR Index Format" está dentro de bloco ` ```markdown``` `
+  com ADRs fictícios (`Use Next.js`, `PostgreSQL over MongoDB`) — placeholder de template, não conhecimento.
+  O extrator checa fence antes de escrever.
+- **Ganho medido antes de copiar:** a skill já declarava "decisão irreversível exige ADR" sem critério de
+  *se* algo é irreversível; o acervo fornece exatamente esse critério, ligando-se ao padrão inegociável L56.
+- **Verificação:** 16 células conferidas contra a fonte na geração (zero divergências). Prova detecta
+  adulteração: trocar uma célula quebra o hash canônico e derruba 4 sinônimos (exit 1 apontando o arquivo).
+- **Lição do item anterior já embutida:** o hash nasce EOL-independente (`\r\n`→`\n` antes do sha256), porque
+  hashear bytes crus fez o CI reprovar um clone Linux cujo conteúdo era idêntico ao disco Windows só por fim
+  de linha. Verificado também num clone limpo do HEAD com HOME vazio (etapa agora obrigatória do ciclo).
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |
