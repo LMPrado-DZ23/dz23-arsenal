@@ -31,11 +31,35 @@ IGNORAR_ARQUIVOS = {"README.md"}
 
 
 def sha(p: Path) -> str:
+    """Hash de conteúdo normalizado por fim de linha.
+
+    Comparar bytes crus fazia o auditor reportar CONTEUDO_DIVERGENTE entre repo e instalação
+    quando os dois têm o mesmo texto com EOL diferente — acontece em qualquer máquina com
+    core.autocrlf=false, onde o git materializa LF enquanto a cópia instalada conserva CRLF
+    (o install-all usa Copy-Item, que não converte). O veredito era falso e empurrava a pessoa
+    para reinstalar algo que já estava igual.
+
+    Arquivos binários seguem comparados byte a byte: normalizar linha neles corromperia o hash
+    de um artefato real (ícone, zip de pacote), que é justamente o que se quer detectar.
+    """
     h = hashlib.sha256()
+    if _e_parece_texto(p):
+        with open(p, "rb") as fh:
+            dados = fh.read()
+        h.update(dados.replace(b"\r\n", b"\n"))
+        return h.hexdigest()
     with open(p, "rb") as fh:
         for bloco in iter(lambda: fh.read(1 << 20), b""):
             h.update(bloco)
     return h.hexdigest()
+
+
+EXT_TEXTO = {".md", ".txt", ".json", ".py", ".sh", ".ps1", ".yml", ".yaml", ".toml",
+             ".cfg", ".ini", ".csv", ".js", ".mjs", ".ts"}
+
+
+def _e_parece_texto(p: Path) -> bool:
+    return p.suffix.lower() in EXT_TEXTO
 
 
 def mapa(root: Path) -> dict[str, str]:
