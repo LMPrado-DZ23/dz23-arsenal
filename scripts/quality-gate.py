@@ -12,13 +12,11 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import subprocess
 import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-_ARQUIVO = Path(__file__).resolve()
 
 
 def rodar(nome: str, cmd: list[str]) -> dict:
