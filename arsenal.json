@@ -3,7 +3,7 @@
   "generated_by": "scripts/build-manifest.py",
   "counts": {
     "skills": 10,
-    "external": 13,
+    "external": 14,
     "prompts": 1,
     "mcp": 2,
     "bundle": 1
@@ -131,6 +131,11 @@
     }
   ],
   "external": [
+    {
+      "file": "external/absorcao-2026-11-17.md",
+      "autor": null,
+      "repo": null
+    },
     {
       "file": "external/anthropic-skills.md",
       "autor": "Anthropic",

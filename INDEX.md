@@ -3,7 +3,7 @@
 > Gerado por `scripts/build-manifest.py` em 2026-11-17. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**10 skills · 13 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
+**10 skills · 14 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -32,6 +32,7 @@
 
 | Skill | Autor | Repositório |
 |---|---|---|
+| [absorcao-2026-11-17](external/absorcao-2026-11-17.md) | — | — |
 | [anthropic-skills](external/anthropic-skills.md) | Anthropic | https://github.com/anthropics/skills |
 | [astryx](external/astryx.md) | — | — |
 | [cloudflare-security-audit](external/cloudflare-security-audit.md) | Cloudflare | https://github.com/cloudflare/security-audit-skill |

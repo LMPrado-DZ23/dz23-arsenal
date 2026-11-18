@@ -3,6 +3,92 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.5.0] — 2026-11-17
+
+**Instrumentos absorvidos de pacotes externos + dois gates que mentiam consertados.**
+Auditoria de 12 repositórios baixados (ECC, replica-skill, agent-skills/Vercel,
+modern-web-guidance, open-code-review, agent-desktop, rea, shadcn/ui, pomerado,
+suparagent, playwright-mcp, REA) e das skills instaladas nesta máquina. As técnicas foram
+reimplementadas, não copiadas; a triagem por pacote está em `external/absorcao-2026-11-17.md`.
+
+### Corrigido — verificadores que davam verde sem verificar
+- **`run-evals.py --verify-quotes` retornava exit 0 quando `AUDIT-STATUS.json` não
+  existia.** Apagar o arquivo de estado desligava silenciosamente a checagem de citação
+  fabricada — a camada 5 inteira. Agora ausência ou ilegitibilidade é falha. Prova:
+  renomear o arquivo → antes `exit 0`, agora `exit 1`.
+- **`check-eval-results.py` não cruzava NOT_TESTED com o ROADMAP**, embora o docstring
+  prometesse. O código só testava se a string `"Status de evals"` existia; um registro
+  fantasma dava `PROBLEMAS: 0`. Agora compara declarados × registrados e confere o
+  "Total pendente" escrito no ROADMAP. Prova: mudar para 7 → `diz 7, mas há 99 sem registro`.
+- **`build-manifest.py` usava `date.today()` no `generated_at`**, então `manifesto:check`
+  falhava em qualquer dia diferente do último push sem nada ter mudado. O CI da main estava
+  verde em 2026-11-14 porque rodou no dia certo; no mesmo commit, em 17/11, dava 16/17.
+  Trocado por comparação de conteúdo canônico.
+- **`bundles` era lista hardcoded** que punha o MCP principal dentro de "bundles" e omitia
+  `mcp/pentagi-mcp` do inventário. `mcp/` e `bundle/` agora são enumerados do disco.
+- **93 blobs commitados com CRLF** contra o próprio `.gitattributes` (`* text=auto eol=lf`),
+  entrada anterior à regra. Todo clone em Windows nascia com `git status` sujo em 93
+  arquivos, e quem trabalha no Windows para de confiar no diff — onde justamente se veria
+  edição indevida. Renormalizados; o CI agora tem passo que impede regressão.
+- **Skill sem `validate_skill.py` contava como OK** (`sem validate_skill.py (pulado)`), no
+  gate e no CI. A skill que define o contrato de evidência — `dz23-autonomous-improvement-ultimate`
+  — era justamente a não verificada. Ganhou validador próprio e a ausência passou a falhar.
+- **Passo "Resumo" do CI saía 0 quando `gate.json` estava ausente**: imprimia "o gate não
+  chegou a rodar" e aprovava. Agora falha, com escrita atômica e `set -euo pipefail`.
+- **Ponte de checagem comum não funcionava na instalação**: `parents[3]` a partir de
+  `~/.agents/skills` aponta para `~/.agents`, sem o módulo — a skill em produção era a menos
+  verificada. Novo `_achar_arsenal.py` sobe a árvore, lê `~/.agents/skills/.dz23-arsenal`
+  (gravado pelo install-all) ou respeita `DZ23_ARSENAL`.
+- **Números da documentação divergiam do disco** (7 casos): README dizia "9 skills" com 10,
+  badge `skills-9`, "1 MCP" com 2, "16 checks" com 19, "45/131" (131 não existe; são 144),
+  e um bloco obsoleto afirmando "executados: 3" quando a tabela do próprio arquivo diz 45.
+- **`dz23-performance-scalability-engine` alegava preservação falsa**: "o original está
+  preservado em `_sources/user-spec.md`". Os arquivos existem na máquina de origem, mas
+  `_sources/` está no `.gitignore` e `git log --all -- '*_sources*'` não retorna nenhum
+  commit — quem clona recebe promessa vazia. SKILL.md corrigido; CHANGELOG ganhou entrada
+  de correção em vez de reescrita da linha antiga.
+- **Vocabulário de estados rivais**: `NOT_RUN` em 4 arquivos da autonomous contra
+  `NOT_TESTED` nas outras nove, aceitos ambos pelo regex do runner. Unificado.
+- **`PROMPT-ATIVACAO.txt` congelado em v1.0/v1.0.0** em 7 skills cujas VERSION tinham
+  avançado (1.1.0, 1.2.2, 1.3.0). Quem colasse o prompt usaria texto velho.
+- **`references/legacy-v1.md` carregava frontmatter de skill descontinuada**
+  (`name: dz23-premium-ui-ultimate`) — uma segunda skill se passando por referência,
+  carregável por agente. Virou cabeçalho explícito de arquivo histórico.
+
+### Adicionado — técnicas absorvidas
+- **`scripts/gate_candidatos.py`**: triagem determinística *antes* de investigar. Função pura,
+  threshold como expressão, `GATE_VERSION` rastreável, três cestos (lançado / contido com
+  motivo / não-avaliável). Ausência de sinal nunca vira zero. Auto-teste cobre positivo,
+  negativo, vazio, determinismo e guarda de amostra pobre. De `vercel-optimize/lib/gates/*.mjs`.
+- **`scripts/verifica_claims.py`**: evidência conferida por comando, com
+  `passRate = verificados/(verificados+falhos)`; não-verificável e sem-suporte ficam fora do
+  denominador. Ancorado na skill auditada, não em "existe em qualquer pasta". De
+  `vercel-optimize/references/verification.md`.
+- **`scripts/skill_validator.py`**: checagens comuns reunificadas (frontmatter, VERSION ×
+  frontmatter, PROMPT-ATIVACAO defasada, referências quebradas, evals coerentes, nome morto
+  em frontmatter vivo). Havia dez cópias divergentes; a maior tinha 15 linhas. Provado por
+  injeção: citar `references/NAO-EXISTE-teste.md` dava PASS.
+- **`scripts/check-numbers.py`**: confere números da documentação contra o disco e denuncia
+  **regra órfã** (padrão que não casa em lugar nenhum = autoengano; foi o que aconteceu com a
+  regra de contagem de checks). Lê a contagem real do artefato `.gate-contagem`; a primeira
+  tentativa, parsear o fonte do gate por regex, contou 24 contra 31 reais.
+- **`scripts/check-licenses.py`**: licença obrigatória por componente e por referência
+  externa. Achou `bundle/dz23-dsh-agency` sem LICENSE algum (criado, herdando MIT do repo) e
+  8 externas com "verificar no repositório". Resolvidas com prova: 4 lidas do arquivo LICENSE
+  do projeto baixado, 3 via API do GitHub. `anthropic-skills` e `vercel-react-best-practices`
+  seguem sem licença — a API devolve `license: null` — e agora dizem isso explicitamente,
+  porque sem licença explícita não se redistribui conteúdo.
+- **`scripts/_tracks.py`**: mapa skill ↔ pasta derivado do disco. Eram três cópias iguais,
+  nenhuma com `dz23-postgres-prod-preflight`: `record-eval` criava a pasta e
+  `check-eval-results` a rejeitava como "não mapeada". A única skill com 0 de 13 evals
+  executados era justamente a que o instrumento não conseguia registrar.
+- **CI**: instala `jsonschema` (sem ele, "Evals contra o schema" caía em fallback parcial com
+  selo de completa), publica o `--report` no resumo do run, e falha ante CRLF fora da norma.
+
+### Estado medido
+`quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
+com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
+
 ## [1.4.9] — 2026-11-09
 
 **Camada 4** — 3 skills do arsenal usadas no próprio repo, com o CI como juiz.
