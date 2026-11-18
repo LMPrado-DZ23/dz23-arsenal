@@ -102,6 +102,71 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.1] — 2026-11-17
+
+**Verificação por ataque.** Quatro rodadas seguintes à v1.5.0 mudaram o método: em vez de
+exercitar as ferramentas, passar a atacá-las com entrada doente e perguntar "o que acontece
+quando não há nada?". Cada pergunta rendeu um defeito real.
+
+### Corrigido
+- **`gate_candidatos.avaliar()` explodia com `AttributeError`** diante de
+  `{"endpoints": {...}}` — dict onde se espera lista, formato que um coletor quebrado produz
+  naturalmente. O JSON de sinais vem de fora, então entrada malformada é caso esperado. Agora
+  cada forma doente vira linha em `nao_avaliaveis`. `GATE_VERSION` 1.0.0 → 1.2.0.
+- **`check-numbers.py` morria com `.gate-contagem` contendo `[]`** (`AttributeError` em
+  `.get`) e com `arsenal.json` `{}`, truncado ou sem `counts` (`KeyError`). A correção não foi
+  envolver em try/except: o checker lia um artefato **gerado**, comparando dois artefatos entre
+  si — se `build-manifest.py` atrasasse, README e manifesto dariam verde juntos sobre números
+  velhos. Passou a medir o filesystem; contagens idênticas antes e depois, imunidade inclusa.
+- **`check-copies.py` caía com `FileNotFoundError`** se `skills/` não existisse (clone
+  interrompido, worktree novo). Verificador que explode é indistinguível de repo que falhou.
+- **`check-links.py` era gate-fantasma**: imprimia "verificados: 0 / QUEBRADOS: 0" e saía 0.
+  Caminho errado, pasta vazia ou checkout parcial aprovavam o repositório inteiro sem abrir um
+  arquivo — e ele está no CI desde o início. Zero conferidos agora falha com a causa.
+- **`check-licenses.py` aprovava árvore vazia** ("licenças consistentes", exit 0) porque cada
+  laço usa `continue` em pasta ausente. Mesmo padrão da v1.5.0 por outra porta. Conta o que
+  conferiu (17 componentes no repo) e reclama em zero.
+- **`README.md` dizia "28 tools"** quando `tools/list` devolve 24 numa instalação mínima; as
+  outras quatro são habilitadas por `DZ23_WORKSPACE_ROOTS`/`DZ23_SANDBOX_ENABLED`. Medido por
+  sessão JSON-RPC real, não lido de doc.
+- **`ROADMAP.md` documentava `run-evals.py --record <skill> <arquivo>`** gravando
+  `evals-results/<skill>.json`. Nenhum dos dois existe — copiar da doc produzia exit 2.
+  Tabela completa refeita e conferida comando por comando.
+- **`audit-zips.py` chamava de divergente o que só diferia em fim de linha**: comparava SHA de
+  bytes crus entre uma árvore que o git monta LF (`core.autocrlf=false`) e a instalação com
+  CRLF. Num clone virgem acusava 2 arquivos idênticos. Texto conhecido é hasheado com CRLF
+  colapsado; binários seguem byte a byte.
+- **`check-audit-inputs.py` sem argumento** dava `TypeError` (`Path(None)`) antes da mensagem de
+  uso, que existia três linhas abaixo mas nunca era alcançada.
+- **Dividas 8 e 8b resolvidas**: skill instalada dependia do checkout para rodar as checagens
+  comuns — movido o repo, ela pulava tudo e ainda saía com exit 0, apenas um WARN que ninguém
+  lê (minha nota anterior no ROADMAP subestimava isso como "degradação visível").
+  `skill_validator.py` e `_achar_arsenal.py` viraram conteúdo versionado de cada skill, com
+  preferência pela cópia local; a duplicação resultante ganhou `check-copies.py`.
+
+### Adicionado
+- **`scripts/selftest-ferramentas.py`** — suíte versionada de ataque, no gate e no CI. Cinco
+  grupos: triagem (nove formas doentes de JSON), claims (dezesseis textos hostis), descoberta
+  de arsenal (env inválida, ponteiro mentiroso), guardas (quatro árvores incompletas) e
+  **rejeição** (baseline válido precisa ser aceito e seis casos inválidos reprova­dos). Tem
+  auto-verificação: injeta violação conhecida e exige detectá-la. Custo medido: 2,3 s.
+- **`scripts/check-copies.py`** — SHA-256 das 20 cópias embutidas contra a fonte.
+- **`--raiz <pasta>`** em `check-structure`, `check-licenses`, `check-copies` e `run-evals`.
+  Existia uma armadilha concreta sem isto: apontar `cwd` para uma fixture faz o script escanear
+  o repo real ao lado e devolver verde sem ler nada — foi exatamente como um ataque anterior a
+  estes scripts reportou "casos inválidos aceitos" que nunca foram lidos. Em `run-evals` o
+  reposicionamento inclui `SKILLS`/`RESULTADOS`/`PROMPTS`/`SCHEMA`, congelados no import.
+- **`docs/defeitos-verificados-2026-11-17.md`** dentro do repo. A primeira versão desse
+  relatório — base de toda a v1.5.0 — foi perdida num `git checkout -- .` porque era arquivo
+  solto fora da árvore versionada.
+- **`external/absorcao-2026-11-17.md`** indexado no README (estava órfão).
+
+### Estado medido
+`quality-gate.py`: **33/33** em 5,5 s (orçamento de 300 s por check). Escala verificada:
+200 skills em 3,4 s; 5.000 casos de eval; 200.000 links em 35 s; caminho Windows de 204
+caracteres. Clone virgem com `core.autocrlf=false` nasce com `git status` limpo e roda o gate
+inteiro sem nada instalado.
+
 ## [1.4.9] — 2026-11-09
 
 **Camada 4** — 3 skills do arsenal usadas no próprio repo, com o CI como juiz.

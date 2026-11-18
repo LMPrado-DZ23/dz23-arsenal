@@ -221,6 +221,12 @@ roda em CI a cada push ([`.github/workflows/quality.yml`](.github/workflows/qual
 | [`scripts/check-links.py`](scripts/check-links.py) | todo link relativo `.md` |
 | [`scripts/build-manifest.py`](scripts/build-manifest.py) | gera [`arsenal.json`](arsenal.json) e [`INDEX.md`](INDEX.md) |
 | [`scripts/audit-zips.py`](scripts/audit-zips.py) | compara o repo com as skills instaladas |
+| [`scripts/check-numbers.py`](scripts/check-numbers.py) | números da documentação contra o disco; denuncia regra órfã |
+| [`scripts/check-licenses.py`](scripts/check-licenses.py) | licença por componente e por referência externa |
+| [`scripts/check-copies.py`](scripts/check-copies.py) | cópias embutidas nas skills batem com `scripts/` |
+| [`scripts/selftest-ferramentas.py`](scripts/selftest-ferramentas.py) | ataca os verificadores com entrada doente e exige que **reprovem** o inválido |
+| [`scripts/gate_candidatos.py`](scripts/gate_candidatos.py) | triagem determinística: o que merece investigação antes de qualquer trabalho |
+| [`scripts/verifica_claims.py`](scripts/verifica_claims.py) | confere caminho citado em texto contra o disco e devolve `passRate` |
 | [`scripts/verify-cli.ps1`](scripts/verify-cli.ps1) | inventário real de CLIs da máquina |
 
 ## Documentos do repositório
