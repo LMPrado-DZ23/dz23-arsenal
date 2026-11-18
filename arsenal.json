@@ -26,12 +26,12 @@
       "version": "1.1.2",
       "description": "Skill de engenharia de backend, banco de dados, contratos de API, migrações seguras, multi-tenancy, segurança de aplicação e observabilidade. Ative ao criar, revisar, refatorar ou depurar serviços, endpoints, schemas, migrações, integrações e pipelines de dados.",
       "user_invocable": true,
-      "files": 32,
+      "files": 33,
       "references": 11,
       "templates": 2,
       "scripts": 4,
       "evals": 12,
-      "sha256_skill_md": "fc2e77b85e68b7c663ce3ff3fa2f953c950e9e752b9da382a8fbf5e212b37365"
+      "sha256_skill_md": "a8f15b0932e5e0b26c6d79998801d13dad57f9b9f492083ffd7ee17d2fe15cfd"
     },
     {
       "name": "dz23-codebase-cartographer",

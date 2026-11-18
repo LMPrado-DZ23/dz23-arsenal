@@ -1,0 +1,15 @@
+No,situacao,convencao,exemplo,origem_arquivo,origem_secao
+1,criar recurso (POST),201 Created com header Location apontando o recurso criado,POST /api/v1/users -> 201 + Location,ECC api-design/SKILL.md,Status Code Reference
+2,deletar ou atualizar sem corpo de resposta,204 No Content,DELETE /api/v1/users/:id -> 204,ECC api-design/SKILL.md,Status Code Reference
+3,JSON malformado ou falha de validacao de formato,400 Bad Request,corpo invalido -> 400,ECC api-design/SKILL.md,Status Code Reference
+4,autenticacao ausente ou invalida,401 Unauthorized,sem token -> 401,ECC api-design/SKILL.md,Status Code Reference
+5,autenticado mas sem permissao,403 Forbidden,token valido sem acesso -> 403,ECC api-design/SKILL.md,Status Code Reference
+6,recurso nao existe,404 Not Found,id inexistente -> 404,ECC api-design/SKILL.md,Status Code Reference
+7,conflito de estado ou entrada duplicada,409 Conflict,email ja cadastrado -> 409,ECC api-design/SKILL.md,Status Code Reference
+8,JSON valido mas dado semanticamente invalido,422 Unprocessable Entity,email com formato errado -> 422 (nao 400),ECC api-design/SKILL.md,Status Code Reference
+9,rate limit excedido,429 Too Many Requests com header Retry-After,excedeu cota -> 429 + Retry-After,ECC api-design/SKILL.md,Status Code Reference
+10,falha inesperada do servidor,500 Internal Server Error sem expor detalhes internos,erro nao tratado -> 500 generico,ECC api-design/SKILL.md,Status Code Reference
+11,nome de recurso na URL,substantivo plural em kebab-case sem verbo,GOOD /api/v1/team-members; BAD /api/v1/getUsers ou /api/v1/user,ECC api-design/SKILL.md,Naming Rules
+12,acao que nao mapeia em CRUD,verbo apos o recurso com moderacao,POST /api/v1/orders/:id/cancel,ECC api-design/SKILL.md,URL Structure
+13,estrategia de versionamento,/api/v1 no path; nao versione ate precisar; no maximo 2 versoes ativas; 410 Gone apos sunset,v1 e v2 em paralelo com Sunset header,ECC api-design/SKILL.md,Versioning Strategy
+14,formato do corpo de erro,objeto error com code message e details por campo,{error:{code,message,details:[{field,message,code}]}},ECC api-design/SKILL.md,Error Response

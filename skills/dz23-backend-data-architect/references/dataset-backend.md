@@ -49,7 +49,7 @@ linha errada engana mais que um acervo ausente, porque o agente passa a confiar 
 
 ## Limite honesto
 
-São 30 linhas, não um corpo de conhecimento — destiladas de tabelas de decisão de três skills do ECC.
+É um acervo de decisões, não um corpo de conhecimento — destiladas de tabelas de decisão de três skills do ECC.
 O restante do valor daquelas fontes é narrativa, e foi para `references/` como texto, não como dado.
 Não trate ausência de linha aqui como licença para inventar: o acervo cobre o que foi medido na fonte;
 fora disso, decide-se pelo projeto, e se registra a decisão (ver `dz23-spec-to-system-engine` / ADR).

@@ -88,6 +88,13 @@ DATASETS = {
         "busca_em": ["tier", "limit", "window", "use_case"],
         "titulo": "Faixas de rate limit por plano",
     },
+    "rest": {
+        "arquivo": "convencoes-rest.csv",
+        "aliases": {"rest", "status", "codigo", "http status", "versionamento", "versao",
+                    "erro", "error", "url", "recurso", "naming", "nome"},
+        "busca_em": ["situacao", "convencao", "exemplo"],
+        "titulo": "Convencoes REST: status, nomes, versao, erro (ECC api-design, MIT)",
+    },
 }
 
 
@@ -118,6 +125,8 @@ TERMOS = {
                "logado": "authenticated", "autenticado": "authenticated",
                "pago": "premium", "empresarial": "enterprise", "interno": "internal",
                "servico": "service-to-service", "microsservico": "service-to-service"},
+    "rest": {"criar": "criar recurso", "apagar": "deletar", "proibido": "sem permissao",
+             "nao encontrado": "recurso nao existe", "versionar": "versionamento"},
 }
 
 

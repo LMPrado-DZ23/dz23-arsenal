@@ -1,10 +1,15 @@
 # Proveniência de `dados-backend/`
 
+> **convencoes-rest.csv** (14 linhas) vem da skill `api-design` do ECC (MIT): status codes,
+> nomenclatura de recurso, versionamento e formato de erro. Cada linha cita `ECC api-design/SKILL.md`
+> e a seção de origem. Não duplica as tabelas abaixo (rate-limit já estava em `faixas-de-rate-limit`).
+
+
 Cada CSV aqui é derivado, não escrito à mão. Este arquivo diz de onde veio cada linha e como foi
 verificado — sem isso, um dado tabulado no repo vira "verdade" sem procedência, que é exatamente o
 defeito que este arsenal combate desde a rodada 1.
 
-## Fonte única das seis tabelas
+## Fonte das tabelas destiladas do ECC
 
 - **Projeto:** ECC (`affaan-m/everything-claude-code`, v2.2.3), baixado como `ECC-main.zip`.
 - **Licença:** MIT — lida no arquivo `LICENSE` da raiz do repositório (1.071 chars, "MIT License"),

@@ -61,7 +61,7 @@ AUDITAR → ENTENDER O DOMÍNIO → MODELAR DADOS → DESENHAR O CONTRATO → PL
 - Query plan, N+1, cache, pool, SLO e telemetria: `references/performance-and-observability.md`
 - Gates, severidade e matriz de teste: `references/quality-gates.md`
 - Catálogo de erros recorrentes com sintoma e correção: `references/anti-patterns.md`
-- **Acervo consultável de decisões (30 linhas, MIT/ECC)**: `references/dataset-backend.md` — antes de escolher tipo de coluna, índice, método HTTP, paginação ou rate limit, consulte `python scripts/consulta-backend.py <domínio> <termo>` em português, ou `... busca <termo>` para varrer o acervo inteiro (responde "sem correspondência" quando não há). Não opine sobre o que a tabela já mediu.
+- **Acervo consultável de decisões (MIT/ECC) — inclui convenções REST (status, nomes, versão, erro)**: `references/dataset-backend.md` — antes de escolher tipo de coluna, índice, método HTTP, paginação ou rate limit, consulte `python scripts/consulta-backend.py <domínio> <termo>` em português, ou `... busca <termo>` para varrer o acervo inteiro (responde "sem correspondência" quando não há). Não opine sobre o que a tabela já mediu.
 - ADR e revisão de contrato: `templates/adr.md`, `templates/contract-review.md`
 - Instalação em harness: `references/installation.md`
 

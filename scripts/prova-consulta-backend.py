@@ -31,6 +31,9 @@ DEVE_ACHAR = [
     (["api", "pagina numerada"], "Offset"),
     (["limite", "interno"], "10000/min"),
     (["limite", "anonimo"], "30/min"),
+    (["rest", "criar recurso"], "201"),
+    (["rest", "versionamento"], "410"),
+    (["rest", "nome"], "kebab-case"),
 ]
 
 # (args, string que NAO pode aparecer) -- o falso positivo historico era outro dataset responder
@@ -44,6 +47,7 @@ DEVE_NEGAR = [
     # e quase me levou a remover uma funcionalidade boa para deixar o teste verde. O que importa e:
     # exit != 0 e nenhuma celula de DECISAO apresentada como resultado (prefixo '[' dos itens).
     (["api", "graphql"], None),
+    (["rest", "quasarxyz"], None),          # termo inexistente no dataset rest recusa
 ]
 
 ruins = []
