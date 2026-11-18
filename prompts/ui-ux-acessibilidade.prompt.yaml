@@ -1,0 +1,11 @@
+name: ui-ux-acessibilidade
+version: 1.0.0
+risk: medium
+requires_evidence: true
+requires_baseline: false
+destructive_actions: false
+dominios:
+  - ui
+  - ux
+  - accessibility
+  - design-system

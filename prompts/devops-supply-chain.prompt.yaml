@@ -1,0 +1,11 @@
+name: devops-supply-chain
+version: 1.0.0
+risk: high
+requires_evidence: true
+requires_baseline: true
+destructive_actions: false
+dominios:
+  - devops
+  - supply-chain
+  - sre
+  - observability

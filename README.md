@@ -102,6 +102,23 @@ nada) e para **rastreabilidade** (de onde veio cada skill).
 |---|---|---|
 | [`prompts/performance-4-camadas.md`](prompts/performance-4-camadas.md) | plano de otimização em 4 camadas, 20 itens | [`dz23-performance-scalability-engine`](skills/dz23-performance-scalability-engine/) |
 
+### Biblioteca de métodos de análise (8 prompts + `prompt.yaml`)
+
+| Prompt | O que pede | Risco |
+|---|---|---|
+| [`arquitetura-escalabilidade.md`](prompts/arquitetura-escalabilidade.md) | plano em 7 camadas; nenhuma tecnologia entra sem necessidade demonstrada | high |
+| [`seguranca-owasp.md`](prompts/seguranca-owasp.md) | auditoria em 6 camadas, com cenário de exploração autorizado | high |
+| [`banco-de-dados.md`](prompts/banco-de-dados.md) | modelagem, índices, transações, migrações reversíveis | high |
+| [`testes-qualidade.md`](prompts/testes-qualidade.md) | estratégia em 8 tipos de teste, partindo do baseline | medium |
+| [`engenharia-reversa-autorizada.md`](prompts/engenharia-reversa-autorizada.md) | RE defensiva, só em escopo autorizado, com grau de confiança | high |
+| [`ui-ux-acessibilidade.md`](prompts/ui-ux-acessibilidade.md) | UI/UX/a11y em 10 dimensões, com teste manual e automatizado | medium |
+| [`agentes-skills-mcp.md`](prompts/agentes-skills-mcp.md) | arquitetura de skills/agentes/MCP com permissões e avaliação | high |
+| [`devops-supply-chain.md`](prompts/devops-supply-chain.md) | build reprodutível, SBOM, segredos, rollback, incidentes | high |
+
+Cada um tem um `prompt.yaml` ao lado com `name`, `version`, `risk`, `requires_evidence`,
+`requires_baseline`, `destructive_actions` e `dominios`. Em todos os oito `destructive_actions: false`:
+prompt não autoriza deploy, force-push, migração destrutiva nem alteração de produção.
+
 Índice e comparação prompt × skill: [`prompts/README.md`](prompts/README.md).
 
 ## Pré-requisitos de CLI

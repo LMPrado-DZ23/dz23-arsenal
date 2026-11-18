@@ -3,7 +3,7 @@
 > Gerado por `scripts/build-manifest.py` em 2026-11-18. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**18 skills · 16 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
+**18 skills · 16 externas · 9 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -59,7 +59,15 @@
 
 ## Prompts de origem
 
+- [`agentes-skills-mcp.md`](prompts/agentes-skills-mcp.md)
+- [`arquitetura-escalabilidade.md`](prompts/arquitetura-escalabilidade.md)
+- [`banco-de-dados.md`](prompts/banco-de-dados.md)
+- [`devops-supply-chain.md`](prompts/devops-supply-chain.md)
+- [`engenharia-reversa-autorizada.md`](prompts/engenharia-reversa-autorizada.md)
 - [`performance-4-camadas.md`](prompts/performance-4-camadas.md)
+- [`seguranca-owasp.md`](prompts/seguranca-owasp.md)
+- [`testes-qualidade.md`](prompts/testes-qualidade.md)
+- [`ui-ux-acessibilidade.md`](prompts/ui-ux-acessibilidade.md)
 
 ## Estado de verificação
 

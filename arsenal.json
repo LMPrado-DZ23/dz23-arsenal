@@ -4,7 +4,7 @@
   "counts": {
     "skills": 18,
     "external": 16,
-    "prompts": 1,
+    "prompts": 9,
     "mcp": 2,
     "bundle": 1
   },
@@ -309,7 +309,15 @@
     }
   ],
   "prompts": [
-    "prompts/performance-4-camadas.md"
+    "prompts/agentes-skills-mcp.md",
+    "prompts/arquitetura-escalabilidade.md",
+    "prompts/banco-de-dados.md",
+    "prompts/devops-supply-chain.md",
+    "prompts/engenharia-reversa-autorizada.md",
+    "prompts/performance-4-camadas.md",
+    "prompts/seguranca-owasp.md",
+    "prompts/testes-qualidade.md",
+    "prompts/ui-ux-acessibilidade.md"
   ],
   "mcp": [
     {

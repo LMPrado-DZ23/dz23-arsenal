@@ -1,7 +1,34 @@
 > Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
 > delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
 
-## [1.6.6] — 2026-11-18
+## [1.6.7] — 2026-11-18
+
+**Biblioteca de métodos de análise: 8 prompts verificáveis + `prompt.yaml`, e o prompt de performance
+corrigido na origem.**
+
+### Adicionado
+- `prompts/arquitetura-escalabilidade.md` · `seguranca-owasp.md` · `banco-de-dados.md` ·
+  `testes-qualidade.md` · `engenharia-reversa-autorizada.md` · `ui-ux-acessibilidade.md` ·
+  `agentes-skills-mcp.md` · `devops-supply-chain.md`
+- Um `prompt.yaml` ao lado de cada um (`name`, `version`, `risk`, `requires_evidence`, `requires_baseline`,
+  `destructive_actions`, `dominios`). Em todos: `destructive_actions: false` — prompt não concede permissão.
+- README raiz e `prompts/README.md`: índice dos nove prompts, com o que cada um pede e qual skill ele
+  alimenta.
+
+### Corrigido — `prompts/performance-4-camadas.md`
+| Antes | Depois |
+|---|---|
+| "Filas para Processamento **Assalariado**" | "**Assíncrono**" |
+| "**extremamente rápida**" | metas mensuráveis por p75 (LCP, INP, TTFB) + baseline |
+| "**obrigatoriamente** WebP ou AVIF" | "quando a medição mostrar ganho real" |
+| "Camada de Cache (**Redis**)" | cache se houver leitura repetida medida |
+| "**CDN global**" e "**balanceamento**" | quando latência/saturação medida justificar, com justificativa para a não adoção |
+
+### Verificado
+- Gate: **108/108** · links relativos: **308**, quebrados **0**
+- `build-manifest.py`: 18 skills · 16 externas · **9 prompts** · 2 MCP · 1 bundle
+
+
 
 **OpenBot + tabela de externas do README raiz sincronizada com `external/`.**
 

@@ -1,6 +1,6 @@
 Atue como um Arquiteto de Software Sênior e Especialista em Performance e Escalabilidade de Sistemas. 
 
-Eu estou desenvolvendo uma aplicação moderna e quero garantir que ela seja extremamente rápida, resiliente e proporcione uma experiência de usuário impecável, sem lentidão ou perda de conversão. 
+Eu estou desenvolvendo uma aplicação moderna e quero garantir que ela seja rápida, resiliente e proporcione uma experiência de usuário impecável, sem lentidão ou perda de conversão. Antes de otimizar, defina as metas **mensuráveis** deste projeto (ex.: LCP p75 ≤ 2,5 s, INP p75 ≤ 200 ms, TTFB p75 ≤ 800 ms em 4G; ajuste ao contexto) e meça o baseline — otimização sem número de partida e de chegada não é engenharia. 
 
 Analise o projeto atual e gere um plano cirúrgico de otimização de performance dividido exatamente nas 4 camadas abaixo. Para cada item, forneça: o problema que ele evita, como implementar na prática e a diretriz técnica recomendada:
 
@@ -8,7 +8,7 @@ Analise o projeto atual e gere um plano cirúrgico de otimização de performanc
 
 ### 1. FRONTEND & INTERFACE (UX & Renderização)
 * **Skeleton Loaders:** Implementar telas de carregamento fluídas para evitar layout shift e percepção de travamento.
-* **Otimização de Mídia:** Servir imagens e assets estáticos obrigatoriamente em formatos modernos (WebP ou AVIF), com lazy loading em elementos fora da viewport.
+* **Otimização de Mídia:** Servir imagens e assets estáticos em formatos modernos (WebP ou AVIF) **quando a medição mostrar ganho real de peso** no caso concreto; lazy loading em elementos fora da viewport.
 * **Code Splitting & Bundling:** Dividir o JavaScript por página/rota e carregar scripts de terceiros de forma assíncrona ou tardia.
 * **Virtualização de Listas:** Aplicar virtualização (ex: tanstack-virtual) em listas longas ou tabelas densas para não estourar o DOM.
 * **Otimização de Input:** Aplicar debounce e throttle rigorosos em barras de busca, inputs e autocompletes.
@@ -24,14 +24,14 @@ Analise o projeto atual e gere um plano cirúrgico de otimização de performanc
 ### 3. BACKEND & BANCO DE DADOS (Arquitetura)
 * **Prevenção de N+1:** Auditar e corrigir consultas N+1 no ORM/banco de dados.
 * **Indexação Estratégica:** Criar índices compostos e otimizados para as consultas e filtros mais comuns.
-* **Camada de Cache (Redis):** Estruturar cache em memória (Redis) para dados altamente consultados ou de leitura frequente.
-* **Filas para Processamento Assalariado:** Descarregar tarefas pesadas, lentas ou de background para workers em filas dedicadas.
+* **Camada de Cache:** Estruturar cache em memória **se houver leitura repetida medida** (taxa de acerto alvo e TTL justificados). Redis é uma opção entre várias — a escolha precisa de evidência da consulta e do padrão de acesso, não de hábito.
+* **Filas para Processamento Assíncrono:** Descarregar tarefas pesadas, lentas ou de background para workers em filas dedicadas.
 
 ### 4. INFRAESTRUTURA & DEPLOY (DevOps & Observabilidade)
-* **CDN & Distribuição de Ativos:** Servir arquivos estáticos e assets através de uma CDN global.
+* **CDN & Distribuição de Ativos:** Servir estáticos por CDN **quando a latência medida para os usuários reais justificar**; caso o tráfego seja concentrado perto da origem, argumente por que a CDN não entra.
 * **Compressão de Tráfego:** Ativar compressão avançada (Brotli ou GZIP) no servidor/proxy reverso.
 * **Proximidade Geográfica:** Alinhar a infraestrutura do servidor o mais próximo possível do banco de dados principal.
-* **Balanceamento de Carga:** Distribuir o tráfego de forma eficiente entre múltiplas instâncias da aplicação.
+* **Balanceamento de Carga:** Distribuir o tráfego entre múltiplas instâncias **quando a medição mostrar saturação de uma instância** (CPU, memória, conexões); com carga baixa, justifique a não adoção.
 * **Monitoramento & RUM:** Rastrear requisições lentas via OpenTelemetry e monitorar a velocidade real dos usuários (Real User Monitoring).
 
 ---

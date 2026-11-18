@@ -1,0 +1,10 @@
+name: testes-qualidade
+version: 1.0.0
+risk: medium
+requires_evidence: true
+requires_baseline: true
+destructive_actions: false
+dominios:
+  - testing
+  - quality
+  - regression

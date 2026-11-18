@@ -1,0 +1,10 @@
+name: engenharia-reversa-autorizada
+version: 1.0.0
+risk: high
+requires_evidence: true
+requires_baseline: false
+destructive_actions: false
+dominios:
+  - reverse-engineering
+  - analysis
+  - authorized-scope

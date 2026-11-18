@@ -1,0 +1,11 @@
+name: agentes-skills-mcp
+version: 1.0.0
+risk: high
+requires_evidence: true
+requires_baseline: false
+destructive_actions: false
+dominios:
+  - agents
+  - mcp
+  - permissions
+  - evaluation
