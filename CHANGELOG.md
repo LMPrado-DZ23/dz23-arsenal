@@ -102,6 +102,40 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.11] — 2026-11-17
+
+### Corrigido — o auditor de alegações corrompia o repositório que auditava
+`scripts/audita-alegacoes.py` entrava na sessão com oito provas, escritas no padrão
+"corrompe o arquivo real do repo, restaura em `finally`". Duas falhas nesse desenho apareceram
+ao estender o arquivo:
+
+- **`TimeoutExpired` dentro do `try` pula o `finally`.** Uma das alegações novas chamava o
+  `quality-gate`, que por sua vez executa este mesmo auditor -- recursão. Em 241 s de execução
+  o prazo estourou, o `finally` não rodou e ficaram **38 linhas injetadas** em
+  `skills/dz23-e2e-browser-verifier/SKILL.md` mais um README mentiroso. Como cada execução
+  acrescentava uma linha sem remover a anterior, o dano era cumulativo e invisível ao
+  `git status` de quem só olha a última linha. Restaurado do HEAD.
+- Um auditor que precisa danificar o alvo para testá-lo está mal desenhado, não destemido: além
+  do timeout, qualquer crash entre escrever e restaurar faz o mesmo, e duas verificações
+  concorrentes leem o estado que a outra corrompeu. O dano na instalação do usuário nem aparece
+  no git.
+
+Reescrito sem mutação: as provas copiam skill/instalação para diretório temporário e corrompem a
+cópia (`audit-zips` aceita `--dest`; o validador resolve arsenal pela própria localização,
+então uma cópia fora de `~/.agents/skills` reproduz o cenário "repo movido" fielmente). A
+verificação de contagem passou a ler `.gate-contagem` em vez de invocar o gate, eliminando a
+recursão. Resultado: **13/13 alegações sustentadas em 5 s** (eram 241 s com estouro), árvore
+intacta após a execução.
+
+Também corrigido no mesmo lance: `afirma()` fazia `ok = fn()`, então qualquer função no estilo
+"lança em vez de retornar bool" devolvia `None` e era contada como falha -- cinco verificações
+corretas apareceram como "alegação não sustentada" contra um repo verde. Aceita os dois contratos.
+
+Alegações cobertas agora: os dois gates-fantasma originais fechados, `check-audit-inputs` sem
+argumento, regra órfã denunciada, referência quebrada reprovada, `python -O` sem desligar
+validador, skill instalada auto-validando sem checkout, índice sem CRLF, EOL não confundido com
+divergência, contagem derivada da execução, índice de skills em dia, `agents/` do bundle
+sincronizado e comandos da documentação apontando para arquivos reais.
 ## [1.5.10] — 2026-11-17
 
 ### Adicionado

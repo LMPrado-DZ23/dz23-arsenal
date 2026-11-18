@@ -6,8 +6,10 @@ um sistema que nao existe. Este arquivo re-executa a experiencia por tras de cad
 """
 import json
 import pathlib
+import shutil
 import subprocess
 import sys
+import tempfile
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 if len(sys.argv) > 1:
@@ -27,8 +29,17 @@ resultados = []
 
 
 def afirma(texto, fn):
+    """Aceita dois contratos: fn que lança em violação, ou fn que devolve bool.
+
+    O bug que esta docstring registra: a versão anterior fazia `ok = fn()`, então qualquer fn
+    no estilo lança-não-retorna -- usada nas alegações novas do fim da sessão -- devolvia None
+    e era contada como falha. Cinco verificações corretas apareceram como 'alegação não
+    sustentada' contra um repo verde. Um auditor que acusa o alvo por causa do próprio contrato
+    interno é o pior tipo de falso positivo: empurra alguém a "consertar" o que está certo.
+    """
     try:
-        ok = fn()
+        ret = fn()
+        ok = True if ret is None else bool(ret)
     except Exception as exc:  # noqa: BLE001
         ok = False
         texto += f"  [excecao: {type(exc).__name__}]"
@@ -65,31 +76,50 @@ afirma("check-audit-inputs sem arg -> exit 2 com usage",
 
 # check-numbers denuncia regra orfa.
 def orfa():
-    import shutil
-    readme = RAIZ / "README.md"
-    b = readme.read_bytes()
-    try:
+    """Escreve README mentiroso numa COPIA, nunca no repo.
+
+    A versão anterior alterava README.md do próprio repositório e restaurava em `finally`.
+    Isso é inaceitável por três motivos independentes: um TimeoutExpired dentro do try pula o
+    finally e deixa o repo corrompido (aconteceu -- 38 linhas injetadas num SKILL.md); qualquer
+    crash entre escrever e restaurar faz o mesmo; e se duas verificações rodarem concorrentes,
+    uma lê o estado que a outra corrompeu. Um auditor que precisa danificar o alvo para testá-lo
+    está mal desenhado, não destemido.
+    """
+    with tempfile.TemporaryDirectory() as td:
+        tmp = pathlib.Path(td)
+        shutil.copytree(RAIZ / "scripts", tmp / "scripts")
+        shutil.copytree(RAIZ / "skills", tmp / "skills")
+        for n in ("README.md", "ROADMAP.md", "arsenal.json", ".gate-contagem",
+                  "evals.schema.json"):
+            if (RAIZ / n).is_file():
+                shutil.copy2(RAIZ / n, tmp / n)
+        if (RAIZ / "external").is_dir():
+            shutil.copytree(RAIZ / "external", tmp / "external")
+        if (RAIZ / "bundle").is_dir():
+            shutil.copytree(RAIZ / "bundle", tmp / "bundle")
+        if (RAIZ / "mcp").is_dir():
+            shutil.copytree(RAIZ / "mcp", tmp / "mcp")
+        readme = tmp / "README.md"
         t = readme.read_text(encoding="utf-8")
         readme.write_text(t.replace("Coleção de 10 skills", "Coleção de X skills"),
                           encoding="utf-8")
-        rc, s = exec_(["scripts/check-numbers.py"])
+        rc, s = exec_(["scripts/check-numbers.py"], cwd=tmp)
         return "REGRA ÓRFÃ" in s or rc != 0
-    finally:
-        readme.write_bytes(b)
 afirma("check-numbers pega regra orfa quando o numero sai do README", orfa)
 
 # claims: referencia quebrada em SKILL.md e pega pelo gate.
 def claims_pega():
-    import shutil
-    alvo = RAIZ / "skills/dz23-e2e-browser-verifier/SKILL.md"
-    b = alvo.read_bytes()
-    try:
-        alvo.write_bytes(b + "\nVer `references/relatorio-de-cobertura.md`.\n".encode())
-        rc, s = exec_(["scripts/verifica_claims.py", "--texto", str(alvo), "--raiz", ".",
-                      "--min", "1.0"])
+    with tempfile.TemporaryDirectory() as td:
+        esp = pathlib.Path(td) / "repo"
+        shutil.copytree(RAIZ / "skills/dz23-e2e-browser-verifier",
+                        esp / "skills/dz23-e2e-browser-verifier")
+        shutil.copytree(RAIZ / "scripts", esp / "scripts")
+        alvo = esp / "skills/dz23-e2e-browser-verifier/SKILL.md"
+        alvo.write_bytes(alvo.read_bytes()
+                         + "\nVer `references/relatorio-de-cobertura.md`.\n".encode())
+        rc, s = exec_(["scripts/verifica_claims.py", "--texto", str(alvo), "--raiz", str(esp),
+                       "--min", "1.0"])
         return rc != 0 and "falho" in s.lower()
-    finally:
-        alvo.write_bytes(b)
 afirma("verifica_claims reprova referencia quebrada", claims_pega)
 
 # python -O nao desliga validador (rodada 19).
@@ -107,28 +137,34 @@ afirma("validador nao aprova sob python -O", modo_o)
 
 # skill instalada se auto-valida sem o checkout (rodada 7).
 def instala_sem_repo():
+    """Copia a skill instalada para um destino isolado e corrompe SÓ a cópia.
+
+    Antes isto escrevia em ~/.agents/skills de verdade, protegido apenas por `finally`. Um
+    TimeoutExpired dentro do try pula o finally e deixa a instalação do usuário quebrada -- o
+    dano não aparece no git status, então passa despercebido até a próxima sessão. O validador
+    resolve arsenal subindo a árvore e lendo .dz23-arsenal relativo ao próprio arquivo, então
+    uma cópia fora de ~/.agents/skills com ponteiro mentiroso reproduz o cenário sem tocar em
+    nada real.
+    """
     import os
-    import tempfile
-    sk = pathlib.Path(os.path.expanduser("~/.agents/skills"))
-    alvo = sk / ".dz23-arsenal"
-    if not alvo.is_file():
+    sk_real = pathlib.Path(os.path.expanduser("~/.agents/skills"))
+    origem = sk_real / "dz23-codebase-cartographer"
+    if not origem.is_dir():
         return False
-    guardado = alvo.read_bytes()
-    v = sk / "dz23-codebase-cartographer/SKILL.md"
-    vb = v.read_bytes()
-    try:
-        alvo.write_text("D:\\repo\\inexistente\\para\\teste\n", encoding="utf-8")
-        v.write_bytes(vb + "\nVer `references/mapa-de-fluxo-legado.md`.\n".encode())
-        rc, s = exec_([str(sk / "dz23-codebase-cartographer/scripts/validate_skill.py")])
+    with tempfile.TemporaryDirectory() as td:
+        esp = pathlib.Path(td) / "dz23-codebase-cartographer"
+        shutil.copytree(origem, esp)
+        (esp / ".dz23-arsenal").write_text("D:\\repo\\inexistente\\para\\teste\n",
+                                           encoding="utf-8")
+        v = esp / "SKILL.md"
+        v.write_bytes(v.read_bytes()
+                      + "\nVer `references/mapa-de-fluxo-legado.md`.\n".encode())
+        rc, s = exec_([str(esp / "scripts/validate_skill.py")])
         return rc != 0 and "WARN" not in s
-    finally:
-        alvo.write_bytes(guardado)
-        v.write_bytes(vb)
 afirma("skill instalada reprova mesmo sem o repo (rodada 7)", instala_sem_repo)
 
 # CRLF: indice limpo apesar do working tree.
 def crlf():
-    import shutil
     bash = shutil.which("bash") or r"C:\Program Files\Git\bin\bash.exe"
     p = subprocess.run([bash, "-c",
                         'cd "$1" && git grep -Il --cached -P "\\r$" -- "*.md" "*.py" '
@@ -139,20 +175,87 @@ afirma("indice sem CRLF (passo de CI do jeito certo)", crlf)
 
 # audit-zips nao confunde EOL com divergencia (rodada 9).
 def eol_audit():
-    import shutil
-    import tempfile
-    sk = pathlib.Path.home() / ".agents/skills/dz23-codebase-cartographer"
-    alvo = sk / "references/data-and-flow.md"
-    if not alvo.is_file():
+    """Mesma lição: comparar contra uma cópia convertida, nunca editar a instalação.
+
+    audit-zips aceita --dest, então dá para apontá-lo para um espelho com LF puro e medir a
+    decisão sem escrever em lugar nenhum que alguém usa.
+    """
+    sk_real = pathlib.Path.home() / ".agents/skills"
+    if not (sk_real / "dz23-codebase-cartographer").is_dir():
         return False
-    b = alvo.read_bytes()
-    try:
-        alvo.write_bytes(b.replace(b"\r\n", b"\n"))
-        rc, s = exec_(["scripts/audit-zips.py"])
-        return "cartographer" not in s.split("CONTEUDO_DIVERGENTE")[-1][:200]
-    finally:
-        alvo.write_bytes(b)
+    with tempfile.TemporaryDirectory() as td:
+        esp = pathlib.Path(td)
+        shutil.copytree(sk_real, esp / "skills", symlinks=False)
+        alvo = esp / "skills/dz23-codebase-cartographer/references/data-and-flow.md"
+        if not alvo.is_file():
+            return False
+        alvo.write_bytes(alvo.read_bytes().replace(b"\r\n", b"\n"))
+        rc, s = exec_(["scripts/audit-zips.py", "--dest", str(esp / "skills")])
+        detalhe = s.split("CONTEUDO_DIVERGENTE")[-1][:400] if "CONTEUDO_DIVERGENTE" in s else ""
+        return "cartographer" not in detalhe
 afirma("audit-zips ignora diferenca so de EOL", eol_audit)
+
+print("\n=== estrutura do arsenal: o que foi declarado nestas rodadas ainda vale? ===")
+
+# A contagem de checks publicada não pode ser digitada em lugar nenhum: o check-numbers lê
+# .gate-contagem, escrito pela execução real do gate. Se alguém fixar um número no README, isto
+# precisa pegar.
+def confere_contagem_derivada() -> None:
+    # Não chamar o quality-gate daqui: este arquivo É um check do gate, então invocar o gate
+    # recursa até estourar o prazo (medido: 241 s e TimeoutExpired). Basta conferir que o
+    # número publicado bate com o que o checker lê -- a aritmética completa roda no próprio gate.
+    artefato = RAIZ / ".gate-contagem"
+    if not artefato.is_file():
+        raise AssertionError(".gate-contagem ausente; rode python scripts/quality-gate.py")
+    medido = json.loads(artefato.read_text(encoding="utf-8")).get("total")
+    rc, s = exec_(["scripts/check-numbers.py", "--json"])
+    d = json.loads(s)
+    lido = d["real"].get("quality_gate_checks")
+    if lido != medido:
+        raise AssertionError(f"checker le {lido}, gate publicou {medido}")
+    if d["problemas"]:
+        raise AssertionError(f"divergencia numerica: {d['problemas'][:1]}")
+afirma("nº de checks é derivado da execução, não digitado", confere_contagem_derivada)
+
+# Índice de skills gerado (rodada 27): se alguém editar a tabela à mão, isto cai.
+def confere_indice() -> None:
+    rc, s = exec_(["scripts/gera-indice-skills.py", "--check"])
+    if rc != 0:
+        raise AssertionError(f"índice de skills desatualizado: {s.strip()[:120]}")
+afirma("índice de skills bate com o disco", confere_indice)
+
+# Bundle: os 88 agentes versionados batem com as fontes (rodada 28).
+def confere_bundle() -> None:
+    import os
+    p = subprocess.run([sys.executable, "build.py", "--check"], capture_output=True,
+                       cwd=str(RAIZ / "bundle/dz23-dsh-agency"), timeout=180, env=os.environ)
+    saida = p.stdout.decode("utf-8", "replace") + p.stderr.decode("utf-8", "replace")
+    if p.returncode != 0:
+        raise AssertionError(f"agents/ fora de sincronia: {saida.strip()[-140:]}")
+afirma("bundle agents/ sincronizado com as fontes", confere_bundle)
+
+# Comandos da documentação apontam para arquivos que existem (rodada 26).
+def confere_docs() -> None:
+    rc, s = exec_(["scripts/check-docs-runnable.py"])
+    if rc != 0:
+        raise AssertionError(f"comando de doc quebrado: {s.strip()[:140]}")
+afirma("toda referência de comando na documentação existe", confere_docs)
+
+# Clone limpo: o índice não tem CRLF mesmo com a cópia de trabalho convertida (rodada 9). Esta é
+# a razão do --cached no passo de CI; sem ela, o teste vira falso positivo em Windows.
+def confere_crlf_indice() -> None:
+    import shutil
+    bash = shutil.which("bash") or r"C:\Program Files\Git\bin\bash.exe"
+    if not pathlib.Path(bash).is_file():
+        return          # sem bash, nada a medir (não é falha do repo)
+    p = subprocess.run(
+        [bash, "-c", 'cd "$1" && git grep -Il --cached -P "\\r$" -- "*.md" "*.py" "*.sh" '
+                     '"*.yml" "*.json" "*.txt" || true', "x", str(RAIZ)],
+        capture_output=True, timeout=180)
+    saida = p.stdout.decode("utf-8", "replace").strip()
+    if saida:
+        raise AssertionError(f"{len(saida.splitlines())} blob(s) com CRLF no índice")
+afirma("índice do git sem CRLF (decisão do passo de CI)", confere_crlf_indice)
 
 print("\n" + "=" * 64)
 caiu = [t for t, ok in resultados if not ok]
