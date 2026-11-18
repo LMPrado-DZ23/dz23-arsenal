@@ -228,7 +228,7 @@ jobs:
 
       - name: Publicar relatório do gate
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: quality-gate
           path: gate.json
@@ -287,7 +287,7 @@ jobs:
 
       - name: Publicar relatório do gate (Windows)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: quality-gate-windows
           path: gate.json
