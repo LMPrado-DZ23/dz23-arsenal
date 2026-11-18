@@ -151,6 +151,13 @@ def main(argv: list[str]) -> int:
     # enquanto as cópias baterem com a fonte.
     resultados.append(rodar("copias", [py, "scripts/check-copies.py"]))
     resultados.append(rodar("licencas", [py, "scripts/check-licenses.py"]))
+    # Catálogo de fontes externas (mandato: layer catalog/). O índice de ~35 fontes é
+    # máquina-legível em catalog/catalog.json; licença só é "verificada" com o LICENSE lido e
+    # sha256 no disco, as demais ficam "a-verificar" (catalogadas por URL, nada copiado). O
+    # verificador cruza com external/ (sem doc órfão) e tem autoteste de controle negativo.
+    resultados.append(rodar("catalogo:verifica", [py, "scripts/check-catalog.py"]))
+    resultados.append(rodar("catalogo:indice", [py, "scripts/gera-catalog.py", "--check"]))
+    resultados.append(rodar("catalogo:autoteste", [py, "scripts/check-catalog.py", "--selftest"]))
     # Documento era a única superfície sem verificador de conteúdo: existência e link eram
     # conferidos, mas texto corrompido passava. Nesta sessão eu mesmo injetei duas vezes resíduo
     # de ferramenta num .md (caractere CJK no meio do português e uma expressão Python inteira no
