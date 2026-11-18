@@ -3,24 +3,43 @@
 Este documento existe para que ninguém precise acreditar em badge. O que está aqui é o que foi **verificado**;
 o que não foi testado está marcado como `NOT_TESTED`, não como "funciona".
 
-## Onde estamos (v1.3.0)
+## Onde estamos (v1.5.0)
 
 | Componente | Versão | Estado verificado |
 |---|---|---|
-| 10 skills DZ23 | ver [`INDEX.md`](INDEX.md) | estrutura ✅ · validadores ✅ · **cobertura de evals parcial (45/144)** |
+| 10 skills DZ23 | ver [`INDEX.md`](INDEX.md) | estrutura ✅ · validadores ✅ (10/10, antes 9/10) · cobertura de evals 45/144 |
 | `mcp/dz23-subagents-universal-mcp` | 4.4.1 | instalado e configurado no ambiente de origem; **não iniciado em CI** |
 | `bundle/dz23-dsh-agency` | 1.0.0 | estrutura ✅; `build.py` não executado em CI |
-| 9 skills externas | — | apenas documentadas (não redistribuídas) |
-| 1 prompt de origem | — | copiado verbatim |
+| 13 referências externas + registro de absorção | — | documentadas (não redistribuídas); tabela do README conferida contra o disco |
 
 ### O que roda em CI (a cada push/PR)
 
-1. `validate_skill.py` de cada skill que tiver um
+1. `validate_skill.py` de **cada** skill — ausência agora falha, não pula
 2. `check-structure.py` — arquivos obrigatórios, frontmatter, `VERSION` × frontmatter, schema dos evals
 3. `check-links.py` — todo link relativo `.md` do repositório
-4. `build-manifest.py --check` — `arsenal.json` e `INDEX.md` não podem estar desatualizados
+4. `build-manifest.py --check` — compara conteúdo canônico, não data (ver v1.5.0 abaixo)
+5. `check-numbers.py` — números do README/ROADMAP contra o disco, incluindo regra órfã
+6. `check-licenses.py` — licença por componente e por referência externa
+7. auto-testes de `gate_candidatos.py` e `verifica_claims.py`, mais `claims:<skill>` nos 10 SKILL.md
 
 Constantes do CI: [`.github/workflows/quality.yml`](.github/workflows/quality.yml).
+Contagem atual medida: **31 checks** (`python scripts/quality-gate.py`).
+
+## Correções estruturais da v1.5.0
+
+Detalhadas em [`CHANGELOG.md`](CHANGELOG.md) e na justificativa de
+[`external/absorcao-2026-11-17.md`](external/absorcao-2026-11-17.md). O ponto que importa
+para este documento: **dois gates rodavam no CI sem verificar o que prometiam.**
+
+- `--verify-quotes` devolvia exit 0 quando `AUDIT-STATUS.json` faltava. Apagar o estado
+  desligava a checagem de citação fabricada. Consertado e provado por renomeio do arquivo.
+- `check-eval-results.py` prometia cruzar NOT_TESTED com o ROADMAP e só testava se a string
+  `"Status de evals"` existia. Consertado e provado injetando número falso no ROADMAP.
+
+Nenhum dos dois era detectável lendo a suíte verde. A lição virou instrumento: todo
+verificador novo nasce com controle positivo **e** negativo no próprio selftest, e o
+`check-numbers.py` passou a denunciar regra cujo padrão não casa em lugar nenhum — porque
+uma regra órfã é indistinguível de uma checagem aprovada.
 
 ## O buraco maior: evals não executados
 
@@ -121,6 +140,11 @@ nenhum eval).
 | 5 | Skills em português; sem tradução para inglês | baixo — alcance | alto |
 | 6 | `external/` é só documentação; nenhuma skill externa é testada junto | baixo | — |
 | 7 | Sem `evals/results/` versionado (histórico de execução) | médio — falta série temporal | médio |
+| 8 | **Ponte de checagem comum depende de `.dz23-arsenal`**: numa máquina onde o repo foi movido ou apagado depois do install, as skills instaladas voltam a pular as checagens comuns (com WARN visível, não em silêncio). Faltaria um mecanismo de auto-reparo ou uma cópia embutida. | médio | médio |
+| 9 | `verifica_claims.py` cobre só caminho de arquivo. Números, citações longas e afirmações de comportamento ficam `sem-suporte`. O original cataloga ~30 tipos; crescer um por vez com selftest positivo e negativo. | médio | médio |
+| 10 | `gate_candidatos.py` tem 3 gates e nenhum coletor de sinais acoplado. Sem `--sinais` produzido por ferramenta real, a triagem depende de alguém montar o JSON à mão — o que reintroduz o julgamento que o gate existe para eliminar. | alto | médio |
+| 11 | Técnicas absorvidas ainda sem implementação: review fan-out com dedup por evidência, ledger de aprovação com epoch/claim único, calibração bidirecional com fixture held-out, score ponderado must/should/could, guard-rail clean-room executável. Ver `external/absorcao-2026-11-17.md`. | alto | médio–alto |
+| 12 | MCP e bundle seguem com defeitos funcionais próprios, medidos nesta varredura: `mission_status` e `mission_status_job` apontam para a mesma função; jobs vivem em `Map` in-process cortado em 200 sem nenhuma tool de listagem; badge npm aponta para pacote que devolve 404; pentagi-mcp tem duas cópias divergentes e a registrada no DSH é a que **não** está versionada aqui. | alto | médio |
 
 ## Não objetivos (para não prometer o que não vamos fazer)
 
