@@ -198,6 +198,14 @@ def main(argv: list[str]) -> int:
                              "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-codebase",
                             [py, "scripts/prova-consulta-codebase.py"]))
+    # Acervo de categorias de ADR (ECC architecture-decision-records, MIT). O hash de integridade aqui ja
+    # nasce canonico (\r\n -> \n antes do sha256), porque no item anterior hashear bytes crus fez o CI
+    # reprovar um checkout Linux cujo conteudo era identico ao disco Windows so por EOL. Ver a licao em
+    # docs/quality-loop/state.md ("verde local != verde no runner").
+    resultados.append(rodar("espec:consulta",
+                            [py, "skills/dz23-spec-to-system-engine/scripts/consulta-espec.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-espec",
+                            [py, "scripts/prova-consulta-espec.py"]))
     # Repositório PÚBLICO, e até esta rodada nenhum verificador abria um arquivo em busca de
     # credencial: colar um token GitHub válido em `.env.example` dava gate 46/46 verde. Os quatro
     # scripts que mencionam "segredo" no fonte falam de outra coisa (scan descrito em prosa, design

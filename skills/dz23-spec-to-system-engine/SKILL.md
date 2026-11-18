@@ -1,6 +1,6 @@
 ---
 name: dz23-spec-to-system-engine
-version: 1.2.1
+version: 1.3.0
 description: >
   Transforma pedido, ideia ou documento em especificação executável e plano de
   construção: requisitos verificáveis, critério de aceite, decomposição em
@@ -53,7 +53,7 @@ ENQUADRAR → EXTRAIR REQUISITOS → VERIFICAR → DECOMPOR → CONTRATAR → PR
 - **Rastreabilidade viva**: `REQ → fatia → teste → evidência` — requisito sem teste é requisito não coberto.
 - **Definição de pronto explícita** por fatia (código, teste, doc, observabilidade, rollback quando aplicável).
 - **Estimativa é intervalo com premissas**; número único sem premissa é ficção.
-- **Decisão irreversível exige ADR** antes de executar; reversível se decide e se registra.
+- **Decisão irreversível exige ADR** antes de executar; reversível se decide e se registra. Para saber *se* algo merece registro, consulte `python scripts/consulta-espec.py categoria <domínio>` ou `... vale <a escolha concreta>` — as 8 categorias da taxonomia ECC dizem quando um ADR é obrigatório em vez de ruído.
 - **Nunca inventar requisito** que o usuário não pediu, nem apagar em silêncio o que ele pediu.
 - **Nunca declarar pronto sem evidência** — comando, saída, demo ou teste.
 

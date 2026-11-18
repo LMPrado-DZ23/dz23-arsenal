@@ -107,15 +107,15 @@
     },
     {
       "name": "dz23-spec-to-system-engine",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": ">",
       "user_invocable": true,
-      "files": 46,
+      "files": 49,
       "references": 17,
       "templates": 11,
-      "scripts": 5,
+      "scripts": 6,
       "evals": 15,
-      "sha256_skill_md": "1dc519dfc41064555e5c3a4ce0fa205f8b52bce271bc23266268b5c136600b1e"
+      "sha256_skill_md": "da29654aeb415d6d479ca7ad4188b411654b4de9a7a8774b778f86082d7aa374"
     },
     {
       "name": "dz23-ultimate-pro-max",

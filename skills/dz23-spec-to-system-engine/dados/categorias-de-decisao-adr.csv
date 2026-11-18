@@ -1,0 +1,9 @@
+No,category,examples,origem_arquivo,origem_secao
+1,Technology choices,"Framework, language, database, cloud provider",ECC/skills/architecture-decision-records/SKILL.md,Categories of Decisions Worth Recording
+2,Architecture patterns,"Monolith vs microservices, event-driven, CQRS",ECC/skills/architecture-decision-records/SKILL.md,Categories of Decisions Worth Recording
+3,API design,"REST vs GraphQL, versioning strategy, auth mechanism",ECC/skills/architecture-decision-records/SKILL.md,Categories of Decisions Worth Recording
+4,Data modeling,"Schema design, normalization decisions, caching strategy",ECC/skills/architecture-decision-records/SKILL.md,Categories of Decisions Worth Recording
+5,Infrastructure,"Deployment model, CI/CD pipeline, monitoring stack",ECC/skills/architecture-decision-records/SKILL.md,Categories of Decisions Worth Recording
+6,Security,"Auth strategy, encryption approach, secret management",ECC/skills/architecture-decision-records/SKILL.md,Categories of Decisions Worth Recording
+7,Testing,"Test framework, coverage targets, E2E vs integration balance",ECC/skills/architecture-decision-records/SKILL.md,Categories of Decisions Worth Recording
+8,Process,"Branching strategy, review process, release cadence",ECC/skills/architecture-decision-records/SKILL.md,Categories of Decisions Worth Recording

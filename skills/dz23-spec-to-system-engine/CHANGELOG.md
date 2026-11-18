@@ -1,5 +1,14 @@
 # Changelog — dz23-spec-to-system-engine
 
+## [1.3.0] — 2026-11-18
+
+### Adicionado
+- Acervo consultável de categorias de ADR (dados/categorias-de-decisao-adr.csv, 8 linhas, ECC architecture-decision-records, MIT lido no arquivo LICENSE): taxonomia de quando uma decisão merece registro. Consultor scripts/consulta-espec.py com mapa fechado de 40 sinônímos PT→EN e recusa honesta.
+- Prova gate:autoteste-consulta-espec: exaustão dos 40 termos + esquema + integridade por hash **canônico** (EOL-independente), aprendendo do item anterior onde hashear bytes crus reprovou o CI por CRLF vs LF.
+
+### Rejeitado
+- Tabela "ADR Index Format" da mesma fonte: está dentro de bloco `markdown` com ADRs fictícios (Use Next.js, PostgreSQL over MongoDB) — placeholder de template, não conhecimento. Ver dados/PROVENIENCIA.md.
+
 ## [1.2.1] — 2026-11-17
 
 ### Corrigido
