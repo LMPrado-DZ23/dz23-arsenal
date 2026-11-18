@@ -16,7 +16,7 @@
 | [dz23-e2e-browser-verifier](skills/dz23-e2e-browser-verifier/) | 1.2.0 | 30 | 10 | 6 | 4 | 16 |
 | [dz23-performance-scalability-engine](skills/dz23-performance-scalability-engine/) | 1.3.4 | 33 | 11 | 6 | 7 | 16 |
 | [dz23-postgres-prod-preflight](skills/dz23-postgres-prod-preflight/) | 1.2.0 | 21 | 5 | 2 | 5 | 13 |
-| [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.1.4 | 27 | 12 | 4 | 5 | 15 |
+| [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.2.0 | 31 | 12 | 4 | 6 | 15 |
 | [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.3.0 | 49 | 17 | 11 | 6 | 15 |
 | [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.6 | 20 | 10 | 0 | 4 | 13 |
 | [prune-tests](skills/prune-tests/) | 1.0.0 | 14 | 4 | 1 | 3 | 6 |

@@ -1,6 +1,6 @@
 ---
 name: dz23-reverse-engineer-anything
-version: 1.1.4
+version: 1.2.0
 description: >
   Engenharia reversa de binários nativos e firmware com motor próprio em Python puro
   (zero dependências, offline): parser de U-Boot uImage com CRC, tabela de partição ESP
@@ -84,6 +84,11 @@ Leia `references/quality-gates.md`. Resumo — BLOCKER: achado sem offset/hash/c
 - Templates: `templates/re-report.md`, `templates/target-triage.md`, `templates/firmware-map.md`, `templates/findings-ledger.md`
 - Integração com REA (opcional): `references/rea-integration.md`
 - Scripts: `scripts/re_toolkit.py` (motor: triage/uimage/esp/dtb/uf2/intelhex/elf/squashfs/selftest), `scripts/file_triage.py`, `scripts/validate_skill.py`
+
+**Acervo consultável** (antes de nomear símbolo, concluir "cifrado" ou montar firmware): os anti-padrões
+e o mapa de referências viram consulta offline — `python scripts/consulta-reverse.py anti firmware`
+(anti-padrões da fase, com a correção), `... referencia emulacao` (qual `references/*.md` carregar),
+`... busca entropia`. Fonte: as próprias referências da skill (ORIGINAL). Responde "sem correspondência".
 
 ## Roteamento com outras skills
 | Situação | Skill |

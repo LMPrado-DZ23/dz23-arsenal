@@ -1,4 +1,4 @@
-PROMPT DE ATIVAÇÃO — DZ23 Reverse-Engineer-Anything v1.1.4
+PROMPT DE ATIVAÇÃO — DZ23 Reverse-Engineer-Anything v1.2.0
 
 Use a skill dz23-reverse-engineer-anything.
 
@@ -31,3 +31,5 @@ Proibido: analisar sem autorização, executar no host, inventar símbolo, achad
 
 Critério de entrega: cada gate de references/quality-gates.md com estado
 PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.
+
+Acervo consultável (offline): python scripts/consulta-reverse.py anti firmware | referencia emulacao | busca entropia.

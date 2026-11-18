@@ -1,5 +1,16 @@
 # Changelog — dz23-reverse-engineer-anything
 
+## [1.2.0] — 2026-11-18
+
+### Adicionado — acervo consultável de RE (Trilha A, fonte ORIGINAL)
+- `dados/`: 2 CSVs (49 registros) **destilados das próprias referências da skill** (sem fonte externa):
+  `anti-padroes.csv` (38: fase → anti-padrão → por que dói → correção, de `references/anti-patterns.md`)
+  e `selecao-de-referencia.csv` (11: situação → qual `references/*.md` carregar). Proveniência em
+  `dados/PROVENIENCIA.md` (marcado ORIGINAL DZ23).
+- `scripts/consulta-reverse.py` + prova: subcomando PT (anti/antipadrao/fase, referencia/ref, busca),
+  matcher normaliza acento. Ambos no gate (`reverse:consulta`, `gate:autoteste-consulta-reverse`) e no CI.
+- Índice no `SKILL.md`. A skill agora consulta os próprios anti-padrões offline. Bump MINOR 1.1.4 → 1.2.0.
+
 ## [1.1.4] — 2026-11-17
 
 ### Corrigido

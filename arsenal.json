@@ -95,15 +95,15 @@
     },
     {
       "name": "dz23-reverse-engineer-anything",
-      "version": "1.1.4",
+      "version": "1.2.0",
       "description": ">",
       "user_invocable": true,
-      "files": 27,
+      "files": 31,
       "references": 12,
       "templates": 4,
-      "scripts": 5,
+      "scripts": 6,
       "evals": 15,
-      "sha256_skill_md": "00c8f7261274bc769e02e4049d6467649988917b52b5d78e60f992891ae0c0e5"
+      "sha256_skill_md": "549d496061e3c8014974767aa28716cac186a57fe67ddb1905cf36d75475b62e"
     },
     {
       "name": "dz23-spec-to-system-engine",

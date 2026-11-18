@@ -279,6 +279,16 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
 - **Melhora a DZ23 existente** `dz23-e2e-browser-verifier` (1.1.3 → 1.2.0): consulta o próprio acervo
   offline. 3ª das 5 DZ23 restantes da Trilha A. Evals da skill inalterados (ledger 144 intacto).
 
+### `skills/dz23-reverse-engineer-anything/dados/` — acervo de RE (Trilha A, fonte ORIGINAL DZ23)
+- **Origem:** **ORIGINAL (DZ23)** — destilado das próprias referências da skill
+  (`references/anti-patterns.md` + a seção "Seleção de referências"). **Nenhuma fonte externa**; é o
+  conhecimento que a skill já tinha, tornado consultável.
+- **O que entrou:** 2 CSVs (49 registros) — 38 anti-padrões por fase (sintoma → por que dói → correção)
+  e 11 mapas situação → referência. Consultor `scripts/consulta-reverse.py` (matcher normaliza acento)
+  + prova, no gate.
+- **Melhora a DZ23 existente** `dz23-reverse-engineer-anything` (1.1.4 → 1.2.0): consulta os próprios
+  anti-padrões offline. 4ª das 5 DZ23 da Trilha A. Evals inalterados (ledger 144 intacto).
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

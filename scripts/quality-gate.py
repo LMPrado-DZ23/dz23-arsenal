@@ -201,6 +201,10 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("e2e:consulta", [py, "scripts/consulta-e2e.py", "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-e2e",
                             [py, "scripts/prova-consulta-e2e.py"]))
+    # reverse-engineer-anything: acervo de RE (anti-padroes por fase, mapa de referencias).
+    resultados.append(rodar("reverse:consulta", [py, "scripts/consulta-reverse.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-reverse",
+                            [py, "scripts/prova-consulta-reverse.py"]))
     # A skill que MANDA rodar um script tem de levar o script e o dado junto. Medido na rodada 58:
     # os tres consultores instruidos pelo SKILL.md viviam em scripts/ do repo, e `install-all` copia
     # apenas a pasta da skill -- a habilidade instalada em ~/.agents/skills/ mandava executar arquivo

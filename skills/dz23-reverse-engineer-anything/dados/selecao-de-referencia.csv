@@ -1,0 +1,12 @@
+situacao,referencia,origem_arquivo,origem_secao
+"triagem, magic bytes, entropia",references/target-triage.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+ELF/PE/Mach-O e hardening,references/elf-and-native.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+analise estatica e decompilacao,references/static-analysis.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+analise dinamica e instrumentacao,references/dynamic-analysis.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+formatos de firmware,references/firmware-formats.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+extracao de firmware,references/firmware-extraction.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+emulacao de firmware,references/firmware-emulation.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+"boot, hardware e risco fisico",references/boot-and-hardware.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+gates e severidade,references/quality-gates.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+instalacao e ferramental,references/installation.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
+integracao com REA,references/rea-integration.md,SKILL.md (ORIGINAL DZ23),Seleção de referências
