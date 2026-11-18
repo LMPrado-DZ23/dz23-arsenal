@@ -86,11 +86,33 @@ assert m_teto, ('a regra de anti-loop (teto de tentativas antes de nova via) sum
 
 # Vocabulário de estados: a skill não pode introduzir grafia própria e divergir do
 # resto do arsenal. Observado: ela usava NOT_RUN enquanto as outras nove usam NOT_TESTED.
-estados_encontrados = set(re.findall(r'\bNOT_[A-Z_]+\b', s))
-permitidos = {'NOT_TESTED', 'NOT_RECOVERED'}
-estranhos = estados_encontrados - permitidos
-assert not estranhos, (f'estados de evidência fora do vocabulário do arsenal: '
-                       f'{sorted(estranhos)} — use NOT_TESTED')
+# A checagem original só procurava `\bNOT_[A-Z_]+\b` e por isso NÃO viu `UNVERIFIED`, um
+# estado rival sem o prefixo NOT -- exatamente o tipo de caso que deveria denunciar
+# (rodada 50).
+#
+# Dois erros meus corrigidos aqui na mesma rodada, ambos achados pela prova:
+# - `assert`: sob `python -O` a linha inteira desaparece e a checagem vira decorativa. Este
+#   arquivo era justamente o lugar onde a rodada 19 trocou assert por SystemExit; ao escrever
+#   a checagem nova eu reintroduzi o padrão banido.
+# - lista de prefixos (NOT|UN|BLOCKED|...): um rótulo inventado como `PENDING` nao comecando por
+#   nenhum deles passava. O sinal certo e qualquer token em CAIXA ALTA usado como veredito dentro
+#   de crase, comparado contra a lista FECHADA do vocabulario deste arsenal.
+_rotulos = set(re.findall(r"`([A-Z][A-Z0-9_]{3,})`", s))
+permitidos = {
+    "NOT_TESTED", "NOT_RECOVERED", "UNAVAILABLE", "MISCONFIGURED", "AVAILABLE",
+    "PASS", "FAIL", "PARTIAL", "BLOCKED", "STATUS",
+    "BLOCKED_BY_EXTERNAL_DEPENDENCY", "SESSION_LIMIT_REACHED", "NEEDS_APPROVAL",
+    "VERIFIED_COMPLETE", "CRITICAL", "HIGH", "MEDIUM", "LOW", "BLOCKER",
+    # rotulos que nao sao vereditos: aparecem em crase por serem nomes de campo, sigla ou
+    # marcador de rastreabilidade. A lista e fechada e curta de proposito -- cada item aqui
+    # precisa ser justificado, senao o verificador vira colecao de excecoes.
+    "REQ", "OBS", "ID", "SQL", "API", "UX", "UI", "CI", "RUM", "SLO", "N+1", "TODO", "FIXME",
+}
+estranhos = {r for r in _rotulos if r not in permitidos and not re.match(r"REQ-\d", r)}
+if estranhos:
+    print(f"FALHA: estados de evidência fora do vocabulário do arsenal: "
+          f"{sorted(estranhos)} — use NOT_TESTED", file=sys.stderr)
+    raise SystemExit(1)
 
 # O CHANGELOG precisa documentar a versão corrente, senão VERSION avança e o histórico
 # fica mentindo sobre o que mudou.

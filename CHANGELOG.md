@@ -1,3 +1,27 @@
+## [1.5.26] — 2026-11-18
+
+### Corrigido -- `UNVERIFIED` sobreviveu à unificação de vocabulário da v2.1.5
+A rodada 7 unificou `NOT_RUN` → `NOT_TESTED` em quatro arquivos e registrou que a checagem do
+próprio validador fora o que encontrou o desvio. Mas deixou um segundo estado rival na mesma skill:
+a seção 6 definia `UNVERIFIED` como critério de parada enquanto a seção 2 e as outras nove usavam
+`NOT_TESTED`. Trocado, com nota explícita de que não existe vocabulário paralelo por tipo de
+trabalho (autonomous 2.1.6 → 2.1.7).
+
+Também corrigido: o eval `visual-proof` esperava «Declara NOT_RUN ou UNVERIFIED» -- dois termos
+aposentados nesta skill. Um cenário de avaliação ensinando grafia morta é pior que ausente: quem o
+executa aprende o vocabulário errado de propósito.
+
+### Por que nada pegou antes
+A checagem de vocabulário procurava apenas `\bNOT_[A-Z_]+\b`. Um rival sem prefixo `NOT` era
+invisível ao mecanismo criado para impedir exatamente isso. Reescrita para comparar qualquer rótulo
+em CAIXA ALTA entre crases contra lista fechada, reportando com `raise SystemExit(1)` -- a versão
+com `assert` desaparecia sob `python -O`, o mesmo defeito banido das dez skills na v2.1.5, que
+eu reintroduzi ao escrever a checagem nova.
+
+Prova executada injetando `UNVERIFIED`, `PENDING` e `UNTESTED`: os três recusam nos dois modos;
+baseline passa nos dois. Uma variante minha foi corrigida no caminho -- copiar a skill para pasta de
+outro nome fazia o baseline falhar por `frontmatter name != diretório`, motivo alheio ao testado.
+
 ## [1.5.25] — 2026-11-18
 
 ### Verificado sem defeito (varredura de classes, fim de sessao)

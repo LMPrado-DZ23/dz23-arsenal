@@ -1,6 +1,6 @@
 ---
 name: dz23-autonomous-improvement-ultimate
-version: 2.1.6
+version: 2.1.7
 description: Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.
 user-invocable: true
 argument-hint: "<objetivo, ou 'audit <path>', ou cole o /goal>"
@@ -71,7 +71,7 @@ Leia `references/quality-gates.md` e execute os gates aplicáveis: lint, typeche
 - `BLOCKED_BY_EXTERNAL_DEPENDENCY`: credencial, serviço, hardware, permissão ou dado indispensável indisponível; indique desbloqueio.
 - `NEEDS_APPROVAL`: mudança destrutiva, irreversível, financeira ou de risco elevado requer autorização.
 - `SESSION_LIMIT_REACHED`: recursos/contexto/tempo acabaram; checkpoint íntegro e próxima ação concreta.
-- `UNVERIFIED`: implementação feita, mas verificação essencial não executada; não confundir com sucesso.
+- `NOT_TESTED`: implementação feita, mas verificação essencial não executada; não confundir com sucesso. É o mesmo estado que as outras nove skills deste arsenal chamam de `NOT_TESTED` -- não existe vocabulário paralelo por tipo de trabalho.
 - Se restarem itens `MEDIUM/LOW` em escopo, só encerre como completo se o contrato de aceite explicitamente permitir e eles estiverem documentados; caso contrário continue ou informe pendência.
 
 ### 6.1 Avaliação da skill

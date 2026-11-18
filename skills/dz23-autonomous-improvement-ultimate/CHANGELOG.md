@@ -1,5 +1,12 @@
 # Changelog — dz23-autonomous-improvement-ultimate
 
+## [2.1.7] — 2026-11-18
+
+### Corrigido
+- O vocabulário unificado da 2.1.5 deixou `UNVERIFIED` para trás: a seção 6 definia um estado de parada com nome próprio enquanto a seção 2 e as outras nove skills usam `NOT_TESTED`. Trocado por `NOT_TESTED`, com nota explícita de que não existe vocabulário paralelo.
+- `evals/evals.json` caso `visual-proof` esperava "NOT_RUN ou UNVERIFIED", dois termos aposentados nesta skill — quem seguisse o eval ensinaria grafia morta. Reescrito para exigir `NOT_TESTED` (ou `BLOCKED_BY_EXTERNAL_DEPENDENCY`).
+- A checagem de vocabulário do próprio validador só procurava `\bNOT_[A-Z_]+\b`, então não via um rival sem prefixo NOT — foi assim que `UNVERIFIED` sobreviveu à unificação. Agora compara qualquer rótulo em CAIXA ALTA entre crases contra a lista fechada do arsenal, reportando com `raise SystemExit(1)` em vez de `assert`: sob `python -O` a versão com assert desapareceria, o mesmo defeito corrigido nas dez skills na 2.1.6. Provado injetando `UNVERIFIED`, `PENDING` e `UNTESTED`: os três recusam nos dois modos; baseline passa nos dois.
+
 ## [2.1.6] — 2026-11-17
 
 ### Corrigido
