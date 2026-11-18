@@ -155,7 +155,7 @@ externas** documentadas. **O que está publicado é diferente do que está verif
 |---|---|
 | Skills publicadas | **10** DZ23 + **8 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines, replica-recon, replica-entrepreneur, replica-diff, replica-brand, replica-launch — MIT) + **2 MCP** + 1 bundle + 7 externas (+16 referências externas) |
 | Evals declarados | **144** |
-| **Evals executados** | **53/144 (36,8%)** — 51 PASS · 2 PARTIAL · 0 FAIL |
+| **Evals executados** | **73/144 (50,7%)** — 71 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |
 | **Laudo original da auditoria** | **`INVALIDO_COMO_EVIDENCIA`** — 54 de 68 citações não existem nas respostas |
 | Críticos executados | **32 de 45 identificados (71%)** — 13 exigem infra |
@@ -170,7 +170,7 @@ nenhuma enxerga o que a outra enxerga:
 
 | Camada | Cobertura | Erro que só ela mostra |
 |---|---|---|
-| 1 — autoavaliação | 53/144 | viés de confirmação |
+| 1 — autoavaliação | 73/144 | viés de confirmação |
 | 2 — re-leitura adversarial | 20/45 | violação de regra **vizinha** ao eval |
 | 3 — auditoria externa | 16/16 da amostra, em literais | paráfrase do input + citação fabricada |
 | 4 — projeto real | 1 tarefa (CI verde) | ferramenta acusando evidência **legítima** |
@@ -181,7 +181,7 @@ pessoa transforma erro em retrabalho, não em parágrafo.
 
 ### O que NÃO está provado
 
-- **91 de 144 evals nunca executados** (63,2%)
+- **71 de 144 evals nunca executados** (49,3%)
 - **40 evals bloqueados** por ausência de infra (Docker/Postgres/Ghidra/browser/hardware), 13 deles críticos
 - **3 evals criados na v1.4.5** (OB-03/04/05) nunca executados nem auditados
 - **Camada 4 fora do próprio repo:** 0 tarefas
@@ -197,7 +197,7 @@ Verificar agora:
 
 ```bash
 python scripts/quality-gate.py              # roda todos os checks (o total sai da própria saída)
-python scripts/run-evals.py --report        # 53/144 registrados
+python scripts/run-evals.py --report        # 73/144 registrados
 python scripts/run-evals.py --verify-quotes # citações dos laudos válidos
 ```
 
