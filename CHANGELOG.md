@@ -85,6 +85,19 @@ reimplementadas, não copiadas; a triagem por pacote está em `external/absorcao
 - **CI**: instala `jsonschema` (sem ele, "Evals contra o schema" caía em fallback parcial com
   selo de completa), publica o `--report` no resumo do run, e falha ante CRLF fora da norma.
 
+### Bumps de versão nas skills (regra dura do CONTRIBUTING: conteúdo mudou, versão muda)
+- `dz23-autonomous-improvement-ultimate` 2.1.4 → **2.1.5** — vocabulário `NOT_RUN` →
+  `NOT_TESTED` unificado com as outras nove; ganhou validador próprio.
+- `dz23-performance-scalability-engine` 1.3.0 → **1.3.1** — retirada a alegação de que a spec
+  original estava preservada em `_sources/user-spec.md`, caminho que o clone não tem.
+- `dz23-ultimate-pro-max` 2.2.2 → **2.2.3** — `references/legacy-v1.md` deixou de declarar
+  frontmatter da skill descontinuada; `PROMPT-ATIVACAO.txt` ganhou cabeçalho de versão, que
+  nunca teve (as irmãs têm).
+
+Conferência cruzada aplicada às dez skills: VERSION × frontmatter × seção do CHANGELOG ×
+cabeçalho do PROMPT-ATIVACAO. Foi o validador novo da autonomous que encontrou o `NOT_RUN`,
+e o check comum que encontrou o PROMPT-ATIVACAO defasado depois do próprio bump — os dois
+defeitos apareceram por ferramenta, não por leitura.
 ### Estado medido
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.

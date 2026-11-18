@@ -1,5 +1,13 @@
 # Changelog — dz23-performance-scalability-engine
 
+## [1.3.1] — 2026-11-17
+
+### Corrigido
+**Correção de fato: alegação de preservação que o clone não tem**
+
+- `SKILL.md` dizia que a spec original estava "preservada em `_sources/user-spec.md`". Os arquivos existem na máquina de origem, mas `_sources/` está no `.gitignore` e `git log --all -- '*_sources*'` não retorna nenhum commit: quem clona recebe uma promessa vazia. Texto ajustado para "fora deste repositório".
+- Encontrado por `scripts/verifica_claims.py`, que confere caminho citado contra o disco em vez de aceitar a afirmação.
+
 ## [1.3.0] — 2026-11-08
 
 Dois fixes de auditoria: **F-9** (eval impossível de cumprir) e **F-5** (scripts não documentados no

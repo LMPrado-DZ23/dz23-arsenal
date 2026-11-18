@@ -1,5 +1,13 @@
 # Changelog — dz23-ultimate-pro-max
 
+## [2.2.3] — 2026-11-17
+
+### Corrigido
+**Referência histórica deixou de ser uma segunda skill carregável**
+
+- `references/legacy-v1.md` carregava frontmatter próprio com `name: dz23-premium-ui-ultimate` — a skill descontinuada, declarada viva dentro de uma referência. Substituído por cabeçalho explícito de arquivo histórico; o conteúdo metodológico permanece intacto.
+- Motivo pelo qual passou despercebida: o testes de nome morto existia nos outros validadores, mas este era justamente o que faltava nesta skill (15 linhas, sem checagem de eval nem de nome).
+
 ## [2.2.2] — 2026-11-09
 
 ### Corrigido

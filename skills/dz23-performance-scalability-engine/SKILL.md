@@ -1,6 +1,6 @@
 ---
 name: dz23-performance-scalability-engine
-version: 1.3.0
+version: 1.3.1
 description: >
   Plano cirúrgico de otimização de performance e escalabilidade em 4 camadas —
   Frontend/Interface (UX e renderização), Comunicação/Rede (APIs e fluxos),

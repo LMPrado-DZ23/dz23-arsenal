@@ -11,7 +11,7 @@
   "skills": [
     {
       "name": "dz23-autonomous-improvement-ultimate",
-      "version": "2.1.4",
+      "version": "2.1.5",
       "description": "Orquestra objetivos /goal em ciclos autônomos e verificáveis de auditoria, diagnóstico de causa raiz, implementação, testes, revisão adversarial, correção e reteste. Usar em desenvolvimento, depuração, refatoração, QA e melhorias contínuas; combinar com dz23-ultimate-pro-max em interfaces.",
       "user_invocable": true,
       "files": 16,
@@ -19,7 +19,7 @@
       "templates": 2,
       "scripts": 2,
       "evals": 13,
-      "sha256_skill_md": "424d11dc2148f4938739a7b2171fb432ff9ffea28e86a1d83b35bbbf2d2412cb"
+      "sha256_skill_md": "c1357cc7d9508923f4d4e67ade764dce66d110924115396f02acb448b9572f10"
     },
     {
       "name": "dz23-backend-data-architect",
@@ -71,7 +71,7 @@
     },
     {
       "name": "dz23-performance-scalability-engine",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "description": ">",
       "user_invocable": true,
       "files": 27,
@@ -79,7 +79,7 @@
       "templates": 6,
       "scripts": 5,
       "evals": 16,
-      "sha256_skill_md": "d45dea1697ae306988056571206c3929b1d8c4feedcb12c6ff775a20780bac9c"
+      "sha256_skill_md": "c872f08095ff34246c85b8da773cb64b2c3c2a3c7f5e8496547a0838c569df27"
     },
     {
       "name": "dz23-postgres-prod-preflight",
@@ -119,7 +119,7 @@
     },
     {
       "name": "dz23-ultimate-pro-max",
-      "version": "2.2.2",
+      "version": "2.2.3",
       "description": "Skill de direção de arte premium, UX, frontend, arquitetura de interface, segurança, acessibilidade, performance, QA visual e entrega verificável para sites, SaaS, CRM, ERP, B-3PO, desktop e mobile. Ative ao criar, revisar, redesenhar ou implementar interfaces, fluxos e design systems.",
       "user_invocable": true,
       "files": 17,
@@ -127,7 +127,7 @@
       "templates": 0,
       "scripts": 2,
       "evals": 13,
-      "sha256_skill_md": "f60d01e8d66c8fb49d4e4e2e6d26572d43b7e77ae0e41401fe962e757a8c7220"
+      "sha256_skill_md": "39928104bd891f88c9ed18c4185f39af5601dfa077af42c5ed70b3cdb85393fa"
     }
   ],
   "external": [

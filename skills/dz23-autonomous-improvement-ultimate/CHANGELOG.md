@@ -1,5 +1,13 @@
 # Changelog — dz23-autonomous-improvement-ultimate
 
+## [2.1.5] — 2026-11-17
+
+### Corrigido
+**Vocabulário de evidência unificado com o resto do arsenal**
+
+- `NOT_RUN` → `NOT_TESTED` em `SKILL.md`, `references/goal-integration.md`, `references/quality-gates.md` e `templates/acceptance.md`. As outras nove skills já usavam `NOT_TESTED`; `run-evals.py` aceitava as duas grafias por regex, então a divergência sobreviveu ao tempo e aparecia no registro onde a cobertura é lida.
+- Ganhou `scripts/validate_skill.py` próprio. Era a única skill do arsenal sem validador, e o `quality-gate.py` tratava a ausência como OK — a skill que define o contrato de evidência não era verificada por ninguém. O validador novo foi o que encontrou o `NOT_RUN` acima.
+
 ## [2.1.4] — 2026-11-09
 
 ### Adicionado

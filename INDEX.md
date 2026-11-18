@@ -9,16 +9,16 @@
 
 | Skill | Versão | Arquivos | Refs | Templates | Scripts | Evals |
 |---|---|---|---|---|---|---|
-| [dz23-autonomous-improvement-ultimate](skills/dz23-autonomous-improvement-ultimate/) | 2.1.4 | 16 | 5 | 2 | 2 | 13 |
+| [dz23-autonomous-improvement-ultimate](skills/dz23-autonomous-improvement-ultimate/) | 2.1.5 | 16 | 5 | 2 | 2 | 13 |
 | [dz23-backend-data-architect](skills/dz23-backend-data-architect/) | 1.1.0 | 20 | 10 | 2 | 2 | 12 |
 | [dz23-codebase-cartographer](skills/dz23-codebase-cartographer/) | 1.1.0 | 32 | 15 | 7 | 4 | 15 |
 | [dz23-devops-cloud-deployer](skills/dz23-devops-cloud-deployer/) | 1.2.2 | 34 | 17 | 7 | 4 | 16 |
 | [dz23-e2e-browser-verifier](skills/dz23-e2e-browser-verifier/) | 1.1.1 | 24 | 10 | 6 | 2 | 16 |
-| [dz23-performance-scalability-engine](skills/dz23-performance-scalability-engine/) | 1.3.0 | 27 | 10 | 6 | 5 | 16 |
+| [dz23-performance-scalability-engine](skills/dz23-performance-scalability-engine/) | 1.3.1 | 27 | 10 | 6 | 5 | 16 |
 | [dz23-postgres-prod-preflight](skills/dz23-postgres-prod-preflight/) | 1.1.0 | 15 | 5 | 2 | 3 | 13 |
 | [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.1.3 | 26 | 12 | 4 | 4 | 15 |
 | [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.2.0 | 45 | 17 | 11 | 4 | 15 |
-| [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.2 | 17 | 9 | 0 | 2 | 13 |
+| [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.3 | 17 | 9 | 0 | 2 | 13 |
 
 ## MCP e bundles
 
