@@ -44,7 +44,7 @@ from pathlib import Path
 
 # Mudou um threshold? Sobe a versão. Sem isso, dois relatórios com números diferentes
 # não dizem se o código mudou ou se os dados mudaram.
-GATE_VERSION = "1.1.0"
+GATE_VERSION = "1.2.0"
 
 MAX_CANDIDATOS = 6
 
@@ -135,24 +135,54 @@ GATES = {
 
 
 def avaliar(sinais: dict) -> dict:
-    """Roda todos os gates sobre os sinais. Função pura: mesma entrada, mesma saída."""
+    """Roda todos os gates sobre os sinais. Função pura: mesma entrada, mesma saída.
+
+    O JSON de sinais vem de fora (métrica de browser, dump de banco, script de coleta), então
+    entrada malformada é caso esperado, não excepcional: dict no lugar de lista, item não-dict
+    ou chave ausente precisam virar "não avaliável", nunca AttributeError. Um coletor quebrado
+    tem que produzir relatório legível, não traceback.
+    """
     lancados: list[Veredicto] = []
     contidos: list[Veredicto] = []
     nao_avaliaveis: list[str] = []
+
+    if not isinstance(sinais, dict):
+        return {
+            "gate_version": GATE_VERSION,
+            "lancados": [], "adiados_por_limite": [], "contidos": [],
+            "nao_avaliaveis": [f"entrada não é objeto JSON ({type(sinais).__name__})"],
+            "resumo": f"0 lançado(s), 0 adiado(s), 0 contido(s), 1 não avaliável(is)",
+        }
 
     for nome, (chave, fn) in GATES.items():
         itens = sinais.get(chave)
         if itens is None:
             nao_avaliaveis.append(f"{nome}: sinal '{chave}' ausente — gate não avaliado")
             continue
+        if not isinstance(itens, list):
+            nao_avaliaveis.append(
+                f"{nome}: '{chave}' não é lista ({type(itens).__name__}) — gate não avaliado")
+            continue
+        ilegiveis = 0
         for item in itens:
-            v = fn(item)
+            if not isinstance(item, dict):
+                ilegiveis += 1
+                continue
+            try:
+                v = fn(item)
+            except (TypeError, ValueError) as exc:
+                nao_avaliaveis.append(
+                    f"{nome}: item ilegível ({type(exc).__name__}: {exc})")
+                continue
             if v is None:
-                nao_avaliaveis.append(f"{nome}: item sem campos suficientes — não avaliado")
+                ilegiveis += 1
             elif v.lancado:
                 lancados.append(v)
             else:
                 contidos.append(v)
+        if ilegiveis:
+            nao_avaliaveis.append(
+                f"{nome}: {ilegiveis} item(ns) sem campos suficientes — não avaliado(s)")
 
     lancados.sort(key=lambda v: (-v.prioridade, v.id))
     escolhidos = lancados[:MAX_CANDIDATOS]
@@ -226,13 +256,34 @@ def selftest() -> int:
         espera(0 <= v["prioridade"] <= PRIORIDADE_MAX,
                f"prioridade fora do teto em {v['id']}: {v['prioridade']}")
 
+    # Entrada malformada é caso esperado (o JSON vem de coletor externo), não excepcional:
+    # cada forma doente tem que virar relatório legível, nunca exceção.
+    for rotulo, entrada in [
+        ("dict no lugar de lista", {"endpoints": {"rota": "x"}}),
+        ("lista de strings", {"endpoints": ["nada"]}),
+        ("item nulo", {"benchmarks": [None]}),
+        ("campos com tipo errado", {"endpoints": [{"rota": "x", "requests": "muito",
+                                                  "p95_ms": "alta", "hit_rate": "baixa",
+                                                  "cacheavel": True}]}),
+        ("raiz não é objeto", ["a", "b"]),
+    ]:
+        try:
+            rd = avaliar(entrada)
+        except Exception as exc:  # noqa: BLE001
+            espera(False, f"entrada malformada ({rotulo}) explodiu: "
+                          f"{type(exc).__name__}: {exc}")
+            continue
+        espera(not rd["lancados"], f"{rotulo} lançou candidato")
+        espera(rd["nao_avaliaveis"], f"{rotulo} deveria declarar algo não-avaliável")
+
     if falhas:
         print("SELFTEST FALHOU:")
         for f in falhas:
             print("  -", f)
         return 1
     print(f"selftest OK · gate_version {GATE_VERSION} · "
-          f"positivo/negativo/vazio/determinismo/amostra-pobre/teto-de-prioridade")
+          f"positivo/negativo/vazio/determinismo/amostra-pobre/teto-de-prioridade/"
+          f"entrada-malformada")
     return 0
 
 
