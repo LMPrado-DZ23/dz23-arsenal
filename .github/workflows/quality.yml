@@ -106,6 +106,12 @@ jobs:
       - name: Licenças dos componentes
         run: python scripts/check-licenses.py
 
+      - name: Ferramentas sobrevivem a entrada doente
+        # Triagem, verificador de claims e descoberta de arsenal recebem JSON malformado,
+        # texto hostil e caminhos inexistentes. Um traceback aqui significa que o CI pode
+        # morrer por um artefato corrompido em vez de reportar o problema.
+        run: python scripts/selftest-ferramentas.py
+
       - name: Manifesto atualizado
         run: python scripts/build-manifest.py --check
 

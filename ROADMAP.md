@@ -175,6 +175,18 @@ Quando algo passar de `NOT_TESTED` para `PASS`, este arquivo muda **com o comand
 Enquanto isso, `NOT_TESTED` fica escrito — inclusive aqui.
 
 
+### Verificação por ataque às ferramentas (rodadas 12--14)
+
+scripts/selftest-ferramentas.py roda no gate e no CI e submete triagem, verificador de
+claims e descoberta de arsenal a entrada doente: JSON malformado em nove formas, dezesseis
+textos hostis (traversal, bytes de controle, code block, imperativo, numérico, caminho
+absoluto, árvore alheia), variável de ambiente inválida e ponteiro mentiroso. Tem
+auto-verificação: injeta uma violação conhecida e exige detectá-la -- um harness sem teste
+negativo é decoração. Regressões confirmadas ao removê-lo: clamp de prioridade ausente ->
+'prioridade 99999999900 fora do teto'; guarda de traversal removida -> 'vazou como alegação
+verificável'. Motivo de ser versionado: os dois crashes que originaram estes casos foram
+achados em arquivos soltos fora do repo, que morrem com a máquina que os gerou.
+
 ### Verificação em ambiente limpo (rodadas 9--10)
 
 Duas rodadas de verificação exercitaram o que os checks do repo não alcançam: um clone

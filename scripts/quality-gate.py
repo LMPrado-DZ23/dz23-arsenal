@@ -122,6 +122,10 @@ def main(argv: list[str]) -> int:
     # alguém confiar num passRate errado.
     resultados.append(rodar("gate:autoteste", [py, "scripts/gate_candidatos.py", "--selftest"]))
     resultados.append(rodar("claims:autoteste", [py, "scripts/verifica_claims.py", "--selftest"]))
+    # Ataque sistemático: entradas doentes contra triagem, claims e descoberta de arsenal.
+    # Um verificador que explode num JSON malformado é pior que um que erra -- quem vê
+    # traceback para de olhar a saída, e foi assim que os gates-fantasma sobreviveram aqui.
+    resultados.append(rodar("ferramentas:ataque", [py, "scripts/selftest-ferramentas.py"]))
     # Referências citadas nos SKILL.md têm de existir. Roda sobre as 10 skills; --min não é
     # usado aqui porque um caminho quebrado já é falha por si só (exit 1 quando há falho).
     for skill in sorted(p for p in (RAIZ / "skills").iterdir() if p.is_dir()):
