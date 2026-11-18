@@ -175,6 +175,13 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("performance:consulta", [py, "scripts/consulta-performance.py", "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-performance",
                             [py, "scripts/prova-consulta-performance.py"]))
+    # A skill que MANDA rodar um script tem de levar o script e o dado junto. Medido na rodada 58:
+    # os tres consultores instruidos pelo SKILL.md viviam em scripts/ do repo, e `install-all` copia
+    # apenas a pasta da skill -- a habilidade instalada em ~/.agents/skills/ mandava executar arquivo
+    # inexistente. Verde no checkout porque la os dois caminhos existem; quebrado no uso real.
+    resultados.append(rodar("skills:autocontencao", [py, "scripts/checa-autocontencao.py"]))
+    resultados.append(rodar("gate:autoteste-copias-de-consultor",
+                            [py, "scripts/prova-copias-de-consultor.py"]))
     # Repositório PÚBLICO, e até esta rodada nenhum verificador abria um arquivo em busca de
     # credencial: colar um token GitHub válido em `.env.example` dava gate 46/46 verde. Os quatro
     # scripts que mencionam "segredo" no fonte falam de outra coisa (scan descrito em prosa, design

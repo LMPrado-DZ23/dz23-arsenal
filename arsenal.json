@@ -26,10 +26,10 @@
       "version": "1.1.2",
       "description": "Skill de engenharia de backend, banco de dados, contratos de API, migrações seguras, multi-tenancy, segurança de aplicação e observabilidade. Ative ao criar, revisar, refatorar ou depurar serviços, endpoints, schemas, migrações, integrações e pipelines de dados.",
       "user_invocable": true,
-      "files": 24,
+      "files": 32,
       "references": 11,
       "templates": 2,
-      "scripts": 3,
+      "scripts": 4,
       "evals": 12,
       "sha256_skill_md": "f32d2d95f7faaa8911e4f129a4a8dd3eb2273701c38d22a67b4a3e8268677c0b"
     },
@@ -74,10 +74,10 @@
       "version": "1.3.4",
       "description": ">",
       "user_invocable": true,
-      "files": 29,
+      "files": 33,
       "references": 11,
       "templates": 6,
-      "scripts": 6,
+      "scripts": 7,
       "evals": 16,
       "sha256_skill_md": "ae291cecd44837eb0e0276021d6e335145f761707ddbf41800512c42a65cda6b"
     },
@@ -122,10 +122,10 @@
       "version": "2.2.5",
       "description": "Skill de direção de arte premium, UX, frontend, arquitetura de interface, segurança, acessibilidade, performance, QA visual e entrega verificável para sites, SaaS, CRM, ERP, B-3PO, desktop e mobile. Ative ao criar, revisar, redesenhar ou implementar interfaces, fluxos e design systems.",
       "user_invocable": true,
-      "files": 19,
+      "files": 20,
       "references": 10,
       "templates": 0,
-      "scripts": 3,
+      "scripts": 4,
       "evals": 13,
       "sha256_skill_md": "775b148b4756064bfebc1f53c6c870c6385623f5df1d5a53f39e31fa230e9005"
     }

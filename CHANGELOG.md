@@ -1,6 +1,51 @@
 > Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
 > delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
 
+## [1.6.3] — 2026-11-18
+
+### Corrigido -- nenhuma skill instalada conseguia usar os acervos que acabaram de entrar
+A rodada 58 respondeu uma pergunta que 57 rodadas não tinham feito: **o verificador mede o repo ou
+mede o que o usuário recebe?** Medindo a instalação real, os três consultores de acervo
+(`consulta-design`, `consulta-backend`, `consulta-performance`) estavam em `scripts/` do repositório,
+mas o `install-all` copia apenas a pasta da skill para `~/.agents/skills/<nome>/`. Cada `SKILL.md`
+mandava executar `python scripts/consulta-*.py` -- instrução para rodar arquivo que não existe onde a
+habilidade foi instalada. Verde no checkout porque lá os dois caminhos coexistem; quebrado no uso real.
+É a classe das rodadas 47 e 55 (conteúdo correto, inalcançável) aplicada ao ambiente de execução.
+
+Corrigido com regras distintas por tamanho de acervo, sem duplicar byte:
+- **backend e performance** (8 arquivos, ~35 KB): o dado passou a morar em `skills/<nome>/dados/` e
+  viaja com a skill. Os CSVs saíram de `dados-backend/` e `dados-performance/` da raiz.
+- **design** (3 MB): duplicar seria inchar repo e tarball. O script resolve primeiro `dados/` ao lado
+  e depois localiza o checkout pelo mecanismo que os validadores já usam (`_achar_arsenal`, via
+  ponteiro `.dz23-arsenal` ou env `DZ23_ARSENAL`). Uma fonte, dois lugares de execução.
+
+Verificado executando de `~/.agents/skills/`: os três respondem (`tipo dinheiro` → numeric(10,2);
+`metrica lcp` → Waterfalls/Bundle Size/Resource Hints; `grafico tendencia` → Line Chart).
+
+### Adicionado
+- **`scripts/checa-autocontencao.py`**: se um `SKILL.md`/reference manda rodar `scripts/x.py`, então
+  `skills/<nome>/scripts/x.py` tem de existir. Confere as 65 chamadas das 9 skills que instruem
+  execução. Sem isto, a lacuna voltaria no próximo acervo incorporado.
+- **`scripts/prova-copias-de-consultor.py`**: os consultores agora existem em dois lugares com caminhos
+  legítimos diferentes, então `check-copies` compara **código ignorando as linhas de caminho** -- pega
+  divergência de lógica (exit 1) e tolera a diferença de localização (exit 0). A prova injeta os dois
+  casos e asserta que a injeção casou antes de concluir qualquer coisa.
+- Consultor de design ganhou `grafico` (25 tipos de dado → tipo de gráfico) e `motion` (7 categorias
+  por gatilho/intensidade), alcançando dados que existiam no acervo mas nenhum comando lia.
+
+### Registrado
+- **Acervo apresentado como consultável sem comando que o lesse**: `dataset-design.md` listava 14
+  arquivos e o script abria 5. Nove datasets existiam no disco e eram inalcançáveis -- outra vez a
+  classe 47, agora dentro do material que eu mesmo havia incorporado nesta sessão.
+- **Dois defeitos meus na construção desta rodada, ambos pegos por verificação imediata:** (a) escrevi
+  15 sinônimos PT→EN apontando para valores plausíveis e inexistentes ("button feedback", "budget vs
+  actual"), descobertos ao exercitar as 41 chaves contra o catálogo -- sinonimo morto é pior que
+  ausência, porque o usuário acredita na ponte; (b) rodei `git add -A` *antes* de mover os CSVs, e o
+  índice ficou conhecendo 49 arquivos apagados do disco, o que fazia `repo_inventory` devolver
+  `INVENTORY_PARTIAL` por `stat()` falhando. O verificador estava certo em reclamar; eu é que li o
+  sintoma como bug dele.
+- Gate 55 → **57 checks**, todos verdes.
+
 ## [1.6.2] — 2026-11-18
 
 ### Corrigido -- a cobertura de evals contava ARQUIVOS, nao cenarios

@@ -28,8 +28,11 @@ import pathlib
 import re
 import sys
 
+# Fonte canonica do acervo: skills/dz23-backend-data-architect/dados/ (viaja com a instalacao).
+# Este arquivo em scripts/ e o mesmo codigo, resolvendo o dado pelo caminho da skill -- manter uma
+# copia unica dos CSVs evita duas fontes de verdade; check-copies confere que os dois .py nao divergem.
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-DADOS = RAIZ / "dados-backend"
+DADOS = RAIZ / "skills" / "dz23-backend-data-architect" / "dados"
 
 # dataset -> (aliases em portugues, colunas de saida)
 DATASETS = {

@@ -51,6 +51,39 @@ def apontar_raiz(argv: list[str]) -> list[str]:
 # Arquivo-fonte cujo conteúdo deve aparecer idêntico dentro de cada skill.
 MODULOS_EMBUTIDOS = ("skill_validator.py", "_achar_arsenal.py")
 
+# Consultores que existem em dois lugares: `scripts/` (gate e CI) e dentro da skill (instalacao
+# autocontida -- ver checa-autocontencao.py). As duas copias NAO podem ser byte identicas: cada uma
+# resolve o acervo por um caminho proprio, porque no checkout o dado fica em `<raiz>/dados-x/` e na
+# habilidade instalada precisa estar ao lado do script. Entao compara-se apenas o codigo, ignorando as
+# linhas que definem caminho. Editar uma copia e esquecer a outra cria duas fontes de verdade para a
+# mesma consulta; isto quebra nesse caso, e nao quebra pela diferenca legitima de localizacao.
+CONSULTORES_EMBUTIDOS = {
+    "consulta-design.py": "dz23-ultimate-pro-max",
+    "consulta-backend.py": "dz23-backend-data-architect",
+    "consulta-performance.py": "dz23-performance-scalability-engine",
+}
+
+# Prefixos cuja LINHA inteira pode diferir entre as duas copias, por definir onde mora o dado.
+_CAMINHO = ("RAIZ =", "DADOS =", "def _acha_dados", "aqui = pathlib", "if (aqui /",
+            "return RAIZ /", "return aqui")
+
+
+def _codigo(texto: str) -> list[str]:
+    """So instrucoes executaveis: sem comentario, sem docstring, sem linha de caminho."""
+    linhas, dentro_doc = [], False
+    for bruta in texto.splitlines():
+        ls = bruta.strip()
+        if ls.startswith('"""'):
+            if ls.count('"""') == 1:
+                dentro_doc = not dentro_doc
+            continue
+        if dentro_doc or not ls or ls.startswith("#"):
+            continue
+        if ls.startswith(_CAMINHO):
+            continue
+        linhas.append(ls)
+    return linhas
+
 
 def sha(p: Path) -> str:
     """Hash de conteúdo, ignorando fim de linha.
@@ -118,12 +151,42 @@ def main(argv: list[str]) -> int:
                 problemas.append({"modulo": modulo, "skill": sk.name,
                                   "problema": "conteúdo difere de scripts/" + modulo})
 
+    # Consultores: mesma logica, mas comparando codigo (caminho do acervo e legitimamente distinto).
+    for modulo, skill_esperada in CONSULTORES_EMBUTIDOS.items():
+        fonte = RAIZ / "scripts" / modulo
+        copia = pasta_skills / skill_esperada / "scripts" / modulo
+        if not fonte.is_file():
+            problemas.append({"modulo": modulo, "skill": "-",
+                              "problema": "fonte ausente em scripts/"})
+            continue
+        if not copia.is_file():
+            problemas.append({"modulo": modulo, "skill": skill_esperada,
+                              "problema": "consultor ausente na skill -- a instalacao ficaria com "
+                                          "instrucao de rodar script que nao viaja junto"})
+            continue
+        conferidas += 1
+        try:
+            a = _codigo(fonte.read_text(encoding="utf-8", errors="replace"))
+            b = _codigo(copia.read_text(encoding="utf-8", errors="replace"))
+        except OSError as exc:
+            problemas.append({"modulo": modulo, "skill": skill_esperada,
+                              "problema": f"ilegivel: {exc}"})
+            continue
+        if a != b:
+            import difflib
+            delta = [l for l in difflib.unified_diff(a, b, lineterm="", n=0)
+                     if l[:1] in "+-" and l[:3] not in ("---", "+++")][:4]
+            problemas.append({"modulo": modulo, "skill": skill_esperada,
+                              "problema": "codigo divergiu da copia em scripts/ (fora do caminho "
+                                          "do acervo): " + " | ".join(x.strip()[:60] for x in delta)})
+
     if args.json:
         print(json.dumps({"ok": not problemas, "conferidas": conferidas,
                           "problemas": problemas}, ensure_ascii=False, indent=2))
     else:
         print(f"cópia(s) conferida(s): {conferidas} "
-              f"({len(MODULOS_EMBUTIDOS)} módulos × {len(skills)} skills)")
+              f"({len(MODULOS_EMBUTIDOS)} módulos × {len(skills)} skills, "
+              f"+{len(CONSULTORES_EMBUTIDOS)} consultores)")
         if problemas:
             for p in problemas:
                 print(f"DIVERGÊNCIA {p['modulo']} em {p['skill']}: {p['problema']}")

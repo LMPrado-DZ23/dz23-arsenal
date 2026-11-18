@@ -26,8 +26,11 @@ import pathlib
 import re
 import sys
 
+# Fonte canonica do acervo: skills/dz23-performance-scalability-engine/dados/ (viaja com a
+# instalacao). Este arquivo e o mesmo codigo resolvendo pelo caminho da skill -- uma copia unica dos
+# CSVs; check-copies confere que os dois .py nao divergem.
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-DADOS = RAIZ / "dados-performance"
+DADOS = RAIZ / "skills" / "dz23-performance-scalability-engine" / "dados"
 
 DATASETS = {
     "prioridade": {
