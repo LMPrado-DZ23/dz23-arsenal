@@ -64,3 +64,7 @@ _sources/
 *.elf
 *.uf2
 *.dtb
+
+# Artefato do quality-gate: contagem da ultima execucao real
+.gate-contagem
+

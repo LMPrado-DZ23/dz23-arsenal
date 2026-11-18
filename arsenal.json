@@ -79,7 +79,7 @@
       "templates": 6,
       "scripts": 5,
       "evals": 16,
-      "sha256_skill_md": "7971061d65c4372de0138c3d075cbd6833d08d464a8d7bbb44ddaabe0436f8ef"
+      "sha256_skill_md": "d45dea1697ae306988056571206c3929b1d8c4feedcb12c6ff775a20780bac9c"
     },
     {
       "name": "dz23-postgres-prod-preflight",

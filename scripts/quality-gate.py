@@ -12,11 +12,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
+_ARQUIVO = Path(__file__).resolve()
 
 
 def rodar(nome: str, cmd: list[str]) -> dict:
@@ -57,6 +59,35 @@ def validar_skills(py: str) -> list[dict]:
     return resultados
 
 
+def total_de_checks_gerado() -> int | None:
+    """Última contagem real produzida pelo próprio gate, lida de .gate-contagem.
+
+    O check-numbers precisa saber quantos checks existem para conferir a documentação, mas
+    não pode chamar o gate (recursão: ele é um dos checks) nem parsear este fonte (um
+    parser de Python por regex contou 24 contra 31 reais — silenciosamente errado). Então
+    o gate publica o número quando roda, e o conferidor lê o que foi medido. Se o arquivo
+    não existe, devolve None e a regra de contagem é pulada — ausência nunca vira 0.
+    """
+    arq = RAIZ / ".gate-contagem"
+    if not arq.is_file():
+        return None
+    try:
+        dados = json.loads(arq.read_text(encoding="utf-8"))
+        n = dados.get("total")
+        return int(n) if isinstance(n, int) and n > 0 else None
+    except (json.JSONDecodeError, OSError, ValueError, TypeError):
+        return None
+
+
+def publicar_contagem(total: int) -> None:
+    try:
+        (RAIZ / ".gate-contagem").write_text(
+            json.dumps({"total": total}, ensure_ascii=False) + "\n",
+            encoding="utf-8", newline="\n")
+    except OSError:
+        pass  # contagem é conveniência; falhar o gate por isso seria ridículo
+
+
 def main(argv: list[str]) -> int:
     for s in (sys.stdout, sys.stderr):
         try:
@@ -85,8 +116,21 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("evals:schema", [py, "scripts/run-evals.py", "--schema"]))
     resultados.append(rodar("evals:registros", [py, "scripts/check-eval-results.py"]))
     resultados.append(rodar("evals:citacoes", [py, "scripts/run-evals.py", "--verify-quotes"]))
+    # Auto-testes dos instrumentos novos: se o verificador quebrar, o gate avisa antes de
+    # alguém confiar num passRate errado.
+    resultados.append(rodar("gate:autoteste", [py, "scripts/gate_candidatos.py", "--selftest"]))
+    resultados.append(rodar("claims:autoteste", [py, "scripts/verifica_claims.py", "--selftest"]))
+    # Referências citadas nos SKILL.md têm de existir. Roda sobre as 10 skills; --min não é
+    # usado aqui porque um caminho quebrado já é falha por si só (exit 1 quando há falho).
+    for skill in sorted(p for p in (RAIZ / "skills").iterdir() if p.is_dir()):
+        sm = skill / "SKILL.md"
+        if sm.is_file():
+            resultados.append(rodar(f"claims:{skill.name}",
+                                    [py, "scripts/verifica_claims.py",
+                                     "--texto", str(sm), "--raiz", str(RAIZ)]))
 
     falhas = [r for r in resultados if not r["ok"]]
+    publicar_contagem(len(resultados))
     if args.json:
         print(json.dumps({"ok": not falhas, "total": len(resultados),
                           "falhas": len(falhas), "checks": resultados}, indent=2, ensure_ascii=False))

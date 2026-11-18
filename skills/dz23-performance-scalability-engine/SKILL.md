@@ -97,7 +97,7 @@ Atribuir alvo ao pedido sem confirmação viola a regra de separar **observado**
 | Infra | 4.5 Monitoramento & RUM | `infra-layer.md` §4.5 |
 
 Item 3.4: a spec original dizia "Filas para Processamento **Assalariado**" (typo) — interpretado como
-processamento **assíncrono** em filas/workers. O original está preservado em `_sources/user-spec.md` e a
+processamento **assíncrono** em filas/workers. O original está fora deste repositório (`_sources/` é ignorado por `.gitignore`; sobrevive só na máquina de origem) e a
 correção está anotada em comentário HTML no topo de `backend-layer.md`.
 
 ## Entregáveis obrigatórios

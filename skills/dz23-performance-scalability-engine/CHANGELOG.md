@@ -133,3 +133,16 @@ resposta 200 com TTFB em ms, `p50/p95` em 3 execuções, e achados corretos de *
 `Content-Encoding` e `Cache-Control`. Também testado contra endpoint que exige auth (HTTP 401 tratado
 como falha de requisição, exit 1) e URL inválida (exit 2). O endpoint HTTPS público não foi testado
 porque exige TLS válido — `NOT_TESTED`.
+---
+
+## Correção de exatidão — 2026-11-17
+
+As linhas acima dizem "fontes preservadas em `_sources/`". Não é o caso para quem clona:
+`_sources/` está no `.gitignore` (linha 59, mesma família de `_bak/` e `_antigos/`),
+então os cinco arquivos nunca entraram no histórico — `git log --all -- '*_sources*'` não
+retorna nenhum commit. Eles existem apenas na máquina de origem.
+
+O texto antigo descrevia uma crença legítima na hora em que foi escrito (os arquivos estavam
+em disco). Corrigir por cima apagaria o registro; esta entrada declara o estado verificado.
+`SKILL.md` foi ajustado para dizer "fora deste repositório" em vez de apontar para caminho
+que o clone não tem.
