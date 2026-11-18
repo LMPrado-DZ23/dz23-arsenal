@@ -1,0 +1,33 @@
+{
+  "descricao": "Furo fechado (achado do Qwen): uma skill incorporada (não dz23-*) com evals declarados precisa de evidência EXECUTADA (acervo/consultor com dados/, fixture de replay, ou resultado registrado) OU uma declaração honesta NOT_TESTED aqui, com motivo. O gate (cobertura:incorporadas) reprova skill incorporada que não esteja coberta nem declarada. Isto NÃO entra no denominador 144 das DZ23 -- só impede o verde silencioso. 'evidência ou silêncio': NOT_TESTED declarado é honesto; isento em silêncio não é.",
+  "declaradas": {
+    "prune-tests": {
+      "status": "NOT_TESTED",
+      "motivo": "Poda de testes; rubrica é processo de risco (nunca remove sem baseline/aprovação), não mecânica. Sem acervo nem resposta registrada ainda; comportamento a exercitar em projeto real."
+    },
+    "untangle-codebase": {
+      "status": "NOT_TESTED",
+      "motivo": "Reorganização de dependências de um codebase; rubrica estrutural subjetiva, não graduável por grader determinístico. Sem acervo nem resposta registrada ainda."
+    },
+    "replica-brand": {
+      "status": "NOT_TESTED",
+      "motivo": "Suíte de clone clean-room (brand kit); rubrica de análise subjetiva. Sem acervo nem resposta registrada ainda."
+    },
+    "replica-diff": {
+      "status": "NOT_TESTED",
+      "motivo": "Diff de features entre versões; rubrica de análise. Sem acervo nem resposta registrada ainda."
+    },
+    "replica-entrepreneur": {
+      "status": "NOT_TESTED",
+      "motivo": "Análise de viabilidade/oportunidade; rubrica subjetiva. Sem acervo nem resposta registrada ainda."
+    },
+    "replica-launch": {
+      "status": "NOT_TESTED",
+      "motivo": "Material de lançamento/listing; rubrica subjetiva. Sem acervo nem resposta registrada ainda."
+    },
+    "replica-recon": {
+      "status": "NOT_TESTED",
+      "motivo": "Reconhecimento de produto; rubrica de análise. Sem acervo nem resposta registrada ainda."
+    }
+  }
+}

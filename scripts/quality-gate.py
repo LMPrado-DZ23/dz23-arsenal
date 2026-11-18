@@ -182,6 +182,12 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("replay:executa", [py, "scripts/replay-eval.py"]))
     resultados.append(rodar("replay:verifica", [py, "scripts/check-replay.py"]))
     resultados.append(rodar("replay:autoteste", [py, "scripts/check-replay.py", "--selftest"]))
+    # Fecha o furo achado na revisão (Qwen): skill incorporada (não dz23-*) com evals declarados não
+    # pode ficar verde em silêncio. Exige evidência executada (dados/ ou replay) OU NOT_TESTED
+    # declarado com motivo em eval-harness/cobertura-incorporadas.json. Não move o denominador 144.
+    resultados.append(rodar("cobertura:incorporadas", [py, "scripts/check-cobertura-incorporadas.py"]))
+    resultados.append(rodar("cobertura:autoteste",
+                            [py, "scripts/check-cobertura-incorporadas.py", "--selftest"]))
     # Documento era a única superfície sem verificador de conteúdo: existência e link eram
     # conferidos, mas texto corrompido passava. Nesta sessão eu mesmo injetei duas vezes resíduo
     # de ferramenta num .md (caractere CJK no meio do português e uma expressão Python inteira no
