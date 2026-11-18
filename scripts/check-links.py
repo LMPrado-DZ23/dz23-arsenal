@@ -36,6 +36,13 @@ def main() -> int:
         for arq, destino in quebrados:
             print(f"  {arq} -> {destino}")
         return 1
+    if total == 0:
+        # Zero links conferidos não é "nenhum quebrado". Acontece com caminho errado, pasta
+        # vazia ou checkout parcial, e o passo do CI sairia verde sem ter lido nada -- o mesmo
+        # gate-fantasma que motivou a v1.5.0, aqui alcançado por um `--raiz`/argumento ruim.
+        print(f"NENHUM link relativo encontrado em {RAIZ} -- isso não é aprovação",
+              file=sys.stderr)
+        return 1
     print("QUEBRADOS: 0")
     return 0
 

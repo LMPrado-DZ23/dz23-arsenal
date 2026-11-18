@@ -393,7 +393,7 @@ def testa_rejeicao() -> list[str]:
                 problemas.append(f"rejeicao/{rotulo}: aceito, deveria reprovar "
                                  f"-- {s.strip()[:140]}")
 
-    # Árvore vazia não pode virar aprovação em nenhum dos três.
+    # Árvore vazia não pode virar aprovação em nenhum dos verificadores.
     def confere_arvore_vazia() -> None:
         with tempfile.TemporaryDirectory() as td:
             tmp = pathlib.Path(td)
@@ -405,6 +405,22 @@ def testa_rejeicao() -> list[str]:
                     raise AssertionError(f"{script} aprovou árvore sem nada conferir: "
                                          f"{s.strip()[:110]}")
     problemas += sem_excecao("rejeicao/arvore-vazia-nao-aprova", confere_arvore_vazia)
+
+    # check-links recebe caminho posicional (não --raiz) e tinha o mesmo buraco: zero links
+    # lidos saía como "QUEBRADOS: 0", exit 0. Um argumento errado no CI aprovaria o repo
+    # inteiro sem abrir um arquivo.
+    def confere_links_vazios() -> None:
+        import subprocess
+        with tempfile.TemporaryDirectory() as td:
+            p = subprocess.run([sys.executable, str(RAIZ / "scripts/check-links.py"), td],
+                               capture_output=True, timeout=120, cwd=str(RAIZ))
+            saida = p.stdout.decode("utf-8", "replace") + p.stderr.decode("utf-8", "replace")
+            if "Traceback" in saida:
+                raise AssertionError(f"check-links explodiu em árvore vazia: {saida[-140:]}")
+            if p.returncode == 0:
+                raise AssertionError("check-links aprovou sem verificar link algum: "
+                                     f"{saida.strip()[:110]}")
+    problemas += sem_excecao("rejeicao/links-vazios-nao-aprovam", confere_links_vazios)
 
     return problemas
 
