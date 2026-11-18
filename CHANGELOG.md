@@ -102,6 +102,27 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.9] — 2026-11-17
+
+### Corrigido
+- **`bundle/dz23-dsh-agency/build.py --check` não comparava nada.** O flag media limites de
+  bytes e imprimia "RESULTADO: OK (modo --check, nada foi escrito)" -- um `--check` que não
+  confere o que o nome promete é pior que ausência, porque alguém chama, vê OK e confia. Os 88
+  arquivos de `agents/` são gerados e versionados sem verificador algum. Agora compara com as
+  fontes e denuncia `FALTA`, `DIVERGE` e `SOBRA` (arquivo que nenhuma fonte produz).
+  Provado nas duas direções: linha injetada → `DIVERGE agents/00-diretor.txt` exit 1; arquivo
+  apagado → `FALTA …` exit 1; restaurado → OK.
+- **`build.py` escrevia CRLF em Windows**, então rodar o gerador sujava o repositório inteiro
+  -- reproduzido no repo real: 88 arquivos como "modificados" contra o `*.txt text eol=lf` do
+  `.gitattributes`. Conteúdo idêntico ignorando EOL, mas ninguém distingue isso de edição real.
+  Corrigido com `newline="\n"`; provado gerando os 88 e vendo `git status` limpo.
+
+### Adicionado
+- Três validadores próprios do bundle (`check_consistency.py`, `check_sizes.py`,
+  `build.py --check`) entraram no `quality-gate` (**39 checks**) e no CI como passo próprio.
+  Existiam e eram executados à mão desde sempre; nenhum estava automatizado. Dívida 4 do
+  ROADMAP parcialmente fechada -- falta o `mcp/`, que tem `npm run test:gate` mas nada o
+  chama neste workflow.
 ## [1.5.8] — 2026-11-17
 
 ### Corrigido — índice de skills descrevia um repositório que não existe
