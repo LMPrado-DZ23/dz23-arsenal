@@ -109,6 +109,16 @@ jobs:
         # skills/README.md é gerado; edição à mão aqui apodrece (esteve 9/9 linhas erradas).
         run: python scripts/gera-indice-skills.py --check
 
+      - name: Bundle DSH consistente e agents/ sincronizado
+        # Os três validadores próprios do bundle existiam mas nunca rodaram no CI. `agents/`
+        # é artefato gerado e versionado; sem o build.py --check real, divergir das fontes
+        # era invisível.
+        working-directory: bundle/dz23-dsh-agency
+        run: |
+          python check_consistency.py
+          python check_sizes.py
+          python build.py --check
+
       - name: Números da documentação batem com o disco
         run: python scripts/check-numbers.py
 

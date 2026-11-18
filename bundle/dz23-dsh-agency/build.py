@@ -144,7 +144,43 @@ def main() -> int:
         print("RESULTADO: FALHA — nenhum arquivo foi escrito.")
         return 1
     if args.check:
-        print("RESULTADO: OK (modo --check, nada foi escrito).")
+        # A versão anterior deste ramo só imprimia OK depois de checar limites de bytes --
+        # chamava-se "--check" sem comparar nada com `agents/`. Os 88 arquivos versionados
+        # podiam (e podem) divergir das fontes em silêncio. Agora a comparação é o check.
+        destino = pathlib.Path.cwd() / OUT
+        if not destino.is_dir():
+            print(f"RESULTADO: FALHA — {destino} não existe; rode `python build.py`.")
+            return 1
+        ausentes, diferentes = [], []
+        for it in items:
+            alvo = destino / it["filename"]
+            if not alvo.is_file():
+                ausentes.append(it["filename"])
+                continue
+            # comparar normalizando EOL: um CRLF residual herdado de antes da correção de
+            # newline="\n" não deve ser tratado como conteúdo diferente, mas qualquer outra
+            # diferença é.
+            gravado = alvo.read_bytes().replace(b"\r\n", b"\n")
+            esperado = it["content"].encode("utf-8").replace(b"\r\n", b"\n")
+            if gravado != esperado:
+                diferentes.append(it["filename"])
+        extras = sorted(p.name for p in destino.glob("*.txt")
+                        if p.name not in {it["filename"] for it in items})
+        if ausentes or diferentes or extras:
+            for n in ausentes:
+                print(f"FALTA agents/{n} — gere com `python build.py`")
+            for n in diferentes:
+                print(f"DIVERGE agents/{n} — conteúdo difere do gerado pelas fontes")
+            for n in extras:
+                print(f"SOBRA agents/{n} — não é produzido por nenhuma fonte")
+            total = len(ausentes) + len(diferentes) + len(extras)
+            print(f"RESULTADO: FALHA — {total} arquivo(s) de agents/ fora de sincronia.")
+            return 1
+        crlf = [it["filename"] for it in items
+                if b"\r\n" in (destino / it["filename"]).read_bytes()]
+        if crlf:
+            print(f"AVISO: {len(crlf)} arquivo(s) com CRLF no disco; renomeie gerando de novo.")
+        print(f"RESULTADO: OK — agents/ bate com as fontes ({len(items)} arquivos).")
         return 0
 
     cwd_out = pathlib.Path.cwd() / OUT
@@ -153,7 +189,12 @@ def main() -> int:
         shutil.rmtree(tmp)
     tmp.mkdir(parents=True)
     for it in items:
-        (tmp / it["filename"]).write_text(it["content"], encoding="utf-8")
+        # newline="\n" não é cosmético: em Windows o modo texto converte "\n" em "\r\n" na
+        # escrita, e rodar este gerador deixava os 88 arquivos versionados como "modificados"
+        # no git status -- reproduzido nesta sessão. O conteúdo era idêntico ignorando EOL, mas
+        # ninguém distingue isso de edição real, e contra o `*.txt text eol=lf` do
+        # .gitattributes o resultado é um diff falso de 88 arquivos toda vez que alguém gera.
+        (tmp / it["filename"]).write_text(it["content"], encoding="utf-8", newline="\n")
     if cwd_out.exists():
         shutil.rmtree(cwd_out)
     tmp.rename(cwd_out)

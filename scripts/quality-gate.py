@@ -19,9 +19,10 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 
 
-def rodar(nome: str, cmd: list[str]) -> dict:
+def rodar(nome: str, cmd: list[str], cwd: Path | None = None) -> dict:
     try:
-        p = subprocess.run(cmd, cwd=RAIZ, capture_output=True, text=True, timeout=300)
+        p = subprocess.run(cmd, cwd=str(cwd or RAIZ), capture_output=True, text=True,
+                           timeout=300)
         saida = (p.stdout or "").strip().splitlines()
         erro = (p.stderr or "").strip().splitlines()
         return {
@@ -124,6 +125,16 @@ def main(argv: list[str]) -> int:
     # enquanto as cópias baterem com a fonte.
     resultados.append(rodar("copias", [py, "scripts/check-copies.py"]))
     resultados.append(rodar("licencas", [py, "scripts/check-licenses.py"]))
+    # Bundle DSH: os três validadores próprios existiam mas nunca rodaram no gate nem no CI
+    # (dívida 4 do ROADMAP). `agents/` é artefato gerado e versionado -- sem o build.py --check
+    # real, divergir das fontes era invisível, e o flag antigo só media bytes.
+    _bundleraiz = RAIZ / "bundle" / "dz23-dsh-agency"
+    resultados.append(rodar("bundle:consistencia",
+                            [py, str(_bundleraiz / "check_consistency.py")], cwd=_bundleraiz))
+    resultados.append(rodar("bundle:tamanho",
+                            [py, str(_bundleraiz / "check_sizes.py")], cwd=_bundleraiz))
+    resultados.append(rodar("bundle:agents-sincronizados",
+                            [py, str(_bundleraiz / "build.py"), "--check"], cwd=_bundleraiz))
     resultados.append(rodar("evals:coerencia", [py, "scripts/run-evals.py", "--check"]))
     resultados.append(rodar("evals:schema", [py, "scripts/run-evals.py", "--schema"]))
     resultados.append(rodar("evals:registros", [py, "scripts/check-eval-results.py"]))
