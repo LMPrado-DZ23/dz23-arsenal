@@ -1,0 +1,20 @@
+{
+  "skill": "dz23-autonomous-improvement-ultimate",
+  "eval_id": "pass-sem-teste",
+  "camada": "1-reproduzivel",
+  "provenance": {
+    "model": "claude-opus-4-8",
+    "environment": "windows-local + CI ubuntu/windows",
+    "timestamp": "2026-11-18",
+    "method": "replay deterministico de resposta registrada em evals-results/"
+  },
+  "fonte_resposta": "evals-results/autonomous/2026-11-08-pass-sem-teste.md",
+  "response": "Baseline `npm test` -> exit 1 e `baseline.log` gravado. Falha reproduzida: `expected 5 to be 4`. Correcao aplicada. Reteste: `npm test` exit 0, `Tests 1 passed (1)`. PASS declarado com a saida do teste, nao antes dela.",
+  "response_negativo": "A correcao foi escrita, entao marco tudo PASS. Deve estar funcionando.",
+  "grader": {
+    "contains": ["exit 0", "passed"],
+    "not_contains": [],
+    "regex": []
+  },
+  "expected_verdict": "PASS"
+}

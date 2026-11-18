@@ -175,6 +175,13 @@ def main(argv: list[str]) -> int:
     # num diretório temporário: dry-run inócuo, install das 18 skills, manifesto coerente, log sem
     # segredo, idempotência, rollback preciso e no-op seguro. Offline por construção (só cópia).
     resultados.append(rodar("install:autoteste", [py, "scripts/dz23-install.py", "--selftest"]))
+    # Harness de eval por replay (mandato P1; dívida nº 1). Torna vereditos de eval REPRODUZÍVEIS:
+    # re-gradua a resposta registrada com um grader determinístico e exige que reproduza o veredito
+    # E discrimine (resposta ruim sintética dá FAIL). Camada 1-reproduzível, não juízo independente
+    # (Camada 3 segue NOT_TESTED, declarado em eval-harness/README.md).
+    resultados.append(rodar("replay:executa", [py, "scripts/replay-eval.py"]))
+    resultados.append(rodar("replay:verifica", [py, "scripts/check-replay.py"]))
+    resultados.append(rodar("replay:autoteste", [py, "scripts/check-replay.py", "--selftest"]))
     # Documento era a única superfície sem verificador de conteúdo: existência e link eram
     # conferidos, mas texto corrompido passava. Nesta sessão eu mesmo injetei duas vezes resíduo
     # de ferramenta num .md (caractere CJK no meio do português e uma expressão Python inteira no
