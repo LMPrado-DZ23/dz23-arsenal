@@ -3,6 +3,29 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.5.15] -- 2026-11-18
+
+### Corrigido (descoberto pela primeira execucao real do CI, apos 38 rodadas locais)
+- **Testes de descoberta usavam caminho Windows como "inexistente".** D:\caminho\que\nao\existe
+  e absoluto em Windows; no Linux backslash nao e separador, entao virou um nome de arquivo
+  RELATIVO ao cwd -- e como o CI roda dentro do checkout, resolveu para o proprio arsenal. O
+  teste media presenca, nao ausencia: passou 38 rodadas aqui e falhou la. Trocado por caminho
+  derivado de `tempfile.gettempdir()` + pid, ausente em qualquer sistema. Varredura do padrao
+  em todos os `.py` achou uma segunda ocorrencia adormecida (retornava cedo quando a skill nao
+  estava instalada, logo nunca exercitada); corrigidas as duas.
+- **O auditor nao tinha estado "nao aplicavel".** Duas provas dependem de `~/.agents/skills`,
+  inexistente num runner efemero; retornavam `False` querendo dizer "sem como aferir", e o
+  `afirma()` lia isso como reprovacao -- exit 1 sem defeito no repo. Ganhou terceiro estado
+  explicito (`NA`), impresso e contabilizado a parte, com a contagem final comparando
+  identidade (`ok is False`) porque `not None` e verdadeiro. E a mesma disciplina que
+  `verifica_claims` aplica a claims ha muito tempo (`nao-verificavel` fora do denominador),
+  ausente no instrumento que escrevi depois dele.
+
+### Estado
+CI verde em execucao real: run 44238184690, commit `2ba2cb4`, 28 passos,
+`checks: 40 | falhas: 0`. Antes disto, nada desta linha de trabalho havia passado por um
+runner -- o workflow existia configurado desde 2026-11-09, mas so rodara em commits anteriores.
+
 ## [1.5.14] — 2026-11-17
 
 ### Corrigido
