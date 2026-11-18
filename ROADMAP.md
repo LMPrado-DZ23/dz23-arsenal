@@ -117,10 +117,19 @@ de outra pessoa, onde o erro custa retrabalho e não parágrafo.
 
 | Comando | O que faz |
 |---|---|
-| `--list` | lista os cenários por skill |
-| `--check` | auditoria **determinística**: schema, ids duplicados, `expected` × `fails_if` contraditórios, cobertura (a regra do `expected` existe no `SKILL.md`/`references`?) e eval possivelmente impossível |
-| `--record <skill> <arquivo>` | grava o veredito de quem executou, em `evals-results/<skill>.json` |
-| `--report` | estado consolidado: quantos cenários têm resultado |
+| `run-evals.py --list` | lista os cenários por skill |
+| `run-evals.py --check` | auditoria **determinística**: schema, ids duplicados, `expected` × `fails_if` contraditórios, cobertura (a regra do `expected` existe no `SKILL.md`/`references`?) e eval possivelmente impossível |
+| `run-evals.py --schema` | valida cada `evals.json` contra `evals.schema.json` (requer `jsonschema`; sem ele degrada para checagem parcial) |
+| `run-evals.py --report` | estado consolidado: quantos cenários têm resultado |
+| `run-evals.py --verify-quotes` | confere se as citações dos laudos marcados VALIDO existem nas respostas |
+| `record-eval.py --skill <skill> --eval-id <id> --verdict <V>` | grava o veredito de quem executou |
+
+Gravar veredito é outro script, não uma flag do runner: `record-eval.py` recebe
+`--skill`, `--eval-id` e `--verdict` (mais `--evidence`, `--notes`, `--blocked-by`, `--data`,
+`--force`) e escreve **`evals-results/<skill-curto>/<data>-<eval-id>.md`** — um arquivo por
+execução, nunca sobrescrito sem `--force`. A forma antiga desta linha,
+`--record <skill> <arquivo>` gerando `evals-results/<skill>.json`, não corresponde a nenhum
+comando existente: copiá-la produzia `exit 2`.
 
 **O que ele não faz:** executar o comportamento. Isso exige uma sessão de agente real por cenário; o harness
 prova que o eval é **coerente e executável** e guarda o veredito de quem executou.
