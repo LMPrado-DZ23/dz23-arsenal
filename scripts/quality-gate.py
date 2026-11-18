@@ -133,6 +133,11 @@ def main(argv: list[str]) -> int:
     # e alguém acabaria removendo o check inteiro. A distinção existe no próprio script: use
     # `python scripts/audit-zips.py --strict` ao instalar, para exigir presença.
     resultados.append(rodar("instalacao:conteudo", [py, "scripts/audit-zips.py"]))
+    # Os SKILL.md mandam o agente executar onze scripts dentro de skills/<x>/scripts/. Ate a
+    # rodada 46 nada neste arsenal os rodava -- validate_skill confere arquivos, nao comportamento.
+    # Suite com entrada no formato que cada um documenta e controle negativo por verificador.
+    resultados.append(rodar("skills:scripts-executados",
+                            [py, "scripts/executa-scripts-skills.py"]))
     resultados.append(rodar("estrutura", [py, "scripts/check-structure.py"]))
     # As skills embutem cópias de scripts/skill_validator.py e scripts/_achar_arsenal.py
     # para se auto-validarem fora do checkout. Duplicação intencional — mas só é segura

@@ -3,6 +3,29 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.5.21] -- 2026-11-18
+
+### Adicionado
+- **`scripts/executa-scripts-skills.py`** -- roda os onze scripts que os proprios SKILL.md mandam
+  o agente executar (`skills/<x>/scripts/*.py`), com controle negativo por verificador. Ate agora
+  nada neste arsenal os executava: `validate_skill.py`, `check-structure` e o gate conferem
+  arquivos, frontmatter, referencias e evals -- nenhum dos onze foi exercitado uma vez sequer. Um
+  script de skill que quebrasse no primeiro uso transformaria a habilidade inteira em instrucao
+  falsa sem sinal algum. Entra no gate (**44 checks**) e no CI.
+- Casos cobertos (15): `repo_probe` (JSON com tipo conferido), `repo_inventory`, `file_triage`
+  (confirma `read_only=true`), `validate_spec` contra o exemplo que a propria skill distribui +
+  spec vazia reprovada, `check_gherkin` valido e invalido, `check_budget` dentro e estourado
+  (`BUDGET_FAIL` exigido), mais cinco scripts de ambiente externo ao menos respondendo ao
+  `--help` sem traceback.
+
+### Verificado sem defeito
+Os onze rodam corretamente. As duas primeiras tentativas desta suite acusaram problemas inexistentes
+porque eu inventei o formato de entrada: passei JSON onde `check_budget` le tabela markdown
+(`INVALID bm.json: nenhuma tabela markdown encontrada`) e markdown onde `validate_spec` le JSON
+(`Expecting value: line 1 column 1`). Ambos documentam o formato na docstring, e a skill distribui
+`examples/spec-example.json` -- usar a entrada que o alvo declara, nao a que parece natural, e o
+que tornou a medida valida.
+
 ## [1.5.20] -- 2026-11-18
 
 ### Adicionado

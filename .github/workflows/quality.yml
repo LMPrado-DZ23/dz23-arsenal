@@ -108,6 +108,11 @@ jobs:
       - name: Links relativos
         run: python scripts/check-links.py .
 
+      - name: Scripts embutidos nas skills executam o que a instrucao promete
+        # Os SKILL.md mandam o agente rodar estes onze scripts. Antes so eram conferidos como
+        # arquivos; um que quebrasse no primeiro uso viraria instrucao falsa sem sinal nenhum.
+        run: python scripts/executa-scripts-skills.py
+
       - name: Conteudo instalado bate com o repositorio
         # Sem --strict: divergencia de conteudo e defeito real, mas 'nada instalado' e a condicao
         # normal de um runner efemero e ali a presenca nao e alegacao do repo. Instalar e exigir
