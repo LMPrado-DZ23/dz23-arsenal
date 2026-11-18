@@ -1,8 +1,8 @@
 # Índice do arsenal
 
-> Gerado por `scripts/build-manifest.py` em 2026-11-14. **Não editar à mão** — rode o script.
+> Gerado por `scripts/build-manifest.py` em 2026-11-18. **Não editar à mão** — rode o script.
 
-**10 skills · 13 externas · 1 prompt(s) · 1 MCP · 1 bundle**
+**10 skills · 15 externas · 1 prompt(s) · 1 MCP · 1 bundle**
 
 ## Skills
 
@@ -32,12 +32,14 @@
 |---|---|---|
 | [anthropic-skills](external/anthropic-skills.md) | Anthropic | https://github.com/anthropics/skills |
 | [astryx](external/astryx.md) | — | — |
+| [caldoai-skills](external/caldoai-skills.md) | caldoai | https://github.com/caldoai/skills |
 | [cloudflare-security-audit](external/cloudflare-security-audit.md) | Cloudflare | https://github.com/cloudflare/security-audit-skill |
 | [modern-web-guidance](external/modern-web-guidance.md) | — | — |
 | [pentagi](external/pentagi.md) | — | — |
 | [phone-agent-harness](external/phone-agent-harness.md) | — | — |
 | [playwright-mcp](external/playwright-mcp.md) | Microsoft | https://github.com/microsoft/playwright-mcp |
 | [rea](external/rea.md) | morluto | https://github.com/morluto/rea |
+| [skills-cli](external/skills-cli.md) | vercel-labs | https://github.com/vercel-labs/skills |
 | [supabase-postgres-best-practices](external/supabase-postgres-best-practices.md) | Supabase | https://github.com/supabase/agent-skills |
 | [superpowers](external/superpowers.md) | obra | https://github.com/obra/superpowers |
 | [terraform-aws-vpc](external/terraform-aws-vpc.md) | terraform-aws-modules | https://github.com/terraform-aws-modules/terraform-aws-vpc |

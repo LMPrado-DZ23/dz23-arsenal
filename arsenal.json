@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "generated_by": "scripts/build-manifest.py",
-  "generated_at": "2026-11-14",
+  "generated_at": "2026-11-18",
   "counts": {
     "skills": 10,
-    "external": 13,
+    "external": 15,
     "prompts": 1,
     "mcp": 1,
     "bundle": 1
@@ -143,6 +143,11 @@
       "repo": null
     },
     {
+      "file": "external/caldoai-skills.md",
+      "autor": "caldoai",
+      "repo": "https://github.com/caldoai/skills"
+    },
+    {
       "file": "external/cloudflare-security-audit.md",
       "autor": "Cloudflare",
       "repo": "https://github.com/cloudflare/security-audit-skill"
@@ -171,6 +176,11 @@
       "file": "external/rea.md",
       "autor": "morluto",
       "repo": "https://github.com/morluto/rea"
+    },
+    {
+      "file": "external/skills-cli.md",
+      "autor": "vercel-labs",
+      "repo": "https://github.com/vercel-labs/skills"
     },
     {
       "file": "external/supabase-postgres-best-practices.md",
