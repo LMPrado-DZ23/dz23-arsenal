@@ -1,6 +1,6 @@
 ---
 name: dz23-postgres-prod-preflight
-version: 1.1.2
+version: 1.2.0
 description: >-
   Auditoria de pré-produção para Postgres e Supabase: 10 gates de segurança e integridade que a IA costuma
   deixar passar (RLS sem FORCE, statement_timeout ausente, search_path mutável, constraints fora do banco,
@@ -65,6 +65,12 @@ INVENTARIAR → LER CONFIG → TESTAR POLÍTICA → CLASSIFICAR → CORRIGIR →
 | P10 | Segregação de credencial (`service_role`/`anon`) | chave de bypass no cliente ou entregue à IA = controle total | BLOCKER |
 
 Regra de ouro: **gate que não tem consulta anexada é `NOT_TESTED`, não `PASS`.**
+
+**Acervo consultável** (antes de aplicar uma migração ou escrever um gate): o conhecimento de
+pré-deploy vive em `dados/` (ECC/Supabase, MIT) e responde offline. Consulte:
+`python scripts/consulta-postgres.py gate rls` (gates de segurança/lock), `... anti "not null"`
+(anti-padrões de migração e a correção), `... checklist` (checklist de segurança), `... busca lock`.
+Responde "sem correspondência" quando não há — não aproxima.
 
 ## Contexto financeiro (apostas, pagamentos, saldo)
 Quando o domínio move dinheiro, três gates deixam de ser "boa prática" e viram requisito legal/contábil:

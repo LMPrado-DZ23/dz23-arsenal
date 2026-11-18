@@ -1,0 +1,8 @@
+item,por_que,origem_arquivo,origem_secao
+Migração tem UP e DOWN (ou marcada irreversível),Sem volta documentada não sobe,"ECC/database-migrations (Supabase, MIT)",Migration Safety Checklist
+Sem full table lock em tabela grande,Use operações concorrentes,"ECC/database-migrations (Supabase, MIT)",Migration Safety Checklist
+Coluna nova tem default ou é nullable,Nunca NOT NULL sem default,"ECC/database-migrations (Supabase, MIT)",Migration Safety Checklist
+Índices criados CONCURRENTLY,Não inline em tabela existente,"ECC/database-migrations (Supabase, MIT)",Migration Safety Checklist
+Backfill de dados é migração separada,Não misturar com mudança de schema,"ECC/database-migrations (Supabase, MIT)",Migration Safety Checklist
+Testado contra cópia do tamanho de produção,100 linhas podem travar em 10M,"ECC/database-migrations (Supabase, MIT)",Migration Safety Checklist
+Plano de rollback documentado,Reverter em produção é migração nova para frente,"ECC/database-migrations (Supabase, MIT)",Migration Safety Checklist

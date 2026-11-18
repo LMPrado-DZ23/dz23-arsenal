@@ -250,6 +250,17 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
 - **Fora do ledger DZ23:** 6 evals. **5ª e última** da camada produto-para-clone — a suíte replica
   (recon/entrepreneur/diff/brand/launch) está completa; as 6 skills replica de engenharia ficaram fora.
 
+### `skills/dz23-postgres-prod-preflight/dados/` — acervo de pré-deploy (Trilha A, melhora skill DZ23)
+- **Origem:** ECC (`affaan-m/ECC`), skills `postgres-patterns` + `database-migrations`, que creditam o
+  **time do Supabase (MIT)**. Licença **MIT lida no `LICENSE` da raiz** do ECC.
+- **O que entrou:** 3 CSVs de pré-deploy (21 registros) — anti-padrões de migração, gates de
+  segurança/lock, checklist de migração — extraídos das tabelas/listas da fonte, com
+  `origem_arquivo`/`origem_secao`. Consultor `scripts/consulta-postgres.py` + prova, no gate.
+- **Melhora uma DZ23 existente (não é skill nova):** a `dz23-postgres-prod-preflight` passa a consultar
+  o próprio acervo offline (1.1.2 → 1.2.0). Primeira das 5 DZ23 restantes da Trilha A.
+- **Dedup:** não repete o acervo de `dz23-backend-data-architect` (índices por query, tipos); aqui é só
+  pré-deploy (gates, migração, lock). Evals da skill não mudaram (fora o acervo; verificado pela prova).
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

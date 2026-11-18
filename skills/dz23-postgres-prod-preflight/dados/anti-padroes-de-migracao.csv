@@ -1,0 +1,7 @@
+anti_padrao,por_que_falha,melhor_abordagem,origem_arquivo,origem_secao
+SQL manual em produção,"Sem trilha de auditoria, não repetível",Sempre por arquivo de migração,"ECC/database-migrations (Supabase, MIT)",Anti-Patterns
+Editar migração já implantada,Causa drift entre ambientes,Crie uma migração nova,"ECC/database-migrations (Supabase, MIT)",Anti-Patterns
+NOT NULL sem default,"Trava a tabela, reescreve todas as linhas","Add nullable, backfill, depois add constraint","ECC/database-migrations (Supabase, MIT)",Anti-Patterns
+Índice inline em tabela grande,Bloqueia escritas durante o build,CREATE INDEX CONCURRENTLY,"ECC/database-migrations (Supabase, MIT)",Anti-Patterns
+Schema + dados na mesma migração,"Difícil reverter, transação longa",Migrações separadas (DDL e DML),"ECC/database-migrations (Supabase, MIT)",Anti-Patterns
+Dropar coluna antes de remover o código,Erro de app por coluna ausente,"Remova o código primeiro, drope no deploy seguinte","ECC/database-migrations (Supabase, MIT)",Anti-Patterns

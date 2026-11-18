@@ -1,5 +1,19 @@
 # CHANGELOG — dz23-postgres-prod-preflight
 
+## [1.2.0] — 2026-11-18
+
+### Adicionado — acervo consultável de pré-deploy (Trilha A)
+- `dados/`: 3 CSVs (21 registros) de pré-deploy — `anti-padroes-de-migracao.csv` (6),
+  `gates-de-seguranca-e-lock.csv` (8), `checklist-de-migracao.csv` (7). Fonte: ECC
+  (`postgres-patterns` + `database-migrations`, crédito **Supabase, MIT**), lida no `LICENSE` da raiz
+  do ECC. Proveniência em `dados/PROVENIENCIA.md`. **Distinto** do acervo do backend (índices/tipos):
+  aqui é só pré-deploy.
+- `scripts/consulta-postgres.py` + prova (`scripts/prova-consulta-postgres.py`): consulta por subcomando
+  em PT (gate/rls/lock, anti/migracao, checklist, busca), casa por palavra, recusa honesta. Ambos no
+  gate (`postgres:consulta`, `gate:autoteste-consulta-postgres`) e no CI.
+- Índice de uso no `SKILL.md` (quando consultar, no passo dos 10 gates). A skill agora consulta o
+  próprio acervo, offline. Bump MINOR 1.1.2 → 1.2.0.
+
 ## [1.1.2] — 2026-11-18
 
 ### Corrigido

@@ -189,6 +189,10 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("web:consulta", [py, "scripts/consulta-web.py", "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-web",
                             [py, "scripts/prova-consulta-web.py"]))
+    # postgres-prod-preflight: acervo de pre-deploy (gates, anti-padroes de migracao, checklist).
+    resultados.append(rodar("postgres:consulta", [py, "scripts/consulta-postgres.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-postgres",
+                            [py, "scripts/prova-consulta-postgres.py"]))
     # A skill que MANDA rodar um script tem de levar o script e o dado junto. Medido na rodada 58:
     # os tres consultores instruidos pelo SKILL.md viviam em scripts/ do repo, e `install-all` copia
     # apenas a pasta da skill -- a habilidade instalada em ~/.agents/skills/ mandava executar arquivo
