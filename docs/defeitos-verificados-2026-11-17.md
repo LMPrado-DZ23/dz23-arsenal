@@ -3,8 +3,11 @@
 Relatório de auditoria. Cada item tem comando de reprodução.
 
 **Estado (2026-11-17):** os defeitos dos blocos medidos nesta sessão foram corrigidos e
-verificados ao longo de 15 rodadas de verificação; ver `CHANGELOG.md`, entrada [1.5.0], e as dívidas
-em aberto no `ROADMAP.md`. O que continua em aberto está declarado lá, não aqui.
+verificados ao longo das rodadas de verificação seguintes; o registro completo está em
+`CHANGELOG.md` (entradas `[1.5.0]` até a mais recente no topo do arquivo) e as dívidas
+em aberto no `ROADMAP.md`. O que continua em aberto está declarado lá, não aqui -- este
+documento é o retrato do baseline HEAD 26bc28a e não é atualizado depois disso, senão passa
+a competir com o changelog.
 
 Este arquivo foi escrito fora da árvore versionada a princípio, e a primeira cópia se perdeu
 num `git checkout -- .` — versão solta não sobrevive. Está aqui, dentro do repo, para que a

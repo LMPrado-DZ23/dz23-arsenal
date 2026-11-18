@@ -55,7 +55,7 @@ e exige exit ≠ 0 em todos; no fim verifica que a árvore voltou ao HEAD. Resta
 um teste que mexe no disco concorrente consigo mesmo produziria resultado instável. Rode à mão
 antes do PR.
 
-O mínimo de um verificador novo, extraído das 29 rodadas desta linha de trabalho:
+O mínimo de um verificador novo, extraído das rodadas de ataque desta linha de trabalho:
 
 - caso positivo (rejeita o inválido) **e** negativo (aceita o válido), ambos executados;
 - entrada malformada degrada em mensagem, nunca em traceback;
