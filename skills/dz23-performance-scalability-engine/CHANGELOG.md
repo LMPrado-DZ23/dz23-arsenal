@@ -1,5 +1,10 @@
 # Changelog — dz23-performance-scalability-engine
 
+## [1.3.3] — 2026-11-18
+
+### Corrigido
+- Playbook de diagnóstico passou a ser citado no índice de referências do SKILL.md. O arquivo existia (3.724 caracteres de sintoma → camada → primeira medição) mas nenhum texto da skill o endereçava: só o README, que o agente não carrega. Na prática, quem abrisse a skill nunca recebia o roteiro de bissecção entre camadas.
+
 ## [1.3.2] — 2026-11-17
 
 ### Corrigido

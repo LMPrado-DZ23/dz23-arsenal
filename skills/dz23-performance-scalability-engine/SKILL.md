@@ -1,6 +1,6 @@
 ---
 name: dz23-performance-scalability-engine
-version: 1.3.2
+version: 1.3.3
 description: >
   Plano cirúrgico de otimização de performance e escalabilidade em 4 camadas —
   Frontend/Interface (UX e renderização), Comunicação/Rede (APIs e fluxos),
@@ -145,6 +145,7 @@ Leia `references/quality-gates.md`. Resumo — BLOCKER: otimização sem baselin
 
 ## Seleção de referências (carregamento progressivo)
 - Medição, baseline e instrumentos: `references/measurement-first.md`
+- Sintoma → camada → primeira medição: `references/diagnostic-playbook.md`
 - Budget e metas por camada: `references/perf-budget.md`
 - Camada 1 — Frontend e interface: `references/frontend-layer.md`
 - Camada 2 — Comunicação e rede: `references/network-layer.md`

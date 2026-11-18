@@ -139,6 +139,12 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("skills:scripts-executados",
                             [py, "scripts/executa-scripts-skills.py"]))
     resultados.append(rodar("estrutura", [py, "scripts/check-structure.py"]))
+    # Toda referência de cada skill tem de ser nomeada no SKILL.md -- o único texto que o agente
+    # carrega ao ativar a habilidade. Um guia correto, versionado e invisível às instruções é
+    # material morto: aconteceu com diagnostic-playbook.md e verificacao.md (rodada 47).
+    resultados.append(rodar("skills:enderecamento", [py, "scripts/checa-enderecamento.py"]))
+    resultados.append(rodar("gate:autoteste-enderecamento",
+                            [py, "scripts/prova-enderecamento.py"]))
     # As skills embutem cópias de scripts/skill_validator.py e scripts/_achar_arsenal.py
     # para se auto-validarem fora do checkout. Duplicação intencional — mas só é segura
     # enquanto as cópias baterem com a fonte.

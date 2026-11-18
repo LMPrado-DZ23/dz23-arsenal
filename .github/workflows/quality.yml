@@ -108,6 +108,11 @@ jobs:
       - name: Links relativos
         run: python scripts/check-links.py .
 
+      - name: Toda referência é nomeada no SKILL.md que o agente carrega
+        # Guia correto mas invisível às instruções é material morto. Aconteceu com duas
+        # referências em rodadas de verificação anteriores; este passo impede a volta.
+        run: python scripts/checa-enderecamento.py
+
       - name: Scripts embutidos nas skills executam o que a instrucao promete
         # Os SKILL.md mandam o agente rodar estes onze scripts. Antes so eram conferidos como
         # arquivos; um que quebrasse no primeiro uso viraria instrucao falsa sem sinal nenhum.

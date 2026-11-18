@@ -1,6 +1,6 @@
 ---
 name: dz23-postgres-prod-preflight
-version: 1.1.1
+version: 1.1.2
 description: >-
   Auditoria de pré-produção para Postgres e Supabase: 10 gates de segurança e integridade que a IA costuma
   deixar passar (RLS sem FORCE, statement_timeout ausente, search_path mutável, constraints fora do banco,
@@ -89,6 +89,9 @@ nunca podem estar no bundle do cliente, em issue, em print ou no contexto entreg
 Para banco acessível: tabela dos 10 gates com evidência (saída da consulta), blockers em primeiro lugar, SQL de
 correção, ordem de aplicação, rollback e o que não foi possível verificar. Sem acesso: entrega o **plano de
 verificação** com as consultas exatas — nunca inventa resultado de política.
+
+O que já foi executado nesta skill, com ambiente e como reproduzir: `references/verificacao.md`. Cite-o quando
+precisar distinguir "gate conhecido por leitura do catálogo" de "gate validado contra banco real".
 
 ## Gatilho de ativação
 "Use a skill dz23-postgres-prod-preflight, leia SKILL.md e as referências, rode as consultas de catálogo nos 10

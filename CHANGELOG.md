@@ -3,6 +3,24 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.5.22] -- 2026-11-18
+
+### Corrigido -- duas referencias existiam sem nenhum texto da skill as enderecar
+Medida nova: das 110 referencias nas dez skills, quais sao citadas por alguma instrucao que o
+agente efetivamente carrega. Duas nao eram -- `diagnostic-playbook.md` (performance, 3.724
+caracteres de sintoma -> camada -> primeira medicao) e `verificacao.md` (postgres, registro do
+que foi executado contra banco real). Ambas apareciam so no README da skill, arquivo que o agente
+nao le ao ativar. Resultado: conteudo correto, mantido, versionado -- e inalcanavel em uso.
+
+Bump PATCH nas duas (1.3.2->1.3.3, 1.1.1->1.1.2), com PROMPT-ATIVACAO regenerado onde necessario.
+O validador da performance pegou a dessincronizacao sozinho e recusou ate o arquivo ser corrigido.
+
+### Registrado
+Um medidor meu acusou uma terceira referencia quebrada que nao existia: a frase
+`dz23-devops-cloud-deployer (`references/supply-chain-security.md`)` nomeia a skill dona do
+arquivo -- leitura correta, nao defeito. O medidor so conhecia a propria pasta. Corrigido para
+resolver referencias entre skills antes de reclamar.
+
 ## [1.5.21] -- 2026-11-18
 
 ### Adicionado

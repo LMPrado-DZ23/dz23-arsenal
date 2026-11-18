@@ -1,5 +1,10 @@
 # CHANGELOG — dz23-postgres-prod-preflight
 
+## [1.1.2] — 2026-11-18
+
+### Corrigido
+- `references/verificacao.md` entrou no corpo do SKILL.md, junto ao contrato de resposta. Ele registra o que já foi executado contra banco real, com ambiente e como reproduzir; sem endereço, a skill não tinha como distinguir gate lido no catálogo de gate validado.
+
 ## [1.1.1] — 2026-11-17
 
 ### Corrigido
