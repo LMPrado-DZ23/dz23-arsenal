@@ -102,6 +102,29 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.3] — 2026-11-17
+
+### Corrigido
+- **`verifica_claims.py` tratava prosa como caminho de arquivo.** O filtro de placeholder era
+  aplicado ao texto inteiro, então qualquer frase contendo "placeholder" ou "inexistente" fazia o
+  caminho citado na mesma linha virar não-verificável. Medido: 24 ocorrências ignoradas no repo --
+  inclusive um documento que descreve o próprio defeito ("Referencia apontando para arquivo
+  inexistente passa") e assim se auto-censurava. Restrito a candidatos com forma de caminho
+  (`RE_PARECE_CAMINHO`), com sufixos de placeholder insensíveis a caixa: `nao-existe-*` em
+  minúsculas escapava porque o ramo exigia `[A-Z0-9._-]*`. Versão 1.3.0 → 1.4.0.
+- **`quality-gate` chamava `verifica_claims` sem `--min`,** isto é, em modo relatório: o
+  script detecta o caminho quebrado, imprime, e sai 0. Injetando uma referência plausível
+  inexistente, o `validate:` da skill pegava e o `claims:` saía OK -- dois checks do mesmo
+  gate discordando. Agora `--min 1.0` torna o check decisório.
+
+### Adicionado
+- **`scripts/audita-alegacoes.py`** -- re-executa a experiência por trás de cada afirmação
+  qualitativa desta linha de trabalho (oito delas: gates-fantasma fechados, skill instalada
+  auto-validando sem checkout, `python -O` sem desligar validador, CRLF decidido pelo índice,
+  EOL não confundido com divergência, regra órfã denunciada). Número quebra alto porque algum
+  check reclama; frase do tipo "X agora falha quando Y" apodrece em silêncio -- alguém remove a
+  guarda e o CHANGELOG continua descrevendo um sistema que não existe. Roda no gate (34 checks)
+  e no CI.
 ## [1.5.1] — 2026-11-17
 
 **Verificação por ataque.** Quatro rodadas seguintes à v1.5.0 mudaram o método: em vez de

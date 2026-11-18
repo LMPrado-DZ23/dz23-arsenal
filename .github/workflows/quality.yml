@@ -112,6 +112,11 @@ jobs:
         # morrer por um artefato corrompido em vez de reportar o problema.
         run: python scripts/selftest-ferramentas.py
 
+      - name: Alegações da documentação ainda são verdadeiras
+        # Re-executa a experiência por trás de cada frase tipo "X falha quando Y". Sem isto,
+        # remover uma guarda deixa o CHANGELOG descrevendo um sistema que não existe mais.
+        run: python scripts/audita-alegacoes.py
+
       - name: Manifesto atualizado
         run: python scripts/build-manifest.py --check
 

@@ -43,7 +43,7 @@ import sys
 from dataclasses import dataclass, asdict
 from pathlib import Path, PurePosixPath as _PurePosixPath
 
-VERSAO = "1.3.0"
+VERSAO = "1.4.0"
 
 RE_CAMINHO = re.compile(
     r"(?<![\w./-])((?:[\w.\-]+[/\\])+[\w.\-]+\.(?:py|md|json|ya?ml|toml|sh|ps1|js|ts|tsx|jsx|"
@@ -51,9 +51,19 @@ RE_CAMINHO = re.compile(
 )
 
 # Placeholder/exemplo nunca é alegação sobre o repo.
+# Placeholder só faz sentido como *nome de arquivo*. A versão anterior aplicava o filtro à
+# linha inteira, então qualquer prosa contendo "placeholder" ou "inexistente" fazia o caminho
+# citado na mesma frase virar não-verificável — inclusive este repo, onde um documento descreve
+# o próprio defeito ("Referencia apontando para arquivo inexistente passa") e assim se
+# auto-censurava. Medido: 24 ocorrências ignoradas por esse motivo.
 RE_PLACEHOLDER = re.compile(
-    r"(?i)(NAO[-_]EXISTE|nao-existe|INEXISTENTE|does-not-exist|zz-|foo\.|bar\.|exemplo\."
-    r"|<algo>|placeholder)")
+    r"(?i)(?:^|[/\w.-])(?:NAO[-_]EXISTE[\w.-]*|INEXISTENTE[\w.-]*|"
+    r"does-not-exist[\w.-]*|zz-[\w.-]+|"
+    r"foo|bar|baz|exemplo|placeholder|template|algo|X{2,})(?:\.[A-Za-z0-9]{1,5})?(?:$|[/\s])")
+
+# O candidato precisa ter cara de caminho antes de ser julgado placeholder: sem isso,
+# "o modelo vê nome ou placeholder" não vira claim de caminho em primeiro lugar.
+RE_PARECE_CAMINHO = re.compile(r"^[\w.@~/-]*(?:/[\w.@~-]+)+\.[A-Za-z0-9]{1,5}$|^[\w-]+\.[A-Za-z0-9]{1,5}$")
 
 RE_IMPERATIVO = re.compile(
     r"(?i)\b(crie|criar|gere|gerar|adicione|adicionar|escreva|implemente|add |create|"
@@ -135,9 +145,17 @@ def checar_caminho(valor: str, raiz: Path, texto: str, linha_no: int,
     alvo = linha_alvo.strip()[:120]
     norm = _normaliza(valor)
 
-    if RE_PLACEHOLDER.search(valor):
+    # Só julga placeholder quem tem cara de caminho. Um trecho de prosa entre crases ("o
+    # modelo vê nome ou placeholder") não é alegação de existência e não deveria nem chegar
+    # aqui como claim de arquivo; o extrator o captura porque está entre backticks, então a
+    # distinção precisa acontecer nesta porta.
+    if RE_PARECE_CAMINHO.match(valor) and RE_PLACEHOLDER.search(valor):
         return Claim("caminho-arquivo", valor, "nao-verificavel",
                      "placeholder/exemplo, não alegação de existência", alvo)
+
+    if not RE_PARECE_CAMINHO.match(valor):
+        return Claim("caminho-arquivo", valor, "nao-verificavel",
+                     "não tem forma de caminho de arquivo", alvo)
 
     if valor.startswith(("~/", "$")) or re.match(r"^(/|\w:[\\/])", valor):
         return Claim("caminho-arquivo", valor, "nao-verificavel",

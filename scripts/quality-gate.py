@@ -126,14 +126,22 @@ def main(argv: list[str]) -> int:
     # Um verificador que explode num JSON malformado é pior que um que erra -- quem vê
     # traceback para de olhar a saída, e foi assim que os gates-fantasma sobreviveram aqui.
     resultados.append(rodar("ferramentas:ataque", [py, "scripts/selftest-ferramentas.py"]))
-    # Referências citadas nos SKILL.md têm de existir. Roda sobre as 10 skills; --min não é
-    # usado aqui porque um caminho quebrado já é falha por si só (exit 1 quando há falho).
+    # Re-executa a experiencia por tras de cada afirmacao feita nesta linha de trabalho.
+    # Numero quebra alto (algum check reclama); frase do tipo 'X agora falha quando Y' apodrece
+    # em silencio -- alguem remove a guarda, o texto continua no CHANGELOG e vira descricao de um
+    # sistema que nao existe. Este check recusa essa deriva.
+    resultados.append(rodar("alegacoes:reexecucao", [py, "scripts/audita-alegacoes.py"]))
+    # Referências citadas nos SKILL.md têm de existir. Roda sobre as 10 skills; --min 1.0
+    # transforma o script em veredito: sem ele ele é relatório e sai 0 mesmo achando caminho
+    # quebrado, o que faria este check parecer mais forte do que é (observado ao injetar uma
+    # referência inexistente -- o validate: pegou, o claims: saiu OK).
     for skill in sorted(p for p in (RAIZ / "skills").iterdir() if p.is_dir()):
         sm = skill / "SKILL.md"
         if sm.is_file():
             resultados.append(rodar(f"claims:{skill.name}",
                                     [py, "scripts/verifica_claims.py",
-                                     "--texto", str(sm), "--raiz", str(RAIZ)]))
+                                     "--texto", str(sm), "--raiz", str(RAIZ),
+                                     "--min", "1.0"]))
 
     falhas = [r for r in resultados if not r["ok"]]
     publicar_contagem(len(resultados))
