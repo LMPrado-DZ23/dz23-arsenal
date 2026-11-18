@@ -33,6 +33,22 @@ $instaladas = 0
 $skipped = 0
 $falhas = 0
 
+# Ponteiro para o checkout. Uma skill instalada em ~/.agents/skills nao consegue achar
+# o arsenal contando niveis de diretorio (o repo pode estar em outro disco), e sem isso
+# as checagens comuns do validate_skill.py sao puladas com WARN silencioso. Provar com:
+#   Get-Content ~\.agents\skills\.dz23-arsenal
+$ponteiro = Join-Path $destino '.dz23-arsenal'
+if (-not $DryRun) {
+    try {
+        Set-Content -Path $ponteiro -Value (Resolve-Path (Join-Path $PSScriptRoot '..')).Path `
+            -Encoding ascii -NoNewline
+        Add-Content -Path $ponteiro -Value '' -Encoding ascii
+        Write-Host "Ponteiro gravado: $ponteiro" -ForegroundColor DarkGray
+    } catch {
+        Write-Host "AVISO: nao foi possivel gravar $ponteiro -> $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
+
 Get-ChildItem -Path $skillsRoot -Directory | Sort-Object Name | ForEach-Object {
     $nome = $_.Name
     if ($nome -eq 'README.md') { return }

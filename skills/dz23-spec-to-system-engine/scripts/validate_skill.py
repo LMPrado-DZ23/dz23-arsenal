@@ -4,21 +4,25 @@ import re
 import sys
 
 root = Path(__file__).resolve().parents[1]
-# --- checagens comuns do arsenal (scripts/skill_validator.py) ---------------
-# Reunifica o que estava espalhado em dez copias divergentes: frontmatter, VERSION x
-# frontmatter, PROMPT-ATIVACAO congelada, referencias quebradas, evals coerentes e
-# nome de skill descontinuada em frontmatter vivo. As checagens especificas desta skill
-# continuam abaixo.
-_ARSENAL = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(_ARSENAL / "scripts"))
+# --- checagens comuns do arsenal -------------------------------------------
+# A skill instalada em ~/.agents/skills precisa achar o checkout (que pode estar em
+# outro disco) para rodar as checagens compartilhadas. Contar niveis de diretorio nao
+# funciona la: parents[3] aponta para ~/.agents. O localizador sobe a arvore, le o
+# ponteiro .dz23-arsenal ou respeita DZ23_ARSENAL.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 try:
-    from skill_validator import validar_comum
-except ImportError as exc:  # ambiente fora do repo (skill instalada sozinha)
-    print(f"WARN: checagens comuns indisponiveis ({exc})")
-    validar_comum = None
-else:
-    _erros_comuns = validar_comum(root)
-    assert not _erros_comuns, "checagens comuns falharam:\n  - " + "\n  - ".join(_erros_comuns)
+    from _achar_arsenal import importar_validador_comum
+except ImportError:
+    print("WARN: _achar_arsenal ausente — checagens comuns puladas")
+    importar_validador_comum = None
+if importar_validador_comum is not None:
+    _validar_comum = importar_validador_comum(Path(__file__).resolve())
+    if _validar_comum is None:
+        print("WARN: arsenal nao localizado — checagens comuns puladas")
+    else:
+        _erros_comuns = _validar_comum(root)
+        assert not _erros_comuns, ("checagens comuns falharam:\n  - "
+                                   + "\n  - ".join(_erros_comuns))
 
 
 REQUIRED_REFS = [

@@ -167,6 +167,75 @@ def validar_comum(root: Path, *, exigir_version_file: bool = True) -> list[str]:
     return erros
 
 
+def localizar_arsenal(comeco: Path) -> Path | None:
+    """Acha o checkout do arsenal a partir de um arquivo da skill.
+
+    Precisa funcionar em dois lugares diferentes:
+      - dentro do repo:  <arsenal>/skills/<skill>/scripts/validate_skill.py
+      - instalado:       ~/.agents/skills/<skill>/scripts/validate_skill.py,
+                         com o repo em outro disco qualquer
+
+    Contar níveis fixos (`parents[3]`) só vale no primeiro caso e falhou em teste real:
+    rodando da instalação os pais apontavam para `~/.agents`, sem o módulo, e as
+    checagens comuns eram puladas com WARN — ou seja, a skill verificada em produção
+    era justamente a versão menos verificada. Ordem de busca:
+      1. subir diretórios procurando scripts/skill_validator.py + skills/ (o repo);
+      2. ler ~/.agents/skills/.dz23-arsenal, escrito pelo install-all;
+      3. variável DZ23_ARSENAL.
+    """
+    vistos: set[Path] = set()
+    for base in [comeco.resolve()] + list(comeco.resolve().parents):
+        if base in vistos:
+            continue
+        vistos.add(base)
+        candidato = base / "scripts" / "skill_validator.py"
+        # Marcador inconfundível: este arquivo ao lado E uma pasta skills/ irmã.
+        # Isso distingue o repositório de uma cópia solta em ~/.agents/skills.
+        if candidato.is_file() and (base / "skills").is_dir():
+            return base
+
+    # Instalado fora do repo: procurar o ponteiro subindo a partir da skill.
+    for base in [comeco.resolve()] + list(comeco.resolve().parents):
+        marcador = base / ".dz23-arsenal"
+        if marcador.is_file():
+            alvo = marcador.read_text(encoding="utf-8").strip()
+            p = Path(alvo)
+            if (p / "scripts" / "skill_validator.py").is_file():
+                return p
+
+    import os
+    env = os.environ.get("DZ23_ARSENAL")
+    if env:
+        p = Path(env)
+        if (p / "scripts" / "skill_validator.py").is_file():
+            return p
+    return None
+
+
+def escrever_ponteiro(destino_skills: Path, arsenal: Path) -> Path:
+    """Grava em <destino_skills>/.dz23-arsenal onde fica o checkout. Chamado pelo install-all."""
+    arq = destino_skills / ".dz23-arsenal"
+    arq.write_text(str(arsenal.resolve()) + "\n", encoding="utf-8", newline="\n")
+    return arq
+
+
+def importar_validador_comum(aqui: Path):
+    """Retorna a função validar_comum, ou None se o arsenal não for localizável."""
+    import sys
+    arsenal = localizar_arsenal(aqui)
+    if arsenal is None:
+        return None
+    pasta = str(arsenal / "scripts")
+    if pasta not in sys.path:
+        sys.path.insert(0, pasta)
+    try:
+        from skill_validator import validar_comum  # type: ignore
+    except ImportError:
+        return None
+    return validar_comum
+
+
+# --- auto-teste do localizador ---------------------------------------------------
 def relatar(nome: str, erros: list[str], ok_extra: str = "") -> int:
     """Imprime no formato já usado pelo arsenal e devolve exit code."""
     if erros:
@@ -176,3 +245,16 @@ def relatar(nome: str, erros: list[str], ok_extra: str = "") -> int:
         return 1
     print(f"PASS: {nome} · checagens comuns OK{(' · ' + ok_extra) if ok_extra else ''}")
     return 0
+
+
+if __name__ == "__main__":
+    aqui = Path(__file__).resolve()
+    achado = localizar_arsenal(aqui)
+    assert achado is not None, "não conseguiu achar o próprio arsenal"
+    assert (achado / "skills").is_dir(), f"alvo errado: {achado}"
+    simulando_instalado = Path.home() / ".agents" / "skills" / "dz23-backend-data-architect" / \
+        "scripts" / "validate_skill.py"
+    print(f"arsenal localizado: {achado}")
+    print(f"simulando caminho instalado ({simulando_instalado.exists()}):\n"
+          f"  -> {localizar_arsenal(simulando_instalado)}")
+    print("localizador OK")

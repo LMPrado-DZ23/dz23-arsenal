@@ -42,6 +42,16 @@ instaladas=0
 skipped=0
 falhas=0
 
+# Ponteiro para o checkout (mesmo motivo da versao .ps1): a skill instalada precisa
+# localizar o arsenal para rodar as checagens comuns do validate_skill.py.
+if [ "$DRY" -eq 0 ]; then
+  if ARSENAL="$(cd "$SCRIPT_DIR/.." && pwd)" && printf '%s\n' "$ARSENAL" > "$DEST/.dz23-arsenal"; then
+    echo "Ponteiro gravado: $DEST/.dz23-arsenal"
+  else
+    echo "AVISO: nao foi possivel gravar $DEST/.dz23-arsenal" >&2
+  fi
+fi
+
 for dir in "$SKILLS_ROOT"/*/; do
   [ -d "$dir" ] || continue
   nome="$(basename "$dir")"

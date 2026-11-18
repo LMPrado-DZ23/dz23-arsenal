@@ -15,6 +15,26 @@ import sys
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 
+# --- checagens comuns do arsenal -------------------------------------------
+# A skill instalada em ~/.agents/skills precisa achar o checkout (que pode estar em
+# outro disco) para rodar as checagens compartilhadas. Contar niveis de diretorio nao
+# funciona la: parents[3] aponta para ~/.agents. O localizador sobe a arvore, le o
+# ponteiro .dz23-arsenal ou respeita DZ23_ARSENAL.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+try:
+    from _achar_arsenal import importar_validador_comum
+except ImportError:
+    print("WARN: _achar_arsenal ausente - checagens comuns puladas")
+    importar_validador_comum = None
+if importar_validador_comum is not None:
+    _validar_comum = importar_validador_comum(pathlib.Path(__file__).resolve())
+    if _validar_comum is None:
+        print("WARN: arsenal nao localizado - checagens comuns puladas")
+    else:
+        _erros_comuns = _validar_comum(RAIZ, exigir_version_file=True)
+        assert not _erros_comuns, ("checagens comuns falharam:\n  - "
+                                   + "\n  - ".join(_erros_comuns))
+
 
 def frontmatter(texto: str) -> dict:
     m = re.match(r"^---\n(.*?)\n---", texto, re.S)
