@@ -102,6 +102,17 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.4] — 2026-11-17
+
+### Corrigido
+- **`install-all.ps1` propagava `__pycache__` obsoleto para a instalação.** O repo guarda o
+  diretório no disco (ignorado pelo git, mas presente); `Copy-Item -Recurse` levava o bytecode
+  junto. Medido nesta máquina: 53 arquivos `.pyc`, dos quais **10 com mtime/size diferente do
+  fonte** -- justamente os `validate_skill.py` reescritos na v1.5.2. Não é risco de execução:
+  verificado que o Python re-compila sozinho e o validador detecta referência quebrada mesmo com
+  o `.pyc` velho. Mas faz inspeção humana mentir sobre qual versão está instalada, e foi
+  descoberto exatamente porque alguém (eu, nesta sessão) olhou o conteúdo. A instalação agora é
+  limpa em origem; provado sujando de propósito (2 pastas antes, 0 depois).
 ## [1.5.3] — 2026-11-17
 
 ### Corrigido

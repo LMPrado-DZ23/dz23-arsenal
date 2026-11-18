@@ -76,6 +76,17 @@ Get-ChildItem -Path $skillsRoot -Directory | Sort-Object Name | ForEach-Object {
         }
         Copy-Item -Path $_.FullName -Destination $alvo -Recurse -Force
 
+        # O repo guarda __pycache__ no disco -- ignorado pelo git, mas presente. Copiar a skill
+        # inteira leva o bytecode junto, e ele chega ao destino desatualizado: depois de editar
+        # o validador, o .pyc copia do dia anterior fica com mtime/size diferente do fonte.
+        # Verificado nesta sessao que o Python re-compila sozinho (o validador detecta
+        # referencia quebrada mesmo com o .pyc velho), entao nao e risco de execucao -- e lixo
+        # que faz inspecao humana mentir sobre qual versao esta instalada.
+        Get-ChildItem -Path $alvo -Recurse -Directory -Filter '__pycache__' -ErrorAction SilentlyContinue |
+            Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+        Get-ChildItem -Path $alvo -Recurse -File -Filter '*.pyc' -ErrorAction SilentlyContinue |
+            Remove-Item -Force -ErrorAction SilentlyContinue
+
         Write-Host "OK: $nome v$versao" -ForegroundColor Green
         $instaladas++
     } catch {
