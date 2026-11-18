@@ -190,14 +190,34 @@ def cmd_produto(args) -> int:
     return 0
 
 
+# Ponte PT->EN para a coluna Severity, que na planilha so tem Critical/High/Medium/Low. Sem isto o
+# filtro existe na interface e devolve zero para qualquer pedido em portugues.
+SEVERIDADE = {"critica": "critical", "alta": "high", "media": "medium", "baixa": "low",
+              "critical": "critical", "high": "high", "medium": "medium", "low": "low"}
+
+
 def cmd_ux(args) -> int:
     linhas = _ler("ux-guidelines.csv")
+    # Severidade compara pelo VALOR DA PLANILHA (Critical/High/Medium/Low). Antes disto,
+    # `ux formulario --severidade alta` nao devolvia nada: o codigo normalizava os dois lados e
+    # comparava 'alta' contra 'high', que nunca casam. Uma opcao que aceita qualquer string e filtra
+    # para zero e pior que opcao ausente -- quem usou acredita que filtrou. A ponte cobre portugues,
+    # aceita o nome em ingles e recusa explicitamente valor que nao existe no acervo.
+    alvo_sev = None
+    if args.severidade:
+        chave = _norma(args.severidade)
+        alvo_sev = SEVERIDADE.get(chave, chave)
+        if alvo_sev not in {str(r.get("Severity", "")).strip().lower() for r in linhas}:
+            print(f"FALHA: severidade '{args.severidade}' nao existe no acervo. "
+                  f"Valores validos: Critical, High, Medium, Low "
+                  f"(ou em portugues: critica, alta, media, baixa).")
+            return 1
     out = []
     for r in linhas:
         blob = " ".join(str(r.get(k, "")) for k in ("Category", "Issue", "Description"))
         if args.filtro and _melhor(args.filtro, blob) == 0:
             continue
-        if args.severidade and _norma(str(r.get("Severity", ""))) != _norma(args.severidade):
+        if alvo_sev and str(r.get("Severity", "")).strip().lower() != alvo_sev:
             continue
         out.append(r)
     if not out:

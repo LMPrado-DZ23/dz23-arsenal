@@ -17,7 +17,7 @@
 | [postgres-prod-preflight](dz23-postgres-prod-preflight/) | 1.1.2 | Banco/Segurança | intermediate | 5 | 1 | 4 | 13 |
 | [reverse-engineer-anything](dz23-reverse-engineer-anything/) | 1.1.4 | Eng. reversa | advanced | 12 | 4 | 5 | 15 |
 | [spec-to-system-engine](dz23-spec-to-system-engine/) | 1.2.1 | Especificação | advanced | 17 | 9 | 5 | 15 |
-| [ultimate-pro-max](dz23-ultimate-pro-max/) | 2.2.5 | UI/UX | advanced | 10 | 0 | 4 | 13 |
+| [ultimate-pro-max](dz23-ultimate-pro-max/) | 2.2.6 | UI/UX | advanced | 10 | 0 | 4 | 13 |
 
 Totais do disco: **113 referências** e **144 cenários de eval** declarados.
 

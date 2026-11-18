@@ -1,6 +1,29 @@
 > Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
 > delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
 
+## [1.6.4] — 2026-11-18
+
+### Corrigido — filtro de severidade que existia na interface e nunca casava nada
+Seguindo apontamento do auditor ("alinhar os consultores ao padrão texto-livre"), medimos a premissa
+antes de reformar três scripts: o design **não** era texto livre — os três usam subcomandos, e o único
+exemplo em texto livre do repo era placeholder de documentação. Mas o teste que decidia a questão era
+outro: executar todos os 18 comandos que os documentos promovem. Ele achou defeito real.
+
+`ux formulario --severidade alta` devolvia zero. A planilha guarda `Critical/High/Medium/Low`; o código
+normalizava os dois lados e comparava `alta` contra `high`, que nunca casam. Uma opção que aceita
+qualquer string e filtra para zero é pior que opção ausente: quem usou acredita que filtrou. Corrigido
+com ponte PT→EN e recusa explícita listando os valores válidos. `dz23-ultimate-pro-max` 2.2.5 → 2.2.6.
+
+### Adicionado
+- `scripts/checa-exemplos-executaveis.py`: executa todo comando `python scripts/consulta-*.py ...`
+  promovido por `SKILL.md` ou `references/` e exige exit 0. Foi assim que o defeito acima apareceu, e é
+  o único verificador deste repo que trata documentação como interface testável — um agente copia e cola
+  o exemplo; se a assinatura mudou e o texto não, a habilidade instrui um comando quebrado enquanto
+  todos os outros checks seguem verdes. `CHANGELOG` e `PROVENIENCIA` ficam fora de propósito: lá o
+  comando é registro histórico, não instrução vigente. Detectando verificado: subcomando inventado na
+  referência faz o check sair exit 1 apontando o comando.
+- Gate 57 → 58 checks.
+
 ## [1.6.3] — 2026-11-18
 
 ### Corrigido -- nenhuma skill instalada conseguia usar os acervos que acabaram de entrar

@@ -182,6 +182,13 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("skills:autocontencao", [py, "scripts/checa-autocontencao.py"]))
     resultados.append(rodar("gate:autoteste-copias-de-consultor",
                             [py, "scripts/prova-copias-de-consultor.py"]))
+    # Todo comando `python scripts/consulta-*.py ...` que um SKILL.md ou reference promove e executado
+    # aqui. Um agente copia o exemplo e roda; se a interface mudou e o documento nao, o resultado e uma
+    # habilidade que instrui um comando quebrado -- verde em todos os outros checks. Achado real: assim
+    # apareceu que `ux formulario --severidade alta` filtrava contra 'high' comparado a 'alta' e nunca
+    # devolvia nada, e que dataset-design.md apresentava 14 arquivos dos quais o script lia 5.
+    resultados.append(rodar("docs:exemplos-executaveis",
+                            [py, "scripts/checa-exemplos-executaveis.py"]))
     # Repositório PÚBLICO, e até esta rodada nenhum verificador abria um arquivo em busca de
     # credencial: colar um token GitHub válido em `.env.example` dava gate 46/46 verde. Os quatro
     # scripts que mencionam "segredo" no fonte falam de outra coisa (scan descrito em prosa, design

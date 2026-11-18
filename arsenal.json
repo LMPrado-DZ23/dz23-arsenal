@@ -119,7 +119,7 @@
     },
     {
       "name": "dz23-ultimate-pro-max",
-      "version": "2.2.5",
+      "version": "2.2.6",
       "description": "Skill de direção de arte premium, UX, frontend, arquitetura de interface, segurança, acessibilidade, performance, QA visual e entrega verificável para sites, SaaS, CRM, ERP, B-3PO, desktop e mobile. Ative ao criar, revisar, redesenhar ou implementar interfaces, fluxos e design systems.",
       "user_invocable": true,
       "files": 20,
@@ -127,7 +127,7 @@
       "templates": 0,
       "scripts": 4,
       "evals": 13,
-      "sha256_skill_md": "775b148b4756064bfebc1f53c6c870c6385623f5df1d5a53f39e31fa230e9005"
+      "sha256_skill_md": "0fdfdcb55a22aa948f0e39ff9a5beb4e77dacf1b4174db2d7c5ca4653953c678"
     }
   ],
   "external": [

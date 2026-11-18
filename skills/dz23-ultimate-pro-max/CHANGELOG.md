@@ -1,5 +1,11 @@
 # Changelog — dz23-ultimate-pro-max
 
+## [2.2.6] — 2026-11-18
+
+### Corrigido
+- `--severidade` do comando `ux` filtrava contra o valor digitado comparado com o da planilha: `--severidade alta` nunca casava com `High` e devolvia zero resultados. A opcao existia na interface, aceitava qualquer string e falhava em silencio -- pior que opcao ausente, porque quem usou acredita que filtrou. Agora ha ponte PT->EN (critica/alta/media/baixa) e recusa explicita com a lista de valores validos.
+- Comando `grafico` (25 tipos de dado -> tipo de grafico) e `motion` (7 categorias por gatilho/intensidade): `references/dataset-design.md` apresentava 14 arquivos como consultaveis e o script abria 5. Nove datasets existiam no disco sem nenhum caminho de acesso.
+
 ## [2.2.5] — 2026-11-18
 
 ### Adicionado
