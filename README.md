@@ -65,7 +65,7 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 | [`pentagi-mcp`](mcp/pentagi-mcp/) | 1.0.0 | 8 ferramentas MCP sobre a API do PentAGI (pentest autônomo) |
 
 
-## Skills e plataformas externas (13)
+## Skills e plataformas externas (14)
 
 | Skill | Autor | Para quê | Repo |
 |---|---|---|---|
@@ -78,8 +78,17 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 | [Supabase Postgres Best Practices](external/supabase-postgres-best-practices.md) | supabase | Postgres/Supabase | [link](https://github.com/supabase/agent-skills) |
 | [Playwright MCP](external/playwright-mcp.md) | microsoft | Testes E2E via MCP | [link](https://github.com/microsoft/playwright-mcp) |
 | [Terraform AWS VPC](external/terraform-aws-vpc.md) | terraform-aws-modules | VPC AWS IaC | [link](https://github.com/terraform-aws-modules/terraform-aws-vpc) |
+| [PentAGI](external/pentagi.md) | VXControl | Executa pentest autônomo (ponte MCP em `mcp/pentagi-mcp`) | [link](https://github.com/vxcontrol/pentagi) |
+| [Modern Web Guidance](external/modern-web-guidance.md) | Chrome/Edge/Firefox/MDN | Guias de plataforma web moderna | [link](https://github.com/GoogleChrome/modern-web-guidance) |
+| [Astryx](external/astryx.md) | Meta | Design system React 19 com CLI para agentes | [link](https://github.com/facebookincubator/astryx) |
+| [phone-agent-harness](external/phone-agent-harness.md) | comunidade | Agente que liga e atende telefone | — |
 
 Cada linha linka para `external/<nome>.md` com instruções completas de instalação e uso.
+
+O registro da varredura que produziu as técnicas absorvidas neste release — decisão por
+pacote, bloqueios de licença encontrados e o que foi descartado — está em
+[external/absorcao-2026-11-17.md](external/absorcao-2026-11-17.md). Não é uma skill de
+terceiro para instalar; é documentação de processo, e por isso não entra na contagem acima.
 
 ## Prompts de origem
 
@@ -137,12 +146,12 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 
 ## Estado verificado (não é marketing)
 
-Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **13 referências
+Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **14 referências
 externas** documentadas. **O que está publicado é diferente do que está verificado.**
 
 | Métrica | Valor |
 |---|---|
-| Skills publicadas | **10** DZ23 + **2 MCP** + 1 bundle + 7 externas (+13 referências externas) |
+| Skills publicadas | **10** DZ23 + **2 MCP** + 1 bundle + 7 externas (+14 referências externas) |
 | Evals declarados | **144** |
 | **Evals executados** | **45/144 (31,2%)** — 43 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |
