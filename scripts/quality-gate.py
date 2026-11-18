@@ -197,6 +197,10 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("devops:consulta", [py, "scripts/consulta-devops.py", "listar"]))
     resultados.append(rodar("gate:autoteste-consulta-devops",
                             [py, "scripts/prova-consulta-devops.py"]))
+    # e2e-browser-verifier: acervo de E2E/Playwright (flaky, seletores/esperas, fluxo critico).
+    resultados.append(rodar("e2e:consulta", [py, "scripts/consulta-e2e.py", "listar"]))
+    resultados.append(rodar("gate:autoteste-consulta-e2e",
+                            [py, "scripts/prova-consulta-e2e.py"]))
     # A skill que MANDA rodar um script tem de levar o script e o dado junto. Medido na rodada 58:
     # os tres consultores instruidos pelo SKILL.md viviam em scripts/ do repo, e `install-all` copia
     # apenas a pasta da skill -- a habilidade instalada em ~/.agents/skills/ mandava executar arquivo

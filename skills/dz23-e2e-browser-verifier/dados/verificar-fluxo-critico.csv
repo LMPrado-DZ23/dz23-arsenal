@@ -1,0 +1,7 @@
+verificacao,por_que,origem_arquivo,origem_secao
+Pular em produção (dinheiro real),test.skip(NODE_ENV==='production'): fluxo financeiro não roda contra produção,"ECC/e2e-testing (Playwright, MIT)",Financial / Critical Flow Testing
+Verificar o preview antes de confirmar,Assertar o valor no preview antes do confirm pega cálculo errado cedo,"ECC/e2e-testing (Playwright, MIT)",Financial / Critical Flow Testing
+Esperar API 200 antes de assertar sucesso,waitForResponse status 200 antes do 'success visible' evita falso verde,"ECC/e2e-testing (Playwright, MIT)",Financial / Critical Flow Testing
+Assertar o estado final visível,"O success/confirmação tem de estar visível, não só a chamada ter voltado","ECC/e2e-testing (Playwright, MIT)",Financial / Critical Flow Testing
+"Cobrir estados: vazio, erro, carregando, permissão",Um fluxo só com o caminho feliz não prova a UI real,"ECC/e2e-testing (Playwright, MIT)",Financial / Critical Flow Testing
+Isolamento multi-tenant,Fluxo de um tenant não pode ver dado de outro — assertar 404/negação,"ECC/e2e-testing (Playwright, MIT)",Financial / Critical Flow Testing

@@ -270,6 +270,15 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
 - **Melhora a DZ23 existente** `dz23-devops-cloud-deployer` (1.2.3 → 1.3.0): consulta o próprio acervo
   offline. 2ª das 5 DZ23 restantes da Trilha A. Evals da skill inalterados (ledger 144 intacto).
 
+### `skills/dz23-e2e-browser-verifier/dados/` — acervo de E2E (Trilha A, melhora skill DZ23)
+- **Origem:** ECC (`affaan-m/ECC`), skill `e2e-testing` (Playwright). Licença **MIT** (frontmatter da
+  skill + `LICENSE` da raiz do ECC).
+- **O que entrou:** 3 CSVs (16 registros) — causas de flaky e correção, regras de seletor/espera,
+  verificação de fluxo crítico — com `origem_arquivo`/`origem_secao`. Consultor `scripts/consulta-e2e.py`
+  (matcher normaliza acento) + prova, no gate.
+- **Melhora a DZ23 existente** `dz23-e2e-browser-verifier` (1.1.3 → 1.2.0): consulta o próprio acervo
+  offline. 3ª das 5 DZ23 restantes da Trilha A. Evals da skill inalterados (ledger 144 intacto).
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |

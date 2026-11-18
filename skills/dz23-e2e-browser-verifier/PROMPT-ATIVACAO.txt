@@ -1,4 +1,4 @@
-PROMPT DE ATIVAÇÃO — DZ23 E2E Browser Verifier v1.1.3
+PROMPT DE ATIVAÇÃO — DZ23 E2E Browser Verifier v1.2.0
 
 Use a skill dz23-e2e-browser-verifier.
 
@@ -28,3 +28,5 @@ teste destrutivo em produção sem autorização; mock do próprio alvo.
 
 Critério de entrega: cada gate de references/quality-gates.md com estado
 PASS / PARTIAL / FAIL / NOT_TESTED / BLOCKED_BY_EXTERNAL_DEPENDENCY.
+
+Acervo consultável (offline): python scripts/consulta-e2e.py flaky race | seletor testid | fluxo producao | busca waitfor.

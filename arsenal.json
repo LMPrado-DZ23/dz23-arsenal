@@ -59,15 +59,15 @@
     },
     {
       "name": "dz23-e2e-browser-verifier",
-      "version": "1.1.3",
+      "version": "1.2.0",
       "description": ">",
       "user_invocable": true,
-      "files": 25,
+      "files": 30,
       "references": 10,
       "templates": 6,
-      "scripts": 3,
+      "scripts": 4,
       "evals": 16,
-      "sha256_skill_md": "b1b85351170a18817acb2ae6a80c4146f7a43aa85942fe614b83c32251b16e01"
+      "sha256_skill_md": "78f4e90bddea2a3576532844eb4ad71af0744fb4119fd9d860e50c7c41b8fe4a"
     },
     {
       "name": "dz23-performance-scalability-engine",

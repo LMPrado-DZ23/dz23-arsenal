@@ -1,0 +1,7 @@
+regra,por_que,origem_arquivo,origem_secao
+Prefira data-testid,Seletor por texto/classe quebra com i18n e refactor; data-testid é estável,"ECC/e2e-testing (Playwright, MIT)",POM / Playwright Config
+Use locator com auto-wait,locator().click() espera o elemento; click(selector) não — é a causa #1 de flaky,"ECC/e2e-testing (Playwright, MIT)",POM / Playwright Config
+Nunca waitForTimeout fixo,Tempo mágico é lento e ainda flaky; espere a condição (resposta/estado),"ECC/e2e-testing (Playwright, MIT)",POM / Playwright Config
+waitForResponse para dados,"Espere a chamada de API específica, não a tela 'parecer pronta'","ECC/e2e-testing (Playwright, MIT)",POM / Playwright Config
+waitForLoadState('networkidle'),Estabiliza antes de interagir com UI que ainda está carregando,"ECC/e2e-testing (Playwright, MIT)",POM / Playwright Config
+Page Object Model,"Seletores e ações numa classe por página: teste lê intenção, não CSS","ECC/e2e-testing (Playwright, MIT)",POM / Playwright Config

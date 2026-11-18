@@ -1,5 +1,18 @@
 # Changelog — dz23-e2e-browser-verifier
 
+## [1.2.0] — 2026-11-18
+
+### Adicionado — acervo consultável de E2E (Trilha A)
+- `dados/`: 3 CSVs (16 registros) — `flaky-causas-e-correcao.csv` (race/rede/animação → correção),
+  `seletores-e-esperas.csv` (data-testid, auto-wait locator, sem waitForTimeout, POM),
+  `verificar-fluxo-critico.csv` (pular em produção, preview antes de confirmar, esperar API 200,
+  estados, multi-tenant). Fonte ECC `e2e-testing` (Playwright, **MIT**). Proveniência em
+  `dados/PROVENIENCIA.md`.
+- `scripts/consulta-e2e.py` + prova: subcomando PT (flaky/race, seletor/testid, fluxo/producao, busca),
+  com **matcher que normaliza acento** (producao casa produção). Ambos no gate (`e2e:consulta`,
+  `gate:autoteste-consulta-e2e`) e no CI.
+- Índice no `SKILL.md` (mapa de fluxos críticos). Bump MINOR 1.1.3 → 1.2.0.
+
 ## [1.1.3] — 2026-11-18
 
 ### Corrigido

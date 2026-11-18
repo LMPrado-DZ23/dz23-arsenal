@@ -1,6 +1,6 @@
 ---
 name: dz23-e2e-browser-verifier
-version: 1.1.3
+version: 1.2.0
 description: >
   Automação de testes E2E com browser real (Playwright + cross-browser).
   Verifica fluxos críticos de UI, captura evidências (screenshot, vídeo,
@@ -70,6 +70,12 @@ nova > esta skill. Preserve a suíte existente: não crie suite paralela, não r
 - **D. Navegação** — links internos, deep link, 404, back/forward preservando estado.
 - **E. Responsividade** — mobile 390×844, tablet 768×1024, desktop 1280×720 e 1440×900; teclado.
 - **F. Multi-tenant / IDOR** — A não vê nem escreve dado de B; acesso direto por URL retorna `404/403`.
+
+**Acervo consultável** (antes de escrever teste ou debugar flaky): o conhecimento de E2E vive em
+`dados/` (ECC/e2e-testing, Playwright, MIT) e responde offline:
+`python scripts/consulta-e2e.py flaky race` (causas de flaky e a correção),
+`... seletor testid` (seletores/esperas estáveis), `... fluxo producao` (o que verificar em fluxo
+crítico), `... busca waitfor`. Responde "sem correspondência" quando não há.
 
 ## Captura de evidência
 ```ts

@@ -1,0 +1,5 @@
+causa,errado,certo,origem_arquivo,origem_secao
+Race condition,page.click('[data-testid=x]') assume elemento pronto,Locator com auto-wait: page.locator('[data-testid=x]').click(),"ECC/e2e-testing (Playwright, MIT)",Flaky Test Patterns / Common Causes & Fixes
+Timing de rede,page.waitForTimeout(5000) arbitrário,page.waitForResponse(r => r.url().includes('/api/data')),"ECC/e2e-testing (Playwright, MIT)",Flaky Test Patterns / Common Causes & Fixes
+Timing de animação,clicar durante a animação,waitFor({state:'visible'}) + waitForLoadState('networkidle') antes do click,"ECC/e2e-testing (Playwright, MIT)",Flaky Test Patterns / Common Causes & Fixes
+Espera fixa,sleep/waitForTimeout fixo esconde flakiness,"Esperar a condição específica, não um tempo","ECC/e2e-testing (Playwright, MIT)",Flaky Test Patterns / Common Causes & Fixes
