@@ -177,7 +177,29 @@ def instala_sem_repo():
         v.write_bytes(v.read_bytes()
                       + "\nVer `references/mapa-de-fluxo-legado.md`.\n".encode())
         rc, s = exec_([str(esp / "scripts/validate_skill.py")])
-        return rc != 0 and "WARN" not in s
+        if rc == 0:
+            return False
+        # Reprovar não basta: é preciso saber QUAL ramo salvou a verificação. A resistência da
+        # instalação vem da cópia embarcada de skill_validator.py (primeiro ramo de
+        # importar_validador_comum), não do ponteiro -- o ROADMAP diz isso explicitamente. Uma
+        # prova que não distingue os dois ramos aceitaria qualquer exit != 0 e deixaria de acusar
+        # se alguém removesse a cópia embarcada sem remover a dependência do ponteiro.
+        sys.path.insert(0, str(RAIZ / "scripts"))
+        import inspect as _insp
+        from _achar_arsenal import importar_validador_comum as _imp, localizar_arsenal as _loc
+        alvo = (esp / "scripts/validate_skill.py").resolve()
+        if _loc(alvo) is not None:
+            raise AssertionError("cenário esperado era ponte morta; arsenal foi localizado")
+        fn = _imp(str(alvo))
+        origem = _insp.getfile(fn) if fn else None
+        if origem is None:
+            raise AssertionError(
+                f"reprovou sem nenhum validador comum carregado (exit {rc}); a checagem que "
+                f"pegou a referência é própria da skill, então a alegação 'mesmo sem o repo' "
+                f"não está sendo exercida por este teste")
+        if pathlib.Path(origem).parent != (esp / "scripts").resolve():
+            raise AssertionError(f"validador comum veio de fora da cópia: {origem}")
+        return True
 afirma("skill instalada reprova mesmo sem o repo (rodada 7)", instala_sem_repo)
 
 # CRLF: indice limpo apesar do working tree.

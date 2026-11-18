@@ -3,6 +3,31 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.5.17] -- 2026-11-18
+
+### Corrigido
+- **A prova da alegação `skill instalada reprova mesmo sem o repo` não distinguia os dois
+  mecanismos que poderiam sustentá-la.** Ela exigia apenas `exit != 0`, mas a resistência vem da
+  cópia embarcada de `skill_validator.py` (primeiro ramo de `importar_validador_comum`), não do
+  ponteiro: com ponte morta, `localizar_arsenal` devolve `None` e ainda assim o validador
+  resolve o módulo de dentro da própria cópia. Um teste que aceita qualquer reprovação passaria
+  verde numa regressão em que a cópia embarcada sumisse -- desde que a checagem própria da skill
+  reprovasse por outro motivo. Agora a prova exige que um validador comum tenha sido carregado e
+  que ele venha de dentro da cópia. Provado no sentido inverso: removendo a cópia embarcada,
+  `importar_validador_comum` devolve `None` e a nova prova levanta AssertionError.
+
+### Verificado sem defeito
+- **Alegação da rodada 7 continua verdadeira.** Três violações distintas reprovam com ponte morta
+  (referência quebrada, `name` divergente, markdown vazio). O que parecia contradição era erro de
+  medição minha, em três formas diferentes registradas aqui para não repetir: usar alvo coberto por
+  ambas as camadas, deixar de aplicar a violação (regex com `\$` escapado dentro de here-string)
+  e reusar o mesmo diretório temporário entre estados.
+- **Clone em outro caminho** roda o gate inteiro (40 checks sem dependências npm, 41 com elas), as
+  quatro suítes de prova passam lá, instalar a partir dele funciona e a instalação resultante
+  valida contra o clone. Restaurada ao repo original depois.
+- Nenhuma perda real de cobertura no ramo de arsenal ausente na configuração que o
+  `install-all` produz.
+
 ## [1.5.16] -- 2026-11-18
 
 ### Corrigido -- alegacoes sem medidor inventavam sucesso
