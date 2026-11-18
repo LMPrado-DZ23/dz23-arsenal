@@ -36,7 +36,8 @@ def base_completa() -> pathlib.Path:
     """Copia o repo sem artefatos pesados, preservando o que os verificadores leem."""
     tmp = pathlib.Path(tempfile.mkdtemp())
     keep = ("scripts", "skills", "docs", "external", "cli", "prompts", "evals-results",
-            "audit-results", "audit-package", ".github", "bundle", "mcp", "dados-design")
+            "audit-results", "audit-package", ".github", "bundle", "mcp", "dados-design",
+            "catalog", "supply-chain", "security", "install", "eval-harness")
     for n in keep:
         p = RAIZ / n
         if not p.is_dir():
@@ -45,7 +46,9 @@ def base_completa() -> pathlib.Path:
                         ignore=shutil.ignore_patterns("node_modules", "__pycache__"))
     for f in ("README.md", "ROADMAP.md", "CHANGELOG.md", "CONTRIBUTING.md", "INDEX.md",
               "arsenal.json", "LICENSE", "SECURITY.md", "CODE_OF_CONDUCT.md", "VERSION",
-              ".gitattributes", ".gitignore", "evals.schema.json"):
+              ".gitattributes", ".gitignore", "evals.schema.json",
+              "ARCHITECTURE.md", "LIMITATIONS.md", "THIRD-PARTY.md", "LICENSE-MATRIX.md",
+              "matriz-de-requisitos.md"):
         if (RAIZ / f).is_file():
             shutil.copy2(RAIZ / f, tmp / f)
     return tmp

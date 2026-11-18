@@ -180,8 +180,9 @@ externas** documentadas. **O que está publicado é diferente do que está verif
 | **Laudo original da auditoria** | **`INVALIDO_COMO_EVIDENCIA`** — 54 de 68 citações não existem nas respostas |
 | Críticos executados | **32 de 45 identificados (71%)** — 13 exigem infra |
 | Camada 4 (projeto real) | **1 tarefa** no próprio repo — CI verde após **5 iterações** de correção |
-| CI | ✅ verde · **17/17** no gate |
-| Release | **v1.6.1** publicada · este changelog vai até a **1.6.6** (1.6.2–1.6.5 têm entrada, sem release) |
+| CI | ✅ verde em **Ubuntu + Windows** · gate offline (total de checks sai da própria saída) · supply-chain: Gitleaks, CodeQL, Dependabot |
+| Camadas de governança | **catalog/** (35 fontes), **supply-chain/** (SBOM CycloneDX), **security/** (permissões das 18 skills), **install/** (instalador c/ rollback), **eval-harness/** (replay determinístico) |
+| Eval reproduzível | **8** vereditos re-graduáveis por grader determinístico (Camada 1-reproduzível), em 6 skills |
 
 ### 5 camadas de verificação
 
@@ -230,9 +231,14 @@ Detalhe por skill: [`ROADMAP.md`](ROADMAP.md#status-de-evals-atualizado-2026-11-
 python scripts/quality-gate.py
 ```
 
-Roda: validador de cada skill · estrutura (arquivos obrigatórios, frontmatter, `VERSION` × frontmatter,
-schema dos evals) · links relativos · manifesto atualizado. Exit `0` só se **tudo** passar. O mesmo gate
-roda em CI a cada push ([`.github/workflows/quality.yml`](.github/workflows/quality.yml)).
+Roda, num comando: validador de cada skill · estrutura · links relativos · manifesto · números ·
+licenças · segredos · cópias embutidas · **catálogo** (`catalog.json` → CATALOG/THIRD-PARTY/
+LICENSE-MATRIX) · **SBOM** (CycloneDX das deps) · **permissões** das 18 skills · **instalador**
+(dry-run/rollback) · **replay de eval** (vereditos reproduzíveis) · e o **autoteste** (controle
+negativo) de cada verificador. Exit `0` só se **tudo** passar. Roda **offline** e é validado em
+**Ubuntu e Windows** no CI a cada push ([`.github/workflows/quality.yml`](.github/workflows/quality.yml));
+o job Windows existe porque o bug de encoding cp1252 só aparecia lá. Mapa das camadas:
+[`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 | Ferramenta | Para quê |
 |---|---|
@@ -248,11 +254,23 @@ roda em CI a cada push ([`.github/workflows/quality.yml`](.github/workflows/qual
 | [`scripts/gate_candidatos.py`](scripts/gate_candidatos.py) | triagem determinística: o que merece investigação antes de qualquer trabalho |
 | [`scripts/verifica_claims.py`](scripts/verifica_claims.py) | confere caminho citado em texto contra o disco e devolve `passRate` |
 | [`scripts/verify-cli.ps1`](scripts/verify-cli.ps1) | inventário real de CLIs da máquina |
+| [`scripts/dz23-install.py`](scripts/dz23-install.py) | instalador multiplataforma (detect, dry-run, offline, rollback) |
+| [`scripts/gera-sbom.py`](scripts/gera-sbom.py) · [`check-sbom.py`](scripts/check-sbom.py) | SBOM CycloneDX das deps + verificador |
+| [`scripts/check-permissoes.py`](scripts/check-permissoes.py) | permissões declaradas por skill (regra 7) |
+| [`scripts/check-replay.py`](scripts/check-replay.py) · [`replay-eval.py`](scripts/replay-eval.py) | harness de replay: vereditos reproduzíveis |
 
 ## Documentos do repositório
 
 | Documento | Conteúdo |
 |---|---|
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | mapa das camadas (o que existe × planejado) |
+| [`LIMITATIONS.md`](LIMITATIONS.md) | limites honestos: o que não está provado |
+| [`matriz-de-requisitos.md`](matriz-de-requisitos.md) | requisitos do mandato com evidência e estado |
+| [`THIRD-PARTY.md`](THIRD-PARTY.md) · [`LICENSE-MATRIX.md`](LICENSE-MATRIX.md) | proveniência e compatibilidade de licença (gerados de `catalog/catalog.json`) |
+| [`catalog/CATALOG.md`](catalog/CATALOG.md) | catálogo de 35 fontes externas |
+| [`supply-chain/SBOM.md`](supply-chain/SBOM.md) | SBOM CycloneDX da cadeia |
+| [`security/PERMISSIONS.md`](security/PERMISSIONS.md) | permissões/riscos/rollback das 18 skills |
+| [`install/README.md`](install/README.md) · [`eval-harness/README.md`](eval-harness/README.md) | instalação e harness de eval |
 | [`INDEX.md`](INDEX.md) | inventário gerado (versão, arquivos, refs, evals por skill) |
 | [`ROADMAP.md`](ROADMAP.md) | estado honesto: o que foi verificado e o que é `NOT_TESTED` |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | como propor mudança |
@@ -297,3 +315,9 @@ O harness `scripts/run-evals.py` já existe: executa `--report`, registra veredi
 Camada 1 (autoavaliação)**. O que falta para fechar a dívida #1 do `ROADMAP.md` é **execução
 independente + infra**: os ~71 pendentes exigem browser, Postgres, Docker, Ghidra, medição ou render —
 executá-los sem a infra seria fabricar, e auto-avaliar não é prova independente.
+
+**Primeiro passo dado:** o [`eval-harness/`](eval-harness/README.md) adapta o `grader-replay` do
+modern-web-guidance e torna **8 vereditos reproduzíveis** — a resposta registrada é re-graduada por um
+grader determinístico que também tem de **reprovar** uma resposta ruim sintética (prova de
+discriminação). Isso é **Camada 1-reproduzível**, não juízo independente; a **Camada 3** (juiz externo)
+segue `NOT_TESTED`, declarada.
