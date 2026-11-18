@@ -31,16 +31,28 @@ resultados = []
 
 
 def afirma(texto, fn):
-    """Aceita dois contratos: fn que lança em violação, ou fn que devolve bool.
+    """Aceita três resultados: OK, CAIU e N/A -- e eles não são a mesma coisa.
 
-    O bug que esta docstring registra: a versão anterior fazia `ok = fn()`, então qualquer fn
-    no estilo lança-não-retorna -- usada nas alegações novas do fim da sessão -- devolvia None
-    e era contada como falha. Cinco verificações corretas apareceram como 'alegação não
-    sustentada' contra um repo verde. Um auditor que acusa o alvo por causa do próprio contrato
-    interno é o pior tipo de falso positivo: empurra alguém a "consertar" o que está certo.
+    Contratos aceitos por `fn`:
+      * lança exceção            -> CAIU
+      * devolve False            -> CAIU
+      * devolve True ou None     -> OK (None = "verificou e não há violação")
+      * devolve a string 'NA'    -> N/A: a precondição da prova não existe aqui
+
+    A distinção N/A foi obrigatória pela primeira execução real do CI: duas provas dependem de
+    ~/.agents/skills, que não existe num runner efêmero. Elas retornavam False -- o código
+    queria dizer "não tenho como aferir" -- e `afirma` lia isso como reprovação, quebrando o
+    build por uma razão que não é falha do repositório. É exatamente a regra que este arsenal
+    aplica a claims (verifica_claims tem `nao-verificavel` fora do denominador) e que eu não
+    apliquei às minhas próprias provas. Silenciar N/A como OK também seria errado: esconderia
+    que em CI duas alegações ficam sem cobertura, e isso precisa aparecer no log.
     """
     try:
         ret = fn()
+        if isinstance(ret, str) and ret.strip().upper() in ("NA", "N/A"):
+            resultados.append((texto, None))
+            print(f"  N/A     {texto}")
+            return
         ok = True if ret is None else bool(ret)
     except Exception as exc:  # noqa: BLE001
         ok = False
@@ -152,7 +164,7 @@ def instala_sem_repo():
     sk_real = pathlib.Path(os.path.expanduser("~/.agents/skills"))
     origem = sk_real / "dz23-codebase-cartographer"
     if not origem.is_dir():
-        return False
+        return "NA"          # sem instalação nesta máquina; nada a provar aqui
     with tempfile.TemporaryDirectory() as td:
         esp = pathlib.Path(td) / "dz23-codebase-cartographer"
         shutil.copytree(origem, esp)
@@ -187,13 +199,13 @@ def eol_audit():
     """
     sk_real = pathlib.Path.home() / ".agents/skills"
     if not (sk_real / "dz23-codebase-cartographer").is_dir():
-        return False
+        return "NA"          # runner efêmero não tem skills instaladas
     with tempfile.TemporaryDirectory() as td:
         esp = pathlib.Path(td)
         shutil.copytree(sk_real, esp / "skills", symlinks=False)
         alvo = esp / "skills/dz23-codebase-cartographer/references/data-and-flow.md"
         if not alvo.is_file():
-            return False
+            return "NA"
         alvo.write_bytes(alvo.read_bytes().replace(b"\r\n", b"\n"))
         rc, s = exec_(["scripts/audit-zips.py", "--dest", str(esp / "skills")])
         detalhe = s.split("CONTEUDO_DIVERGENTE")[-1][:400] if "CONTEUDO_DIVERGENTE" in s else ""
@@ -357,10 +369,20 @@ def confere_ordem_changelog() -> None:
 afirma("CHANGELOG em ordem de versão descendente", confere_ordem_changelog)
 
 print("\n" + "=" * 64)
-caiu = [t for t, ok in resultados if not ok]
+# None é N/A, não falha. `if not ok` trataria None como queda (not None == True), e foi assim
+# que o CI reprovou duas provas cuja precondição simplesmente não existe num runner efêmero.
+caiu = [t for t, ok in resultados if ok is False]
+na = [t for t, ok in resultados if ok is None]
+verificadas = len(resultados) - len(na)
+if na:
+    print(f"N/A ({len(na)}): precondicao ausente neste ambiente -- nao conta como falha,")
+    print(f"        mas tampouco foi provada aqui:")
+    for n in na:
+        print(f"   - {n}")
 if caiu:
     print(f"{len(caiu)} alegacao(oes) nao sustentada(s):")
     for c in caiu:
         print("   -", c)
     sys.exit(1)
-print(f"todas as {len(resultados)} alegacoes desta sessao seguem sustentadas por execucao")
+print(f"{verificadas}/{len(resultados)} alegacoes sustentadas por execucao"
+      + (f" ({len(na)} sem aplicacao aqui)" if na else ""))
