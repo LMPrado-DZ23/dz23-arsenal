@@ -3,6 +3,30 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.5.19] -- 2026-11-18
+
+### Adicionado
+- **`scripts/audita-sensibilidade.py`** -- aplica aos verificadores do gate a regra da rodada 43:
+  para cada um, injetar uma violacao do dominio que ele enuncia (em copia) e exigir exit != 0.
+  Nove cobertos: `check-structure`, `check-copies`, `check-numbers`, `check-licenses`,
+  `check-links`, `check-docs-runnable`, `check-eval-results`, `checa-ancoras`,
+  `gera-indice-skills`. Todos reprovam. Entra no gate (**42 checks**) e no CI.
+- **Guarda contra violacao imaginaria**, com prova propria (`scripts/prova-sensibilidade.py`).
+  Duas das primeiras execucoes desta auditoria acusaram `check-licenses` e
+  `check-eval-results` de ser ocos -- eram meus testes inventando violacoes: apaguei o
+  `LICENSE` da raiz (o verificador percorre `mcp/` e `bundle/`) e reescrevi
+  `Total pendente 99` quando o ROADMAP guarda tabela `**Total pendente** | **99**`. Agora a
+  assinatura compara conteudo por texto com EOL normalizado; se nada mudou semanticamente, o caso
+  sai como `SETUP! violacao sem efeito` e nunca como verificador oco nem como aprovado.
+
+### Corrigido
+- A primeira versao da guarda usou tamanho+mtime (enganada por `write_text` reescrevendo o
+  arquivo identico) e depois SHA de bytes crus -- `Path.write_text` aplica newline universal,
+  entao converter CRLF→LF altera os bytes (medido: 15 345 → 15 559 num ROADMAP de 214 linhas) sem
+  nenhuma edicao pretendida. Normalizar as quebras de linha antes de hashear resolve, e e a mesma
+  disciplina ja aplicada em `audit-zips` e `build.py --check`: EOL nunca e divergencia de
+  conteudo.
+
 ## [1.5.18] -- 2026-11-18
 
 ### Corrigido -- quatro alegacoes dependiam de `exit != 0` sem dizer o que reprovou

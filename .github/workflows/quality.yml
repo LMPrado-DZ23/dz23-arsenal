@@ -108,6 +108,11 @@ jobs:
       - name: Links relativos
         run: python scripts/check-links.py .
 
+      - name: Cada verificador sabe ficar vermelho
+        # Verde que nao saberia virar vermelho e uma afirmativa decorada. Ja aconteceu: um
+        # --check que media bytes e dizia OK, e verificadores aprovando arvore vazia.
+        run: python scripts/audita-sensibilidade.py
+
       - name: Registro estrutural coerente (ordem, numeração, versões)
         # Duas edições nesta linha de trabalho não casaram com o texto alvo e passaram
         # despercebidas: substituição silenciosa sempre dá exit 0. Este passo confere a

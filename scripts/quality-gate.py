@@ -123,6 +123,10 @@ def main(argv: list[str]) -> int:
     # de cada skill. Existe porque duas edições minhas nesta sessão não casaram com o texto
     # alvo e ninguém percebeu -- editar por busca-e-substituição silenciosa sempre dá exit 0.
     resultados.append(rodar("ancoras", [py, "scripts/checa-ancoras.py"]))
+    # Cada verificador do gate e forcado a reprovar uma violacao do proprio dominio. Sem isto,
+    # um verificador que parou de comparar nada continua devolvendo 0 -- foi o build.py --check
+    # da rodada 28, e aqui se descobriu que duas das minhas proprias violacoes eram imaginarias.
+    resultados.append(rodar("verificadores-sensiveis", [py, "scripts/audita-sensibilidade.py"]))
     resultados.append(rodar("estrutura", [py, "scripts/check-structure.py"]))
     # As skills embutem cópias de scripts/skill_validator.py e scripts/_achar_arsenal.py
     # para se auto-validarem fora do checkout. Duplicação intencional — mas só é segura
