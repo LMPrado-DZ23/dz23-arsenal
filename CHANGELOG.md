@@ -1,3 +1,21 @@
+## [1.5.25] — 2026-11-18
+
+### Verificado sem defeito (varredura de classes, fim de sessao)
+Lente aplicada a todo o repo em quatro eixos descobertos uma por uma nas rodadas anteriores, em vez
+de um incidente por vez:
+
+| Eixo | Origem | Resultado |
+|---|---|---|
+| Identidade derivada de bytes crus | r47/r48 | **zero** occorencias restantes |
+| Estado externo determinando resultado | r39/r42 | 1 suspeito, descartado: `record-eval` usa `date.today()` para nomear arquivo NOVO de registro -- nao conditiona nenhum check, e `check-eval-results` nao le data |
+| Verde devolvido sem medicao | r15/r30/r44 | 13 linhas de `return 0` final, todas o caminho correto de saida depois de imprimir problemas |
+| Asserciona sem controle negativo | r43/r46 | **13 verificadores, todos com prova executada** de que sabem reprovar |
+
+Nenhum conserto necessario. Registrado porque ausencia de achado em varredura ampla e resultado, nao
+ausencia de varredura -- e as duas primeiras linhas desta tabela sao exatamente os dois defeitos que
+as rodadas 47 e 48 corrigiram, agora confirmados como fechados em todo o repo, nao so nos dois
+arquivos onde apareceram.
+
 ## [1.5.24] — 2026-11-18
 
 ### Corrigido -- `check-copies.py` tinha o mesmo defeito da rodada 47
