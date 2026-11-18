@@ -3,6 +3,24 @@
 Histórico de releases **do arsenal**. O changelog de cada skill fica dentro da própria pasta
 (`skills/<nome>/CHANGELOG.md`).
 
+## [1.5.16] -- 2026-11-18
+
+### Corrigido -- alegacoes sem medidor inventavam sucesso
+- **`audita-alegacoes.py` `crlf()`**: sem `bash` acessível, `subprocess.run` com caminho
+  inexistente levanta erro? Não -- nas condições testadas o resultado vinha com stdout vazio, e
+  `return not p.stdout...strip()` lia vazio como "sem CRLF" = **OK inventado sem medir nada**.
+  Um gate-fantasma da classe mais antiga desta sessão, criado por mim ao escrever a prova. Agora
+  retorna `NA` quando não há medidor (a função irmã já tinha a guarda; esta não).
+- **`check-numbers.py`** pulava em silêncio toda alegação cujo medidor não existia (node
+  ausente): a saída continuava dizendo `nenhuma divergência numérica`, lida como "tudo
+  conferido". Passa a listar `N/A (sem medidor aqui): ...` e a encerrar com a contagem do que
+  faltou. Comportamento provado comparando as duas versões no mesmo ambiente sem node: antes
+  silenciava, depois declara -- e ausência de medidor continua sem quebrar o build.
+
+### Registrado
+O terceiro estado (OK / CAIU / N/A) aplicado a claims existe desde a rodada 3; levou trinta e nove
+rodadas para eu aplicá-lo aos instrumentos que escrevi depois dele.
+
 ## [1.5.15] -- 2026-11-18
 
 ### Corrigido (descoberto pela primeira execucao real do CI, apos 38 rodadas locais)

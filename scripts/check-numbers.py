@@ -215,11 +215,18 @@ def main(argv: list[str]) -> int:
     real = estado_disco()
     problemas: list[dict] = []
     regras_sem_alvo: list[str] = []
+    nao_medidos: list[str] = []   # alegacoes sem medidor disponivel neste ambiente
 
     for arquivo, padrao, campo, descricao in REGRAS:
         esperado = real.get(campo)
         caminho = RAIZ / arquivo
         if not caminho.is_file() or esperado is None:
+            # `esperado is None` significa "não houve como medir" (por exemplo node ausente em
+            # _contar_ferramentas_mcp). Pular é correto -- comparar contra nada inventaria um
+            # número -- mas silencioso demais: quem lê "nenhuma divergência" pode entender que
+            # tudo foi conferido. Registrado em nao_medidos e impresso abaixo.
+            if esperado is None and caminho.is_file():
+                nao_medidos.append(f"{descricao} ({campo})")
             continue
         texto = caminho.read_text(encoding="utf-8", errors="replace")
         matches = list(re.finditer(padrao, texto, re.I))
@@ -268,19 +275,26 @@ def main(argv: list[str]) -> int:
 
     if args.json:
         print(json.dumps({"real": real, "problemas": problemas,
-                          "regras_sem_alvo": regras_sem_alvo}, ensure_ascii=False, indent=2))
+                          "regras_sem_alvo": regras_sem_alvo,
+                          "nao_medidos": nao_medidos}, ensure_ascii=False, indent=2))
     else:
         print(f"disco: {real['skills']} skills · {real['mcp']} MCP · {real['bundle']} bundle · "
               f"{real['external']} externas · {real['evals_declarados']} evals declarados · "
               f"{real['evals_executados']} executados · {real['quality_gate_checks']} checks no gate")
         for r in regras_sem_alvo:
             print(f"REGRA ÓRFÃ: {r}")
+        # N/A declarado, não silenciado. Uma alegação sem medidor disponível (node ausente, por
+        # exemplo) não é divergência nem verificação: é cobertura que faltou neste ambiente, e o
+        # leitor precisa saber disso para não ler "nenhuma divergência" como "tudo conferido".
+        for n in sorted(set(nao_medidos)):
+            print(f"N/A (sem medidor aqui): {n}")
         if problemas:
             for p in problemas:
                 print(f"DIVERGÊNCIA {p['arquivo']}:{p['linha']}: diz {p['afirma']}, "
                       f"real é {p['real']} ({p['contexto']})")
         if not problemas and not regras_sem_alvo:
-            print("nenhuma divergência numérica")
+            print("nenhuma divergência numérica"
+                  + (f" ({len(set(nao_medidos))} alegação(ões) sem medidor)" if nao_medidos else ""))
 
     return 1 if (problemas or regras_sem_alvo) else 0
 

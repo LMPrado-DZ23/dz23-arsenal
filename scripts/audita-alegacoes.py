@@ -183,6 +183,13 @@ afirma("skill instalada reprova mesmo sem o repo (rodada 7)", instala_sem_repo)
 # CRLF: indice limpo apesar do working tree.
 def crlf():
     bash = shutil.which("bash") or r"C:\Program Files\Git\bin\bash.exe"
+    # Sem bash não há como medir, e isso não é falha do repositório. A versão anterior chamava
+    # subprocess com um caminho possivelmente inexistente: FileNotFoundError subia para o
+    # afirma() e a alegação aparecia como "caiu" num ambiente onde simplesmente não havia
+    # medidor -- o mesmo engano de categoria que o CI cobrou na rodada 39 (ausência de
+    # precondição tratada como reprovação). Irmã de confere_crlf_indice, que já fazia isso.
+    if not pathlib.Path(bash).is_file():
+        return "NA"
     p = subprocess.run([bash, "-c",
                         'cd "$1" && git grep -Il --cached -P "\\r$" -- "*.md" "*.py" '
                         '"*.sh" "*.yml" "*.json" "*.txt" || true', "x", str(RAIZ)],
@@ -292,10 +299,9 @@ afirma("toda referência de comando na documentação existe", confere_docs)
 # Clone limpo: o índice não tem CRLF mesmo com a cópia de trabalho convertida (rodada 9). Esta é
 # a razão do --cached no passo de CI; sem ela, o teste vira falso positivo em Windows.
 def confere_crlf_indice() -> None:
-    import shutil
     bash = shutil.which("bash") or r"C:\Program Files\Git\bin\bash.exe"
     if not pathlib.Path(bash).is_file():
-        return          # sem bash, nada a medir (não é falha do repo)
+        return "NA"       # ausência de medidor não é reprovação (ver crlf(), mesma lição)
     p = subprocess.run(
         [bash, "-c", 'cd "$1" && git grep -Il --cached -P "\\r$" -- "*.md" "*.py" "*.sh" '
                      '"*.yml" "*.json" "*.txt" || true', "x", str(RAIZ)],
