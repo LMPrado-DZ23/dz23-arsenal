@@ -100,6 +100,11 @@ jobs:
       - name: Links relativos
         run: python scripts/check-links.py .
 
+      - name: Comandos da documentação apontam para arquivos que existem
+        # O CONTRIBUTING já mandou copiar um validador não-copiável e mostrou um evals.json
+        # rejeitado pelo schema. Quem segue o guia descobre isso perdendo tempo, não aqui.
+        run: python scripts/check-docs-runnable.py
+
       - name: Números da documentação batem com o disco
         run: python scripts/check-numbers.py
 

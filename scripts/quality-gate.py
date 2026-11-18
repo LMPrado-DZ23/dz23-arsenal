@@ -108,6 +108,11 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("manifesto:check", [py, "scripts/build-manifest.py", "--check"]))
     resultados.append(rodar("numeros", [py, "scripts/check-numbers.py"]))
     resultados.append(rodar("links", [py, "scripts/check-links.py", "."]))
+    # Links apontam para arquivos; isto confere os COMANDOS que a documentação manda rodar.
+    # Nasceu de criar uma skill seguindo só o CONTRIBUTING (rodada 25): o texto mandava copiar
+    # um validador não-copiável e mostrava um evals.json que o schema rejeita. Nenhuma checagem
+    # automatizada via isso, porque nenhuma delas é um humano lendo o guia.
+    resultados.append(rodar("docs-executaveis", [py, "scripts/check-docs-runnable.py"]))
     resultados.append(rodar("estrutura", [py, "scripts/check-structure.py"]))
     # As skills embutem cópias de scripts/skill_validator.py e scripts/_achar_arsenal.py
     # para se auto-validarem fora do checkout. Duplicação intencional — mas só é segura

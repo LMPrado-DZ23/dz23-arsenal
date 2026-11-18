@@ -102,6 +102,20 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.7] — 2026-11-17
+
+### Adicionado
+- **`scripts/check-docs-runnable.py`** -- confere que todo arquivo citado num bloco de comando
+  da documentação existe, com ancoragem correta (caminho em seção de skill resolve dentro dela).
+  Roda no gate (35 checks) e no CI. Nasce de uma lacuna que nenhuma checagem cobria: links
+  apontam para arquivos, mas ninguém verificava os **comandos** que o repo manda executar. Na
+  rodada 25 isso deixou passar um CONTRIBUTING que mandava copiar um validador não-copiável e
+  mostrava `evals.json` rejeitado pelo schema -- visível só para quem seguisse o guia à mão.
+  Reconhece três escapes legítimos: placeholder de modelo (`skills/<nome>/...`), comentário
+  dentro do bloco e contingência explícita (`|| echo`, `2>/dev/null`), que é como
+  `cli/verify.md` declara a ausência do `verify-cli.sh`. Medido: 196 linhas de comando em 22
+  documentos, zero referências quebradas. Prova de que detecta: injetando
+  `python scripts/validador-que-nao-existe.py` no CONTRIBUTING, denunciou na linha certa.
 ## [1.5.6] — 2026-11-17
 
 ### Corrigido — `CONTRIBUTING.md` não permitia criar uma skill
