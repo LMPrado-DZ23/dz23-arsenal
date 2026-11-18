@@ -1,3 +1,27 @@
+## [1.5.27] — 2026-11-18
+
+### Corrigido — contagens citadas em prosa de skill sem nenhum verificador comparando
+Medida a coerência interna do texto que um agente lê ao ativar uma skill (conteúdo, não estrutura).
+Duas divergências:
+
+- ``dz23-autonomous-improvement-ultimate`` declarava "12 cenários" com 13 em ``evals.json``
+  (2.1.7 → 2.1.8). O validador desta skill confere marcas de seção, anti-loop e vocabulário -- e foi
+  ele que, na v2.1.5, encontrou o ``NOT_RUN`` rival. A mesma classe de desvio continuou aberta nos
+  números porque ninguém escreveu a checagem correspondente: vocabulário virou regra, contagem não.
+  Agora virou, com ``raise SystemExit(1)`` em vez de ``assert`` (que ``python -O`` apagaria), provada
+  em três casos e nos dois modos do interpretador.
+- ``dz23-e2e-browser-verifier`` guardava no cabeçalho "4 templates e 15 evals", valores da v1.1, com
+  6 templates e 16 evals atuais (1.1.2 → 1.1.3). Não era contagem estrutural e sim resíduo de versão
+  -- reescrito para não fixar número corrente em prosa, porque cada bump o deixaria mentindo.
+
+### Registrado
+Um erro meu durante esta rodada introduziu caracteres chineses no texto português de um SKILL.md
+(``conte当前es``), visível só por inspeção. Daí uma varredura de sistema de escrita em todo o repo: 12
+ocorrências de CJK, todas legítimas (carga útil de teste em ``selftest-ferramentas.py`` e o caractere
+``。`` dentro de um regex em ``skill_validator.py``). Nenhum verificador deste arsenal olhava essa
+classe; não virou checagem porque as doze ocorrências atuais estão todas corretas, e um verificador
+sem falso positivo conhecido seria decorativo.
+
 ## [1.5.26] — 2026-11-18
 
 ### Corrigido -- `UNVERIFIED` sobreviveu à unificação de vocabulário da v2.1.5
