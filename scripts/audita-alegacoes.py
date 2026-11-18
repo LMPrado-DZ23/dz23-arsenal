@@ -202,13 +202,44 @@ print("\n=== estrutura do arsenal: o que foi declarado nestas rodadas ainda vale
 # .gate-contagem, escrito pela execução real do gate. Se alguém fixar um número no README, isto
 # precisa pegar.
 def confere_contagem_derivada() -> None:
-    # Não chamar o quality-gate daqui: este arquivo É um check do gate, então invocar o gate
-    # recursa até estourar o prazo (medido: 241 s e TimeoutExpired). Basta conferir que o
-    # número publicado bate com o que o checker lê -- a aritmética completa roda no próprio gate.
+    """A contagem publicada não pode ser um número digitado na documentação.
+
+    Não chamar o quality-gate daqui: este arquivo É um check dele, então invocar o gate
+    recursa até estourar o prazo (medido: 241 s e TimeoutExpired).
+
+    E não exigir .gate-contagem existente: o artefato é gitignored e o CI roda este auditor
+    ANTES do gate, num checkout onde ele jamais existiu. A primeira versão desta função fazia
+    `raise AssertionError("ausente")`, o que passava na minha máquina (onde eu acabara de rodar
+    o gate) e falhava em qualquer clone limpo -- detectado ao verificar a bisectabilidade dos
+    commits, não pelo teste local. Ausência do artefato é o estado normal de um checkout novo:
+    nada há para contradizer, então a checagem aplicável é outra -- nenhum documento fixa um
+    total de checks à mão.
+    """
     artefato = RAIZ / ".gate-contagem"
-    if not artefato.is_file():
-        raise AssertionError(".gate-contagem ausente; rode python scripts/quality-gate.py")
-    medido = json.loads(artefato.read_text(encoding="utf-8")).get("total")
+    medido = None
+    if artefato.is_file():
+        try:
+            medido = json.loads(artefato.read_text(encoding="utf-8")).get("total")
+        except (json.JSONDecodeError, OSError):
+            medido = None
+
+    # O que vale sempre: a documentação não pode afirmar um total arbitrário.
+    for nome in ("README.md", "ROADMAP.md", "CONTRIBUTING.md"):
+        doc = RAIZ / nome
+        if not doc.is_file():
+            continue
+        texto = doc.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r"(?m)^.*?\b(\d{2})\s+checks\b.*$", texto):
+            citado = int(m.group(1))
+            if medido is not None and citado != medido:
+                raise AssertionError(f"{nome} fixa {citado} checks; gate publicou {medido}")
+            if medido is None:
+                # sem medição recente, um número solto na doc é exatamente o que apodrece
+                raise AssertionError(
+                    f"{nome} afirma '{citado} checks' sem fonte executável para conferir "
+                    f"(rode python scripts/quality-gate.py ou remova o número)")
+    if medido is None:
+        return          # checkout limpo: nada contradito, nada a comparar
     rc, s = exec_(["scripts/check-numbers.py", "--json"])
     d = json.loads(s)
     lido = d["real"].get("quality_gate_checks")

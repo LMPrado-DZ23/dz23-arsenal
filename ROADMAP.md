@@ -23,7 +23,12 @@ o que não foi testado está marcado como `NOT_TESTED`, não como "funciona".
 7. auto-testes de `gate_candidatos.py` e `verifica_claims.py`, mais `claims:<skill>` nos 10 SKILL.md
 
 Constantes do CI: [`.github/workflows/quality.yml`](.github/workflows/quality.yml).
-Contagem atual medida: **31 checks** (`python scripts/quality-gate.py`).
+Total de checks: leia de `python scripts/quality-gate.py` (a saída imprime `N/N`). Este
+documento não fixa o número de propósito -- já ficou obsoleto três vezes nesta linha de
+trabalho (16 → 31 → 33 → 39), e um verificador que compara a documentação contra um número
+digitado nela só encontra trabalho infinito. A checagem viva está em
+`scripts/audita-alegacoes.py`, que reprova qualquer `NN checks` escrito em README, ROADMAP ou
+CONTRIBUTING sem fonte executável correspondendo a ele.
 
 ## Correções estruturais da v1.5.0
 
