@@ -121,7 +121,7 @@ CASOS = {
         + b"\n# drift\n")),
     "check-numbers": ("scripts/check-numbers.py", lambda b: (
         b / "README.md").write_text((b / "README.md").read_text(encoding="utf-8").replace(
-        "Coleção de 13 skills", "Coleção de 7 skills"), encoding="utf-8")),
+        "Coleção de 14 skills", "Coleção de 7 skills"), encoding="utf-8")),
     "check-licenses": ("scripts/check-licenses.py", lambda b: [
         # A licenca do REPOSITORIO (LICENSE na raiz) nao e o que ele confere: as linhas 141-160
         # percorrem componentes em mcp/ e bundle/. Apagar a raiz, como eu fiz na primeira

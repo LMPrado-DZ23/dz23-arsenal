@@ -2,7 +2,7 @@
   "schema": 2,
   "generated_by": "scripts/build-manifest.py",
   "counts": {
-    "skills": 13,
+    "skills": 14,
     "external": 16,
     "prompts": 1,
     "mcp": 2,
@@ -140,6 +140,18 @@
       "scripts": 3,
       "evals": 6,
       "sha256_skill_md": "5cc960f0c74558cc182ff3ff781cedc6c4ce91c4a425a57f54da7914edbbcbc5"
+    },
+    {
+      "name": "replica-recon",
+      "version": "1.0.0",
+      "description": ">",
+      "user_invocable": true,
+      "files": 14,
+      "references": 3,
+      "templates": 2,
+      "scripts": 3,
+      "evals": 6,
+      "sha256_skill_md": "67e5133f19e054e84c307e90e9846524243158e222491db3293d15c8c2d602f6"
     },
     {
       "name": "untangle-codebase",

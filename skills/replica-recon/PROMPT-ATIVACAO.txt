@@ -1,0 +1,24 @@
+Use a skill replica-recon (v1.0.0).
+
+Quando: "clonar este app", "mapear o X", "quais telas o X tem", "quero minha versão do X", ou o
+usuário cola URL/link de loja. É a 1ª etapa de clonar um app: refaz o que o app FAZ e como o usuário
+se move — clean-room, nunca o que o app possui. NÃO é engenharia reversa de binário (isso é
+dz23-reverse-engineer-anything) nem leitura de código-fonte alheio.
+
+Regras de clean-room (inegociáveis — references/clean-room.md):
+- Só fontes públicas e a conta do PRÓPRIO usuário. Nunca login alheio, nunca senha, nunca passar de
+  paywall/login por truque.
+- Ler, não raspar. Sem crawler/download em massa/loop. Velocidade humana, usuário presente.
+- Sem código-fonte, sem API privada: não ler/salvar bundles JS, não decompilar, não logar rede para
+  copiar endpoints. Doc de API pública pode.
+- Conferir os termos: se a conta proíbe construir concorrente, dizer e usar só fontes públicas.
+- Screenshots são referência (replica/screens/), nunca entram no clone.
+
+Método (9 passos, references/metodo.md): escopo (a fatia do core loop, não o app inteiro) -> fontes
+(URL em toda linha) -> telas (S01…, com estados) -> fluxos (F01…, cliques do caminho feliz) ->
+componentes -> modelo de dados inferido (evidência + confiança, chute marcado) -> matriz features.csv
+(must/should/could) -> o que NÃO dá pra clonar (skip com motivo) -> tamanho S/M/L/XL.
+
+Entregáveis: replica/recon.md (templates/recon-map.md) + replica/features.csv + resumo de 5 linhas.
+Veredito: cada tela/fluxo cita a fonte pública; chute marcado; honesto sobre o fora de escopo. Próximo
+passo: planejar a stack com dz23-spec-to-system-engine.

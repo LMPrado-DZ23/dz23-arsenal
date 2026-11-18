@@ -189,10 +189,22 @@ alega. Foi assim que `osime-osint-investigation` (CC-BY-SA-4.0) ficou de fora na
 - **Fora do ledger DZ23:** 6 evals, fora dos 144 cenários das 10 DZ23.
 - **Por que NÃO a skill da Vercel:** ver linha em "Avaliado e NÃO incorporado".
 
+### `skills/replica-recon/` — skill inteira (SKILL + 3 references + 2 templates)
+- **Origem:** `Jakeschincariol/replica-skill` (skill `replica-recon`). Licença **MIT lida no arquivo
+  `LICENSE` da raiz** (Copyright 2026 Jake Schincariol), confirmada via API do GitHub.
+- **O que entrou:** a orientação de recon black-box de produto (regras de clean-room; método em 9
+  passos; taxonomia de fontes), internalizada e reescrita em PT — `SKILL.md`, 3 `references/`, 2
+  `templates/` (recon-map, features.csv), `evals/` com 6 cenários, `validate_skill.py` + comuns.
+- **Papel:** 1ª skill da camada **produto-para-clone** (recon → entrepreneur → diff → brand → launch),
+  que complementa a engenharia DZ23 sem duplicá-la. **Não** colide com `dz23-reverse-engineer-anything`
+  (binário/firmware): esta é black-box de produto por fontes públicas.
+- **Fora do ledger DZ23:** 6 evals, fora dos 144 cenários das 10 DZ23.
+
 ## Avaliado e NÃO incorporado
 
 | Fonte | Licença | Motivo |
 |---|---|---|
+| `Jakeschincariol/replica-skill` → 6 das 11 skills (`replica-architect`, `-backend`, `-design`, `-build`, `-deploy`, `-test`) | MIT | Duplicam engenharia que as DZ23 já fazem com acervo+gate+evidência: architect→`spec-to-system`+`backend-data-architect`; backend→`backend-data-architect`; design/build→`ultimate-pro-max`; deploy→`devops-cloud-deployer`; test→`e2e-browser-verifier`. No pipeline de clone, esse papel é das DZ23. Entram as 5 da camada produto-para-clone (recon/entrepreneur/diff/brand/launch). Avaliação: `avaliacao-suite-replica.md`. |
 | `vercel-labs/agent-skills` → skill `web-design-guidelines` (a casca) | **sem licença** (`license:null`, sem arquivo `LICENSE` — API do GitHub) | Não se redistribui conteúdo sem licença explícita. Além disso a skill só **busca** as regras de uma URL remota (WebFetch) a cada uso, o que feriria a autonomia. Trazido o **conhecimento real** (`web-interface-guidelines`, MIT) — ver "Incorporado". |
 | `ECC-main.zip` (no todo) | MIT | 38 MB / 4.878 arquivos de skills e agentes de terceiros. Copiar inteiro criaria duas fontes de verdade para a mesma orientação e apagaria a autoria das nossas. Colheita cirúrgica, item por item com lacuna medida, é o que entra — ver acima. |
 | `modern-web-guidance-src-main.zip` | Apache-2.0 | 38 MB, sendo 428 `.patch` e 329 `.html` de casos de teste upstream. A versão destilada já está instalada (`modern-web-guidance`, 210 arquivos/1,9 MB) e é o que as skills consomem. |

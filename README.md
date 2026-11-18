@@ -1,9 +1,9 @@
 # dz23-arsenal
 
-Coleção de 13 skills, 2 MCP e 1 bundle de engenharia para agentes de IA (Claude Code, DeepSeek Harness,
+Coleção de 14 skills, 2 MCP e 1 bundle de engenharia para agentes de IA (Claude Code, DeepSeek Harness,
 Cursor, Codex). Cada item é uma capacidade completa — não um prompt solto.
 
-![Skills](https://img.shields.io/badge/skills-13-blue)
+![Skills](https://img.shields.io/badge/skills-14-blue)
 ![MCP](https://img.shields.io/badge/mcp-1-green)
 ![Bundle](https://img.shields.io/badge/bundle-1-purple)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
@@ -153,7 +153,7 @@ externas** documentadas. **O que está publicado é diferente do que está verif
 
 | Métrica | Valor |
 |---|---|
-| Skills publicadas | **10** DZ23 + **3 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines — MIT) + **2 MCP** + 1 bundle + 7 externas (+16 referências externas) |
+| Skills publicadas | **10** DZ23 + **4 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines, replica-recon — MIT) + **2 MCP** + 1 bundle + 7 externas (+16 referências externas) |
 | Evals declarados | **144** |
 | **Evals executados** | **45/144 (31,2%)** — 43 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |
