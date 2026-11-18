@@ -54,6 +54,7 @@ verde) registrado aqui com o hash.
 | 3 | `dz23-ultimate-pro-max` 2.2.6 | `dados-design/` 3 MB + consultor (7 comandos) + prova 15 casos + `grafico`/`motion` + correção de `--severidade` | `9fd4a3f` | run 44294369696 ✓ |
 | 4 | `dz23-codebase-cartographer` 1.2.0 | `dados/` 18 decisões da ECC `code-tour` + `consulta-codebase.py` (44 sinônimos) + template `code-tour.md` + prova exaustiva com integridade por hash; 2 tabelas de `codebase-onboarding` rejeitadas por serem placeholder de template | `94381d8` → `77d642b` | run 44308868486 ✓ |
 | 5 | `dz23-spec-to-system-engine` 1.3.0 | `dados/` 8 categorias de ADR (ECC architecture-decision-records) + `consulta-espec.py` (40 sinônimos PT→EN) + prova com hash **canônico** EOL-independente desde o nascimento; "ADR Index Format" rejeitado por ser placeholder em bloco markdown | `95cf3db` | run 44311576695 ✓ |
+| C | `dz23-subagents-universal-mcp` 4.4.1 (Trilha C) | gate agora executa os 293 testes proprios da MCP via `scripts/selftest-subagents-mcp.py` (node --test, zero deps). Criterio: fail 0 E tests>0; sem node => NOT_TESTED declarado, nao PASS falso. Verificado no runner ubuntu (63 checks / 0 falhas, 0 NOT_TESTED) | `06b8a25` | run 44314217971 OK |
 
 Gate foi de 51 → **62 checks**; os quatro commits acima têm CI verde no `main`.
 
