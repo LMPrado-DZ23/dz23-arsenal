@@ -35,6 +35,34 @@ regra errada.
    ```
 7. **Abra o PR** descrevendo: o problema, a mudança, o que você testou e **o que não testou**.
 
+## Verificadores: provar que reprovam
+
+Todo `--check` deste repo tem de recusar o estado que promete caçar. Um verificador que só sabe
+dizer OK é pior que ausência dele -- convida à confiança. Isso já aconteceu aqui:
+`bundle/dz23-dsh-agency/build.py --check` passou a vida medindo limites de bytes e imprimindo
+"RESULTADO: OK", sem nunca comparar `agents/` com as fontes que o geram.
+
+Depois de adicionar ou alterar qualquer checagem, rode:
+
+```bash
+python scripts/prova-verificadores.py
+```
+
+Ele corrompe deliberadamente cada alvo (contagem do manifesto, versão na tabela, agente do
+bundle, cópia embutida, número do README, link quebrado, comando de doc, `VERSION`, instalação)
+e exige exit ≠ 0 em todos; no fim verifica que a árvore voltou ao HEAD. Restauração garantida em
+`finally`, por isso **não** roda dentro do `quality-gate`: o gate executa esses mesmos checks e
+um teste que mexe no disco concorrente consigo mesmo produziria resultado instável. Rode à mão
+antes do PR.
+
+O mínimo de um verificador novo, extraído das 29 rodadas desta linha de trabalho:
+
+- caso positivo (rejeita o inválido) **e** negativo (aceita o válido), ambos executados;
+- entrada malformada degrada em mensagem, nunca em traceback;
+- "não havia nada para conferir" é falha, não sucesso (`check-links`, `check-licenses` e
+  `check-copies` aprovavam árvore vazia);
+- nada de `assert` para reportar violação: `python -O` apaga a linha inteira.
+
 ## Versionamento
 
 SemVer, com uma regra específica deste repo:

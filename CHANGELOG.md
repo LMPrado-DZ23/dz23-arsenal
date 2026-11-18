@@ -102,6 +102,20 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.10] — 2026-11-17
+
+### Adicionado
+- **`scripts/prova-verificadores.py`** -- corrompe de propósito o estado que cada `--check` do
+  repo promete caçar e exige exit ≠ 0 em todos os nove (contagem do manifesto, versão no índice de
+  skills, agente adulterado no bundle, cópia embutida divergente, número mentiroso no README,
+  comando de doc apontando para arquivo inexistente, link quebrado, `VERSION` diferente do
+  declarada, instalação fora do sync). Termina conferindo que a árvore voltou ao HEAD.
+  Rodado: **9/9 recusam**, restauração limpa. Provado também no sentido inverso -- um dano real não
+  restaurado é denunciado (exit 1), então a checagem de integridade não é decorativa.
+  Não entra no `quality-gate` porque o gate executa esses mesmos checks e um teste que altera o
+  disco concorrente consigo mesmo daria resultado instável; roda à mão antes do PR, com seção
+  própria no CONTRIBUTING ("Verificadores: provar que reprovam") listando o mínimo de um check
+  novo extraído das rodadas desta sessão.
 ## [1.5.9] — 2026-11-17
 
 ### Corrigido

@@ -1,6 +1,6 @@
 # Índice do arsenal
 
-> Gerado por `scripts/build-manifest.py` em 2026-11-17. **Não editar à mão** — rode o script.
+> Gerado por `scripts/build-manifest.py` em 2026-11-18. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
 **10 skills · 14 externas · 1 prompt(s) · 2 MCP · 1 bundle(s)**
