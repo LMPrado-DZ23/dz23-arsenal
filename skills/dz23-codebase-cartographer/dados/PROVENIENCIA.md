@@ -10,11 +10,18 @@
 
 ## O que entrou
 
-| Arquivo | Linhas | sha256 (16 primeiros) | Seção na fonte |
+| Arquivo | Linhas | sha256 canônico (16 primeiros) | Seção na fonte |
 |---|---|---|---|
-| `quando-nao-usar-code-tour.csv` | 4 | `1c4948d86c2e6f76` | When NOT to Use |
-| `leitor-e-profundidade.csv` | 8 | `a6ec8cbfcf02f069` | 2. Infer the reader |
-| `antipadroes-de-code-tour.csv` | 6 | `f0a10a1c97be3ea7` | Anti-Patterns |
+| `quando-nao-usar-code-tour.csv` | 4 | `1b5186b7870d882f` | When NOT to Use |
+| `leitor-e-profundidade.csv` | 8 | `0eff7227776d5b38` | 2. Infer the reader |
+| `antipadroes-de-code-tour.csv` | 6 | `d8f5312863fc0177` | Anti-Patterns |
+
+Os hashes são do conteúdo **normalizado** (`\r\n` → `\n`), não dos bytes crus: `.gitattributes` converte
+CSV para LF no índice, enquanto o gerador escreve CRLF no disco Windows. Um digest de bytes crus divergiria
+entre checkout e clone limpo — foi exatamente assim que o CI reprovou esta prova (`d8f531…` no git ≠
+`f0a10a…` no disco) enquanto localmente passava verde. Normalizar antes de hashear torna a integridade
+independente da plataforma de quem gerou, como as rodadas 47/48/51 já exigem para qualquer comparação de
+conteúdo neste arsenal.
 
 Cada linha carrega `origem_arquivo` e `origem_secao` na própria célula: um CSV sem procedência passa a
 ser "verdade" solta dentro do repo, que é o defeito que este arsenal combate desde a rodada 1. Os hashes

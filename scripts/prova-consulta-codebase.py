@@ -95,20 +95,31 @@ print("\n=== integridade do acervo (autocontida, sem depender da fonte ECC) ==="
 # traz origem_arquivo/origem_secao preenchidos, e nenhum valor e placeholder de template. A fidelidade
 # contra a fonte foi conferida na geracao (44 celulas, zero divergencias) e fica registrada em
 # dados/PROVENIENCIA.md com o sha256 de cada arquivo; mudar um byte quebra esta comparacao de hash.
+#
+# IMPORTANTE sobre o hash: .gitattributes normaliza CSV para LF no indice do git, mas o gerador escreve
+# CRLF no disco Windows. Hash de bytes CRUS difere entre checkout e clone limpo -- foi exatamente assim
+# que o CI reprovou esta prova (d8f531... no git != f0a10a... no disco) enquanto localmente passava.
+# Normalizar \r\n -> \n antes de hashear torna o digest independente de fim de linha, como as rodadas
+# 47/48/51 ja exigiam para QUALQUER comparacao de conteudo neste arsenal. Um verificador de integridade
+# que depende de EOL nao mede integridade, mede a plataforma de quem gerou.
 import hashlib
 
+
+def _digest_canonico(p: pathlib.Path) -> str:
+    return hashlib.sha256(p.read_bytes().replace(b"\r\n", b"\n")).hexdigest()[:16]
+
+
 MANIFESTO = {
-    "quando-nao-usar-code-tour.csv": (4, "1c4948d86c2e6f76"),
-    "leitor-e-profundidade.csv": (8, "a6ec8cbfcf02f069"),
-    "antipadroes-de-code-tour.csv": (6, "f0a10a1c97be3ea7"),
+    "quando-nao-usar-code-tour.csv": (4, "1b5186b7870d882f"),
+    "leitor-e-profundidade.csv": (8, "0eff7227776d5b38"),
+    "antipadroes-de-code-tour.csv": (6, "d8f5312863fc0177"),
 }
 for arq, (esperado, digest) in MANIFESTO.items():
     p = mod.DADOS / arq
     if not p.is_file():
         ruins.append(f"{arq}: ausente")
         continue
-    bytes_ = p.read_bytes()
-    h = hashlib.sha256(bytes_).hexdigest()[:16]
+    h = _digest_canonico(p)
     with p.open(encoding="utf-8-sig", newline="") as fh:
         regs = list(csv.DictReader(fh))
     sem_origem = [r["No"] for r in regs
@@ -121,7 +132,7 @@ for arq, (esperado, digest) in MANIFESTO.items():
         ruins.append(f"{arq}: {len(regs)} linhas, manifestos diz {esperado}")
     if h != digest:
         ruins.append(f"{arq}: conteudo mudou desde a geracao a partir da fonte ECC "
-                     f"(hash {h} != {digest}) -- reconferir fidelidade antes de aceitar")
+                     f"(hash canonico {h} != {digest}) -- reconferir fidelidade antes de aceitar")
     if sem_origem:
         ruins.append(f"{arq}: linhas sem origem declarada: {sem_origem}")
 
