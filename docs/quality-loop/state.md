@@ -52,8 +52,24 @@ verde) registrado aqui com o hash.
 | 1 | `dz23-backend-data-architect` 1.1.2 | `dados/` 30 decisões + consultor + prova 15 casos + 2 `.sql` executados + eval | `7433fda` | run 44282647790 ✓ |
 | 2 | `dz23-performance-scalability-engine` 1.3.4 | `dados/` 13 linhas + consultor + prova 41 sinônimos + eval medido | `296fdd4` | run 44286241293 ✓ |
 | 3 | `dz23-ultimate-pro-max` 2.2.6 | `dados-design/` 3 MB + consultor (7 comandos) + prova 15 casos + `grafico`/`motion` + correção de `--severidade` | `9fd4a3f` | run 44294369696 ✓ |
+| 4 | `dz23-codebase-cartographer` 1.2.0 | `dados/` 18 decisões da ECC `code-tour` + `consulta-codebase.py` (44 sinônimos) + template `code-tour.md` + prova exaustiva com integridade por hash; 2 tabelas de `codebase-onboarding` rejeitadas por serem placeholder de template | `94381d8` → `77d642b` | run 44308868486 ✓ |
 
-Gate foi de 51 → **58 checks** neste ciclo; todos os três commits acima têm CI verde no `main`.
+Gate foi de 51 → **60 checks**; os quatro commits acima têm CI verde no `main`.
+
+### O que o item 4 ensinou: verde local ≠ verde no runner
+Pela primeira vez nesta consolidação commitei com gate 60/60 **e** o CI ficou vermelho (run
+44302652416). Reproduzi na única condição que eu ainda não testava — `git clone` limpo do HEAD com HOME
+vazio — e a causa era real e minha: `gate:autoteste-consulta-codebase` hasheava os CSVs crus, mas
+`.gitattributes` converte CSV para LF no índice enquanto o gerador escreve CRLF no disco Windows. O
+verificador de *integridade* não media integridade do conteúdo, media a plataforma de quem gerou
+(`d8f531…` no git ≠ `f0a10a…` no disco). Corrigido com `_digest_canonico()` normalizando `\r\n`→`\n` antes
+do sha256 — mesma regra das rodadas 47/48/51, aplicada ao verificador que eu havia escrito naquela rodada.
+**Aprendizado operacional: rodar o gate num clone limpo passa a ser parte do ciclo, não opcional.**
+
+Dois defeitos da mesma classe apareceram pelo caminho: `audita-sensibilidade` e `audita-alegacoes`
+injetavam violação com string literal fixa (`"| 1.1.1 | Explora"`) que deixou de existir quando a skill
+subiu para 1.2.0 — o `re.sub` virava no-op e o auditor reportava corretamente "medição vazia". Agora
+localizam a linha pelo nome da skill e trocam a versão que ela realmente carrega, sobrevivendo a bump futuro.
 
 ## Padrão que se consolidou nestes itens
 
@@ -153,21 +169,18 @@ passam a poder internalizar as tabelas deles também. Não é bloqueante para na
 
 ## Próximo passo concreto
 
-`dz23-codebase-cartographer`, no mesmo molde já exercitado duas vezes (`7433fda` backend, `296fdd4`
-performance): extrair as 31 linhas tabulares de ECC `code-tour` (4 tabelas) + `codebase-onboarding` (2),
-conferir célula por célula contra a fonte, montar `consulta-codebase.py` com mapa fechado e recusa
-honesta, prova **exaustiva nos sinônimos** (não amostrada — foi o que pegou quatro entradas mortas no
-último item), índice dizendo quando consultar, linha no método, eval executado, VENDOR.md, gate verde,
-commit atômico, **resync da instalação, push, CI verde no HEAD publicado** -- só então anotar aqui o
-hash e chamar de pronta.
+`dz23-spec-to-system-engine`, no molde dos quatro itens já fechados (`7433fda`, `296fdd4`, `9fd4a3f`,
+`77d642b`): extrair as 11 linhas tabulares de ECC `architecture-decision-records`, conferir célula por
+célula contra a fonte, montar `consulta-espec.py` com mapa fechado e recusa honesta, prova **exaustiva nos
+sinônimos** + integridade por hash **canônico** (EOL-independente), índice dizendo quando consultar, linha
+no método, eval executado, VENDOR.md, gate verde.
 
-Passo que a auditoria acrescentou ao padrão (e que faltou em `d310a31`): verificar o gate no **HEAD
-commitado**, não na árvore de trabalho. Árvore verde com índice sujo é o estado que um clone recebe.
-`git worktree add --detach $tmp HEAD && python scripts/quality-gate.py` dentro dele é a checagem.
+Ciclo obrigatório agora com o passo que faltou no item 4: commit → resync install → gate na árvore →
+**gate num clone limpo do HEAD com HOME vazio** → push → CI verde no GitHub. Só então anotar o hash aqui.
 
-Antes de investir nisso, porém, vale a pergunta registrada acima: restam ~48 linhas tabulares para seis
-skills. Se o dono preferir, os itens sem dado tabular (`e2e-browser-verifier`, `devops-cloud-deployer`)
-podem fechar só com `references/` destilada + proveniência, sem consultor próprio — menos cerimônia,
-mesma autonomia de conhecimento. A Trilha C (selftest das MCP) tem ganho claro e independente disso:
-`dz23-subagents-universal-mcp` tem 28 tools e nenhum selftest no gate hoje.
+Depois da spec-to-system, restam por dado tabular: `cartographer` está feita; `code-tour` cobriu o maior
+acervo restante. As fontes sem tabela (`e2e-browser-verifier`, `devops-cloud-deployer`) fecham com
+`references/` destilada + proveniência, sem consultor próprio — menos cerimônia, mesma autonomia. A Trilha C
+(selftest das MCP) tem ganho claro e independente disso: `dz23-subagents-universal-mcp` tem 28 tools e
+nenhum selftest no gate hoje.
 
