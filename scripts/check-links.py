@@ -8,14 +8,28 @@ from pathlib import Path
 
 RAIZ = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
 PAT = re.compile(r"\]\(([^)#]+?\.md)\)")
-IGNORAR = re.compile(r"(/\.git/|/node_modules/)")
+IGNORAR = re.compile(r"(^|[\\/])\.git([\\/]|$)|(^|[\\/])node_modules([\\/]|$)|"
+                     r"(^|[\\/])__pycache__([\\/]|$)")
+
+
+def _norm(caminho) -> str:
+    """Separador canônico para comparação.
+
+    A versão anterior testava `IGNORAR.search(str(md))` com um regex de barras solas. Em Windows
+    `str(Path(...))` devolve backslash, nada casava, e o verificador desia dentro de
+    node_modules conferindo links de bibliotecas de terceiros -- 76 "links quebrados" que não são
+    conteúdo deste repositório. Achei ao instalar as dependências do MCP PentAGI, ou seja: o bug
+    só existia numa máquina onde alguém realmente instalou algo. Corrigido normalizando o caminho
+    (e cobrindo `__pycache__`, mesma classe de ruído).
+    """
+    return str(caminho).replace("\\", "/")
 
 
 def main() -> int:
     quebrados = []
     total = 0
     for md in RAIZ.rglob("*.md"):
-        if IGNORAR.search(str(md)):
+        if IGNORAR.search(_norm(md)):
             continue
         try:
             texto = md.read_text(encoding="utf-8", errors="replace")

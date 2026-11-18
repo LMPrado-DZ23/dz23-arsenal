@@ -140,6 +140,15 @@ def main(argv: list[str]) -> int:
     resultados.append(rodar("bundle:agents-sincronizados",
                             [py, str(_bundleraiz / "build.py"), "--check"], cwd=_bundleraiz))
     resultados.append(rodar("evals:coerencia", [py, "scripts/run-evals.py", "--check"]))
+    # MCP PentAGI: serviço self-hosted que normalmente está fora. O selftest agora cobra
+    # degradação acionável nesse caso, então roda em qualquer máquina -- antes exigia serviço
+    # de pé e por isso nunca entrou no gate. Condicionado a node_modules existir: sem as
+    # dependências instaladas não há como abrir o servidor, e isso é ausência de medidor,
+    # não reprovação (mesma disciplina aplicada às alegações de CRLF).
+    _pentagi = RAIZ / "mcp" / "pentagi-mcp"
+    if (_pentagi / "node_modules").is_dir():
+        resultados.append(rodar("mcp:pentagi-selftest", ["node", "scripts/selftest.js"],
+                                cwd=_pentagi))
     resultados.append(rodar("evals:schema", [py, "scripts/run-evals.py", "--schema"]))
     resultados.append(rodar("evals:registros", [py, "scripts/check-eval-results.py"]))
     resultados.append(rodar("evals:citacoes", [py, "scripts/run-evals.py", "--verify-quotes"]))

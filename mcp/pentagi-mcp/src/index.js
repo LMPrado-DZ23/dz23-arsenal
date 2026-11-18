@@ -77,7 +77,18 @@ function texto(obj) {
 }
 
 function falha(erro) {
-  return { isError: true, content: [{ type: 'text', text: `erro: ${erro.message || erro}` }] }
+  // Erro de rede do fetch chega como TypeError com `cause` (ECONNREFUSED, self-signed, DNS).
+  // Sem isso a mensagem é só "fetch failed": não diz qual endpoint, nem que o servidor local
+  // precisa estar de pé -- exatamente o que um agente precisa saber para não insistir. HTTP e
+  // resposta não-JSON já citam GQL_URL acima; o caminho de rede ficava de fora por engano.
+  let detalhe = erro?.message || String(erro)
+  const causa = erro?.cause
+  if (causa?.code) detalhe += ` (${causa.code})`
+  else if (causa?.message) detalhe += ` (${causa.message})`
+  if (/fetch failed/i.test(detalhe)) {
+    detalhe += ` -- o PentAGI em ${GQL_URL} nao respondeu; confirme que o servidor esta de pe`
+  }
+  return { isError: true, content: [{ type: 'text', text: `erro: ${detalhe}` }] }
 }
 
 const server = new McpServer({ name: 'pentagi', version: '1.0.0' })

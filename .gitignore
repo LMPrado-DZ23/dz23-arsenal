@@ -68,3 +68,7 @@ _sources/
 # Artefato do quality-gate: contagem da ultima execucao real
 .gate-contagem
 
+# Lockfiles npm nao sao versionados neste repo (precedente:
+# mcp/dz23-subagents-universal-mcp). O CI instala dependencias antes de testar,
+# entao a reprodutibilidade vem das versoes no package.json, nao de um lock gerado local.
+mcp/*/package-lock.json
