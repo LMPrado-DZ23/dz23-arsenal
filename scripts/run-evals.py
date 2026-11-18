@@ -122,6 +122,15 @@ def validar_schema() -> tuple[int, list[str]]:
     except ImportError:
         jsonschema = None
 
+    if jsonschema is None:
+        # Declarar a limitação, não escondê-la. Sem a lib cai no checador manual abaixo, que
+        # cobre campos obrigatórios e o padrão de `id` -- mas não vê enum, minLength,
+        # additionalProperties nem tipo. Sair com "skills validadas: OK" nesse regime fazia um
+        # ambiente sem jsonschema parecer ter passado uma validação completa (o CI passou a
+        # instalar a dependência exatamente por causa disso; o código continuou mentindo).
+        print("AVISO: jsonschema ausente -- validação PARCIAL (só campos obrigatórios e "
+              "padrão de id). Instale com: python -m pip install jsonschema", file=sys.stderr)
+
     obrig = schema.get("properties", {}).get("cases", {}).get("items", {}).get("required", [])
     padrao = re.compile(r"^[a-z][a-z0-9-]+$")
     erros: list[str] = []

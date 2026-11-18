@@ -102,6 +102,24 @@ defeitos apareceram por ferramenta, não por leitura.
 `quality-gate.py`: **31/31** (eram 16/17 no mesmo commit base). `audit-zips.py`: 10/10 em dia
 com esta máquina. `verifica_claims`: passRate **1.00** nos dez SKILL.md.
 
+## [1.5.13] — 2026-11-17
+
+### Corrigido
+- **`run-evals.py --schema` dizia "OK" com validação parcial.** Sem `jsonschema` instalado, o
+  código caía num checador manual (campos obrigatórios + padrão de `id`) e imprimia a mesma
+  linha `skills validadas contra evals.schema.json: OK` que o caminho completo -- sem
+  `enum`, `minLength`, `additionalProperties` nem verificação de tipo. Um ambiente sem a
+  dependência parecia ter aprovado uma validação de schema integral. O CI foi corrigido na v1.5.0
+  para instalar `jsonschema` justamente por causa desse fallback silencioso; o código em si
+  continuou mentindo. Agora imprime `AVISO: ... validação PARCIAL` em stderr antes do resultado.
+  Verificado desinstalando a lib num venv limpo: aviso aparece, exit 0 (o parcial ainda é
+  verdade), e removendo um `fails_if` real o mesmo modo parcial denuncia -- ou seja, degradar
+  não é o mesmo que falhar.
+
+### Verificado sem defeito
+Execução em ambiente isolado (venv novo, só stdlib + `jsonschema`, como o runner): os dez
+verificadores, o `quality-gate` completo (**39/39**), os três validadores do bundle e o
+`build.py --check` rodam sem depender de pacote oculto do Python global desta máquina.
 ## [1.5.12] — 2026-11-17
 
 ### Adicionado
