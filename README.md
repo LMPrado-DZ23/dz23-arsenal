@@ -65,7 +65,7 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 | [`pentagi-mcp`](mcp/pentagi-mcp/) | 1.0.0 | 8 ferramentas MCP sobre a API do PentAGI (pentest autônomo) |
 
 
-## Skills e plataformas externas (16)
+## Skills e plataformas externas (17)
 
 | Skill | Autor | Para quê | Repo |
 |---|---|---|---|
@@ -85,6 +85,7 @@ Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/
 | [Skills CLI](external/skills-cli.md) | vercel-labs | Instalador de skills para ~70 harnesses (`skills add/check/update`) | [link](https://github.com/vercel-labs/skills) |
 | [Caldo Skills](external/caldoai-skills.md) | caldoai | Poda de testes sem valor + desemaranhado de codebase | [link](https://github.com/caldoai/skills) |
 | [OpenBot](external/openbot.md) | nightly-labs | Workspace desktop com agentes persistentes, fila e browser | [link](https://github.com/nightly-labs/openbot) |
+| [Paperclip](external/paperclip.md) | paperclipai | Orquestra time de agentes com organograma, metas e orçamento | [link](https://github.com/paperclipai/paperclip) |
 
 Cada linha linka para `external/<nome>.md` com instruções completas de instalação e uso.
 
@@ -168,12 +169,12 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 
 ## Estado verificado (não é marketing)
 
-Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **16 referências
+Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **17 referências
 externas** documentadas. **O que está publicado é diferente do que está verificado.**
 
 | Métrica | Valor |
 |---|---|
-| Skills publicadas | **10** DZ23 + **8 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines, replica-recon, replica-entrepreneur, replica-diff, replica-brand, replica-launch — MIT) + **2 MCP** + 1 bundle + 7 externas (+16 referências externas) |
+| Skills publicadas | **10** DZ23 + **8 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines, replica-recon, replica-entrepreneur, replica-diff, replica-brand, replica-launch — MIT) + **2 MCP** + 1 bundle + 7 externas (+17 referências externas) |
 | Evals declarados (ledger DZ23) | **144** |
 | **Evals executados (DZ23)** | **73/144 (50,7%)** — 71 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |

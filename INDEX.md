@@ -1,9 +1,9 @@
 # Índice do arsenal
 
-> Gerado por `scripts/build-manifest.py` em 2026-11-18. **Não editar à mão** — rode o script.
+> Gerado por `scripts/build-manifest.py` em 2026-11-19. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**18 skills · 16 externas · 9 prompt(s) · 2 MCP · 1 bundle(s)**
+**18 skills · 17 externas · 9 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -46,6 +46,7 @@
 | [cloudflare-security-audit](external/cloudflare-security-audit.md) | Cloudflare | https://github.com/cloudflare/security-audit-skill |
 | [modern-web-guidance](external/modern-web-guidance.md) | — | — |
 | [openbot](external/openbot.md) | nightly-labs | https://github.com/nightly-labs/openbot |
+| [paperclip](external/paperclip.md) | paperclipai | https://github.com/paperclipai/paperclip |
 | [pentagi](external/pentagi.md) | — | — |
 | [phone-agent-harness](external/phone-agent-harness.md) | — | — |
 | [playwright-mcp](external/playwright-mcp.md) | Microsoft | https://github.com/microsoft/playwright-mcp |

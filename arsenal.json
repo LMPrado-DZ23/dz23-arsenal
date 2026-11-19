@@ -3,7 +3,7 @@
   "generated_by": "scripts/build-manifest.py",
   "counts": {
     "skills": 18,
-    "external": 16,
+    "external": 17,
     "prompts": 9,
     "mcp": 2,
     "bundle": 1
@@ -256,6 +256,11 @@
       "file": "external/openbot.md",
       "autor": "nightly-labs",
       "repo": "https://github.com/nightly-labs/openbot"
+    },
+    {
+      "file": "external/paperclip.md",
+      "autor": "paperclipai",
+      "repo": "https://github.com/paperclipai/paperclip"
     },
     {
       "file": "external/pentagi.md",

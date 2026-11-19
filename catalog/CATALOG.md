@@ -2,7 +2,7 @@
 
 > **Gerado** por `scripts/gera-catalog.py` a partir de `catalog/catalog.json`. Não edite à mão — o gate (`catalogo:indice`) reprova divergência.
 
-35 fontes · 13 com licença **verificada** (LICENSE lido, sha256 registrado) · as demais **a-verificar** (catalogadas por URL, nada copiado).
+36 fontes · 13 com licença **verificada** (LICENSE lido, sha256 registrado) · as demais **a-verificar** (catalogadas por URL, nada copiado).
 
 Decisões: INCORPORAR · ADAPTAR · INTEGRAR_POR_ADAPTADOR · CATALOGAR · REFERENCIA · REJEITAR.
 
@@ -43,6 +43,7 @@ Decisões: INCORPORAR · ADAPTAR · INTEGRAR_POR_ADAPTADOR · CATALOGAR · REFER
 | [MCP Registry](https://github.com/modelcontextprotocol/registry) | a-verificar | — | REFERENCIA | registro/descoberta de servidores MCP | a verificar | baixo — referência de distribuição | manifesto próprio (arsenal.json) |
 | [GitHub Awesome Copilot](https://github.com/github/awesome-copilot) | a-verificar | — | CATALOGAR | coleção curada de instruções/prompts para Copilot | nenhuma | baixo — referência; conferir licença de cada item antes de copiar | prompts/ próprio do arsenal |
 | [OpenBot (nightly-labs)](https://github.com/nightly-labs/openbot) | PolyForm Noncommercial 1.0.0 | — | CATALOGAR | agente local-first com acesso ao computador (não offline-only) | a verificar; binários, rede | alto — agentes rodam com danger-full-access e approvalPolicy: never (o próprio README avisa); licença PolyForm Noncommercial 1.0.0 | execução local do DZ23 (subagents-mcp, agent-desktop) com confirmação do dono |
+| [Paperclip (paperclipai)](https://github.com/paperclipai/paperclip) | MIT | — | CATALOGAR | orquestracao de time de agentes com organograma, metas e orcamento | Node.js >= 24.11; Postgres embarcado; porta loopback 3100 | alto — servidor que coordena agentes autonomos; manter em loopback, telemetria ligada por padrao | dz23-subagents-mcp + agent-desktop com confirmacao do dono |
 
 ## Notas
 

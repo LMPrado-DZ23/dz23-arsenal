@@ -1,10 +1,10 @@
 # Skills externas recomendadas
 
-**Dezesseis** projetos mantidos por outras organizações que **complementam** as 10 skills DZ23. Nenhum deles
+**Dezessete** projetos mantidos por outras organizações que **complementam** as 10 skills DZ23. Nenhum deles
 está redistribuído aqui — cada arquivo documenta o repositório oficial, o gap que preenche e os cuidados.
 
-Nove são **skills**, uma é **coleção de skills** (Caldo), cinco são **plataformas** (PentAGI, Modern Web
-Guidance, Astryx, phone-agent-harness, OpenBot) e uma é **ferramenta de instalação** (Skills CLI).
+Nove são **skills**, uma é **coleção de skills** (Caldo), seis são **plataformas** (PentAGI, Modern Web
+Guidance, Astryx, phone-agent-harness, OpenBot, Paperclip) e uma é **ferramenta de instalação** (Skills CLI).
 
 ## Índice
 
@@ -26,6 +26,7 @@ Guidance, Astryx, phone-agent-harness, OpenBot) e uma é **ferramenta de instala
 | [Skills CLI](skills-cli.md) | vercel-labs | **instalador** de skills para ~70 agentes, com lock e update |
 | [Caldo Skills](caldoai-skills.md) | caldoai | poda de testes sem valor e desemaranhado de codebase |
 | [OpenBot](openbot.md) | nightly-labs | workspace desktop com agentes persistentes, fila e browser |
+| [Paperclip](paperclip.md) | paperclipai | time de agentes com organograma, metas e orçamento |
 
 ## Como escolher
 
@@ -47,6 +48,7 @@ Guidance, Astryx, phone-agent-harness, OpenBot) e uma é **ferramenta de instala
 | instalar/atualizar skills em vários harnesses | Skills CLI (`npx skills add`, `check`, `update`) |
 | limpar suíte de testes e emaranhado antes de mexer | Caldo Skills |
 | equipe de agentes viva, com fila e browser compartilhado | OpenBot (licença noncommercial, ver o arquivo) |
+| time com metas, cargos e orçamento num painel | Paperclip (`http://127.0.0.1:3100`) |
 
 ## Regra de convivência
 
@@ -72,5 +74,6 @@ próprio repositório.
 | Skills CLI | binário npm global (`skills`) | comando `skills` + lock em `~/.agents/.skill-lock.json` |
 | Caldo Skills | 2 skills via Skills CLI | skills `prune-tests` e `untangle-codebase` |
 | OpenBot | app desktop (Electron/Bun) + CLIs via ACP | app próprio; agentes ficam dentro dele |
+| Paperclip | servidor Node + UI React (`paperclipai run`) | painel web em `127.0.0.1:3100` |
 
 Como registrar em cada harness: [`docs/harness-integration.md`](../docs/harness-integration.md).

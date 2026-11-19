@@ -1,7 +1,30 @@
 > Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
 > delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
 
-## [1.6.7] — 2026-11-18
+## [1.6.8] — 2026-11-19
+
+**Paperclip instalado nesta máquina e documentado — com o bug de instalação no Windows e onde o onboarding
+parou.**
+
+### Adicionado
+- **`external/paperclip.md`** — [`paperclipai/paperclip`](https://github.com/paperclipai/paperclip) (MIT):
+  servidor Node + UI React que orquestra um **time de agentes** com organograma, metas, orçamento e
+  governança. Estado real: **instalado e rodando** em `http://127.0.0.1:3100`, Postgres embarcado na porta
+  `54329`, backup a cada 60 min, `doctor` **11 passed / 1 warning**.
+- README raiz e `external/README.md`: 16 → **17** externas.
+
+### Registrado como evidência (não como opinião)
+- `paperclipai install -y` **falha no Windows** com `spawn npm ENOENT` — o instalador chama `npm` sem shell e
+  no Windows o binário é `npm.cmd`. Caminho que funciona: `npm install -g paperclipai@latest` **com
+  `--allow-scripts`**, senão o Postgres embarcado e os assets não são baixados.
+- **Serviço de fundo não é suportado no win32** (o `doctor` diz explicitamente). Subir com `paperclipai run`.
+- Onboarding do painel parado no passo **3/5 (Connect a model)**: conectar modelo exige chave de API ou login
+  de assinatura — decisão do dono, não de um agente.
+
+### Não testado
+- Orquestração de agentes ponta a ponta (`NOT_TESTED`): depende de conectar modelo no painel.
+
+
 
 **Biblioteca de métodos de análise: 8 prompts verificáveis + `prompt.yaml`, e o prompt de performance
 corrigido na origem.**

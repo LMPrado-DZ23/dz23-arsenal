@@ -464,6 +464,19 @@
       "risco": "alto — agentes rodam com danger-full-access e approvalPolicy: never (o próprio README avisa); licença PolyForm Noncommercial 1.0.0",
       "fallback_local": "execução local do DZ23 (subagents-mcp, agent-desktop) com confirmação do dono",
       "doc": "external/openbot.md"
+    },
+    {
+      "nome": "Paperclip (paperclipai)",
+      "url": "https://github.com/paperclipai/paperclip",
+      "licenca": "MIT",
+      "licenca_verificada": false,
+      "sha256_zip": null,
+      "funcao": "orquestracao de time de agentes com organograma, metas e orcamento",
+      "decisao": "CATALOGAR",
+      "dependencias": "Node.js >= 24.11; Postgres embarcado; porta loopback 3100",
+      "risco": "alto — servidor que coordena agentes autonomos; manter em loopback, telemetria ligada por padrao",
+      "fallback_local": "dz23-subagents-mcp + agent-desktop com confirmacao do dono",
+      "doc": "external/paperclip.md"
     }
   ]
 }
