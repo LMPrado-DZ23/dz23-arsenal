@@ -1,0 +1,3 @@
+Use `dz23-project-governance` for this project.
+
+Start with the appropriate L1/L2/L3 decision gate. Read the project plan and valid handoff when available, distinguish plan intent from repository/environment state, define the approved scope and verification before execution, and keep the progress panel derived from the canonical plan. Do not expose secrets or perform high-risk mutations without the required confirmation.

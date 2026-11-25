@@ -32,6 +32,7 @@ CATEGORIAS = {
     "dz23-reverse-engineer-anything": ("Eng. reversa", "advanced"),
     "dz23-spec-to-system-engine": ("Especificação", "advanced"),
     "dz23-ultimate-pro-max": ("UI/UX", "advanced"),
+    "dz23-project-governance": ("Governança", "advanced"),
 }
 
 

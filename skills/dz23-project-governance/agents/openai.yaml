@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Governance"
+  short_description: "Plan, architect, execute, verify, and track projects"
+  default_prompt: "Start the project decision gate: inspect the plan, state, risks, dependencies, and propose an approved execution plan before changing anything."

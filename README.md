@@ -1,9 +1,9 @@
 # dz23-arsenal
 
-Coleção de 18 skills, 2 MCP e 1 bundle de engenharia para agentes de IA (Claude Code, DeepSeek Harness,
+Coleção de 19 skills, 2 MCP e 1 bundle de engenharia para agentes de IA (Claude Code, DeepSeek Harness,
 Cursor, Codex). Cada item é uma capacidade completa — não um prompt solto.
 
-![Skills](https://img.shields.io/badge/skills-18-blue)
+![Skills](https://img.shields.io/badge/skills-19-blue)
 ![MCP](https://img.shields.io/badge/mcp-2-green)
 ![Bundle](https://img.shields.io/badge/bundle-1-purple)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
@@ -39,7 +39,7 @@ pwsh scripts/verify-cli.ps1
 As skills ficam em `~/.agents/skills/<nome>/` e são descobertas automaticamente por Claude Code, DeepSeek
 Harness, Codex e Cursor (via junction/symlink de `~/.claude/skills` e `~/.codex/skills`).
 
-## Índice — Skills DZ23 (10)
+## Índice — Skills DZ23 (11)
 
 | Skill | Versão | Para quê | Quando usar |
 |---|---|---|---|
@@ -298,16 +298,16 @@ referências externas pertencem aos seus respectivos autores e mantêm suas lice
 
 ## Aviso honesto sobre evals
 
-As 10 skills DZ23 declaram **144 cenários** (o "ledger DZ23"). Executados e registrados em
+As 11 skills DZ23 declaram **152 cenários** (o "ledger DZ23"). Executados e registrados em
 `evals-results/`: **73 (50,7%)**, todos como **Camada 1 — autoavaliação na mesma sessão (viés do
 autor)**, não prova independente. O resto é `NOT_TESTED`/`BLOCKED`, declarado no `CHANGELOG.md` de cada
 skill e no [`ROADMAP.md`](ROADMAP.md).
 
-**Total real vs ledger (transparência):** `python scripts/run-evals.py --report` conta as **18 skills**
-= **192 avaliações** (144 das 10 DZ23 + 48 das 8 incorporadas). As 48 das incorporadas estão em **0/48** no
+**Total real vs ledger (transparência):** `python scripts/run-evals.py --report` conta as **19 skills**
+= **200 avaliações** (152 das 11 DZ23 + 48 das 8 incorporadas). As 48 das incorporadas estão em **0/48** no
 ledger — a verificação delas é a **prova do consultor/script no gate**, não o registro de eval. Logo,
-contra as 18 skills a cobertura registrada é **73/192 (38%)**; contra o ledger DZ23, **73/144 (50,7%)**.
-Os dois números são verdadeiros: o 144 é o escopo de verificação histórica das DZ23; o 192 é o que o
+contra as 19 skills a cobertura registrada é **73/200 (36,5%)**; contra o ledger DZ23, **73/152 (48%)**.
+Os dois números são verdadeiros: o 152 é o escopo de verificação histórica das DZ23; o 200 é o que o
 comando soma.
 
 Skill com eval não executado é skill com comportamento **não comprovado**. Trate `evals/evals.json` como

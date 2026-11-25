@@ -7,7 +7,7 @@ o que não foi testado está marcado como `NOT_TESTED`, não como "funciona".
 
 | Componente | Versão | Estado verificado |
 |---|---|---|
-| 10 skills DZ23 | ver [`INDEX.md`](INDEX.md) | estrutura ✅ · validadores ✅ (10/10, antes 9/10) · cobertura de evals 73/144 |
+| 11 skills DZ23 | ver [`INDEX.md`](INDEX.md) | estrutura ✅ · validadores ✅ (11/11, antes 10/10) · cobertura de evals 73/152 |
 | `mcp/dz23-subagents-universal-mcp` | 4.4.1 | instalado e configurado no ambiente de origem; **não iniciado em CI** |
 | `bundle/dz23-dsh-agency` | 1.0.0 | estrutura ✅; `build.py` não executado em CI |
 | 13 referências externas + registro de absorção | — | documentadas (não redistribuídas); tabela do README conferida contra o disco |
@@ -48,7 +48,7 @@ uma regra órfã é indistinguível de uma checagem aprovada.
 
 ## O buraco maior: evals não executados
 
-As 10 skills DZ23 declaram **144 cenários** (ledger DZ23). Executados e registrados: **73 (50,7%)**, todos Camada 1 (autoavaliação, viés do autor). `run-evals.py --report` conta as 18 skills = **192 avaliações** (144 DZ23 + 48 incorporadas, estas 0/48, verificadas pela prova do consultor no gate).
+As 11 skills DZ23 declaram **152 cenários** (ledger DZ23). Executados e registrados: **73 (48%)**, todos Camada 1 (autoavaliação, viés do autor). `run-evals.py --report` conta as 19 skills = **200 avaliações** (152 DZ23 + 48 incorporadas, estas 0/48, verificadas pela prova do consultor no gate).
 Os demais seguem `NOT_TESTED`; a tabela por skill abaixo é a fonte, e `scripts/check-numbers.py`
 confere estes números contra o disco.
 
@@ -80,7 +80,7 @@ Fonte: `python scripts/run-evals.py --report` · estado de auditoria: `--audit` 
 
 | Métrica | Valor |
 |---|---|
-| Declarados | **144** |
+| Declarados | **152** |
 | Executados | **73 (50,7%)** |
 | Criticidade A (crítico) identificada | 45 |
 | Críticos executados | **32 (71%)** — os 13 restantes exigem infra |
@@ -101,7 +101,7 @@ Fonte: `python scripts/run-evals.py --report` · estado de auditoria: `--audit` 
 | `dz23-e2e-browser-verifier` | 16 | 1 | 1 | 0 | 0 |
 | `dz23-ultimate-pro-max` | 13 | 1 | 1 | 0 | 0 |
 | `dz23-postgres-prod-preflight` | 13 | 0 | 0 | 0 | 0 |
-| **TOTAL** | **144** | **73** | **71** | **2** | **0** |
+| **TOTAL** | **152** | **73** | **71** | **2** | **0** |
 
 ### Auditoria (camada 3)
 
@@ -147,7 +147,7 @@ nenhum eval).
 
 | # | Dívida | Impacto | Esforço |
 |---|---|---|---|
-| 1 | Evals não executados (71 de 144 cenários) | alto — comportamento não comprovado | alto |
+| 1 | Evals não executados (79 de 152 cenários) | alto — comportamento não comprovado | alto |
 | 2 | `install-all.sh` nunca rodou em Linux/macOS | médio — caminho Linux não exercitado | baixo |
 | 3 | **CI** — resolvido: rodando desde 2026-11-09 (2 runs verdes). Verificar: `gh run list --limit 5` | — | — |
 | 4 | **Parcialmente resolvido (2026-11-17):** o `bundle/` passou a rodar no gate e no CI -- `check_consistency.py`, `check_sizes.py` e um `build.py --check` que compara `agents/` com as fontes (o flag antigo só media limites de bytes). Continua aberto o `mcp/`: os testes existem (`npm run test:gate`, 293 casos, cobertura 95.4% acima do budget 90/75/80) e foram executados nesta sessão, mas **nenhum passo do `quality.yml` invoca npm** -- verificado por inspeção do workflow. | médio | médio |
