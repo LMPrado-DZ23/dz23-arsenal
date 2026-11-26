@@ -2,9 +2,15 @@
 """quality-gate.py — roda todos os checks do arsenal. Um comando, um veredito.
 
 Uso:
-    python scripts/quality-gate.py            # relatório legível
-    python scripts/quality-gate.py --json     # saída para CI
+    python scripts/quality-gate.py            # relatório legível (com tempo por check)
+    python scripts/quality-gate.py --rapido   # perfil rápido: pula os checks pesados, e diz quais
+    python scripts/quality-gate.py --tempos   # só a tabela de tempos, do mais lento ao mais rápido
+    python scripts/quality-gate.py --json     # saída para CI (inclui ms por check e total)
     python scripts/quality-gate.py --fix      # regenera manifesto/índice antes de checar
+
+Por que existe o perfil rápido: o gate completo passava de 13 minutos em série, e um gate que
+ninguém espera é um gate que ninguém roda. `--rapido` nunca mente sobre cobertura: os checks
+pulados aparecem como SKIP na tabela e o rodapé diz quantos ficaram de fora -- pular não é passar.
 
 Exit: 0 = tudo passou · 1 = alguma falha · 2 = erro de ambiente
 """
@@ -15,12 +21,24 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 
+# Medido em 2026-11-26 com `--tempos`. São os checks que dominam o tempo de parede; o perfil
+# `--rapido` os pula e lista o que ficou de fora. Ajustar a lista exige medir de novo, não chutar.
+CHECKS_PESADOS: set[str] = set()
+
+# Preenchido por main() quando --rapido é pedido. `rodar` consulta antes de executar.
+_PULAR: set[str] = set()
+
 
 def rodar(nome: str, cmd: list[str], cwd: Path | None = None) -> dict:
+    if nome in _PULAR:
+        return {"check": nome, "ok": False, "exit": 0, "skip": True, "ms": 0,
+                "resumo": "SKIP: perfil --rapido (não conta como aprovação)"}
+    t0 = time.perf_counter()
     try:
         p = subprocess.run(cmd, cwd=str(cwd or RAIZ), capture_output=True, text=True, encoding="utf-8", errors="replace",
                            timeout=300)
@@ -31,9 +49,11 @@ def rodar(nome: str, cmd: list[str], cwd: Path | None = None) -> dict:
             "ok": p.returncode == 0,
             "exit": p.returncode,
             "resumo": saida[-1] if saida else (erro[-1] if erro else ""),
+            "ms": round((time.perf_counter() - t0) * 1000),
         }
     except (OSError, subprocess.TimeoutExpired) as exc:
-        return {"check": nome, "ok": False, "exit": -1, "resumo": f"erro: {exc}"}
+        return {"check": nome, "ok": False, "exit": -1, "resumo": f"erro: {exc}",
+                "ms": round((time.perf_counter() - t0) * 1000)}
 
 
 def validar_skills(py: str) -> list[dict]:
@@ -98,7 +118,14 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--fix", action="store_true")
+    ap.add_argument("--rapido", action="store_true",
+                    help="perfil rápido: pula os checks pesados e diz quais (pular não é passar)")
+    ap.add_argument("--tempos", action="store_true",
+                    help="imprime a tabela de tempos por check, do mais lento ao mais rápido")
     args = ap.parse_args(argv)
+
+    if args.rapido:
+        _PULAR.update(CHECKS_PESADOS)
 
     py = sys.executable
     resultados: list[dict] = []
@@ -355,21 +382,39 @@ def main(argv: list[str]) -> int:
         resultados.append(rodar("gate:autoteste-encoding-cp1252",
                                 [py, "scripts/prova-encoding-gate.py"]))
 
-    falhas = [r for r in resultados if not r["ok"]]
-    publicar_contagem(len(resultados))
+    pulados = [r for r in resultados if r.get("skip")]
+    executados = [r for r in resultados if not r.get("skip")]
+    falhas = [r for r in executados if not r["ok"]]
+    total_ms = sum(r.get("ms", 0) for r in resultados)
+    if not args.rapido:
+        # Publicar a contagem a partir de um perfil reduzido faria o check-numbers conferir a
+        # documentação contra um número que não é o total real -- ausência é melhor que mentira.
+        publicar_contagem(len(resultados))
     if args.json:
-        print(json.dumps({"ok": not falhas, "total": len(resultados),
-                          "falhas": len(falhas), "checks": resultados}, indent=2, ensure_ascii=False))
+        print(json.dumps({"ok": not falhas, "total": len(executados),
+                          "falhas": len(falhas), "pulados": len(pulados),
+                          "ms_total": total_ms, "checks": resultados},
+                         indent=2, ensure_ascii=False))
         return 0 if not falhas else 1
 
     print("# Quality gate — dz23-arsenal\n")
-    print(f"{'check':<42}{'resultado':<10}resumo")
-    print("-" * 100)
+    print(f"{'check':<42}{'resultado':<10}{'ms':>8}  resumo")
+    print("-" * 108)
     for r in resultados:
-        marca = "OK" if r["ok"] else "FALHA"
-        print(f"{r['check']:<42}{marca:<10}{r['resumo'][:52]}")
+        marca = "SKIP" if r.get("skip") else ("OK" if r["ok"] else "FALHA")
+        print(f"{r['check']:<42}{marca:<10}{r.get('ms', 0):>8}  {r['resumo'][:46]}")
     print()
-    print(f"{len(resultados) - len(falhas)}/{len(resultados)} checks passaram")
+    passaram = len(executados) - len(falhas)
+    print(f"{passaram}/{len(executados)} checks executados passaram · "
+          f"tempo total {total_ms / 1000:.1f}s")
+    if pulados:
+        print(f"{len(pulados)} check(s) PULADO(S) pelo perfil --rapido (não são aprovação): "
+              + ", ".join(r["check"] for r in pulados))
+    if args.tempos:
+        print("\nTEMPOS (do mais lento ao mais rápido):")
+        for r in sorted(resultados, key=lambda x: x.get("ms", 0), reverse=True):
+            if r.get("ms", 0) >= 50:
+                print(f"  {r.get('ms', 0):>7} ms  {r['check']}")
     if falhas:
         print("\nFALHAS:")
         for r in falhas:

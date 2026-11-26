@@ -2,7 +2,7 @@
 
 > **Gerado** por `scripts/gera-catalog.py` a partir de `catalog/catalog.json`. Não edite à mão — o gate (`catalogo:indice`) reprova divergência.
 
-37 fontes · 14 com licença **verificada** (LICENSE lido, sha256 registrado) · as demais **a-verificar** (catalogadas por URL, nada copiado).
+39 fontes · 16 com licença **verificada** (LICENSE lido, sha256 registrado) · as demais **a-verificar** (catalogadas por URL, nada copiado).
 
 Decisões: INCORPORAR · ADAPTAR · INTEGRAR_POR_ADAPTADOR · CATALOGAR · REFERENCIA · REJEITAR.
 
@@ -45,6 +45,8 @@ Decisões: INCORPORAR · ADAPTAR · INTEGRAR_POR_ADAPTADOR · CATALOGAR · REFER
 | [OpenBot (nightly-labs)](https://github.com/nightly-labs/openbot) | PolyForm Noncommercial 1.0.0 | — | CATALOGAR | agente local-first com acesso ao computador (não offline-only) | a verificar; binários, rede | alto — agentes rodam com danger-full-access e approvalPolicy: never (o próprio README avisa); licença PolyForm Noncommercial 1.0.0 | execução local do DZ23 (subagents-mcp, agent-desktop) com confirmação do dono |
 | [Paperclip (paperclipai)](https://github.com/paperclipai/paperclip) | MIT | — | CATALOGAR | orquestracao de time de agentes com organograma, metas e orcamento | Node.js >= 24.11; Postgres embarcado; porta loopback 3100 | alto — servidor que coordena agentes autonomos; manter em loopback, telemetria ligada por padrao | dz23-subagents-mcp + agent-desktop com confirmacao do dono |
 | [hallmark](https://github.com/Nutlope/hallmark) | MIT | ✅ | REFERENCIA | piso de design anti-AI-slop: 48 regras, 51 temas, sloplint com gates por camada | Node para os scripts (lint/tema/captura); leitura da skill nao exige nada | baixo — skill + scripts locais, sem servico; 6,6 MB por copia instalada | dz23-ultimate-pro-max (direcao de arte) + web-design-guidelines (104 regras de UI) |
+| [app-store-compliance](https://github.com/mjmirza/app-store-compliance) | LicenseRef-OpenRoots-ORA-2.3 | ✅ | REFERENCIA | auditoria pre-submissao para App Store e Google Play: 125 padroes de rejeicao, 117 prazos regulatorios, guard que bloqueia submit de risco | bash (Git Bash no Windows) + python3 para os auditores; hook PreToolUse no Claude Code | medio — licenca source-available ORA 2.3 com royalty acima de US$ 20 mi/ano e vedacao de treino de IA; o guard intercepta cada comando de shell | nenhum equivalente no arsenal; dz23-spec-to-system-engine cobre requisitos, nao politica de loja |
+| [omnibridge-mcp](https://github.com/ayoubmep/omnibridge-mcp) | MIT | ✅ | INTEGRAR_POR_ADAPTADOR | servidor MCP unico para 28 apps CAD/BIM/3D: cad_apps, cad_skill, cad_read, cad_modify, cad_screenshot | Python 3.10+ (uv tool), Windows, pywin32; bridge por app instalado a parte | alto — scripts rodam sem sandbox dentro do app, com poder de apagar geometria e escrever arquivo | MCP blender (blender-mcp) para Blender; sem equivalente para AutoCAD/Revit/Rhino |
 
 ## Notas
 

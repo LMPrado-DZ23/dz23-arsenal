@@ -1,10 +1,11 @@
 # Skills externas recomendadas
 
-**Dezoito** projetos mantidos por outras organizações que **complementam** as skills DZ23. Nenhum deles
+**Vinte** projetos mantidos por outras organizações que **complementam** as skills DZ23. Nenhum deles
 está redistribuído aqui — cada arquivo documenta o repositório oficial, o gap que preenche e os cuidados.
 
-Dez são **skills**, uma é **coleção de skills** (Caldo), seis são **plataformas** (PentAGI, Modern Web
-Guidance, Astryx, phone-agent-harness, OpenBot, Paperclip) e uma é **ferramenta de instalação** (Skills CLI).
+Doze são **skills**, uma é **coleção de skills** (Caldo), seis são **plataformas** (PentAGI, Modern Web
+Guidance, Astryx, phone-agent-harness, OpenBot, Paperclip), uma é **ferramenta de instalação** (Skills CLI)
+e uma é **servidor MCP** (OmniBridge).
 
 ## Índice
 
@@ -28,6 +29,8 @@ Guidance, Astryx, phone-agent-harness, OpenBot, Paperclip) e uma é **ferramenta
 | [OpenBot](openbot.md) | nightly-labs | workspace desktop com agentes persistentes, fila e browser |
 | [Paperclip](paperclip.md) | paperclipai | time de agentes com organograma, metas e orçamento |
 | [Hallmark](hallmark.md) | Nutlope | **piso de design anti-AI-slop**: 48 regras, 51 temas e linter com gates |
+| [App Store Compliance](app-store-compliance.md) | mjmirza | **evitar rejeição** na App Store e no Google Play, com guard de pré-submissão |
+| [OmniBridge](omnibridge.md) | ayoubmep | **um MCP para 28 apps** CAD, BIM e 3D (AutoCAD, Revit, Rhino, Maya…) |
 
 ## Como escolher
 
@@ -51,6 +54,8 @@ Guidance, Astryx, phone-agent-harness, OpenBot, Paperclip) e uma é **ferramenta
 | equipe de agentes viva, com fila e browser compartilhado | OpenBot (licença noncommercial, ver o arquivo) |
 | time com metas, cargos e orçamento num painel | Paperclip (`http://127.0.0.1:3100`) |
 | impedir o visual "cara de IA" e provar por gate | Hallmark (`sloplint`, 51 temas, hook de lint) |
+| publicar app iOS/Android sem rejeição | App Store Compliance (`/app-store-audit` + guard) |
+| dirigir AutoCAD, Revit, Rhino, Maya, Unreal | OmniBridge (MCP, 5 ferramentas) |
 
 ## Regra de convivência
 
@@ -78,5 +83,7 @@ próprio repositório.
 | OpenBot | app desktop (Electron/Bun) + CLIs via ACP | app próprio; agentes ficam dentro dele |
 | Paperclip | servidor Node + UI React (`paperclipai run`) | painel web em `127.0.0.1:3100` |
 | Hallmark | skill + scripts Node (`install.mjs`) | skill em `~/.agents/skills` + `sloplint` e hook de lint |
+| App Store Compliance | skill + guard bash (`install.sh`) | skill nos 4 harnesses + hook `PreToolUse` |
+| OmniBridge | servidor MCP Python (`uv tool install`) | ferramentas `cad_*` no harness |
 
 Como registrar em cada harness: [`docs/harness-integration.md`](../docs/harness-integration.md).

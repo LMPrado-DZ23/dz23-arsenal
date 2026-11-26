@@ -7,6 +7,7 @@
 | agent-desktop | Apache-2.0 | ✅ | sim (permissiva) | ADAPTAR |
 | agent-skills (vercel-labs) | a-verificar | — | a verificar | REJEITAR |
 | Anthropic Skills | declarada em external/anthropic-skills.md | — | a verificar | REFERENCIA |
+| app-store-compliance | LicenseRef-OpenRoots-ORA-2.3 | ✅ | não — source-available com royalty (só REFERENCIA) | REFERENCIA |
 | astryx | MIT | ✅ | sim (permissiva) | REFERENCIA |
 | Caldo Skills | MIT | ✅ | sim (permissiva) | INCORPORAR |
 | Cloudflare Security Audit | declarada em external/cloudflare-security-audit.md | — | a verificar | REFERENCIA |
@@ -19,6 +20,7 @@
 | MCP Registry | a-verificar | — | a verificar | REFERENCIA |
 | modern-web-guidance-src | Apache-2.0 | ✅ | sim (permissiva) | ADAPTAR |
 | Ollama | a-verificar | — | a verificar | INTEGRAR_POR_ADAPTADOR |
+| omnibridge-mcp | MIT | ✅ | sim (permissiva) | INTEGRAR_POR_ADAPTADOR |
 | open-code-review | Apache-2.0 | ✅ | sim (permissiva) | ADAPTAR |
 | OpenBot (nightly-labs) | PolyForm Noncommercial 1.0.0 | — | a verificar | CATALOGAR |
 | OpenHands | a-verificar | — | a verificar | CATALOGAR |

@@ -3,7 +3,7 @@
   "generated_by": "scripts/build-manifest.py",
   "counts": {
     "skills": 19,
-    "external": 18,
+    "external": 20,
     "prompts": 9,
     "mcp": 2,
     "bundle": 1
@@ -245,6 +245,11 @@
       "repo": "https://github.com/anthropics/skills"
     },
     {
+      "file": "external/app-store-compliance.md",
+      "autor": "Mirza Iqbal (mjmirza)",
+      "repo": "https://github.com/mjmirza/app-store-compliance"
+    },
+    {
       "file": "external/astryx.md",
       "autor": null,
       "repo": null
@@ -268,6 +273,11 @@
       "file": "external/modern-web-guidance.md",
       "autor": null,
       "repo": null
+    },
+    {
+      "file": "external/omnibridge.md",
+      "autor": "ayoubmep",
+      "repo": "https://github.com/ayoubmep/omnibridge-mcp"
     },
     {
       "file": "external/openbot.md",

@@ -169,15 +169,16 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 
 ## Estado verificado (não é marketing)
 
-Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **18 referências
+Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **20 referências
 externas** documentadas. **O que está publicado é diferente do que está verificado.**
 
 | Métrica | Valor |
 |---|---|
-| Skills publicadas | **10** DZ23 + **8 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines, replica-recon, replica-entrepreneur, replica-diff, replica-brand, replica-launch — MIT) + **2 MCP** + 1 bundle + 7 externas (+18 referências externas) |
-| Evals declarados (ledger DZ23) | **144** |
-| **Evals executados (DZ23)** | **73/144 (50,7%)** — 71 PASS · 2 PARTIAL · 0 FAIL |
+| Skills publicadas | **10** DZ23 + **8 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines, replica-recon, replica-entrepreneur, replica-diff, replica-brand, replica-launch — MIT) + **2 MCP** + 1 bundle + 7 externas (+20 referências externas) |
+| Evals declarados (ledger DZ23) | **152** |
+| **Evals executados (DZ23)** | **73/152 (48,0%)** — 71 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |
+| Escopo da contagem | os números de evals acima são o **recorte DZ23** (11 skills). Somando as 8 skills incorporadas — que declaram os próprios evals — são **200 declarados, 73 registrados (36,5%)**. Número medido por python scripts/run-evals.py --report, não escrito à mão |
 | **Laudo original da auditoria** | **`INVALIDO_COMO_EVIDENCIA`** — 54 de 68 citações não existem nas respostas |
 | Críticos executados | **32 de 45 identificados (71%)** — 13 exigem infra |
 | Camada 4 (projeto real) | **1 tarefa** no próprio repo — CI verde após **5 iterações** de correção |

@@ -70,6 +70,8 @@ _sources/
 
 # Artefato do quality-gate: contagem da ultima execucao real
 .gate-contagem
+# Artefato do run-evals --report: contagem medida de evals (fonte unica de numero)
+.evals-contagem.json
 
 # Lockfiles npm nao sao versionados neste repo (precedente:
 # mcp/dz23-subagents-universal-mcp). O CI instala dependencias antes de testar,

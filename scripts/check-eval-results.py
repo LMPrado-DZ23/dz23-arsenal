@@ -151,6 +151,26 @@ def main() -> int:
             problemas.append(
                 f"ROADMAP.md: não declara quantos cenários estão pendentes ({pendentes})")
 
+        # Contagem publicada por `run-evals.py --report`: se ela existe, tem de casar com o disco.
+        # Sem este cruzamento, o número do README podia envelhecer em silêncio -- foi o que
+        # aconteceu: README dizia 73/144 (50,7%) com 152 cenários e 79 pendentes no recorte DZ23.
+        # A ausência do arquivo é registrada como aviso, nunca como aprovação: um conferidor que
+        # trata "não medido" como "ok" é o mesmo defeito que ele existe para pegar.
+        contagem = RAIZ / ".evals-contagem.json"
+        if contagem.is_file():
+            try:
+                publicado = json.loads(contagem.read_text(encoding="utf-8"))
+                dz = publicado.get("dz23") or {}
+                publicados = dz.get("pendentes")
+                if isinstance(publicados, int) and publicados != pendentes:
+                    problemas.append(
+                        f".evals-contagem.json: diz {publicados} pendentes (recorte dz23), "
+                        f"o disco tem {pendentes} — rode: python scripts/run-evals.py --report")
+            except (json.JSONDecodeError, OSError):
+                problemas.append(".evals-contagem.json ilegível — rode: python scripts/run-evals.py --report")
+        else:
+            print("aviso: .evals-contagem.json ausente; contagem publicada nao foi medida nesta rodada")
+
     print(f"registros verificados: {len(arquivos)}")
     if problemas:
         print(f"PROBLEMAS: {len(problemas)}")
