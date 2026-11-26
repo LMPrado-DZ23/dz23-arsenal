@@ -1,9 +1,9 @@
 # Índice do arsenal
 
-> Gerado por `scripts/build-manifest.py` em 2026-11-19. **Não editar à mão** — rode o script.
+> Gerado por `scripts/build-manifest.py` em 2026-11-26. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**18 skills · 17 externas · 9 prompt(s) · 2 MCP · 1 bundle(s)**
+**19 skills · 18 externas · 9 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -16,6 +16,7 @@
 | [dz23-e2e-browser-verifier](skills/dz23-e2e-browser-verifier/) | 1.2.0 | 30 | 10 | 6 | 4 | 16 |
 | [dz23-performance-scalability-engine](skills/dz23-performance-scalability-engine/) | 1.3.4 | 33 | 11 | 6 | 7 | 16 |
 | [dz23-postgres-prod-preflight](skills/dz23-postgres-prod-preflight/) | 1.2.0 | 21 | 5 | 2 | 5 | 13 |
+| [dz23-project-governance](skills/dz23-project-governance/) | 1.0.0 | 11 | 1 | 0 | 3 | 8 |
 | [dz23-reverse-engineer-anything](skills/dz23-reverse-engineer-anything/) | 1.2.0 | 31 | 12 | 4 | 6 | 15 |
 | [dz23-spec-to-system-engine](skills/dz23-spec-to-system-engine/) | 1.3.0 | 49 | 17 | 11 | 6 | 15 |
 | [dz23-ultimate-pro-max](skills/dz23-ultimate-pro-max/) | 2.2.6 | 20 | 10 | 0 | 4 | 13 |
@@ -44,6 +45,7 @@
 | [astryx](external/astryx.md) | — | — |
 | [caldoai-skills](external/caldoai-skills.md) | caldoai | https://github.com/caldoai/skills |
 | [cloudflare-security-audit](external/cloudflare-security-audit.md) | Cloudflare | https://github.com/cloudflare/security-audit-skill |
+| [hallmark](external/hallmark.md) | Nutlope (Hassan El Mghari) | https://github.com/Nutlope/hallmark |
 | [modern-web-guidance](external/modern-web-guidance.md) | — | — |
 | [openbot](external/openbot.md) | nightly-labs | https://github.com/nightly-labs/openbot |
 | [paperclip](external/paperclip.md) | paperclipai | https://github.com/paperclipai/paperclip |

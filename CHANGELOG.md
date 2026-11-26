@@ -1,6 +1,38 @@
 > Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
 > delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
 
+## [1.6.9] — 2026-11-26
+
+**Hallmark instalado nos quatro harnesses e documentado — com a prova de que o linter funciona.**
+
+### Adicionado
+- **`external/hallmark.md`** — [`Nutlope/hallmark`](https://github.com/Nutlope/hallmark) (MIT, licença
+  verificada na API do GitHub e no `LICENSE` do pacote): skill de design **anti-AI-slop** com piso de
+  **48 regras** numeradas, **51 temas** com `tokens.css` + screenshot, e `sloplint.mjs` com gates por
+  camada (`floor`/`reflex`/`finish`). Estado real: **instalado** em `~/.agents/skills/hallmark` (DSH +
+  Codex) e `~/.claude/skills/hallmark` (Claude Code, com hook `PostToolUse` que aconselha e nunca
+  bloqueia), mais junction em `~/.qwen/skills/hallmark`. Instalador oficial: `node install.mjs
+  --claude --codex` (gates `refcheck` + `theme validate` passaram).
+- `catalog/catalog.json`: fonte `hallmark` com licença verificada e `sha256_zip` medido
+  (`eb5ae192c808a27b`, ZIP de 58,55 MB).
+- README raiz, `external/README.md`, `INDEX.md`, `arsenal.json`, `THIRD-PARTY.md` e `LICENSE-MATRIX.md`:
+  17 → **18** externas (regenerados por `gera-catalog.py` e `build-manifest.py`).
+
+### Registrado como evidência (não como opinião)
+- O hook de lint foi exercitado num projeto de teste com `.hallmark` e um `Hero.tsx` proposital:
+  devolveu **2 FAILs** — `gate 26a` (sem `:focus-visible`) e `gate 48` (cor literal `#7c3aed` fora do
+  bloco de tokens). Sem a pasta `.hallmark`, o mesmo arquivo devolve `{}` e exit 0.
+- **Codex lê `~/.agents/skills`**: sessão nova (`codex exec`) respondeu que a skill existe e citou a
+  descrição. Por isso **não** se cria junction em `~/.codex/skills` — faria o Codex listar Hallmark
+  duas vezes (o próprio instalador avisa).
+- Geração de imagem é **opt-in**: `scripts/imagegen.mjs` só chama `api.together.xyz` se
+  `TOGETHER_API_KEY` existir; sem a chave cai para CSS-art/placeholder (estado desta máquina).
+
+### Não testado
+- Qualidade visual do que a skill produz (`NOT_TESTED`): eleva o piso, não substitui direção de arte.
+- Leitura da skill por Claude Code e Qwen Code só acontece no início da sessão de cada um; o hook do
+  Claude dispara apenas ao escrever arquivo.
+
 ## [1.6.8] — 2026-11-19
 
 **Paperclip instalado nesta máquina e documentado — com o bug de instalação no Windows e onde o onboarding

@@ -2,8 +2,8 @@
   "schema": 2,
   "generated_by": "scripts/build-manifest.py",
   "counts": {
-    "skills": 18,
-    "external": 17,
+    "skills": 19,
+    "external": 18,
     "prompts": 9,
     "mcp": 2,
     "bundle": 1
@@ -92,6 +92,18 @@
       "scripts": 5,
       "evals": 13,
       "sha256_skill_md": "ae8378f69997a3d5086f7d2b08290858573f3b50c828174230a8cfbec4a944cd"
+    },
+    {
+      "name": "dz23-project-governance",
+      "version": "1.0.0",
+      "description": "Govern L1-L3 project work with a decision gate, evidence-based planning, architecture, execution, verification, and a panel derived from the canonical plan.",
+      "user_invocable": true,
+      "files": 11,
+      "references": 1,
+      "templates": 0,
+      "scripts": 3,
+      "evals": 8,
+      "sha256_skill_md": "ee4f5f0c9b4d041e732251c519eff1ac6cfd39bee2c2c52b3aa063afa96c4943"
     },
     {
       "name": "dz23-reverse-engineer-anything",
@@ -246,6 +258,11 @@
       "file": "external/cloudflare-security-audit.md",
       "autor": "Cloudflare",
       "repo": "https://github.com/cloudflare/security-audit-skill"
+    },
+    {
+      "file": "external/hallmark.md",
+      "autor": "Nutlope (Hassan El Mghari)",
+      "repo": "https://github.com/Nutlope/hallmark"
     },
     {
       "file": "external/modern-web-guidance.md",

@@ -169,12 +169,12 @@ Mapa detalhado (quem chama quem, e por quê): [`docs/integration-map.md`](docs/i
 
 ## Estado verificado (não é marketing)
 
-Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **17 referências
+Este repo publica **10 skills DZ23 + 2 MCP + 1 bundle + 7 skills externas empacotadas** e **18 referências
 externas** documentadas. **O que está publicado é diferente do que está verificado.**
 
 | Métrica | Valor |
 |---|---|
-| Skills publicadas | **10** DZ23 + **8 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines, replica-recon, replica-entrepreneur, replica-diff, replica-brand, replica-launch — MIT) + **2 MCP** + 1 bundle + 7 externas (+17 referências externas) |
+| Skills publicadas | **10** DZ23 + **8 incorporadas** (untangle-codebase, prune-tests, web-design-guidelines, replica-recon, replica-entrepreneur, replica-diff, replica-brand, replica-launch — MIT) + **2 MCP** + 1 bundle + 7 externas (+18 referências externas) |
 | Evals declarados (ledger DZ23) | **144** |
 | **Evals executados (DZ23)** | **73/144 (50,7%)** — 71 PASS · 2 PARTIAL · 0 FAIL |
 | **Evals auditados em literais** | **16/16 da amostra** (re-auditorias de 2026-11-09) |
@@ -182,7 +182,7 @@ externas** documentadas. **O que está publicado é diferente do que está verif
 | Críticos executados | **32 de 45 identificados (71%)** — 13 exigem infra |
 | Camada 4 (projeto real) | **1 tarefa** no próprio repo — CI verde após **5 iterações** de correção |
 | CI | ✅ verde em **Ubuntu + Windows** · gate offline (total de checks sai da própria saída) · supply-chain: Gitleaks, CodeQL, Dependabot |
-| Camadas de governança | **catalog/** (35 fontes), **supply-chain/** (SBOM CycloneDX), **security/** (permissões das 18 skills), **install/** (instalador c/ rollback), **eval-harness/** (replay determinístico) |
+| Camadas de governança | **catalog/** (37 fontes), **supply-chain/** (SBOM CycloneDX), **security/** (permissões das 18 skills), **install/** (instalador c/ rollback), **eval-harness/** (replay determinístico) |
 | Eval reproduzível | **8** vereditos re-graduáveis por grader determinístico (Camada 1-reproduzível), em 6 skills |
 
 ### 5 camadas de verificação
@@ -270,7 +270,7 @@ o job Windows existe porque o bug de encoding cp1252 só aparecia lá. Mapa das 
 | [`LIMITATIONS.md`](LIMITATIONS.md) | limites honestos: o que não está provado |
 | [`matriz-de-requisitos.md`](matriz-de-requisitos.md) | requisitos do mandato com evidência e estado |
 | [`THIRD-PARTY.md`](THIRD-PARTY.md) · [`LICENSE-MATRIX.md`](LICENSE-MATRIX.md) | proveniência e compatibilidade de licença (gerados de `catalog/catalog.json`) |
-| [`catalog/CATALOG.md`](catalog/CATALOG.md) | catálogo de 35 fontes externas |
+| [`catalog/CATALOG.md`](catalog/CATALOG.md) | catálogo de 37 fontes externas |
 | [`supply-chain/SBOM.md`](supply-chain/SBOM.md) | SBOM CycloneDX da cadeia |
 | [`security/PERMISSIONS.md`](security/PERMISSIONS.md) | permissões/riscos/rollback das 18 skills |
 | [`install/README.md`](install/README.md) · [`eval-harness/README.md`](eval-harness/README.md) | instalação e harness de eval |

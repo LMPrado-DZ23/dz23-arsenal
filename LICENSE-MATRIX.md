@@ -12,6 +12,7 @@
 | Cloudflare Security Audit | declarada em external/cloudflare-security-audit.md | — | a verificar | REFERENCIA |
 | ECC (easy-claude-code) | MIT | ✅ | sim (permissiva) | ADAPTAR |
 | GitHub Awesome Copilot | a-verificar | — | a verificar | CATALOGAR |
+| hallmark | MIT | ✅ | sim (permissiva) | REFERENCIA |
 | LangGraph | a-verificar | — | a verificar | CATALOGAR |
 | LiteLLM | a-verificar | — | a verificar | INTEGRAR_POR_ADAPTADOR |
 | MCP Inspector | a-verificar | — | a verificar | REFERENCIA |
@@ -21,6 +22,7 @@
 | open-code-review | Apache-2.0 | ✅ | sim (permissiva) | ADAPTAR |
 | OpenBot (nightly-labs) | PolyForm Noncommercial 1.0.0 | — | a verificar | CATALOGAR |
 | OpenHands | a-verificar | — | a verificar | CATALOGAR |
+| Paperclip (paperclipai) | MIT | — | sim (permissiva) | CATALOGAR |
 | PentAGI | declarada em external/pentagi.md | — | a verificar | INTEGRAR_POR_ADAPTADOR |
 | phone-agent-harness | declarada em external/phone-agent-harness.md | — | a verificar | REFERENCIA |
 | playwright-mcp | Apache-2.0 | ✅ | sim (permissiva) | REFERENCIA |

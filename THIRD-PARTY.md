@@ -8,6 +8,7 @@
 | astryx | https://github.com/facebook/astryx | MIT | sim | REFERENCIA | external/astryx.md |
 | Caldo Skills | https://github.com/caldoai/skills | MIT | sim | INCORPORAR | external/caldoai-skills.md |
 | ECC (easy-claude-code) | https://github.com/badlogic/claude-commands | MIT | sim | ADAPTAR | — |
+| hallmark | https://github.com/Nutlope/hallmark | MIT | sim | REFERENCIA | external/hallmark.md |
 | modern-web-guidance-src | https://github.com/GoogleChrome/modern-web-guidance-src | Apache-2.0 | sim | ADAPTAR | external/modern-web-guidance.md |
 | open-code-review | https://github.com/alibaba/open-code-review | Apache-2.0 | sim | ADAPTAR | — |
 | playwright-mcp | https://github.com/microsoft/playwright-mcp | Apache-2.0 | sim | REFERENCIA | external/playwright-mcp.md |
@@ -28,6 +29,7 @@
 | Ollama | https://github.com/ollama/ollama | a-verificar | não (a-verificar) | INTEGRAR_POR_ADAPTADOR | — |
 | OpenBot (nightly-labs) | https://github.com/nightly-labs/openbot | PolyForm Noncommercial 1.0.0 | não (a-verificar) | CATALOGAR | external/openbot.md |
 | OpenHands | https://github.com/All-Hands-AI/OpenHands | a-verificar | não (a-verificar) | CATALOGAR | — |
+| Paperclip (paperclipai) | https://github.com/paperclipai/paperclip | MIT | não (a-verificar) | CATALOGAR | external/paperclip.md |
 | PentAGI | https://github.com/vxcontrol/pentagi | declarada em external/pentagi.md | não (a-verificar) | INTEGRAR_POR_ADAPTADOR | external/pentagi.md |
 | phone-agent-harness | https://github.com/comunidade/phone-agent-harness | declarada em external/phone-agent-harness.md | não (a-verificar) | REFERENCIA | external/phone-agent-harness.md |
 | Pydantic AI | https://github.com/pydantic/pydantic-ai | a-verificar | não (a-verificar) | CATALOGAR | — |

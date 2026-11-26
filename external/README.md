@@ -1,9 +1,9 @@
 # Skills externas recomendadas
 
-**Dezessete** projetos mantidos por outras organizações que **complementam** as 10 skills DZ23. Nenhum deles
+**Dezoito** projetos mantidos por outras organizações que **complementam** as skills DZ23. Nenhum deles
 está redistribuído aqui — cada arquivo documenta o repositório oficial, o gap que preenche e os cuidados.
 
-Nove são **skills**, uma é **coleção de skills** (Caldo), seis são **plataformas** (PentAGI, Modern Web
+Dez são **skills**, uma é **coleção de skills** (Caldo), seis são **plataformas** (PentAGI, Modern Web
 Guidance, Astryx, phone-agent-harness, OpenBot, Paperclip) e uma é **ferramenta de instalação** (Skills CLI).
 
 ## Índice
@@ -27,6 +27,7 @@ Guidance, Astryx, phone-agent-harness, OpenBot, Paperclip) e uma é **ferramenta
 | [Caldo Skills](caldoai-skills.md) | caldoai | poda de testes sem valor e desemaranhado de codebase |
 | [OpenBot](openbot.md) | nightly-labs | workspace desktop com agentes persistentes, fila e browser |
 | [Paperclip](paperclip.md) | paperclipai | time de agentes com organograma, metas e orçamento |
+| [Hallmark](hallmark.md) | Nutlope | **piso de design anti-AI-slop**: 48 regras, 51 temas e linter com gates |
 
 ## Como escolher
 
@@ -49,6 +50,7 @@ Guidance, Astryx, phone-agent-harness, OpenBot, Paperclip) e uma é **ferramenta
 | limpar suíte de testes e emaranhado antes de mexer | Caldo Skills |
 | equipe de agentes viva, com fila e browser compartilhado | OpenBot (licença noncommercial, ver o arquivo) |
 | time com metas, cargos e orçamento num painel | Paperclip (`http://127.0.0.1:3100`) |
+| impedir o visual "cara de IA" e provar por gate | Hallmark (`sloplint`, 51 temas, hook de lint) |
 
 ## Regra de convivência
 
@@ -75,5 +77,6 @@ próprio repositório.
 | Caldo Skills | 2 skills via Skills CLI | skills `prune-tests` e `untangle-codebase` |
 | OpenBot | app desktop (Electron/Bun) + CLIs via ACP | app próprio; agentes ficam dentro dele |
 | Paperclip | servidor Node + UI React (`paperclipai run`) | painel web em `127.0.0.1:3100` |
+| Hallmark | skill + scripts Node (`install.mjs`) | skill em `~/.agents/skills` + `sloplint` e hook de lint |
 
 Como registrar em cada harness: [`docs/harness-integration.md`](../docs/harness-integration.md).

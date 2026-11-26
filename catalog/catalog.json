@@ -477,6 +477,19 @@
       "risco": "alto — servidor que coordena agentes autonomos; manter em loopback, telemetria ligada por padrao",
       "fallback_local": "dz23-subagents-mcp + agent-desktop com confirmacao do dono",
       "doc": "external/paperclip.md"
+    },
+    {
+      "nome": "hallmark",
+      "url": "https://github.com/Nutlope/hallmark",
+      "licenca": "MIT",
+      "licenca_verificada": true,
+      "sha256_zip": "eb5ae192c808a27b",
+      "funcao": "piso de design anti-AI-slop: 48 regras, 51 temas, sloplint com gates por camada",
+      "decisao": "REFERENCIA",
+      "dependencias": "Node para os scripts (lint/tema/captura); leitura da skill nao exige nada",
+      "risco": "baixo — skill + scripts locais, sem servico; 6,6 MB por copia instalada",
+      "fallback_local": "dz23-ultimate-pro-max (direcao de arte) + web-design-guidelines (104 regras de UI)",
+      "doc": "external/hallmark.md"
     }
   ]
 }
