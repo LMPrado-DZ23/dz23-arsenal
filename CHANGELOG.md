@@ -1,6 +1,50 @@
 > Lacuna conhecida: as releases **1.5.0 – 1.6.0** foram publicadas no GitHub sem entrada aqui. O registro
 > delas está em `gh release list`. A partir da 1.6.1 o changelog volta a ser a fonte.
 
+## [1.7.0] — 2026-11-26
+
+**Gate que dá para esperar, número de eval que não mente, e mais duas fontes externas.**
+
+### Adicionado
+- **`external/omnibridge.md`** — [`ayoubmep/omnibridge-mcp`](https://github.com/ayoubmep/omnibridge-mcp)
+  (MIT): um servidor MCP com 5 ferramentas (`cad_apps`, `cad_skill`, `cad_read`, `cad_modify`,
+  `cad_screenshot`) para **28 apps** CAD/BIM/3D. Instalado por `uv tool install`, registrado nos quatro
+  harnesses e com bridge do Blender instalada.
+- **`external/app-store-compliance.md`** — [`mjmirza/app-store-compliance`](https://github.com/mjmirza/app-store-compliance)
+  (**ORA 2.3**, `LicenseRef-OpenRoots-ORA-2.3`): auditoria pré-submissão para App Store e Google Play,
+  com guard que bloqueia `submit` de risco. Entra como **ficha + link**: 6 KB de texto próprio
+  apontando para o repositório oficial, nenhum arquivo do pacote versionado — indexação, não
+  redistribuição. A licença (source-available, royalty acima de US$ 20 mi/ano, vedação de treino)
+  vale para quem copia o conteúdo do pacote, não para um ponteiro.
+- `.evals-contagem.json` (artefato local, ignorado): contagem medida por `run-evals.py --report`, com
+  os dois recortes (`dz23` e `todas`).
+
+### Corrigido
+- **O gate levava mais de 13 minutos** e não dizia onde o tempo ia. Agora imprime **ms por check** e o
+  total de parede, tem `--tempos` (tabela do mais lento ao mais rápido) e `--rapido` (pula os checks
+  pesados declarados e **lista** os pulados — pular nunca conta como aprovação).
+- **O README publicava `73/144 (50,7%)`** e o ROADMAP `71 pendentes de 144`, enquanto o disco tinha
+  **152 cenários no recorte DZ23 e 79 pendentes**. Números corrigidos e o escopo explicitado
+  (DZ23 × incluindo as incorporadas: 200 declarados, 73 registrados, 36,5%).
+- `check-eval-results.py` agora **cruza** a contagem publicada com o disco: se `.evals-contagem.json`
+  divergir, o gate reprova citando os dois números, em vez de deixar o README envelhecer em silêncio.
+- `gera-catalog.py`: licenças `OpenRoots`/`ORA` deixam de cair em "a verificar" genérico e passam a ser
+  classificadas como **source-available com royalty** (só `REFERENCIA`).
+
+### Registrado como evidência
+- `quality-gate` (perfil completo) roda e publica a contagem; `--rapido` existe para o uso diário.
+- `omnibridge`: handshake por stdio devolveu `5` ferramentas; `cad_apps` listou **28 apps**;
+  `cad_skill('blender')` devolveu o guia; e pelo harness a ferramenta respondeu `[]` com
+  `only_available=true` porque nenhum CAD estava aberto.
+- `app-store-compliance`: instalador provou a si mesmo (bloqueia app de risco, fica silencioso em
+  comando comum, funciona pelo PowerShell). O aviso de `python3` sumiu depois de criar o shim
+  `~/bin/python3` (o `python3` do PATH era o atalho da Microsoft Store): `doctor` agora fecha sem
+  ressalva e o `deadline-checker.py` roda.
+
+### Não testado
+- Nenhum app CAD aberto: `cad_read`/`cad_modify`/`cad_screenshot` do OmniBridge seguem `NOT_TESTED`.
+- Guard do app-store em projeto real de app mobile: `NOT_TESTED` (só o teste embutido do instalador).
+
 ## [1.6.9] — 2026-11-26
 
 **Hallmark instalado nos quatro harnesses e documentado — com a prova de que o linter funciona.**

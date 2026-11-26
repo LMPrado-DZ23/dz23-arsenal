@@ -490,6 +490,32 @@
       "risco": "baixo — skill + scripts locais, sem servico; 6,6 MB por copia instalada",
       "fallback_local": "dz23-ultimate-pro-max (direcao de arte) + web-design-guidelines (104 regras de UI)",
       "doc": "external/hallmark.md"
+    },
+    {
+      "nome": "app-store-compliance",
+      "url": "https://github.com/mjmirza/app-store-compliance",
+      "licenca": "LicenseRef-OpenRoots-ORA-2.3",
+      "licenca_verificada": true,
+      "sha256_zip": "3cf41c1c8db014d3",
+      "funcao": "auditoria pre-submissao para App Store e Google Play: 125 padroes de rejeicao, 117 prazos regulatorios, guard que bloqueia submit de risco",
+      "decisao": "REFERENCIA",
+      "dependencias": "bash (Git Bash no Windows) + python3 para os auditores; hook PreToolUse no Claude Code",
+      "risco": "medio — licenca source-available ORA 2.3 com royalty acima de US$ 20 mi/ano e vedacao de treino de IA; o guard intercepta cada comando de shell",
+      "fallback_local": "nenhum equivalente no arsenal; dz23-spec-to-system-engine cobre requisitos, nao politica de loja",
+      "doc": "external/app-store-compliance.md"
+    },
+    {
+      "nome": "omnibridge-mcp",
+      "url": "https://github.com/ayoubmep/omnibridge-mcp",
+      "licenca": "MIT",
+      "licenca_verificada": true,
+      "sha256_zip": "2d1b2fc99d1aaa8d",
+      "funcao": "servidor MCP unico para 28 apps CAD/BIM/3D: cad_apps, cad_skill, cad_read, cad_modify, cad_screenshot",
+      "decisao": "INTEGRAR_POR_ADAPTADOR",
+      "dependencias": "Python 3.10+ (uv tool), Windows, pywin32; bridge por app instalado a parte",
+      "risco": "alto — scripts rodam sem sandbox dentro do app, com poder de apagar geometria e escrever arquivo",
+      "fallback_local": "MCP blender (blender-mcp) para Blender; sem equivalente para AutoCAD/Revit/Rhino",
+      "doc": "external/omnibridge.md"
     }
   ]
 }

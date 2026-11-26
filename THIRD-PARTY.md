@@ -5,11 +5,13 @@
 | Fonte | URL | Licença | Verificada | Decisão | Doc |
 |---|---|---|:--:|---|---|
 | agent-desktop | https://github.com/addyosmani/agent-desktop | Apache-2.0 | sim | ADAPTAR | — |
+| app-store-compliance | https://github.com/mjmirza/app-store-compliance | LicenseRef-OpenRoots-ORA-2.3 | sim | REFERENCIA | external/app-store-compliance.md |
 | astryx | https://github.com/facebook/astryx | MIT | sim | REFERENCIA | external/astryx.md |
 | Caldo Skills | https://github.com/caldoai/skills | MIT | sim | INCORPORAR | external/caldoai-skills.md |
 | ECC (easy-claude-code) | https://github.com/badlogic/claude-commands | MIT | sim | ADAPTAR | — |
 | hallmark | https://github.com/Nutlope/hallmark | MIT | sim | REFERENCIA | external/hallmark.md |
 | modern-web-guidance-src | https://github.com/GoogleChrome/modern-web-guidance-src | Apache-2.0 | sim | ADAPTAR | external/modern-web-guidance.md |
+| omnibridge-mcp | https://github.com/ayoubmep/omnibridge-mcp | MIT | sim | INTEGRAR_POR_ADAPTADOR | external/omnibridge.md |
 | open-code-review | https://github.com/alibaba/open-code-review | Apache-2.0 | sim | ADAPTAR | — |
 | playwright-mcp | https://github.com/microsoft/playwright-mcp | Apache-2.0 | sim | REFERENCIA | external/playwright-mcp.md |
 | pomerado | https://github.com/pomerado/pomerado | MIT | sim | ADAPTAR | — |

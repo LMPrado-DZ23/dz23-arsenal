@@ -3,7 +3,7 @@
 > Gerado por `scripts/build-manifest.py` em 2026-11-26. **Não editar à mão** — rode o script.
 > A data acima é informativa e não entra na comparação do `--check`.
 
-**19 skills · 18 externas · 9 prompt(s) · 2 MCP · 1 bundle(s)**
+**19 skills · 20 externas · 9 prompt(s) · 2 MCP · 1 bundle(s)**
 
 ## Skills
 
@@ -42,11 +42,13 @@
 | Skill | Autor | Repositório |
 |---|---|---|
 | [anthropic-skills](external/anthropic-skills.md) | Anthropic | https://github.com/anthropics/skills |
+| [app-store-compliance](external/app-store-compliance.md) | Mirza Iqbal (mjmirza) | https://github.com/mjmirza/app-store-compliance |
 | [astryx](external/astryx.md) | — | — |
 | [caldoai-skills](external/caldoai-skills.md) | caldoai | https://github.com/caldoai/skills |
 | [cloudflare-security-audit](external/cloudflare-security-audit.md) | Cloudflare | https://github.com/cloudflare/security-audit-skill |
 | [hallmark](external/hallmark.md) | Nutlope (Hassan El Mghari) | https://github.com/Nutlope/hallmark |
 | [modern-web-guidance](external/modern-web-guidance.md) | — | — |
+| [omnibridge](external/omnibridge.md) | ayoubmep | https://github.com/ayoubmep/omnibridge-mcp |
 | [openbot](external/openbot.md) | nightly-labs | https://github.com/nightly-labs/openbot |
 | [paperclip](external/paperclip.md) | paperclipai | https://github.com/paperclipai/paperclip |
 | [pentagi](external/pentagi.md) | — | — |

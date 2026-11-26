@@ -38,6 +38,10 @@ def _compat_mit(licenca: str, verificada: bool) -> str:
         return "não — sem LICENSE (REJEITAR p/ cópia)"
     if "a-verificar" in low or "a verificar" in low or "declarada em" in low:
         return "a verificar"
+    if "openroots" in low or "ora-" in low:
+        # ORA (OpenRoots Agent License): source-available com piso de receita, royalty acima do
+        # limite e vedação de treino de IA. Fica fora da matriz permissiva: só entra por ponteiro.
+        return "não — source-available com royalty (só REFERENCIA)"
     if "gpl" in low:
         return "copyleft — isolar (não redistribuir junto)"
     if any(k in low for k in ("mit", "apache", "isc", "bsd", "cc0")):

@@ -289,7 +289,49 @@ def cmd_report() -> int:
     print()
     pct = (total_exec / total * 100) if total else 0
     print(f"TOTAL: {total} declarados · {total_exec} registrados ({pct:.1f}%) · {faltando} sem resultado")
+    publicar_contagem(total, total_exec, faltando, pct)
     return 0 if faltando == 0 else 1
+
+
+def publicar_contagem(declarados: int, executados: int, pendentes: int, pct: float) -> None:
+    """Publica a contagem medida para que documentação e gate leiam o MESMO número.
+
+    Há DOIS recortes legítimos e eles não podem ser confundidos:
+      - `dz23`: as skills DZ23 (o ledger publicado, regra de check-numbers.py);
+      - `todas`: inclui as incorporadas, que declaram evals próprios.
+    Antes o README dizia "73/144 (50,7%)", o ROADMAP dizia "71 pendentes de 144" e o disco tinha
+    152 no recorte DZ23: dois números velhos e um lisonjeiro. Agora quem mede é este comando;
+    quem confere é check-eval-results.py, comparando o arquivo com o disco. Sem o arquivo, o
+    conferidor não inventa zero — só avisa que a contagem não foi medida nesta rodada.
+    """
+    destino = RAIZ / ".evals-contagem.json"
+    dz_decl = dz_exec = 0
+    for skill in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
+        if not skill.name.startswith("dz23-"):
+            continue
+        casos = carregar(skill).get("cases", [])
+        dz_decl += len(casos)
+        curto = CURTO.get(skill.name, skill.name.replace("dz23-", ""))
+        pasta = RESULTADOS / curto
+        cobertos: set[str] = set()
+        if pasta.is_dir():
+            for md in pasta.glob("*.md"):
+                mi = re.match(r"\d{4}-\d{2}-\d{2}-(.+)$", md.stem)
+                if mi:
+                    cobertos.add(mi.group(1))
+        dz_exec += len(cobertos & {str(c.get("id")) for c in casos if isinstance(c, dict)})
+    dz_pend = max(0, dz_decl - dz_exec)
+    dz_pct = round((dz_exec / dz_decl * 100) if dz_decl else 0, 1)
+    try:
+        destino.write_text(json.dumps({
+            "dz23": {"declarados": dz_decl, "executados": dz_exec,
+                     "pendentes": dz_pend, "percentual": dz_pct},
+            "todas": {"declarados": declarados, "executados": executados,
+                      "pendentes": pendentes, "percentual": round(pct, 1)},
+            "fonte": "python scripts/run-evals.py --report",
+        }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+    except OSError:
+        pass  # conveniência de leitura; falhar o relatório por isso seria desproporcional
 
 
 
